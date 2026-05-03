@@ -410,3 +410,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Homologacao E Observabilidade
+
+- [x] Catalogo de contratos de API criado.
+- [x] Cenarios de homologacao criados.
+- [x] Execucao auditavel de cenario criada.
+- [x] Resumo de observabilidade criado.
+- [x] Snapshot de dados mockados criado.
+- [x] Console web conectado a homologacao.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

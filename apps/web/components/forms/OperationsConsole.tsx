@@ -238,6 +238,20 @@ export function OperationsConsole() {
     });
   }
 
+  function runHomologationCheck() {
+    void run("Homologacao", async () => {
+      const results = await Promise.all([
+        icemaxApi.apiContracts(token || undefined),
+        icemaxApi.homologationScenarios(token || undefined),
+        icemaxApi.runHomologationScenario("os-completa", token || undefined),
+        icemaxApi.observabilitySummary(token || undefined),
+        icemaxApi.demoDataSnapshot(token || undefined),
+      ]);
+
+      return { checks: results.length, results };
+    });
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -325,6 +339,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
+        <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}

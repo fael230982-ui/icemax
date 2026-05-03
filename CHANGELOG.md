@@ -231,3 +231,12 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionada matriz inicial de papeis e permissoes.
 - Adicionado diagnostico tecnico de ambiente.
 - Painel web passou a consultar diagnostico consolidado.
+
+## 0.8.2 - Homologacao E Observabilidade
+
+- Adicionado catalogo de contratos principais de API.
+- Adicionados cenarios de homologacao operacional.
+- Adicionada execucao auditavel de cenario de homologacao.
+- Adicionado resumo de observabilidade local.
+- Adicionado snapshot de dados de demonstracao.
+- Painel web passou a executar verificacao de homologacao.

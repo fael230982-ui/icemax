@@ -453,3 +453,29 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
 
   await app.close();
 });
+
+test("homologation contracts observability and demo snapshot are available", async () => {
+  const app = await buildApp();
+
+  const contracts = await app.inject({ method: "GET", url: "/api-contract/routes" });
+  assert.equal(contracts.statusCode, 200);
+  assert.ok(contracts.json().total >= 10);
+
+  const scenarios = await app.inject({ method: "GET", url: "/homologation/scenarios" });
+  assert.equal(scenarios.statusCode, 200);
+  assert.equal(scenarios.json().total, 4);
+
+  const run = await app.inject({ method: "POST", url: "/homologation/scenarios/os-completa/run" });
+  assert.equal(run.statusCode, 201);
+  assert.equal(run.json().status, "passed_mock");
+
+  const observability = await app.inject({ method: "GET", url: "/observability/summary" });
+  assert.equal(observability.statusCode, 200);
+  assert.equal(observability.json().signals[0].status, "healthy");
+
+  const snapshot = await app.inject({ method: "GET", url: "/demo-data/snapshot" });
+  assert.equal(snapshot.statusCode, 200);
+  assert.equal(snapshot.json().tenant.name, "ICEMAX Ar Condicionado");
+
+  await app.close();
+});

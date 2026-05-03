@@ -288,6 +288,28 @@ Retorna matriz inicial de papeis e permissoes.
 
 Retorna diagnostico tecnico de ambiente, storage e dependencias externas.
 
+## Homologacao E Observabilidade
+
+### GET /api-contract/routes
+
+Lista contratos principais de API para validacao e integracao.
+
+### GET /homologation/scenarios
+
+Lista cenarios de homologacao operacional.
+
+### POST /homologation/scenarios/:key/run
+
+Executa um cenario de homologacao em modo mock e registra auditoria.
+
+### GET /observability/summary
+
+Retorna sinais operacionais locais para suporte e validacao.
+
+### GET /demo-data/snapshot
+
+Retorna snapshot dos dados mockados usados em demonstracao.
+
 ## Arquivos
 
 ### POST /files

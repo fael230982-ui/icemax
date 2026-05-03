@@ -15,6 +15,7 @@ import { registerDispatchRoutes } from "./modules/dispatch";
 import { registerEquipmentRoutes } from "./modules/equipment";
 import { registerEnterpriseSuiteRoutes } from "./modules/enterprise-suite";
 import { registerFileRoutes } from "./modules/files";
+import { registerHomologationRoutes } from "./modules/homologation";
 import { registerIntegrationRoutes } from "./modules/integrations";
 import { registerOperationRoutes } from "./modules/operations";
 import { registerOrderRoutes } from "./modules/orders";
@@ -32,6 +33,7 @@ export async function registerRoutes(app: FastifyInstance) {
   await registerDashboardRoutes(app);
   await registerDispatchRoutes(app);
   await registerEnterpriseSuiteRoutes(app);
+  await registerHomologationRoutes(app);
   await registerCustomerRoutes(app);
   await registerCustomerPortalRoutes(app);
   await registerEquipmentRoutes(app);
