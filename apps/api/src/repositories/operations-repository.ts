@@ -1,6 +1,6 @@
 import { getPrisma } from "../database";
 import { checklistTemplates, quotes, stock } from "../mock-data";
-import type { CreatePartInput, CreateStockLocationInput, CreateStockMovementInput } from "../schemas";
+import type { CreatePartInput, CreateStockLocationInput, CreateStockMovementInput, UpdateQuoteDecisionInput } from "../schemas";
 
 export async function listMockQuotes() {
   return {
@@ -27,6 +27,31 @@ export async function listPrismaQuotes(tenantId: string) {
     data,
     total: data.length,
   };
+}
+
+export async function updateMockQuoteDecision(tenantId: string, quoteId: string, input: UpdateQuoteDecisionInput) {
+  return {
+    id: quoteId,
+    tenantId,
+    status: input.decision,
+    customerName: input.customerName,
+    reason: input.reason,
+  };
+}
+
+export async function updatePrismaQuoteDecision(tenantId: string, quoteId: string, input: UpdateQuoteDecisionInput) {
+  const status = input.decision;
+  return getPrisma().quote.update({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    data: {
+      status,
+      approvedAt: status === "approved" ? new Date() : undefined,
+      rejectedAt: status === "rejected" ? new Date() : undefined,
+    },
+  });
 }
 
 export async function listMockChecklists() {

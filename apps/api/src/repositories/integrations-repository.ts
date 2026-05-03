@@ -1,6 +1,6 @@
 import { getPrisma } from "../database";
 import { integrations, notifications, whatsappTemplates } from "../mock-data";
-import type { CreateNotificationTemplateInput, UpdateIntegrationStatusInput } from "../schemas";
+import type { CreateNotificationTemplateInput, SendNotificationInput, UpdateIntegrationStatusInput } from "../schemas";
 import type { Prisma } from "@icemax/database";
 
 export async function listMockNotifications() {
@@ -104,6 +104,30 @@ export async function createPrismaNotificationTemplate(tenantId: string, input: 
       subject: input.subject,
       body: input.body,
       active: input.active,
+    },
+  });
+}
+
+export async function sendMockNotification(tenantId: string, input: SendNotificationInput) {
+  return {
+    id: `notification-${Date.now()}`,
+    tenantId,
+    status: "queued",
+    ...input,
+  };
+}
+
+export async function sendPrismaNotification(tenantId: string, input: SendNotificationInput) {
+  return getPrisma().notification.create({
+    data: {
+      tenantId,
+      channel: input.channel,
+      recipient: input.recipient,
+      subject: input.subject,
+      body: input.body,
+      relatedType: input.relatedType,
+      relatedId: input.relatedId,
+      status: "queued",
     },
   });
 }

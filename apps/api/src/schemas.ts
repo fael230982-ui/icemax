@@ -136,6 +136,21 @@ export const updateIntegrationStatusSchema = z.object({
   config: z.record(z.unknown()).optional(),
 });
 
+export const updateQuoteDecisionSchema = z.object({
+  decision: z.enum(["approved", "rejected"]),
+  customerName: z.string().optional(),
+  reason: z.string().optional(),
+});
+
+export const sendNotificationSchema = z.object({
+  channel: z.enum(["email", "whatsapp", "push", "internal"]),
+  recipient: z.string().min(3),
+  subject: z.string().optional(),
+  body: z.string().min(3),
+  relatedType: z.string().optional(),
+  relatedId: z.string().optional(),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -164,3 +179,5 @@ export type CreateOrderFromContractVisitInput = z.output<typeof createOrderFromC
 export type CreateNotificationTemplateInput = z.output<typeof createNotificationTemplateSchema>;
 export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStatusSchema>;
 export type LoginInput = z.output<typeof loginSchema>;
+export type UpdateQuoteDecisionInput = z.output<typeof updateQuoteDecisionSchema>;
+export type SendNotificationInput = z.output<typeof sendNotificationSchema>;

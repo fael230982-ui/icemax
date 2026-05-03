@@ -135,3 +135,8 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionado painel de criacao rapida para testar API.
 - Criados componentes de formulario inicial no painel.
 - Relatorio de OS passou a tentar gerar PDF real com Chrome/Edge headless e fallback HTML.
+
+## 0.4.4 - Lote 19
+
+- Criada aprovacao/recusa de orcamento.
+- Criado envio simulado de notificacoes.

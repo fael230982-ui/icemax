@@ -11,10 +11,12 @@ import {
   listPrismaIntegrations,
   listPrismaNotificationTemplates,
   listPrismaNotifications,
+  sendMockNotification,
+  sendPrismaNotification,
   upsertMockIntegration,
   upsertPrismaIntegration,
 } from "../repositories/integrations-repository";
-import { createNotificationTemplateSchema, parseBody, updateIntegrationStatusSchema } from "../schemas";
+import { createNotificationTemplateSchema, parseBody, sendNotificationSchema, updateIntegrationStatusSchema } from "../schemas";
 
 export async function registerIntegrationRoutes(app: FastifyInstance) {
   app.get("/ai/requests", async () => ({
@@ -30,6 +32,16 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     }
 
     return listMockNotifications();
+  });
+
+  app.post("/notifications/send", async (request, reply) => {
+    const context = await getAuthContext(request);
+    const input = parseBody(sendNotificationSchema, request.body);
+    const notification = isPrismaEnabled()
+      ? await sendPrismaNotification(context.tenantId, input)
+      : await sendMockNotification(context.tenantId, input);
+
+    return reply.code(202).send(notification);
   });
 
   app.get("/integrations", async (request) => {

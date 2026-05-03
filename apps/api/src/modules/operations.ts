@@ -16,8 +16,10 @@ import {
   listPrismaQuotes,
   listPrismaStock,
   listPrismaStockLocations,
+  updateMockQuoteDecision,
+  updatePrismaQuoteDecision,
 } from "../repositories/operations-repository";
-import { createPartSchema, createStockLocationSchema, createStockMovementSchema, parseBody } from "../schemas";
+import { createPartSchema, createStockLocationSchema, createStockMovementSchema, parseBody, updateQuoteDecisionSchema } from "../schemas";
 
 export async function registerOperationRoutes(app: FastifyInstance) {
   app.get("/quotes", async (request) => {
@@ -28,6 +30,16 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return listMockQuotes();
+  });
+
+  app.patch("/quotes/:id/decision", async (request) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(updateQuoteDecisionSchema, request.body);
+
+    return isPrismaEnabled()
+      ? updatePrismaQuoteDecision(context.tenantId, id, input)
+      : updateMockQuoteDecision(context.tenantId, id, input);
   });
 
   app.get("/checklists", async (request) => {

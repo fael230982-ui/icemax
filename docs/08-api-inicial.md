@@ -162,6 +162,10 @@ Lista orcamentos mockados, incluindo status, itens e validade.
 
 Quando `API_DATA_SOURCE="prisma"`, lista orcamentos do tenant atual com itens e cliente vinculado pela OS.
 
+### PATCH /quotes/:id/decision
+
+Registra aprovacao ou recusa do orcamento.
+
 ## Checklists
 
 ### GET /checklists
@@ -211,6 +215,10 @@ Lista solicitacoes mockadas de IA.
 ### GET /notifications
 
 Lista notificacoes mockadas de e-mail, WhatsApp, push ou internas.
+
+### POST /notifications/send
+
+Cria envio de notificacao em fila. No momento, o envio e simulado/local.
 
 ## Integracoes
 
