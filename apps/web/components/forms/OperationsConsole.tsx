@@ -252,6 +252,19 @@ export function OperationsConsole() {
     });
   }
 
+  function runDatabaseTransitionCheck() {
+    void run("Virada para banco", async () => {
+      const results = await Promise.all([
+        icemaxApi.databaseCutoverPlan(token || undefined),
+        icemaxApi.databaseSchemaSummary(token || undefined),
+        icemaxApi.databaseSeedPlan(token || undefined),
+        icemaxApi.databaseEnvironmentChecklist(token || undefined),
+      ]);
+
+      return { checks: results.length, results };
+    });
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -340,6 +353,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
+        <button type="button" className="secondary" onClick={runDatabaseTransitionCheck}>Virada banco</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}

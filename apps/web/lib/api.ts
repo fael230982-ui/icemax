@@ -147,4 +147,8 @@ export const icemaxApi = {
     apiRequest<unknown>(`/homologation/scenarios/${key}/run`, { method: "POST", token }),
   observabilitySummary: (token?: string) => apiRequest<unknown>("/observability/summary", { token }),
   demoDataSnapshot: (token?: string) => apiRequest<unknown>("/demo-data/snapshot", { token }),
+  databaseCutoverPlan: (token?: string) => apiRequest<unknown>("/database/cutover-plan", { token }),
+  databaseSchemaSummary: (token?: string) => apiRequest<unknown>("/database/schema-summary", { token }),
+  databaseSeedPlan: (token?: string) => apiRequest<unknown>("/database/seed-plan", { token }),
+  databaseEnvironmentChecklist: (token?: string) => apiRequest<unknown>("/database/environment-checklist", { token }),
 };

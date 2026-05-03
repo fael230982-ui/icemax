@@ -240,3 +240,11 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionado resumo de observabilidade local.
 - Adicionado snapshot de dados de demonstracao.
 - Painel web passou a executar verificacao de homologacao.
+
+## 0.8.3 - Transicao Para Banco Real
+
+- Adicionado plano de virada de mock para Prisma/PostgreSQL.
+- Adicionado resumo de dominios do schema Prisma.
+- Adicionado plano de seed inicial.
+- Adicionado checklist de variaveis de ambiente.
+- Painel web passou a consultar diagnostico de virada para banco.

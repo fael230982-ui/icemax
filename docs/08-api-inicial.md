@@ -310,6 +310,24 @@ Retorna sinais operacionais locais para suporte e validacao.
 
 Retorna snapshot dos dados mockados usados em demonstracao.
 
+## Transicao Para Banco Real
+
+### GET /database/cutover-plan
+
+Retorna plano de virada de mock para Prisma/PostgreSQL.
+
+### GET /database/schema-summary
+
+Resume dominios e modelos principais do schema Prisma.
+
+### GET /database/seed-plan
+
+Descreve dados criados pelo seed inicial.
+
+### GET /database/environment-checklist
+
+Lista variaveis necessarias para modo mock e modo Prisma.
+
 ## Arquivos
 
 ### POST /files

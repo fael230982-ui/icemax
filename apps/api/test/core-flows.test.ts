@@ -479,3 +479,25 @@ test("homologation contracts observability and demo snapshot are available", asy
 
   await app.close();
 });
+
+test("database transition exposes cutover schema seed and environment plans", async () => {
+  const app = await buildApp();
+
+  const cutover = await app.inject({ method: "GET", url: "/database/cutover-plan" });
+  assert.equal(cutover.statusCode, 200);
+  assert.equal(cutover.json().targetMode, "prisma");
+
+  const schema = await app.inject({ method: "GET", url: "/database/schema-summary" });
+  assert.equal(schema.statusCode, 200);
+  assert.ok(schema.json().totalModelsReferenced >= 20);
+
+  const seed = await app.inject({ method: "GET", url: "/database/seed-plan" });
+  assert.equal(seed.statusCode, 200);
+  assert.equal(seed.json().devLogin.email, "adm.rcsolutions@gmail.com");
+
+  const env = await app.inject({ method: "GET", url: "/database/environment-checklist" });
+  assert.equal(env.statusCode, 200);
+  assert.ok(env.json().requiredForPrisma.includes("DATABASE_URL"));
+
+  await app.close();
+});

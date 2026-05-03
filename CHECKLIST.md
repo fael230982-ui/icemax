@@ -425,3 +425,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Transicao Para Banco Real
+
+- [x] Plano de virada mock para Prisma criado.
+- [x] Resumo de schema criado.
+- [x] Plano de seed criado.
+- [x] Checklist de ambiente criado.
+- [x] Console web conectado a virada de banco.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
