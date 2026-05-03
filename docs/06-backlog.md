@@ -92,3 +92,39 @@
 - Gerar etiqueta QR por equipamento.
 - Imprimir etiquetas em lote.
 - Ler QR pelo app tecnico para abrir equipamento ou OS.
+
+## Epico 11 - Orcamentos E Aprovacoes
+
+- Criar orcamento a partir da OS.
+- Adicionar itens de servico.
+- Adicionar pecas do estoque.
+- Definir validade.
+- Enviar link para cliente.
+- Registrar aprovacao, recusa ou pedido de ajuste.
+- Converter orcamento aprovado em execucao.
+
+## Epico 12 - Checklists E Qualidade
+
+- Criar modelos de checklist por tipo de atendimento.
+- Campos obrigatorios.
+- Medicoes tecnicas.
+- Fotos obrigatorias.
+- Bloquear conclusao de OS sem itens obrigatorios.
+- Pontuacao de qualidade futura.
+
+## Epico 13 - Relatorios E Auditoria
+
+- Relatorio PDF de OS.
+- Relatorio de produtividade.
+- Relatorio de contratos.
+- Relatorio de estoque.
+- Auditoria de eventos importantes.
+- Exportacoes futuras.
+
+## Epico 14 - Notificacoes
+
+- E-mail de conclusao.
+- E-mail de aprovacao de orcamento.
+- E-mail de visita preventiva proxima.
+- Alertas internos.
+- Templates por empresa.

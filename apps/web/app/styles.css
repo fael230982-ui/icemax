@@ -484,6 +484,41 @@ dt {
   color: var(--muted);
 }
 
+.quote {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.quote span,
+.quote small,
+.simpleItem span,
+.simpleItem small {
+  display: block;
+  color: var(--muted);
+}
+
+.quote b {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--primary);
+}
+
+.simpleItem {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.simpleItem span,
+.simpleItem small {
+  margin-top: 4px;
+}
+
 .aiGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

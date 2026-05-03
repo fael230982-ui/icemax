@@ -1,4 +1,18 @@
-import { contracts, floorPlan, metrics, orders, qrLabels, serviceFlow, stockAlerts, technicians, tenant } from "./data";
+import {
+  checklists,
+  contracts,
+  floorPlan,
+  manuals,
+  metrics,
+  notifications,
+  orders,
+  qrLabels,
+  quotes,
+  serviceFlow,
+  stockAlerts,
+  technicians,
+  tenant,
+} from "./data";
 
 export default function Home() {
   return (
@@ -11,7 +25,7 @@ export default function Home() {
         </div>
 
         <nav aria-label="Menu principal">
-          {["Dashboard", "Ordens", "Contratos", "Mapas", "QR", "Agenda", "Campo", "Estoque", "IA", "Whitelabel"].map((item) => (
+          {["Dashboard", "Ordens", "Contratos", "Orcamentos", "Checklists", "Mapas", "QR", "Agenda", "Campo", "Estoque", "Manuais", "IA", "Notificacoes", "Whitelabel"].map((item) => (
             <a className={item === "Dashboard" ? "active" : ""} href={`#${item.toLowerCase()}`} key={item}>
               {item}
             </a>
@@ -92,6 +106,44 @@ export default function Home() {
               <span className="route" />
             </div>
             <p className="muted">No MVP, agenda manual com tempo de deslocamento. Depois, sugestao automatica por localizacao, urgencia e especialidade.</p>
+          </article>
+
+          <article className="panel" id="orcamentos">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Aprovacao</p>
+                <h2>Orcamentos</h2>
+              </div>
+              <span className="pill">Link cliente</span>
+            </div>
+            <div className="stack">
+              {quotes.map((quote) => (
+                <div className="quote" key={quote.number}>
+                  <strong>{quote.number}</strong>
+                  <span>{quote.customer}</span>
+                  <b>{quote.total}</b>
+                  <small>{quote.status}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel" id="checklists">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Qualidade</p>
+                <h2>Checklists tecnicos</h2>
+              </div>
+            </div>
+            <div className="stack">
+              {checklists.map((checklist) => (
+                <div className="simpleItem" key={checklist.name}>
+                  <strong>{checklist.name}</strong>
+                  <span>{checklist.items} itens</span>
+                  <small>{checklist.requiredPhotos ? "Fotos obrigatorias" : "Fotos opcionais"}</small>
+                </div>
+              ))}
+            </div>
           </article>
 
           <article className="panel xl" id="contratos">
@@ -192,6 +244,23 @@ export default function Home() {
             </div>
           </article>
 
+          <article className="panel" id="manuais">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Biblioteca</p>
+                <h2>Manuais no app</h2>
+              </div>
+            </div>
+            <div className="stack">
+              {manuals.map((manual) => (
+                <div className="simpleItem" key={manual.title}>
+                  <strong>{manual.title}</strong>
+                  <span>{manual.detail}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+
           <article className="panel xl" id="ia">
             <div className="panelHeader">
               <div>
@@ -227,6 +296,24 @@ export default function Home() {
               <dt>Regra</dt>
               <dd>ICEMAX e tenant, nao codigo fixo.</dd>
             </dl>
+          </article>
+
+          <article className="panel" id="notificacoes">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Comunicacao</p>
+                <h2>Notificacoes</h2>
+              </div>
+            </div>
+            <div className="stack">
+              {notifications.map((notification) => (
+                <div className="simpleItem" key={`${notification.channel}-${notification.subject}`}>
+                  <strong>{notification.subject}</strong>
+                  <span>{notification.channel}</span>
+                  <small>{notification.status}</small>
+                </div>
+              ))}
+            </div>
           </article>
 
           <article className="panel xl">

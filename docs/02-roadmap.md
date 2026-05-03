@@ -1,6 +1,6 @@
 # Roadmap
 
-## Fase 1 - MVP Vendavel
+## Fase 1 - Base Operacional Completa
 
 Objetivo: entregar uma versao que uma empresa consiga usar na operacao real.
 
@@ -26,6 +26,12 @@ Objetivo: entregar uma versao que uma empresa consiga usar na operacao real.
 - Cadastro simples de contratos recorrentes.
 - Controle de proxima manutencao por contrato.
 - Geracao simples de etiqueta QR por equipamento.
+- Orcamento e aprovacao por cliente.
+- Checklist configuravel por tipo de servico.
+- Estoque por almoxarifado e tecnico.
+- Manuais por marca/modelo.
+- Auditoria inicial.
+- Notificacoes por e-mail.
 
 ## Fase 2 - Operacao Inteligente
 
@@ -43,6 +49,9 @@ Objetivo: entregar uma versao que uma empresa consiga usar na operacao real.
 - Geracao automatica de OS recorrente por contrato.
 - Mapas interativos com plantas e localizacao dos equipamentos.
 - Leitura de QR Code pelo app tecnico.
+- Reserva de pecas para OS.
+- Relatorios gerenciais.
+- SLA e alertas de atraso.
 
 ## Fase 3 - IA E Automacao
 
@@ -54,6 +63,8 @@ Objetivo: entregar uma versao que uma empresa consiga usar na operacao real.
 - Priorizacao dinamica por urgencia.
 - Previsao de manutencao preventiva.
 - Relatorios gerenciais avancados.
+- Classificacao automatica de urgencia.
+- Geracao automatica de comunicados ao cliente.
 
 ## Fase 4 - Plataforma Whitelabel Completa
 
@@ -65,3 +76,5 @@ Objetivo: entregar uma versao que uma empresa consiga usar na operacao real.
 - Marketplace de prestadores.
 - Modulo financeiro.
 - Integracoes com ERP externo.
+- Configurador visual de relatorios.
+- Biblioteca de modelos por segmento tecnico.

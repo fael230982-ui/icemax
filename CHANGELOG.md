@@ -22,3 +22,16 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionados mapas interativos de plantas e localizacao de equipamentos ao escopo.
 - Adicionado gerador de etiquetas QR por equipamento ao escopo.
 - Atualizados API mockada, painel e schema com plantas, pontos de equipamento e QR labels.
+
+## 0.2.0 - Lote 4
+
+- Expandido escopo para projeto completo, incluindo orcamentos, aprovacoes, checklists, estoque avancado, manuais, IA, notificacoes, auditoria e relatorios.
+- Criada lista de pendencias do cliente para acelerar futuras integracoes e homologacao.
+- Schema Prisma ampliado com modulos operacionais completos.
+- SQL conceitual sincronizado com os novos modulos.
+- API mockada expandida com rotas de orcamentos, checklists, estoque, manuais, IA e notificacoes.
+- Painel web atualizado com cards dos novos modulos.
+- App tecnico ampliado com OS, ferramentas de campo e contratos proximos.
+- Adicionada logica compartilhada para pre-visualizacao de visitas recorrentes de contrato.
+- Adicionado `docker-compose.yml` para PostgreSQL local.
+- Documentado ambiente local.

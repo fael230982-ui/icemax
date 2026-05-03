@@ -35,6 +35,22 @@ enum ServiceOrderPriority {
   emergency
 }
 
+enum QuoteStatus {
+  draft
+  sent
+  approved
+  rejected
+  expired
+  cancelled
+}
+
+enum NotificationChannel {
+  email
+  whatsapp
+  push
+  internal
+}
+
 model Tenant {
   id                      String   @id @default(uuid())
   name                    String
@@ -59,6 +75,16 @@ model Tenant {
   contracts  ServiceContract[]
   floorPlans FloorPlan[]
   qrLabels   EquipmentQrLabel[]
+  checklistTemplates ChecklistTemplate[]
+  partsUsed  ServiceOrderPart[]
+  stockLocations StockLocation[]
+  stockMovements StockMovement[]
+  stockReservations StockReservation[]
+  manuals    Manual[]
+  quotes     Quote[]
+  notifications Notification[]
+  auditLogs  AuditLog[]
+  aiRequests AiRequest[]
 }
 
 model User {
@@ -240,6 +266,9 @@ model ServiceOrder {
   photos             ServiceOrderPhoto[]
   locations          TechnicianLocation[]
   contractVisits     ServiceContractVisit[]
+  checklistAnswers   ServiceOrderChecklistAnswer[]
+  partsUsed          ServiceOrderPart[]
+  quotes             Quote[]
 
   @@index([tenantId, status])
   @@index([tenantId, scheduledStart])
@@ -332,6 +361,50 @@ model ServiceOrderPhoto {
   @@index([tenantId, serviceOrderId])
 }
 
+model ChecklistTemplate {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  serviceType String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  items  ChecklistItem[]
+
+  @@index([tenantId, serviceType])
+}
+
+model ChecklistItem {
+  id         String  @id @default(uuid())
+  tenantId   String
+  templateId String
+  label      String
+  required   Boolean @default(false)
+  inputType  String  @default("checkbox")
+  sortOrder  Int     @default(0)
+
+  template ChecklistTemplate @relation(fields: [templateId], references: [id])
+  answers  ServiceOrderChecklistAnswer[]
+
+  @@index([tenantId, templateId])
+}
+
+model ServiceOrderChecklistAnswer {
+  id             String   @id @default(uuid())
+  tenantId       String
+  serviceOrderId String
+  checklistItemId String
+  value          String?
+  createdAt      DateTime @default(now())
+
+  order ServiceOrder @relation(fields: [serviceOrderId], references: [id])
+  item  ChecklistItem @relation(fields: [checklistItemId], references: [id])
+
+  @@index([tenantId, serviceOrderId])
+}
+
 model Part {
   id           String   @id @default(uuid())
   tenantId     String
@@ -344,8 +417,211 @@ model Part {
   active       Boolean  @default(true)
 
   tenant Tenant @relation(fields: [tenantId], references: [id])
+  stockItems StockItem[]
+  stockMovements StockMovement[]
+  reservations StockReservation[]
+  orderParts ServiceOrderPart[]
 
   @@index([tenantId, name])
+}
+
+model StockLocation {
+  id               String   @id @default(uuid())
+  tenantId         String
+  name             String
+  type             String
+  technicianUserId String?
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  stockItems StockItem[]
+  movementsFrom StockMovement[] @relation("StockMovementFrom")
+  movementsTo   StockMovement[] @relation("StockMovementTo")
+  reservations  StockReservation[]
+
+  @@index([tenantId, type])
+}
+
+model StockItem {
+  id         String  @id @default(uuid())
+  tenantId   String
+  partId     String
+  locationId String
+  quantity   Decimal @default(0)
+
+  part     Part @relation(fields: [partId], references: [id])
+  location StockLocation @relation(fields: [locationId], references: [id])
+
+  @@unique([partId, locationId])
+  @@index([tenantId, locationId])
+}
+
+model StockMovement {
+  id             String   @id @default(uuid())
+  tenantId       String
+  partId         String
+  fromLocationId String?
+  toLocationId   String?
+  serviceOrderId String?
+  quantity       Decimal
+  reason         String
+  createdByUserId String?
+  createdAt      DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  part   Part @relation(fields: [partId], references: [id])
+  fromLocation StockLocation? @relation("StockMovementFrom", fields: [fromLocationId], references: [id])
+  toLocation   StockLocation? @relation("StockMovementTo", fields: [toLocationId], references: [id])
+
+  @@index([tenantId, partId])
+  @@index([tenantId, serviceOrderId])
+}
+
+model StockReservation {
+  id             String   @id @default(uuid())
+  tenantId       String
+  partId         String
+  locationId     String
+  serviceOrderId String
+  quantity       Decimal
+  status         String   @default("reserved")
+  createdAt      DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  part Part @relation(fields: [partId], references: [id])
+  location StockLocation @relation(fields: [locationId], references: [id])
+
+  @@index([tenantId, serviceOrderId])
+}
+
+model ServiceOrderPart {
+  id             String   @id @default(uuid())
+  tenantId       String
+  serviceOrderId String
+  partId         String
+  quantity       Decimal
+  unitPrice      Decimal?
+  createdAt      DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  order ServiceOrder @relation(fields: [serviceOrderId], references: [id])
+  part  Part @relation(fields: [partId], references: [id])
+
+  @@index([tenantId, serviceOrderId])
+}
+
+model Quote {
+  id             String      @id @default(uuid())
+  tenantId       String
+  serviceOrderId String
+  customerId     String
+  number         String
+  status         QuoteStatus @default(draft)
+  subtotal       Decimal     @default(0)
+  discount       Decimal     @default(0)
+  total          Decimal     @default(0)
+  validUntil     DateTime?
+  approvedAt     DateTime?
+  rejectedAt     DateTime?
+  approvalToken  String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  order  ServiceOrder @relation(fields: [serviceOrderId], references: [id])
+  items  QuoteItem[]
+
+  @@unique([tenantId, number])
+  @@index([tenantId, status])
+  @@index([tenantId, serviceOrderId])
+}
+
+model QuoteItem {
+  id          String  @id @default(uuid())
+  tenantId    String
+  quoteId     String
+  kind        String
+  description String
+  quantity    Decimal @default(1)
+  unitPrice   Decimal @default(0)
+  total       Decimal @default(0)
+  partId      String?
+
+  quote Quote @relation(fields: [quoteId], references: [id])
+
+  @@index([tenantId, quoteId])
+}
+
+model Manual {
+  id            String   @id @default(uuid())
+  tenantId      String
+  title         String
+  brand         String?
+  model         String?
+  equipmentType String?
+  capacityBtu   Int?
+  fileUrl       String
+  tags          String?
+  createdAt     DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, brand, model])
+}
+
+model AiRequest {
+  id             String   @id @default(uuid())
+  tenantId       String
+  userId         String?
+  serviceOrderId String?
+  type           String
+  inputText      String?
+  outputText     String?
+  imageUrl       String?
+  model          String?
+  estimatedCost  Decimal?
+  createdAt      DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, type])
+  @@index([tenantId, serviceOrderId])
+}
+
+model Notification {
+  id          String              @id @default(uuid())
+  tenantId    String
+  channel     NotificationChannel
+  recipient   String
+  subject     String?
+  body        String?
+  status      String              @default("pending")
+  relatedType String?
+  relatedId   String?
+  sentAt      DateTime?
+  createdAt   DateTime            @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, relatedType, relatedId])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  tenantId    String
+  actorUserId String?
+  entityType  String
+  entityId    String
+  action      String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, entityType, entityId])
+  @@index([tenantId, createdAt])
 }
 
 model TechnicianLocation {

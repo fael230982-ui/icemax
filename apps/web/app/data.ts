@@ -104,3 +104,25 @@ export const qrLabels = [
   { code: "ICM-AC-0001", customer: "ClimaSul Hotel", location: "Recepcao" },
   { code: "ICM-AC-0002", customer: "Mercado Avante", location: "Caixa 03" },
 ];
+
+export const quotes = [
+  { number: "ORC-2026-001", customer: "ClimaSul Hotel", status: "Enviado", total: "R$ 1.840,00" },
+  { number: "ORC-2026-002", customer: "Mercado Avante", status: "Aprovado", total: "R$ 620,00" },
+];
+
+export const checklists = [
+  { name: "Preventiva split", items: 5, requiredPhotos: true },
+  { name: "Higienizacao", items: 4, requiredPhotos: true },
+  { name: "Corretiva", items: 6, requiredPhotos: false },
+];
+
+export const manuals = [
+  { title: "Carrier Piso Teto 60k", detail: "Carrier - Piso Teto" },
+  { title: "Midea Cassete 36k", detail: "Midea - Cassete" },
+];
+
+export const notifications = [
+  { channel: "E-mail", subject: "OS concluida", status: "Pendente" },
+  { channel: "E-mail", subject: "Aprovacao de orcamento", status: "Enviado" },
+  { channel: "Interno", subject: "Contrato vence em 7 dias", status: "Fila" },
+];

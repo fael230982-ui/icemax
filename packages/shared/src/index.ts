@@ -33,3 +33,31 @@ export type TenantBrand = {
   primaryColor: string;
   secondaryColor: string;
 };
+
+export const quoteStatuses = ["draft", "sent", "approved", "rejected", "expired", "cancelled"] as const;
+
+export type QuoteStatus = (typeof quoteStatuses)[number];
+
+export const contractRecurrenceMonths = [3, 4, 6] as const;
+
+export type ContractRecurrenceMonths = (typeof contractRecurrenceMonths)[number];
+
+export const notificationChannels = ["email", "whatsapp", "push", "internal"] as const;
+
+export type NotificationChannel = (typeof notificationChannels)[number];
+
+export const stockLocationTypes = ["warehouse", "vehicle", "technician", "outsourced"] as const;
+
+export type StockLocationType = (typeof stockLocationTypes)[number];
+
+export const aiRequestTypes = [
+  "text_improvement",
+  "issue_cause_suggestion",
+  "service_order_summary",
+  "checklist_suggestion",
+] as const;
+
+export type AiRequestType = (typeof aiRequestTypes)[number];
+
+export { previewContractVisits } from "./contracts";
+export type { ContractVisitPreview } from "./contracts";

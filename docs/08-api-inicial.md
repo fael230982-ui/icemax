@@ -46,6 +46,10 @@ Lista contratos recorrentes.
 
 Lista contratos com visitas proximas ou que precisam gerar OS.
 
+### GET /contracts/:id/visits/preview
+
+Retorna uma pre-visualizacao das proximas visitas de contrato conforme recorrencia configurada.
+
 ## Mapas E Plantas
 
 ### GET /floor-plans
@@ -57,6 +61,42 @@ Lista plantas e pontos mockados de equipamentos.
 ### GET /qr-labels
 
 Lista etiquetas QR geradas para equipamentos.
+
+## Orcamentos
+
+### GET /quotes
+
+Lista orcamentos mockados, incluindo status, itens e validade.
+
+## Checklists
+
+### GET /checklists
+
+Lista modelos de checklist por tipo de atendimento.
+
+## Estoque
+
+### GET /stock
+
+Lista itens de estoque e alertas de quantidade minima.
+
+## Manuais
+
+### GET /manuals
+
+Lista manuais tecnicos disponiveis no app e painel.
+
+## IA
+
+### GET /ai/requests
+
+Lista solicitacoes mockadas de IA.
+
+## Notificacoes
+
+### GET /notifications
+
+Lista notificacoes mockadas de e-mail, WhatsApp, push ou internas.
 
 ## Observacao
 

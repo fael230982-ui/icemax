@@ -117,3 +117,88 @@ export const qrLabels = [
     qrPayload: "icemax://equipment/ICM-AC-0002",
   },
 ];
+
+export const quotes = [
+  {
+    id: "quote-001",
+    number: "ORC-2026-001",
+    serviceOrderId: "1048",
+    customer: "ClimaSul Hotel",
+    status: "sent",
+    total: 1840,
+    validUntil: "2026-05-10",
+    items: [
+      { kind: "service", description: "Diagnostico e teste de estanqueidade", quantity: 1, unitPrice: 450 },
+      { kind: "part", description: "Reposicao de fluido refrigerante", quantity: 1, unitPrice: 1390 },
+    ],
+  },
+  {
+    id: "quote-002",
+    number: "ORC-2026-002",
+    serviceOrderId: "1049",
+    customer: "Mercado Avante",
+    status: "approved",
+    total: 620,
+    validUntil: "2026-05-08",
+    items: [
+      { kind: "service", description: "Correcao de dreno e higienizacao", quantity: 1, unitPrice: 620 },
+    ],
+  },
+];
+
+export const checklistTemplates = [
+  {
+    id: "checklist-001",
+    name: "Preventiva split",
+    serviceType: "preventive",
+    items: [
+      "Limpeza dos filtros",
+      "Verificacao do dreno",
+      "Medicao de temperatura",
+      "Inspecao eletrica",
+      "Fotos antes e depois",
+    ],
+  },
+  {
+    id: "checklist-002",
+    name: "Higienizacao",
+    serviceType: "cleaning",
+    items: [
+      "Protecao do ambiente",
+      "Aplicacao de produto adequado",
+      "Limpeza da evaporadora",
+      "Teste final de funcionamento",
+    ],
+  },
+];
+
+export const stock = [
+  { sku: "CAP-45", name: "Capacitor 45uF", location: "Almoxarifado", quantity: 4, minimum: 6 },
+  { sku: "BD-001", name: "Bomba de dreno", location: "Veiculo Rafael", quantity: 2, minimum: 1 },
+  { sku: "R410A", name: "Fluido R410A", location: "Almoxarifado", quantity: 1, minimum: 3 },
+];
+
+export const manuals = [
+  { id: "manual-001", title: "Carrier Piso Teto 60k", brand: "Carrier", model: "Piso Teto 60.000", equipmentType: "split" },
+  { id: "manual-002", title: "Midea Cassete 36k", brand: "Midea", model: "Cassete 36.000", equipmentType: "cassete" },
+];
+
+export const aiRequests = [
+  {
+    id: "ai-001",
+    type: "text_improvement",
+    inputText: "limpei filtro e tava com pouco gas",
+    outputText: "Foi realizada a limpeza dos filtros e identificada baixa carga de fluido refrigerante.",
+  },
+  {
+    id: "ai-002",
+    type: "issue_cause_suggestion",
+    inputText: "foto com serpentina congelada e relato de pouca ventilacao",
+    outputText: "Possiveis causas: filtro obstruido, baixa vazao de ar ou baixa carga de fluido.",
+  },
+];
+
+export const notifications = [
+  { id: "notif-001", channel: "email", recipient: "ordens@icemax.com.br", subject: "OS #1048 concluida", status: "pending" },
+  { id: "notif-002", channel: "email", recipient: "cliente@climasul.com.br", subject: "Aprovacao de orcamento", status: "sent" },
+];

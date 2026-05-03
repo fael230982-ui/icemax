@@ -63,3 +63,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 4
+
+- [x] Escopo completo documentado alem do MVP.
+- [x] Pendencias do cliente documentadas em `docs/09-pendencias-do-cliente.md`.
+- [x] Schema Prisma ampliado com orcamentos, checklists, estoque, manuais, IA, notificacoes e auditoria.
+- [x] SQL conceitual atualizado.
+- [x] API mockada ampliada.
+- [x] Painel web ampliado.
+- [x] App tecnico ampliado.
+- [x] Ambiente local documentado.
+- [x] Prisma Client gerado.
+- [x] Typecheck executado em todos os workspaces.
+- [x] Build do painel web executado.
+- [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
+- [ ] Push inicial pendente.

@@ -205,6 +205,171 @@ create table parts (
   active boolean not null default true
 );
 
+create table checklist_templates (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  name text not null,
+  service_type text not null,
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table checklist_items (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  template_id uuid not null references checklist_templates(id),
+  label text not null,
+  required boolean not null default false,
+  input_type text not null default 'checkbox',
+  sort_order integer not null default 0
+);
+
+create table service_order_checklist_answers (
+  id uuid primary key,
+  tenant_id uuid not null,
+  service_order_id uuid not null references service_orders(id),
+  checklist_item_id uuid not null references checklist_items(id),
+  value text,
+  created_at timestamptz not null default now()
+);
+
+create table stock_locations (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  name text not null,
+  type text not null,
+  technician_user_id uuid references users(id),
+  active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create table stock_items (
+  id uuid primary key,
+  tenant_id uuid not null,
+  part_id uuid not null references parts(id),
+  location_id uuid not null references stock_locations(id),
+  quantity numeric(12, 3) not null default 0,
+  unique (part_id, location_id)
+);
+
+create table stock_movements (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  part_id uuid not null references parts(id),
+  from_location_id uuid references stock_locations(id),
+  to_location_id uuid references stock_locations(id),
+  service_order_id uuid references service_orders(id),
+  quantity numeric(12, 3) not null,
+  reason text not null,
+  created_by_user_id uuid references users(id),
+  created_at timestamptz not null default now()
+);
+
+create table stock_reservations (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  part_id uuid not null references parts(id),
+  location_id uuid not null references stock_locations(id),
+  service_order_id uuid not null references service_orders(id),
+  quantity numeric(12, 3) not null,
+  status text not null default 'reserved',
+  created_at timestamptz not null default now()
+);
+
+create table service_order_parts (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  service_order_id uuid not null references service_orders(id),
+  part_id uuid not null references parts(id),
+  quantity numeric(12, 3) not null,
+  unit_price numeric(12, 2),
+  created_at timestamptz not null default now()
+);
+
+create table quotes (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  service_order_id uuid not null references service_orders(id),
+  customer_id uuid not null references customers(id),
+  number text not null,
+  status text not null default 'draft',
+  subtotal numeric(12, 2) not null default 0,
+  discount numeric(12, 2) not null default 0,
+  total numeric(12, 2) not null default 0,
+  valid_until timestamptz,
+  approved_at timestamptz,
+  rejected_at timestamptz,
+  approval_token text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (tenant_id, number)
+);
+
+create table quote_items (
+  id uuid primary key,
+  tenant_id uuid not null,
+  quote_id uuid not null references quotes(id),
+  kind text not null,
+  description text not null,
+  quantity numeric(12, 3) not null default 1,
+  unit_price numeric(12, 2) not null default 0,
+  total numeric(12, 2) not null default 0,
+  part_id uuid references parts(id)
+);
+
+create table manuals (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  title text not null,
+  brand text,
+  model text,
+  equipment_type text,
+  capacity_btu integer,
+  file_url text not null,
+  tags text,
+  created_at timestamptz not null default now()
+);
+
+create table ai_requests (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  user_id uuid references users(id),
+  service_order_id uuid references service_orders(id),
+  type text not null,
+  input_text text,
+  output_text text,
+  image_url text,
+  model text,
+  estimated_cost numeric(12, 6),
+  created_at timestamptz not null default now()
+);
+
+create table notifications (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  channel text not null,
+  recipient text not null,
+  subject text,
+  body text,
+  status text not null default 'pending',
+  related_type text,
+  related_id uuid,
+  sent_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create table audit_logs (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  actor_user_id uuid references users(id),
+  entity_type text not null,
+  entity_id uuid not null,
+  action text not null,
+  metadata jsonb,
+  created_at timestamptz not null default now()
+);
+
 create table technician_locations (
   id uuid primary key,
   tenant_id uuid not null references tenants(id),

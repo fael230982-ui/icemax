@@ -40,6 +40,10 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Assinatura do cliente.
 - PDF automatico ao concluir.
 - Envio por e-mail para empresa e copia opcional para cliente.
+- Orcamento vinculado a OS.
+- Aprovacao do cliente por link, assinatura ou aceite no app.
+- Garantia aplicada por tipo de servico.
+- Auditoria de alteracoes sensiveis.
 
 ### Contratos De Manutencao
 
@@ -75,6 +79,9 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Estoque minimo.
 - Custo, preco de venda e margem.
 - Transferencia entre almoxarifado e tecnico.
+- Solicitacao de reposicao pelo tecnico.
+- Reserva de pecas para OS agendada.
+- Inventario e ajuste com justificativa.
 
 ### IA
 
@@ -83,6 +90,25 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Sugestao de possiveis causas com base em foto e descricao.
 - Sugestao de checklist conforme tipo de atendimento.
 - Importante: a IA deve apoiar o tecnico, nao substituir diagnostico.
+- Registro do texto original, texto gerado, usuario solicitante e custo estimado.
+- Frases padronizadas por empresa.
+
+### Financeiro Operacional
+
+- Orcamentos por OS.
+- Itens de servico e pecas.
+- Descontos.
+- Impostos ou taxas futuras.
+- Status de aprovacao.
+- Futuro: contas a receber e integracao com ERP financeiro.
+
+### Notificacoes
+
+- E-mail de conclusao de OS.
+- Copia opcional para cliente.
+- Link de aprovacao de orcamento.
+- Link de acompanhamento da OS.
+- Alertas internos sobre contratos vencendo, estoque minimo e OS atrasada.
 
 ### Manuais
 
@@ -106,6 +132,15 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Etiqueta pode incluir nome da empresa, codigo do equipamento, local de instalacao e QR.
 - Impressao em lote por cliente, contrato ou local.
 - Leitura pelo app tecnico.
+
+### Relatorios
+
+- Relatorio PDF de OS com logo e cores da empresa.
+- Relatorio de produtividade por tecnico.
+- Relatorio de contratos ativos e visitas previstas.
+- Relatorio de consumo de pecas.
+- Relatorio de tempo medio de atendimento.
+- Exportacao CSV/Excel futura.
 
 ### Whitelabel
 
