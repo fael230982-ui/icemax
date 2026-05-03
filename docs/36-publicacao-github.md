@@ -32,6 +32,7 @@ O GitHub Actions executa `npm run validate` em pull requests e pushes para `main
 
 Esse comando cobre:
 
+- verificacao contra segredos versionados;
 - geracao do Prisma Client;
 - typecheck dos workspaces;
 - testes automatizados disponiveis;
@@ -77,4 +78,3 @@ Antes de liberar para teste real:
 - revisar o diagnostico de plataforma;
 - validar fluxos de OS, cliente, tecnico, estoque, contrato, rastreamento, assinatura, relatorio e notificacoes;
 - registrar pendencias como issues no GitHub.
-

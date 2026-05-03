@@ -11,6 +11,12 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - README atualizado com estrutura real do monorepo e scripts atuais.
 - PDFs mantidos adiados para ganhar velocidade.
 
+## 0.8.6 - Protecao Contra Segredos
+
+- Adicionado guard local para bloquear arquivos `.env` reais e padroes comuns de chaves.
+- `npm run validate` passou a executar a verificacao contra segredos antes de typecheck, testes e build.
+- Documentado processo de trabalho seguro com chaves e tokens.
+
 ## 0.1.0 - Lote 1
 
 - Criada estrutura base do projeto ICEMAX.

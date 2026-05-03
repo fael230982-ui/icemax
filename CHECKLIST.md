@@ -119,6 +119,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
 
+## Registro De Protecao Contra Segredos
+
+- [x] Guard contra segredos criado.
+- [x] Guard conectado ao `npm run validate`.
+- [x] Documentacao de protecao contra segredos criada.
+- [x] Template de pull request atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
+
 ## Registro Do Lote 8
 
 - [x] Gerador de PDF criado.

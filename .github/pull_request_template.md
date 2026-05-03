@@ -5,6 +5,7 @@
 ## Validacao
 
 - [ ] `npm run validate`
+- [ ] Guard de segredos passou sem achados
 - [ ] Fluxo afetado revisado no painel/app/API
 - [ ] Textos e experiencia do usuario revisados
 
@@ -19,4 +20,3 @@
 ## Observacoes
 
 - 
-

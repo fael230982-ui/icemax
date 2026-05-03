@@ -15,10 +15,11 @@
     "db:generate": "npm run db:generate -w packages/database",
     "db:migrate": "npm run db:migrate -w packages/database",
     "db:seed": "npm run db:seed -w packages/database",
-    "validate": "npm run db:generate && npm run typecheck && npm run test && npm run build -w apps/web",
+    "validate": "npm run guard:secrets && npm run db:generate && npm run typecheck && npm run test && npm run build -w apps/web",
     "audit:prod": "npm audit --omit=dev --omit=optional",
     "audit:full": "npm audit",
     "docs:pdf": "node scripts/generate-doc-pdfs.mjs",
+    "guard:secrets": "node scripts/guard-secrets.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },
