@@ -140,3 +140,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 
 - Criada aprovacao/recusa de orcamento.
 - Criado envio simulado de notificacoes.
+
+## 0.5.0 - Lote 20
+
+- Criada factory `buildApp` para testar API sem abrir porta.
+- Adicionados testes de fluxos criticos da API em modo mock.
+- Script `test` adicionado ao monorepo e API.
+- `validate` passou a executar testes.

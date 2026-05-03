@@ -265,3 +265,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 20
+
+- [x] Factory de app da API criada.
+- [x] Testes de health/dashboard criados.
+- [x] Testes de criacao de entidades criados.
+- [x] Testes de execucao de OS criados.
+- [x] Testes de contratos/estoque/notificacao/orcamento criados.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

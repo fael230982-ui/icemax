@@ -1,7 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
-const storageRoot = process.env.STORAGE_LOCAL_PATH ?? join(process.cwd(), "storage");
+const workspaceRoot = join(process.cwd(), "..", "..");
+const storageRoot = process.env.STORAGE_LOCAL_PATH ?? join(workspaceRoot, "storage");
 
 export type StoredFile = {
   path: string;
