@@ -90,6 +90,10 @@ export function OperationsConsole() {
     void run("Despacho inteligente", () => icemaxApi.dispatchRecommendations(token || undefined));
   }
 
+  function loadDispatchReadiness() {
+    void run("Prontidao da OS", () => icemaxApi.dispatchReadiness("1048", "tech-001", token || undefined));
+  }
+
   function loadLocations() {
     void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
   }
@@ -355,6 +359,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadLocations}>Ver equipe no mapa</button>
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
+        <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>

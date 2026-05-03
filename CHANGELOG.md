@@ -9,6 +9,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar recomendacoes de despacho.
 - Teste automatizado cobre recomendacoes de equipe.
 
+## 0.8.10 - Prontidao De Despacho Da OS
+
+- Adicionado endpoint de prontidao antes do deslocamento do tecnico.
+- Prontidao passou a verificar rota, pecas provaveis, manual, localizacao e historico.
+- Console web passou a consultar a prontidao de uma OS.
+- Teste automatizado cobre checks de prontidao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

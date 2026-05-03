@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -58,5 +58,17 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
       .filter(Boolean);
 
     return recommendMockDispatchAssignments({ serviceOrderIds });
+  });
+
+  app.get("/dispatch/service-orders/:id/readiness", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string };
+    const readiness = getMockServiceOrderDispatchReadiness(id, query.technicianUserId);
+
+    if (!readiness) {
+      return reply.code(404).send({ message: "OS nao encontrada para prontidao de despacho." });
+    }
+
+    return readiness;
   });
 }

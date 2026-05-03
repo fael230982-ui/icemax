@@ -1,4 +1,4 @@
-import { serviceOrders, serviceOrderStops, technicianLocations } from "../mock-data";
+import { serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
 import type { OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 
 const priorityWeight: Record<string, number> = {
@@ -172,5 +172,106 @@ export function recommendMockDispatchAssignments(input?: { serviceOrderIds?: str
       immediateActions: data.filter((item) => item.recommendedTechnician.score >= 80).length,
     },
     data,
+  };
+}
+
+function requiredPartsForIssue(issue: string) {
+  const normalized = issue.toLowerCase();
+
+  if (normalized.includes("dreno") || normalized.includes("vazando")) {
+    return ["BD-001"];
+  }
+
+  if (normalized.includes("refrigeracao") || normalized.includes("gela") || normalized.includes("gas")) {
+    return ["R410A", "CAP-45"];
+  }
+
+  return ["CAP-45"];
+}
+
+export function getMockServiceOrderDispatchReadiness(serviceOrderId: string, technicianUserId?: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+  const stop = serviceOrderStops.find((item) => item.serviceOrderId === serviceOrderId);
+  const technician = technicianLocations.find((item) => item.technicianUserId === technicianUserId) ?? technicianLocations[0];
+
+  if (!order || !stop) {
+    return null;
+  }
+
+  const route = optimizeMockRoute({
+    technicianUserId: technician.technicianUserId,
+    serviceOrderIds: [serviceOrderId],
+  });
+  const requiredSkus = requiredPartsForIssue(order.issue);
+  const parts = requiredSkus.map((sku) => {
+    const item = stock.find((stockItem) => stockItem.sku === sku);
+    const available = item ? item.quantity > 0 : false;
+
+    return {
+      sku,
+      name: item?.name ?? "Peca nao cadastrada",
+      available,
+      quantity: item?.quantity ?? 0,
+      location: item?.location ?? "Nao localizado",
+      belowMinimum: item ? item.quantity <= item.minimum : true,
+    };
+  });
+
+  const checks = [
+    {
+      key: "technician_location",
+      label: "Localizacao do tecnico",
+      status: technician ? "ok" : "blocked",
+      detail: technician ? `${technician.technician} com posicao recente.` : "Tecnico sem localizacao.",
+    },
+    {
+      key: "route",
+      label: "Deslocamento",
+      status: route.totalTravelMinutes <= 35 ? "ok" : "attention",
+      detail: `${route.totalTravelMinutes} minutos estimados ate o cliente.`,
+    },
+    {
+      key: "parts",
+      label: "Pecas provaveis",
+      status: parts.every((part) => part.available) ? "ok" : "blocked",
+      detail: parts.every((part) => part.available) ? "Pecas provaveis disponiveis." : "Ha peca provavel indisponivel.",
+    },
+    {
+      key: "manual",
+      label: "Manual tecnico",
+      status: "ok",
+      detail: "Consultar manual do equipamento no app antes da execucao.",
+    },
+    {
+      key: "customer_context",
+      label: "Historico do cliente",
+      status: order.priority === "emergency" ? "attention" : "ok",
+      detail: order.priority === "emergency" ? "Atendimento urgente; revisar historico antes de concluir." : "Sem alerta critico de historico.",
+    },
+  ];
+  const blocked = checks.filter((check) => check.status === "blocked").length;
+  const attention = checks.filter((check) => check.status === "attention").length;
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    issue: order.issue,
+    technician: {
+      technicianUserId: technician.technicianUserId,
+      name: technician.technician,
+      status: technician.status,
+    },
+    route: {
+      totalTravelMinutes: route.totalTravelMinutes,
+      totalDistanceKm: route.totalDistanceKm,
+    },
+    parts,
+    checks,
+    status: blocked > 0 ? "blocked" : attention > 0 ? "attention" : "ready",
+    recommendation: blocked > 0
+      ? "Separar pecas ou trocar tecnico antes do deslocamento."
+      : attention > 0
+        ? "Liberar com acompanhamento do gestor."
+        : "Liberado para despacho.",
   };
 }

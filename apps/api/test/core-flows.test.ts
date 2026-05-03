@@ -197,6 +197,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(recommendations.json().data[0].serviceOrderId, "1048");
   assert.ok(recommendations.json().data[0].recommendedTechnician.score > 0);
 
+  const readiness = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",
+  });
+  assert.equal(readiness.statusCode, 200);
+  assert.equal(readiness.json().serviceOrderId, "1048");
+  assert.ok(["ready", "attention", "blocked"].includes(readiness.json().status));
+  assert.ok(readiness.json().checks.length >= 5);
+
   await app.close();
 });
 
