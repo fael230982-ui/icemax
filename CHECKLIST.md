@@ -92,5 +92,5 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada.
-- [ ] Commit local criado.
+- [x] Commit local criado.
 - [ ] Push inicial pendente.
