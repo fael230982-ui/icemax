@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "ICEMAX Técnico",
+    "slug": "icemax-tecnico",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "icemax",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.icemax.tecnico"
+    },
+    "android": {
+      "package": "br.com.icemax.tecnico",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA"
+      ]
+    }
+  }
+}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ICEMAX | Painel Operacional</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="assets/icemax.PNG" alt="ICEMAX">
+          <div>
+            <strong>ICEMAX</strong>
+            <span>Tenant piloto</span>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Menu principal">
+          <button class="nav-item active" data-view="dashboard">Dashboard</button>
+          <button class="nav-item" data-view="orders">Ordens de servico</button>
+          <button class="nav-item" data-view="schedule">Agenda inteligente</button>
+          <button class="nav-item" data-view="field">Equipe em campo</button>
+          <button class="nav-item" data-view="stock">Estoque</button>
+          <button class="nav-item" data-view="ai">Assistente IA</button>
+          <button class="nav-item" data-view="settings">Whitelabel</button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Painel web</p>
+            <h1 id="view-title">Dashboard operacional</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost">Exportar</button>
+            <button class="primary">Nova OS</button>
+          </div>
+        </header>
+
+        <section class="view active" id="dashboard">
+          <div class="metric-grid">
+            <article class="metric">
+              <span>OS abertas</span>
+              <strong>18</strong>
+              <small>5 urgentes</small>
+            </article>
+            <article class="metric">
+              <span>Concluidas hoje</span>
+              <strong>11</strong>
+              <small>Tempo medio 1h42</small>
+            </article>
+            <article class="metric">
+              <span>Tecnicos ativos</span>
+              <strong>7</strong>
+              <small>2 terceirizados</small>
+            </article>
+            <article class="metric">
+              <span>Pecas em alerta</span>
+              <strong>9</strong>
+              <small>Reposicao sugerida</small>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel wide">
+              <div class="panel-header">
+                <h2>Fila de prioridade</h2>
+                <span class="badge danger">Urgencias</span>
+              </div>
+              <div class="table">
+                <div class="row head">
+                  <span>OS</span>
+                  <span>Cliente</span>
+                  <span>Problema</span>
+                  <span>Status</span>
+                </div>
+                <div class="row">
+                  <span>#1048</span>
+                  <span>ClimaSul Hotel</span>
+                  <span>Split 60k sem refrigeracao</span>
+                  <span class="status danger">Emergencia</span>
+                </div>
+                <div class="row">
+                  <span>#1049</span>
+                  <span>Mercado Avante</span>
+                  <span>Dreno vazando</span>
+                  <span class="status warn">Agendada</span>
+                </div>
+                <div class="row">
+                  <span>#1050</span>
+                  <span>Clinica Vida</span>
+                  <span>Preventiva trimestral</span>
+                  <span class="status ok">Em rota</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Mapa operacional</h2>
+                <span class="badge">Tempo real</span>
+              </div>
+              <div class="map-preview">
+                <span class="pin p1"></span>
+                <span class="pin p2"></span>
+                <span class="pin p3"></span>
+                <span class="route"></span>
+              </div>
+              <p class="muted">Ultima localizacao conhecida dos tecnicos e OS ativas.</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="orders">
+          <div class="split">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>OS #1048</h2>
+                <span class="badge danger">Alta prioridade</span>
+              </div>
+              <dl class="details">
+                <dt>Cliente</dt><dd>ClimaSul Hotel</dd>
+                <dt>Equipamento</dt><dd>Carrier Split Piso Teto 60.000 BTUs</dd>
+                <dt>Endereco</dt><dd>Av. Central, 1180 - Centro</dd>
+                <dt>Tecnico</dt><dd>Rafael Martins</dd>
+              </dl>
+              <div class="timeline">
+                <span class="done">Aberta</span>
+                <span class="done">Agendada</span>
+                <span class="current">Em atendimento</span>
+                <span>Assinatura</span>
+                <span>PDF + e-mail</span>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Historico do aparelho</h2>
+              </div>
+              <ul class="history">
+                <li><strong>12/04/2026</strong><span>Limpeza completa e medicao de temperatura.</span></li>
+                <li><strong>18/02/2026</strong><span>Troca de capacitor da condensadora.</span></li>
+                <li><strong>07/11/2025</strong><span>Verificacao de baixa carga de fluido.</span></li>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="schedule">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Agenda com sugestao de rota</h2>
+              <button class="ghost">Recalcular</button>
+            </div>
+            <div class="route-list">
+              <article><b>08:30</b><span>Clinica Vida</span><small>12 min de deslocamento</small></article>
+              <article><b>10:15</b><span>ClimaSul Hotel</span><small>Urgencia, tecnico mais proximo</small></article>
+              <article><b>14:00</b><span>Mercado Avante</span><small>Janela confirmada pelo cliente</small></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="field">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Equipe em campo</h2>
+              <span class="badge">LGPD: rastrear em OS ativa</span>
+            </div>
+            <div class="cards">
+              <article class="tech"><strong>Rafael Martins</strong><span>Em atendimento - OS #1048</span><small>Ultima posicao ha 2 min</small></article>
+              <article class="tech"><strong>Joao Pereira</strong><span>Em rota - OS #1050</span><small>Chegada prevista 08:43</small></article>
+              <article class="tech"><strong>Equipe Norte</strong><span>Terceirizado</span><small>Acesso limitado a OS atribuidas</small></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="stock">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Mini ERP de pecas</h2>
+              <button class="primary">Nova peca</button>
+            </div>
+            <div class="table">
+              <div class="row head"><span>Peca</span><span>Local</span><span>Saldo</span><span>Status</span></div>
+              <div class="row"><span>Capacitor 45uF</span><span>Almoxarifado</span><span>4 un</span><span class="status warn">Minimo</span></div>
+              <div class="row"><span>Bomba de dreno</span><span>Veiculo Rafael</span><span>2 un</span><span class="status ok">OK</span></div>
+              <div class="row"><span>Fluido R410A</span><span>Almoxarifado</span><span>1 cilindro</span><span class="status danger">Critico</span></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="ai">
+          <div class="split">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Revisao de texto tecnico</h2>
+                <span class="badge">IA assistiva</span>
+              </div>
+              <textarea readonly>limpei filtro e tava com pouco gas, precisa olhar vazamento</textarea>
+              <div class="ai-result">Foi realizada a limpeza dos filtros e identificada baixa carga de fluido refrigerante. Recomenda-se teste de estanqueidade para verificar possivel vazamento no sistema.</div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Sugestao por foto + relato</h2>
+              </div>
+              <ul class="history">
+                <li><strong>Possivel causa</strong><span>Filtro obstruido ou serpentina com sujeira excessiva.</span></li>
+                <li><strong>Verificacao</strong><span>Medir diferencial de temperatura e corrente do compressor.</span></li>
+                <li><strong>Cuidado</strong><span>Confirmar diagnostico em campo antes de registrar conclusao.</span></li>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="settings">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Configuracao whitelabel</h2>
+              <span class="badge">Multiempresa</span>
+            </div>
+            <div class="settings-grid">
+              <label>Nome da empresa<input value="ICEMAX Ar Condicionado"></label>
+              <label>E-mail de relatorio<input value="ordens@icemax.com.br"></label>
+              <label>Cor principal<input value="#0B7CEB"></label>
+              <label>Copia para cliente<select><option>Opcional por OS</option></select></label>
+            </div>
+            <p class="muted">A mesma plataforma aceitara outras empresas com logo, cores, dados e usuarios separados.</p>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
