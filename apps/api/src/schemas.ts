@@ -87,6 +87,55 @@ export const createQuoteFromOrderSchema = z.object({
   discount: z.number().nonnegative().default(0),
 });
 
+export const createPartSchema = z.object({
+  sku: z.string().optional(),
+  name: z.string().min(2),
+  unit: z.string().default("un"),
+  costPrice: z.number().nonnegative().optional(),
+  salePrice: z.number().nonnegative().optional(),
+  minimumStock: z.number().nonnegative().default(0),
+});
+
+export const createStockLocationSchema = z.object({
+  name: z.string().min(2),
+  type: z.enum(["warehouse", "vehicle", "technician", "outsourced"]),
+  technicianUserId: z.string().optional(),
+});
+
+export const createStockMovementSchema = z.object({
+  partId: z.string().min(1),
+  fromLocationId: z.string().optional(),
+  toLocationId: z.string().optional(),
+  serviceOrderId: z.string().optional(),
+  quantity: z.number().positive(),
+  reason: z.string().min(2),
+});
+
+export const generateContractVisitsSchema = z.object({
+  occurrences: z.number().int().min(1).max(24).default(6),
+  fromDate: z.string().datetime().optional(),
+});
+
+export const createOrderFromContractVisitSchema = z.object({
+  title: z.string().min(3).default("Visita preventiva de contrato"),
+  description: z.string().optional(),
+  assignedTechnicianId: z.string().optional(),
+});
+
+export const createNotificationTemplateSchema = z.object({
+  channel: z.enum(["email", "whatsapp", "push", "internal"]),
+  name: z.string().min(2),
+  subject: z.string().optional(),
+  body: z.string().min(3),
+  active: z.boolean().default(true),
+});
+
+export const updateIntegrationStatusSchema = z.object({
+  provider: z.string().min(2),
+  status: z.enum(["not_configured", "configured", "error", "disabled"]),
+  config: z.record(z.unknown()).optional(),
+});
+
 export function parseBody<T extends z.ZodTypeAny>(schema: T, body: unknown): z.output<T> {
   return schema.parse(body);
 }
@@ -101,3 +150,10 @@ export type AnswerChecklistInput = z.output<typeof answerChecklistSchema>;
 export type AddServiceOrderPartInput = z.output<typeof addServiceOrderPartSchema>;
 export type UpdateServiceOrderStatusInput = z.output<typeof updateServiceOrderStatusSchema>;
 export type CreateQuoteFromOrderInput = z.output<typeof createQuoteFromOrderSchema>;
+export type CreatePartInput = z.output<typeof createPartSchema>;
+export type CreateStockLocationInput = z.output<typeof createStockLocationSchema>;
+export type CreateStockMovementInput = z.output<typeof createStockMovementSchema>;
+export type GenerateContractVisitsInput = z.output<typeof generateContractVisitsSchema>;
+export type CreateOrderFromContractVisitInput = z.output<typeof createOrderFromContractVisitSchema>;
+export type CreateNotificationTemplateInput = z.output<typeof createNotificationTemplateSchema>;
+export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStatusSchema>;

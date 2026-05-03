@@ -116,6 +116,14 @@ Retorna uma pre-visualizacao das proximas visitas de contrato conforme recorrenc
 
 Cria contrato recorrente com periodicidade de 3, 4 ou 6 meses.
 
+### POST /contracts/:id/visits/generate
+
+Gera visitas planejadas para um contrato.
+
+### POST /contract-visits/:id/service-order
+
+Cria OS preventiva a partir de uma visita de contrato.
+
 ## Mapas E Plantas
 
 ### GET /floor-plans
@@ -152,6 +160,22 @@ Lista itens de estoque e alertas de quantidade minima.
 
 Quando `API_DATA_SOURCE="prisma"`, lista saldo por peca/local e calcula alertas por estoque minimo.
 
+### POST /parts
+
+Cria peca no cadastro do tenant.
+
+### GET /stock-locations
+
+Lista locais de estoque, como almoxarifado, veiculo e tecnico.
+
+### POST /stock-locations
+
+Cria local de estoque.
+
+### POST /stock-movements
+
+Registra movimentacao de estoque e atualiza saldo quando usando Prisma.
+
 ## Manuais
 
 ### GET /manuals
@@ -175,6 +199,20 @@ Lista notificacoes mockadas de e-mail, WhatsApp, push ou internas.
 ### GET /integrations
 
 Lista status mockado das integracoes externas.
+
+### PUT /integrations/:provider
+
+Atualiza status/configuracao de integracao no tenant atual.
+
+## Templates De Notificacao
+
+### GET /notification-templates
+
+Lista templates de notificacao.
+
+### POST /notification-templates
+
+Cria template de notificacao para e-mail, WhatsApp, push ou interno.
 
 ## WhatsApp
 

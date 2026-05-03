@@ -4,7 +4,11 @@ import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
 import {
   createMockContract,
+  createMockOrderFromContractVisit,
   createPrismaContract,
+  createPrismaOrderFromContractVisit,
+  generateMockContractVisits,
+  generatePrismaContractVisits,
   getMockContract,
   getPrismaContract,
   listMockContracts,
@@ -12,7 +16,7 @@ import {
   listPrismaContracts,
   listPrismaDueContracts,
 } from "../repositories/contracts-repository";
-import { createContractSchema, parseBody } from "../schemas";
+import { createContractSchema, createOrderFromContractVisitSchema, generateContractVisitsSchema, parseBody } from "../schemas";
 
 export async function registerContractRoutes(app: FastifyInstance) {
   app.get("/contracts", async (request) => {
@@ -65,5 +69,27 @@ export async function registerContractRoutes(app: FastifyInstance) {
       : await createMockContract(context.tenantId, input);
 
     return reply.code(201).send(contract);
+  });
+
+  app.post("/contracts/:id/visits/generate", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(generateContractVisitsSchema, request.body);
+    const visits = isPrismaEnabled()
+      ? await generatePrismaContractVisits(context.tenantId, id, input)
+      : await generateMockContractVisits(context.tenantId, id, input);
+
+    return reply.code(201).send(visits);
+  });
+
+  app.post("/contract-visits/:id/service-order", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(createOrderFromContractVisitSchema, request.body);
+    const order = isPrismaEnabled()
+      ? await createPrismaOrderFromContractVisit(context.tenantId, id, context.userId, input)
+      : await createMockOrderFromContractVisit(context.tenantId, id, context.userId, input);
+
+    return reply.code(201).send(order);
   });
 }

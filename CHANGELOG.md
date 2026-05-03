@@ -101,3 +101,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 
 - Adicionados endpoints de execucao da OS: notas, fotos, checklist, pecas, status e orcamento.
 - Repositorio de ordens expandido para registrar execucao em mock ou Prisma.
+
+## 0.3.4 - Lote 14
+
+- Estoque acelerado com endpoints de pecas, locais e movimentacoes.
+- Movimentacao de estoque com transacao Prisma para atualizar saldos.
+- Contratos acelerados com geracao de visitas recorrentes e OS preventiva a partir da visita.
+- Integracoes aceleradas com templates de notificacao e atualizacao de status.

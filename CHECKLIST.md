@@ -190,3 +190,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 14
+
+- [x] Endpoint de criacao de pecas criado.
+- [x] Endpoints de locais de estoque criados.
+- [x] Endpoint de movimentacao de estoque criado.
+- [x] Atualizacao transacional de saldo adicionada para Prisma.
+- [x] Endpoint de geracao de visitas de contrato criado.
+- [x] Endpoint de OS a partir de visita de contrato criado.
+- [x] Endpoints de templates de notificacao criados.
+- [x] Endpoint de atualizacao de integracao criado.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

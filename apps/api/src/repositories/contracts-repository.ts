@@ -1,6 +1,7 @@
 import { getPrisma } from "../database";
 import { serviceContracts } from "../mock-data";
-import type { CreateContractInput } from "../schemas";
+import { previewContractVisits } from "@icemax/shared";
+import type { CreateContractInput, CreateOrderFromContractVisitInput, GenerateContractVisitsInput } from "../schemas";
 
 export async function listMockContracts() {
   return {
@@ -98,5 +99,102 @@ export async function createPrismaContract(tenantId: string, input: CreateContra
     include: {
       equipment: true,
     },
+  });
+}
+
+export async function generateMockContractVisits(tenantId: string, contractId: string, input: GenerateContractVisitsInput) {
+  const contract = await getMockContract(contractId);
+  const startDate = input.fromDate ?? (contract && "nextVisit" in contract ? contract.nextVisit : new Date().toISOString());
+
+  return {
+    data: previewContractVisits({
+      startDate: startDate.slice(0, 10),
+      recurrenceMonths: ((contract?.recurrenceMonths ?? 3) as 3 | 4 | 6),
+      occurrences: input.occurrences,
+    }).map((visit) => ({
+      id: `visit-${contractId}-${visit.sequence}`,
+      tenantId,
+      contractId,
+      expectedDate: visit.expectedDate,
+      status: "planned",
+    })),
+  };
+}
+
+export async function generatePrismaContractVisits(tenantId: string, contractId: string, input: GenerateContractVisitsInput) {
+  const prisma = getPrisma();
+  const contract = await prisma.serviceContract.findFirstOrThrow({
+    where: { tenantId, id: contractId },
+  });
+  const startDate = (input.fromDate ?? contract.startDate.toISOString()).slice(0, 10);
+  const visits = previewContractVisits({
+    startDate,
+    recurrenceMonths: contract.recurrenceMonths as 3 | 4 | 6,
+    occurrences: input.occurrences,
+  });
+
+  const data = await prisma.$transaction(
+    visits.map((visit) =>
+      prisma.serviceContractVisit.create({
+        data: {
+          tenantId,
+          contractId,
+          expectedDate: new Date(`${visit.expectedDate}T00:00:00.000Z`),
+          status: "planned",
+        },
+      }),
+    ),
+  );
+
+  return { data };
+}
+
+export async function createMockOrderFromContractVisit(tenantId: string, visitId: string, openedByUserId: string, input: CreateOrderFromContractVisitInput) {
+  return {
+    id: `order-${Date.now()}`,
+    tenantId,
+    visitId,
+    openedByUserId,
+    status: "open",
+    title: input.title,
+    description: input.description,
+    assignedTechnicianId: input.assignedTechnicianId,
+  };
+}
+
+export async function createPrismaOrderFromContractVisit(tenantId: string, visitId: string, openedByUserId: string, input: CreateOrderFromContractVisitInput) {
+  const prisma = getPrisma();
+  const visit = await prisma.serviceContractVisit.findFirstOrThrow({
+    where: { tenantId, id: visitId },
+    include: {
+      contract: true,
+    },
+  });
+
+  return prisma.$transaction(async (tx) => {
+    const order = await tx.serviceOrder.create({
+      data: {
+        tenantId,
+        customerId: visit.contract.customerId,
+        addressId: visit.contract.addressId,
+        openedByUserId,
+        assignedTechnicianId: input.assignedTechnicianId,
+        title: input.title,
+        description: input.description,
+        priority: "normal",
+        status: "open",
+        scheduledStart: visit.expectedDate,
+      },
+    });
+
+    await tx.serviceContractVisit.update({
+      where: { id: visitId },
+      data: {
+        serviceOrderId: order.id,
+        status: "scheduled",
+      },
+    });
+
+    return order;
   });
 }
