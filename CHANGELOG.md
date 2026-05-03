@@ -172,3 +172,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criada sugestao local de causas provaveis por regras.
 - Painel web passou a acionar revisao de texto e sugestao de causas.
 - Documentadas regras de uso assistivo da IA.
+
+## 0.5.4 - Lote 24
+
+- Adicionado portal publico opcional para cliente abrir OS.
+- Criada configuracao publica por tenant/slug.
+- Painel web passou a disparar solicitacao de OS pelo cliente para teste.
+- Documentado fluxo operacional do portal do cliente.

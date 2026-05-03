@@ -321,3 +321,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 24
+
+- [x] Configuracao publica do portal criada.
+- [x] Endpoint de abertura opcional de OS pelo cliente criado.
+- [x] Console web conectado ao fluxo de portal.
+- [x] Teste de portal do cliente adicionado.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

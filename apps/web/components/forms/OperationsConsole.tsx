@@ -109,6 +109,23 @@ export function OperationsConsole() {
     );
   }
 
+  function createPortalOrder() {
+    void run("Portal do cliente", () =>
+      icemaxApi.createPortalOrder({
+        tenantSlug: "icemax",
+        customerName: "Cliente Portal",
+        customerEmail: "cliente.portal@local.dev",
+        customerPhone: "+5500000000000",
+        address: "Rua Teste, 100",
+        equipmentType: "Split Hi Wall",
+        equipmentLabel: "Sala principal",
+        problemDescription: "Equipamento nao esta refrigerando adequadamente.",
+        urgency: "high",
+        allowWhatsapp: true,
+      }),
+    );
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -191,6 +208,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
+        <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}

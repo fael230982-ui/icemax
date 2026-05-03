@@ -145,6 +145,16 @@ Lista clientes do tenant atual.
 
 Cria cliente no tenant atual.
 
+## Portal Do Cliente
+
+### GET /customer-portal/:tenantSlug/config
+
+Retorna configuracao publica minima do portal do cliente para a empresa whitelabel.
+
+### POST /customer-portal/service-orders
+
+Permite que o cliente abra uma OS opcionalmente, sem obrigar uso do app. A solicitacao entra como `open` para triagem da empresa.
+
 ## Equipamentos
 
 ### GET /equipment

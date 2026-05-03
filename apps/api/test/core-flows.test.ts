@@ -210,3 +210,34 @@ test("local ai assistant improves text and suggests causes", async () => {
 
   await app.close();
 });
+
+test("customer portal can request optional service order", async () => {
+  const app = await buildApp();
+
+  const config = await app.inject({
+    method: "GET",
+    url: "/customer-portal/icemax/config",
+  });
+  assert.equal(config.statusCode, 200);
+  assert.equal(config.json().serviceOrderOpeningEnabled, true);
+
+  const order = await app.inject({
+    method: "POST",
+    url: "/customer-portal/service-orders",
+    payload: {
+      tenantSlug: "icemax",
+      customerName: "Cliente Portal",
+      customerEmail: "cliente.portal@local.dev",
+      customerPhone: "+5500000000000",
+      address: "Rua Teste, 100",
+      equipmentType: "Split",
+      problemDescription: "Nao esta refrigerando",
+      urgency: "high",
+      allowWhatsapp: true,
+    },
+  });
+  assert.equal(order.statusCode, 201);
+  assert.equal(order.json().openedBy, "customer_portal");
+
+  await app.close();
+});

@@ -194,6 +194,19 @@ export const suggestIssueCausesSchema = z.object({
   equipmentType: z.string().optional(),
 });
 
+export const customerPortalOrderSchema = z.object({
+  tenantSlug: z.string().min(2).default("icemax"),
+  customerName: z.string().min(2),
+  customerEmail: z.string().email().optional(),
+  customerPhone: z.string().min(8),
+  address: z.string().min(5),
+  equipmentType: z.string().min(2),
+  equipmentLabel: z.string().optional(),
+  problemDescription: z.string().min(5),
+  urgency: z.enum(["normal", "high", "emergency"]).default("normal"),
+  allowWhatsapp: z.boolean().default(true),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -230,3 +243,4 @@ export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
 export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
+export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
