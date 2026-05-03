@@ -16,6 +16,87 @@ export async function listMockDueContracts() {
   };
 }
 
+type MaintenanceCalendarItem = {
+  contractId: string;
+  customer: string;
+  plan: string;
+  recurrenceMonths: number;
+  expectedDate: string;
+  status: "overdue" | "due_soon" | "planned";
+  sequence: number;
+  coveredEquipment: number;
+  recommendedAction: string;
+};
+
+function classifyVisit(expectedDate: string, today: Date) {
+  const visitDate = new Date(`${expectedDate}T00:00:00.000Z`);
+  const diffDays = Math.ceil((visitDate.getTime() - today.getTime()) / 86_400_000);
+
+  if (diffDays < 0) {
+    return "overdue" as const;
+  }
+
+  if (diffDays <= 15) {
+    return "due_soon" as const;
+  }
+
+  return "planned" as const;
+}
+
+function actionForStatus(status: MaintenanceCalendarItem["status"]) {
+  if (status === "overdue") {
+    return "Gerar OS preventiva com prioridade alta e reagendar com o cliente.";
+  }
+
+  if (status === "due_soon") {
+    return "Confirmar janela de atendimento e reservar tecnico/pecas.";
+  }
+
+  return "Manter no planejamento do contrato.";
+}
+
+function summarizeCalendar(items: MaintenanceCalendarItem[]) {
+  return {
+    totalVisits: items.length,
+    overdue: items.filter((item) => item.status === "overdue").length,
+    dueSoon: items.filter((item) => item.status === "due_soon").length,
+    planned: items.filter((item) => item.status === "planned").length,
+    contractsCovered: new Set(items.map((item) => item.contractId)).size,
+  };
+}
+
+export async function getMockContractMaintenanceCalendar(params: { occurrences?: number; fromDate?: string }) {
+  const today = new Date(`${(params.fromDate ?? new Date().toISOString()).slice(0, 10)}T00:00:00.000Z`);
+  const occurrences = params.occurrences ?? 4;
+  const data = serviceContracts.flatMap((contract) =>
+    previewContractVisits({
+      startDate: contract.nextVisit,
+      recurrenceMonths: contract.recurrenceMonths as 3 | 4 | 6,
+      occurrences,
+    }).map((visit) => {
+      const status = classifyVisit(visit.expectedDate, today);
+
+      return {
+        contractId: contract.id,
+        customer: contract.customer,
+        plan: contract.plan,
+        recurrenceMonths: contract.recurrenceMonths,
+        expectedDate: visit.expectedDate,
+        status,
+        sequence: visit.sequence,
+        coveredEquipment: contract.coveredEquipment,
+        recommendedAction: actionForStatus(status),
+      };
+    }),
+  ).sort((a, b) => a.expectedDate.localeCompare(b.expectedDate));
+
+  return {
+    generatedAt: today.toISOString(),
+    summary: summarizeCalendar(data),
+    data,
+  };
+}
+
 export async function getMockContract(id: string) {
   return serviceContracts.find((item) => item.id === id) ?? null;
 }
@@ -59,6 +140,59 @@ export async function listPrismaDueContracts(tenantId: string) {
   });
 
   return { data };
+}
+
+export async function getPrismaContractMaintenanceCalendar(tenantId: string, params: { occurrences?: number; fromDate?: string }) {
+  const today = new Date(`${(params.fromDate ?? new Date().toISOString()).slice(0, 10)}T00:00:00.000Z`);
+  const occurrences = params.occurrences ?? 4;
+  const contracts = await getPrisma().serviceContract.findMany({
+    where: { tenantId, active: true },
+    include: {
+      customer: true,
+      equipment: true,
+      visits: {
+        where: {
+          status: { in: ["planned", "scheduled", "overdue"] },
+        },
+        orderBy: { expectedDate: "asc" },
+      },
+    },
+  });
+
+  const data = contracts.flatMap((contract) => {
+    const plannedVisits = contract.visits.length
+      ? contract.visits.slice(0, occurrences).map((visit, index) => ({
+          expectedDate: visit.expectedDate.toISOString().slice(0, 10),
+          sequence: index + 1,
+        }))
+      : previewContractVisits({
+          startDate: contract.startDate.toISOString().slice(0, 10),
+          recurrenceMonths: contract.recurrenceMonths as 3 | 4 | 6,
+          occurrences,
+        });
+
+    return plannedVisits.map((visit) => {
+      const status = classifyVisit(visit.expectedDate, today);
+
+      return {
+        contractId: contract.id,
+        customer: contract.customer.name,
+        plan: contract.name,
+        recurrenceMonths: contract.recurrenceMonths,
+        expectedDate: visit.expectedDate,
+        status,
+        sequence: visit.sequence,
+        coveredEquipment: contract.equipment.length,
+        recommendedAction: actionForStatus(status),
+      };
+    });
+  }).sort((a, b) => a.expectedDate.localeCompare(b.expectedDate));
+
+  return {
+    generatedAt: today.toISOString(),
+    summary: summarizeCalendar(data),
+    data,
+  };
 }
 
 export async function getPrismaContract(tenantId: string, id: string) {

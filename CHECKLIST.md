@@ -495,3 +495,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Calendario De Contratos Recorrentes
+
+- [x] Endpoint de calendario de contratos criado.
+- [x] Classificacao de visitas por prazo criada.
+- [x] Console web conectado ao calendario.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

@@ -9,7 +9,9 @@ import {
   createPrismaOrderFromContractVisit,
   generateMockContractVisits,
   generatePrismaContractVisits,
+  getMockContractMaintenanceCalendar,
   getMockContract,
+  getPrismaContractMaintenanceCalendar,
   getPrismaContract,
   listMockContracts,
   listMockDueContracts,
@@ -37,6 +39,22 @@ export async function registerContractRoutes(app: FastifyInstance) {
     }
 
     return listMockDueContracts();
+  });
+
+  app.get("/contracts/maintenance-calendar", async (request) => {
+    const context = await getAuthContext(request);
+    const query = request.query as { occurrences?: string; fromDate?: string };
+    const occurrences = query.occurrences ? Number(query.occurrences) : undefined;
+    const params = {
+      occurrences: Number.isFinite(occurrences) ? Math.min(Math.max(Number(occurrences), 1), 24) : undefined,
+      fromDate: query.fromDate,
+    };
+
+    if (isPrismaEnabled()) {
+      return getPrismaContractMaintenanceCalendar(context.tenantId, params);
+    }
+
+    return getMockContractMaintenanceCalendar(params);
   });
 
   app.get("/contracts/:id/visits/preview", async (request, reply) => {

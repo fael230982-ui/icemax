@@ -192,6 +192,10 @@ export function OperationsConsole() {
     });
   }
 
+  function loadContractCalendar() {
+    void run("Calendario de contratos", () => icemaxApi.contractMaintenanceCalendar(token || undefined));
+  }
+
   function runEnterpriseSuite() {
     void run("Suite escala", async () => {
       const results = await Promise.all([
@@ -349,6 +353,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
+        <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>

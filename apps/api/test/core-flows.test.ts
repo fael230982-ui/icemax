@@ -101,6 +101,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(visits.statusCode, 201);
   assert.equal(visits.json().data.length, 3);
 
+  const calendar = await app.inject({
+    method: "GET",
+    url: "/contracts/maintenance-calendar?occurrences=2&fromDate=2026-05-03",
+  });
+  assert.equal(calendar.statusCode, 200);
+  assert.equal(calendar.json().summary.contractsCovered, 3);
+  assert.equal(calendar.json().summary.totalVisits, 6);
+  assert.equal(calendar.json().data[0].status, "due_soon");
+
   const movement = await app.inject({
     method: "POST",
     url: "/stock-movements",
