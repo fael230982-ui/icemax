@@ -15,12 +15,15 @@ import {
   createPrismaOrder,
   createPrismaQuoteFromOrder,
   getMockOrder,
+  getMockOrderForReport,
   getPrismaOrder,
+  getPrismaOrderForReport,
   listMockOrders,
   listPrismaOrders,
   updateMockOrderStatus,
   updatePrismaOrderStatus,
 } from "../repositories/orders-repository";
+import { saveServiceOrderReportHtml } from "../services/report-service";
 import {
   addServiceOrderNoteSchema,
   addServiceOrderPartSchema,
@@ -130,5 +133,34 @@ export async function registerOrderRoutes(app: FastifyInstance) {
       : await createMockQuoteFromOrder(context.tenantId, id, input);
 
     return reply.code(201).send(quote);
+  });
+
+  app.post("/service-orders/:id/report", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const order = isPrismaEnabled()
+      ? await getPrismaOrderForReport(context.tenantId, id)
+      : await getMockOrderForReport(context.tenantId, id);
+
+    if (!order) {
+      return reply.code(404).send({ message: "Ordem de servico nao encontrada." });
+    }
+
+    const report = await saveServiceOrderReportHtml(id, {
+      order: {
+        id: order.id,
+        title: "title" in order ? order.title : "Ordem de servico",
+        description: order.description,
+        status: order.status,
+        customerSignedName: order.customerSignedName,
+      },
+      customer: order.customer,
+      equipment: order.equipment,
+      notes: order.notes,
+      photos: order.photos,
+      parts: "partsUsed" in order ? order.partsUsed : [],
+    });
+
+    return reply.code(201).send(report);
   });
 }

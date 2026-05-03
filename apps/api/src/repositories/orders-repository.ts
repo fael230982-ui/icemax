@@ -56,6 +56,53 @@ export async function getPrismaOrder(tenantId: string, id: string) {
   });
 }
 
+export async function getPrismaOrderForReport(tenantId: string, id: string) {
+  return getPrisma().serviceOrder.findFirst({
+    where: { tenantId, id },
+    include: {
+      customer: true,
+      equipment: true,
+      notes: true,
+      photos: true,
+      partsUsed: {
+        include: {
+          part: true,
+        },
+      },
+    },
+  });
+}
+
+export async function getMockOrderForReport(tenantId: string, id: string) {
+  const order = serviceOrders.find((item) => item.id === id);
+
+  if (!order) {
+    return null;
+  }
+
+  return {
+    ...order,
+    tenantId,
+    title: order.issue,
+    description: order.issue,
+    customerSignedName: null,
+    customer: {
+      name: order.customer,
+      email: "cliente@exemplo.local",
+      phone: "+5500000000000",
+    },
+    equipment: {
+      brand: order.equipment.split(" ")[0],
+      model: order.equipment,
+      serialNumber: "ICM-AC-MOCK",
+      installationLocation: "Local de instalacao",
+    },
+    notes: [{ rawText: "Atendimento registrado em ambiente mock.", improvedText: null }],
+    photos: [],
+    partsUsed: [],
+  };
+}
+
 export async function createMockOrder(tenantId: string, openedByUserId: string, input: CreateServiceOrderInput) {
   return {
     id: `${Date.now()}`,

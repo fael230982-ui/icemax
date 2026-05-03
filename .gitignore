@@ -10,6 +10,10 @@ build/
 coverage/
 tmp/
 uploads/
+storage/uploads/*
+storage/reports/*
+!storage/uploads/.gitkeep
+!storage/reports/.gitkeep
 *.tsbuildinfo
 .tmp-doc-pdf/
 .DS_Store

@@ -86,6 +86,16 @@ Atualiza status da OS. Quando status for `completed`, registra conclusao.
 
 Cria orcamento vinculado a uma OS.
 
+### POST /service-orders/:id/report
+
+Gera relatorio HTML local da OS e retorna URL interna.
+
+## Arquivos
+
+### GET /files/*
+
+Serve arquivos locais gerados em desenvolvimento, como relatorios e uploads.
+
 ## Clientes
 
 ### GET /customers

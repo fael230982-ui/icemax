@@ -7,6 +7,7 @@ import { registerContractRoutes } from "./modules/contracts";
 import { registerCustomerRoutes } from "./modules/customers";
 import { registerDashboardRoutes } from "./modules/dashboard";
 import { registerEquipmentRoutes } from "./modules/equipment";
+import { registerFileRoutes } from "./modules/files";
 import { registerIntegrationRoutes } from "./modules/integrations";
 import { registerOperationRoutes } from "./modules/operations";
 import { registerOrderRoutes } from "./modules/orders";
@@ -16,6 +17,7 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get("/auth/context", async (request) => getAuthContext(request));
 
   await registerAuthRoutes(app);
+  await registerFileRoutes(app);
   await registerDashboardRoutes(app);
   await registerCustomerRoutes(app);
   await registerEquipmentRoutes(app);

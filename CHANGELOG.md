@@ -115,3 +115,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criadas rotas `/auth/login` e `/auth/me`.
 - Contexto multiempresa passou a aceitar Bearer token.
 - Seed passou a criar senha local com hash seguro.
+
+## 0.4.1 - Lote 16
+
+- Criada camada local de arquivos.
+- Criado gerador HTML de relatorio de OS.
+- Adicionado endpoint para gerar relatorio de OS.
+- Adicionada rota local para servir arquivos em desenvolvimento.

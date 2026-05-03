@@ -131,3 +131,19 @@ npm run docs:pdf
 ```
 
 Os arquivos PDF ficam em `docs-pdf/`.
+
+## Arquivos Locais Da API
+
+Durante desenvolvimento, relatorios e uploads podem ser salvos em:
+
+```bash
+storage/
+```
+
+Variavel:
+
+```bash
+STORAGE_LOCAL_PATH="./storage"
+```
+
+Em producao, essa camada deve ser substituida por armazenamento S3 compativel.

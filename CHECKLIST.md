@@ -220,3 +220,15 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 16
+
+- [x] Camada local de arquivos criada.
+- [x] Gerador HTML de relatorio de OS criado.
+- [x] Endpoint de relatorio de OS criado.
+- [x] Rota local de arquivos criada.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
