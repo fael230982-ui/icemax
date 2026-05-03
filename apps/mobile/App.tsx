@@ -4,7 +4,7 @@ import { ContractCard } from "./src/components/ContractCard";
 import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
-import { contracts, orders, quality, tools } from "./src/data/dashboard";
+import { contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
 
 export default function App() {
   return (
@@ -26,6 +26,14 @@ export default function App() {
           <View style={styles.grid}>
             {tools.map((tool) => (
               <InfoCard key={tool.title} title={tool.title} detail={tool.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Execucao da OS">
+          <View style={styles.grid}>
+            {executionSteps.map((step) => (
+              <InfoCard key={step.title} title={step.title} detail={step.detail} />
             ))}
           </View>
         </Section>

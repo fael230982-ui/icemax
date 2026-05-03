@@ -2,6 +2,7 @@ import {
   checklists,
   contracts,
   equipmentList,
+  executionFlow,
   floorPlan,
   integrations,
   manuals,
@@ -42,6 +43,17 @@ export function DashboardSections() {
                 <small>{order.technician}</small>
               </span>
               <b>{order.eta}</b>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel eyebrow="Execucao de campo" title="Fluxo da OS" action={<span className="pill">App tecnico</span>} wide>
+        <div className="contractGrid">
+          {executionFlow.map((step) => (
+            <div className="contract" key={step.label}>
+              <strong>{step.label}</strong>
+              <span>{step.status}</span>
             </div>
           ))}
         </div>

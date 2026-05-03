@@ -54,6 +54,30 @@ Retorna detalhe de uma ordem de servico.
 
 Cria uma ordem de servico.
 
+### POST /service-orders/:id/notes
+
+Adiciona nota tecnica a uma OS.
+
+### POST /service-orders/:id/photos
+
+Adiciona foto a uma OS.
+
+### POST /service-orders/:id/checklist-answers
+
+Registra resposta de checklist da OS.
+
+### POST /service-orders/:id/parts
+
+Registra peca usada na OS.
+
+### PATCH /service-orders/:id/status
+
+Atualiza status da OS. Quando status for `completed`, registra conclusao.
+
+### POST /service-orders/:id/quotes
+
+Cria orcamento vinculado a uma OS.
+
 ## Clientes
 
 ### GET /customers

@@ -77,6 +77,15 @@ export const serviceFlow = [
   "PDF e e-mail",
 ];
 
+export const executionFlow = [
+  { label: "Check-in", status: "Obrigatorio" },
+  { label: "Checklist", status: "Em andamento" },
+  { label: "Fotos", status: "Antes/depois" },
+  { label: "Pecas", status: "Baixa estoque" },
+  { label: "Orcamento", status: "Quando necessario" },
+  { label: "Assinatura", status: "Finalizacao" },
+];
+
 export const contracts = [
   {
     customer: "Clinica Vida",

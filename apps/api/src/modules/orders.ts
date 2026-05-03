@@ -1,8 +1,36 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
-import { createMockOrder, createPrismaOrder, getMockOrder, getPrismaOrder, listMockOrders, listPrismaOrders } from "../repositories/orders-repository";
-import { createServiceOrderSchema, parseBody } from "../schemas";
+import {
+  addMockOrderNote,
+  addMockOrderPart,
+  addMockOrderPhoto,
+  addPrismaOrderNote,
+  addPrismaOrderPart,
+  addPrismaOrderPhoto,
+  answerMockChecklist,
+  answerPrismaChecklist,
+  createMockOrder,
+  createMockQuoteFromOrder,
+  createPrismaOrder,
+  createPrismaQuoteFromOrder,
+  getMockOrder,
+  getPrismaOrder,
+  listMockOrders,
+  listPrismaOrders,
+  updateMockOrderStatus,
+  updatePrismaOrderStatus,
+} from "../repositories/orders-repository";
+import {
+  addServiceOrderNoteSchema,
+  addServiceOrderPartSchema,
+  addServiceOrderPhotoSchema,
+  answerChecklistSchema,
+  createQuoteFromOrderSchema,
+  createServiceOrderSchema,
+  parseBody,
+  updateServiceOrderStatusSchema,
+} from "../schemas";
 
 export async function registerOrderRoutes(app: FastifyInstance) {
   app.get("/service-orders", async (request) => {
@@ -37,5 +65,70 @@ export async function registerOrderRoutes(app: FastifyInstance) {
       : await createMockOrder(context.tenantId, context.userId, input);
 
     return reply.code(201).send(order);
+  });
+
+  app.post("/service-orders/:id/notes", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(addServiceOrderNoteSchema, request.body);
+    const note = isPrismaEnabled()
+      ? await addPrismaOrderNote(context.tenantId, id, context.userId, input)
+      : await addMockOrderNote(context.tenantId, id, context.userId, input);
+
+    return reply.code(201).send(note);
+  });
+
+  app.post("/service-orders/:id/photos", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(addServiceOrderPhotoSchema, request.body);
+    const photo = isPrismaEnabled()
+      ? await addPrismaOrderPhoto(context.tenantId, id, context.userId, input)
+      : await addMockOrderPhoto(context.tenantId, id, context.userId, input);
+
+    return reply.code(201).send(photo);
+  });
+
+  app.post("/service-orders/:id/checklist-answers", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(answerChecklistSchema, request.body);
+    const answer = isPrismaEnabled()
+      ? await answerPrismaChecklist(context.tenantId, id, input)
+      : await answerMockChecklist(context.tenantId, id, input);
+
+    return reply.code(201).send(answer);
+  });
+
+  app.post("/service-orders/:id/parts", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(addServiceOrderPartSchema, request.body);
+    const part = isPrismaEnabled()
+      ? await addPrismaOrderPart(context.tenantId, id, input)
+      : await addMockOrderPart(context.tenantId, id, input);
+
+    return reply.code(201).send(part);
+  });
+
+  app.patch("/service-orders/:id/status", async (request) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(updateServiceOrderStatusSchema, request.body);
+
+    return isPrismaEnabled()
+      ? updatePrismaOrderStatus(context.tenantId, id, input)
+      : updateMockOrderStatus(context.tenantId, id, input);
+  });
+
+  app.post("/service-orders/:id/quotes", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = getAuthContext(request);
+    const input = parseBody(createQuoteFromOrderSchema, request.body);
+    const quote = isPrismaEnabled()
+      ? await createPrismaQuoteFromOrder(context.tenantId, id, input)
+      : await createMockQuoteFromOrder(context.tenantId, id, input);
+
+    return reply.code(201).send(quote);
   });
 }

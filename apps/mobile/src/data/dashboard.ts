@@ -24,3 +24,12 @@ export const quality = [
   { title: "Offline", value: "Sincronizacao pendente: 0" },
   { title: "Fotos", value: "Obrigatorias por checklist" },
 ];
+
+export const executionSteps = [
+  { title: "Check-in", detail: "Registrar chegada com localizacao" },
+  { title: "Checklist", detail: "Responder itens obrigatorios" },
+  { title: "Fotos", detail: "Antes, durante e depois" },
+  { title: "Pecas", detail: "Informar consumo em campo" },
+  { title: "Orcamento", detail: "Gerar aprovacao quando necessario" },
+  { title: "Assinatura", detail: "Coletar aceite do cliente" },
+];

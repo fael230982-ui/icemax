@@ -96,3 +96,8 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionadas validacoes de entrada com Zod na API.
 - Criados endpoints POST para clientes, equipamentos, ordens de servico e contratos.
 - Adicionado handler global de erros da API.
+
+## 0.3.3 - Lote 13
+
+- Adicionados endpoints de execucao da OS: notas, fotos, checklist, pecas, status e orcamento.
+- Repositorio de ordens expandido para registrar execucao em mock ou Prisma.

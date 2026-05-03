@@ -175,3 +175,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 13
+
+- [x] Endpoint de notas da OS criado.
+- [x] Endpoint de fotos da OS criado.
+- [x] Endpoint de checklist da OS criado.
+- [x] Endpoint de pecas usadas criado.
+- [x] Endpoint de status da OS criado.
+- [x] Endpoint de orcamento por OS criado.
+- [x] Fluxo de execucao de OS adicionado ao painel e app.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
