@@ -117,6 +117,10 @@ export function OperationsConsole() {
     );
   }
 
+  function reviewServiceOrderCompletion() {
+    void run("Revisao de conclusao da OS", () => icemaxApi.serviceOrderCompletionReview("1048", token || undefined));
+  }
+
   function createPortalOrder() {
     void run("Portal do cliente", () =>
       icemaxApi.createPortalOrder({
@@ -362,6 +366,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
+        <button type="button" className="secondary" onClick={reviewServiceOrderCompletion}>Revisar conclusao OS</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>

@@ -25,6 +25,7 @@ import {
 } from "../repositories/orders-repository";
 import { saveServiceOrderReportPdf } from "../services/report-service";
 import { recordAuditEvent } from "../services/audit-service";
+import { buildOrderCompletionReview } from "../services/order-completion-service";
 import {
   addServiceOrderNoteSchema,
   addServiceOrderPartSchema,
@@ -204,5 +205,19 @@ export async function registerOrderRoutes(app: FastifyInstance) {
     });
 
     return reply.code(201).send(report);
+  });
+
+  app.get("/service-orders/:id/completion-review", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const order = isPrismaEnabled()
+      ? await getPrismaOrderForReport(context.tenantId, id)
+      : await getMockOrderForReport(context.tenantId, id);
+
+    if (!order) {
+      return reply.code(404).send({ message: "Ordem de servico nao encontrada." });
+    }
+
+    return buildOrderCompletionReview(order);
   });
 }

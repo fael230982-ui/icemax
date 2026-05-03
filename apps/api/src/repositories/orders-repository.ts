@@ -130,8 +130,8 @@ export async function getMockOrderForReport(tenantId: string, id: string) {
       installationLocation: "Local de instalacao",
     },
     notes: [{ rawText: "Atendimento registrado em ambiente mock.", improvedText: null }],
-    photos: [],
-    partsUsed: [],
+    photos: [{ type: "after", fileUrl: "/files/uploads/mock-after.jpg" }],
+    partsUsed: [{ partId: "part-001", quantity: 1 }],
   };
 }
 

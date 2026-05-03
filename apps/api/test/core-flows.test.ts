@@ -74,6 +74,15 @@ test("service order execution flow accepts mock records", async () => {
   assert.equal(report.statusCode, 201);
   assert.match(report.json().url, /^\/files\/reports\/os-1048\.(pdf|html)$/);
 
+  const completionReview = await app.inject({
+    method: "GET",
+    url: "/service-orders/1048/completion-review",
+  });
+  assert.equal(completionReview.statusCode, 200);
+  assert.equal(completionReview.json().serviceOrderId, "1048");
+  assert.ok(completionReview.json().checks.length >= 5);
+  assert.match(completionReview.json().reportDraft.professionalSummary, /Foi identificado/);
+
   const upload = await app.inject({
     method: "POST",
     url: "/files",

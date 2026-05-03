@@ -16,6 +16,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar a prontidao de uma OS.
 - Teste automatizado cobre checks de prontidao.
 
+## 0.8.11 - Revisao De Conclusao Da OS
+
+- Adicionado endpoint de revisao antes do fechamento da OS.
+- Revisao passou a validar texto, fotos, assinatura, equipamento e contato do cliente.
+- Criado rascunho profissional de relatorio com assistente local.
+- Console web passou a consultar a revisao de conclusao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -540,3 +540,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Revisao De Conclusao Da OS
+
+- [x] Endpoint de revisao de conclusao criado.
+- [x] Checks de texto, fotos, assinatura, equipamento e contato criados.
+- [x] Rascunho profissional de relatorio criado.
+- [x] Console web conectado a revisao de conclusao.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
