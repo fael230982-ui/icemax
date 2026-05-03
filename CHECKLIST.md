@@ -451,3 +451,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Governanca GitHub E Publicacao
+
+- [x] Workflow de validacao criado.
+- [x] Template de pull request criado.
+- [x] Templates de issue criados.
+- [x] Guia de publicacao no GitHub criado.
+- [x] README atualizado com estrutura real do monorepo.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

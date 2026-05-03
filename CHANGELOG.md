@@ -2,6 +2,15 @@
 
 Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de releases, homologacoes ou publicacoes importantes.
 
+## 0.8.5 - Governanca GitHub E Publicacao
+
+- Adicionado workflow de CI para validar pull requests e pushes na branch `main`.
+- Adicionado template de pull request com checklist de validacao e governanca.
+- Adicionados templates de issue para bugs e novas funcionalidades.
+- Documentado processo de publicacao controlada no GitHub.
+- README atualizado com estrutura real do monorepo e scripts atuais.
+- PDFs mantidos adiados para ganhar velocidade.
+
 ## 0.1.0 - Lote 1
 
 - Criada estrutura base do projeto ICEMAX.
