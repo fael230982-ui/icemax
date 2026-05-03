@@ -256,6 +256,20 @@ Cria plano de backup.
 
 Cria playbook de incidente.
 
+## Suite De Aceleracao
+
+### GET /acceleration/lots
+
+Lista 99 lotes conectados para aceleracao futura.
+
+### POST /acceleration/lots/:key/run
+
+Executa um lote especifico em modo mock/auditavel.
+
+### POST /acceleration/lots/run-all
+
+Executa os 99 lotes conectados e retorna contagem consolidada.
+
 ## Arquivos
 
 ### POST /files

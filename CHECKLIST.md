@@ -382,3 +382,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Da Suite De Aceleracao
+
+- [x] 99 contratos de lotes futuros criados.
+- [x] Endpoint de listagem criado.
+- [x] Endpoint de execucao individual criado.
+- [x] Endpoint de execucao em massa criado.
+- [x] Console web conectado a suite de aceleracao.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

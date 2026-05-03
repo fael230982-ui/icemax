@@ -134,4 +134,7 @@ export const icemaxApi = {
   createManualImportJob: (body: unknown, token?: string) => apiRequest<unknown>("/manuals/import-jobs", { method: "POST", body, token }),
   createBackupPlan: (body: unknown, token?: string) => apiRequest<unknown>("/backup-plans", { method: "POST", body, token }),
   createIncidentPlaybook: (body: unknown, token?: string) => apiRequest<unknown>("/incident-playbooks", { method: "POST", body, token }),
+  accelerationLots: (token?: string) => apiRequest<ApiListResponse<unknown>>("/acceleration/lots", { token }),
+  runAccelerationLot: (key: string, token?: string) => apiRequest<unknown>(`/acceleration/lots/${key}/run`, { method: "POST", token }),
+  runAllAccelerationLots: (token?: string) => apiRequest<unknown>("/acceleration/lots/run-all", { method: "POST", token }),
 };

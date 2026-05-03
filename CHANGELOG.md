@@ -215,3 +215,11 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Lote 52: importacao de manuais.
 - Lote 53: plano de backup.
 - Lote 54: playbooks de incidentes.
+
+## 0.8.0 - Suite De Aceleracao
+
+- Adicionada suite com 99 contratos de lotes futuros.
+- Criadas rotas para listar, executar um lote e executar todos os lotes.
+- Painel web passou a acionar a execucao dos 99 lotes.
+- Teste automatizado garante que os lotes 55 a 153 estao conectados.
+- PDFs mantidos adiados para ganhar velocidade.

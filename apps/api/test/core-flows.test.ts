@@ -400,3 +400,33 @@ test("enterprise scale suite connects twenty expansion flows", async () => {
 
   await app.close();
 });
+
+test("acceleration suite connects and runs ninety nine giant lots", async () => {
+  const app = await buildApp();
+
+  const lots = await app.inject({
+    method: "GET",
+    url: "/acceleration/lots",
+  });
+  assert.equal(lots.statusCode, 200);
+  assert.equal(lots.json().total, 99);
+  assert.equal(lots.json().data[0].lot, 55);
+  assert.equal(lots.json().data[98].lot, 153);
+
+  const single = await app.inject({
+    method: "POST",
+    url: "/acceleration/lots/agenda-auto-confirmation/run",
+  });
+  assert.equal(single.statusCode, 201);
+  assert.equal(single.json().status, "executed");
+
+  const all = await app.inject({
+    method: "POST",
+    url: "/acceleration/lots/run-all",
+  });
+  assert.equal(all.statusCode, 201);
+  assert.equal(all.json().connectedLots, 99);
+  assert.equal(all.json().data.length, 99);
+
+  await app.close();
+});
