@@ -62,3 +62,12 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criado helper de dados locais para transicao entre mock e API.
 - Documentada estrategia frontend/API.
 - Adicionada variavel `NEXT_PUBLIC_API_URL`.
+
+## 0.2.4 - Lote 8
+
+- Criado gerador de PDF para documentos Markdown.
+- Adicionado script `docs:pdf`.
+- Criada pasta `docs-pdf/` para copias em PDF dos documentos de leitura.
+- Adicionada camada inicial para alternar API entre mock e Prisma.
+- Criados repositorios iniciais de dashboard e ordens.
+- Criado contexto de autenticacao simulado por headers.

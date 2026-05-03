@@ -118,3 +118,15 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 8
+
+- [x] Gerador de PDF criado.
+- [x] Script `docs:pdf` criado.
+- [x] PDFs dos documentos gerados.
+- [x] API preparada para alternar mock/Prisma em dashboard e ordens.
+- [x] Contexto de autenticacao simulado criado.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

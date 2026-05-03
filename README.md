@@ -29,6 +29,12 @@ Validar projeto:
 npm run validate
 ```
 
+Gerar PDFs dos documentos:
+
+```bash
+npm run docs:pdf
+```
+
 Banco local:
 
 ```bash

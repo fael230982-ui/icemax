@@ -23,3 +23,12 @@ NEXT_PUBLIC_API_URL="http://localhost:3333"
 - Tokens de OpenAI, WhatsApp, e-mail e mapas do servidor nao entram no front-end.
 - O painel pode receber chaves publicas restritas quando for necessario carregar mapas no navegador.
 
+## Contexto Multiempresa
+
+Durante o desenvolvimento, a API aceita headers para simular contexto:
+
+- `x-tenant-id`
+- `x-user-id`
+- `x-user-role`
+
+No login real, estes valores devem vir do token de sessao validado no back-end.

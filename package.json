@@ -17,6 +17,7 @@
     "validate": "npm run db:generate && npm run typecheck && npm run build -w apps/web",
     "audit:prod": "npm audit --omit=dev --omit=optional",
     "audit:full": "npm audit",
+    "docs:pdf": "node scripts/generate-doc-pdfs.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },

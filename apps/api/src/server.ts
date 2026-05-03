@@ -1,6 +1,7 @@
 import cors from "@fastify/cors";
 import Fastify from "fastify";
 import { serviceOrderStatuses } from "@icemax/shared";
+import { config } from "./config";
 import { registerRoutes } from "./routes";
 
 const app = Fastify({ logger: true });
@@ -22,7 +23,4 @@ app.get("/meta", async () => ({
 
 await registerRoutes(app);
 
-const port = Number(process.env.PORT ?? 3333);
-const host = process.env.HOST ?? "0.0.0.0";
-
-await app.listen({ port, host });
+await app.listen({ port: config.port, host: config.host });

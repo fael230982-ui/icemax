@@ -24,6 +24,19 @@ Variavel esperada:
 DATABASE_URL="postgresql://icemax:icemax@localhost:5432/icemax"
 ```
 
+Para usar API com banco real:
+
+```bash
+API_DATA_SOURCE="prisma"
+DEFAULT_TENANT_ID="tenant-icemax"
+```
+
+Para continuar usando dados mockados:
+
+```bash
+API_DATA_SOURCE="mock"
+```
+
 ## Comandos De Validacao
 
 ```bash
@@ -101,3 +114,13 @@ App tecnico:
 ```bash
 npm run dev:mobile
 ```
+
+## PDFs Da Documentacao
+
+Sempre que documentos em `docs/` forem criados ou atualizados:
+
+```bash
+npm run docs:pdf
+```
+
+Os arquivos PDF ficam em `docs-pdf/`.

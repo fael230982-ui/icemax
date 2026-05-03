@@ -11,5 +11,6 @@ coverage/
 tmp/
 uploads/
 *.tsbuildinfo
+.tmp-doc-pdf/
 .DS_Store
 Thumbs.db

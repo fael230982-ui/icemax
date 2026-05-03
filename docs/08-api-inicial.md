@@ -20,6 +20,20 @@ Retorna metadados do produto e status suportados de OS.
 
 Retorna a empresa atual. No MVP inicial, a ICEMAX e usada como tenant piloto.
 
+## Autenticacao E Contexto
+
+### GET /auth/context
+
+Retorna o contexto atual simulado de autenticacao.
+
+Headers de desenvolvimento:
+
+- `x-tenant-id`
+- `x-user-id`
+- `x-user-role`
+
+Enquanto login real nao estiver implementado, a API usa `tenant-icemax` e papel `owner` como padrao.
+
 ## Dashboard
 
 ### GET /dashboard
