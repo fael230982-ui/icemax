@@ -396,3 +396,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Diagnostico De Plataforma
+
+- [x] Endpoint de prontidao criado.
+- [x] Catalogo de modulos criado.
+- [x] Matriz de papeis criada.
+- [x] Diagnostico tecnico criado.
+- [x] Console web conectado ao diagnostico.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

@@ -137,4 +137,8 @@ export const icemaxApi = {
   accelerationLots: (token?: string) => apiRequest<ApiListResponse<unknown>>("/acceleration/lots", { token }),
   runAccelerationLot: (key: string, token?: string) => apiRequest<unknown>(`/acceleration/lots/${key}/run`, { method: "POST", token }),
   runAllAccelerationLots: (token?: string) => apiRequest<unknown>("/acceleration/lots/run-all", { method: "POST", token }),
+  platformReadiness: (token?: string) => apiRequest<unknown>("/platform/readiness", { token }),
+  platformModules: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/modules", { token }),
+  platformRoles: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/roles", { token }),
+  platformDiagnostics: (token?: string) => apiRequest<unknown>("/platform/diagnostics", { token }),
 };

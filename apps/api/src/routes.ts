@@ -18,6 +18,7 @@ import { registerFileRoutes } from "./modules/files";
 import { registerIntegrationRoutes } from "./modules/integrations";
 import { registerOperationRoutes } from "./modules/operations";
 import { registerOrderRoutes } from "./modules/orders";
+import { registerPlatformRoutes } from "./modules/platform";
 
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/tenant/current", async () => tenant);
@@ -39,5 +40,6 @@ export async function registerRoutes(app: FastifyInstance) {
   await registerAssetRoutes(app);
   await registerOperationRoutes(app);
   await registerIntegrationRoutes(app);
+  await registerPlatformRoutes(app);
   await registerAuditRoutes(app);
 }

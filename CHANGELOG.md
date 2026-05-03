@@ -223,3 +223,11 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web passou a acionar a execucao dos 99 lotes.
 - Teste automatizado garante que os lotes 55 a 153 estao conectados.
 - PDFs mantidos adiados para ganhar velocidade.
+
+## 0.8.1 - Diagnostico De Plataforma
+
+- Adicionado endpoint de prontidao operacional.
+- Adicionado catalogo de modulos e maturidade.
+- Adicionada matriz inicial de papeis e permissoes.
+- Adicionado diagnostico tecnico de ambiente.
+- Painel web passou a consultar diagnostico consolidado.

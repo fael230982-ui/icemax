@@ -270,6 +270,24 @@ Executa um lote especifico em modo mock/auditavel.
 
 Executa os 99 lotes conectados e retorna contagem consolidada.
 
+## Diagnostico Da Plataforma
+
+### GET /platform/readiness
+
+Retorna prontidao operacional, bloqueios e integracoes pendentes.
+
+### GET /platform/modules
+
+Lista catalogo de modulos e maturidade.
+
+### GET /platform/roles
+
+Retorna matriz inicial de papeis e permissoes.
+
+### GET /platform/diagnostics
+
+Retorna diagnostico tecnico de ambiente, storage e dependencias externas.
+
 ## Arquivos
 
 ### POST /files

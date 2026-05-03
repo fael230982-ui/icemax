@@ -430,3 +430,26 @@ test("acceleration suite connects and runs ninety nine giant lots", async () => 
 
   await app.close();
 });
+
+test("platform diagnostics expose readiness catalog and role matrix", async () => {
+  const app = await buildApp();
+
+  const readiness = await app.inject({ method: "GET", url: "/platform/readiness" });
+  assert.equal(readiness.statusCode, 200);
+  assert.equal(readiness.json().tenant, "ICEMAX Ar Condicionado");
+  assert.equal(readiness.json().mode, "mock");
+
+  const modules = await app.inject({ method: "GET", url: "/platform/modules" });
+  assert.equal(modules.statusCode, 200);
+  assert.ok(modules.json().total >= 10);
+
+  const roles = await app.inject({ method: "GET", url: "/platform/roles" });
+  assert.equal(roles.statusCode, 200);
+  assert.ok(roles.json().data.some((item: { role: string }) => item.role === "owner"));
+
+  const diagnostics = await app.inject({ method: "GET", url: "/platform/diagnostics" });
+  assert.equal(diagnostics.statusCode, 200);
+  assert.equal(diagnostics.json().validation.zod, true);
+
+  await app.close();
+});

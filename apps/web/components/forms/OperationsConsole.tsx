@@ -225,6 +225,19 @@ export function OperationsConsole() {
     void run("99 lotes acelerados", () => icemaxApi.runAllAccelerationLots(token || undefined));
   }
 
+  function runPlatformCheck() {
+    void run("Diagnostico plataforma", async () => {
+      const results = await Promise.all([
+        icemaxApi.platformReadiness(token || undefined),
+        icemaxApi.platformModules(token || undefined),
+        icemaxApi.platformRoles(token || undefined),
+        icemaxApi.platformDiagnostics(token || undefined),
+      ]);
+
+      return { checks: results.length, results };
+    });
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -311,6 +324,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>
+        <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}
