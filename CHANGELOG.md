@@ -55,3 +55,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - API reorganizada em modulos por dominio.
 - Documentado fluxo local de migrations e seed.
 - Separada validacao operacional de auditoria de dependencias.
+
+## 0.2.3 - Lote 7
+
+- Criado cliente de API para o painel web.
+- Criado helper de dados locais para transicao entre mock e API.
+- Documentada estrategia frontend/API.
+- Adicionada variavel `NEXT_PUBLIC_API_URL`.

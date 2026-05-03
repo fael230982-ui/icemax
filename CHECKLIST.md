@@ -108,3 +108,13 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [ ] Auditoria de dependencias pendente de resolucao antes de release.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 7
+
+- [x] Cliente de API do painel criado.
+- [x] Helper de dados locais criado.
+- [x] Estrategia frontend/API documentada.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

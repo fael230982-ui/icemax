@@ -90,6 +90,12 @@ Painel web:
 npm run dev:web
 ```
 
+Quando o painel consumir a API local:
+
+```bash
+NEXT_PUBLIC_API_URL="http://localhost:3333"
+```
+
 App tecnico:
 
 ```bash
