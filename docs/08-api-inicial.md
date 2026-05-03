@@ -54,6 +54,12 @@ Retorna indicadores principais, OS urgentes e visitas de contrato proximas.
 
 Lista ordens de servico.
 
+Filtros opcionais:
+
+- `status`
+- `priority`
+- `customer`
+
 ### GET /service-orders/:id
 
 Retorna detalhe de uma ordem de servico.
@@ -91,6 +97,17 @@ Cria orcamento vinculado a uma OS.
 Gera relatorio local da OS e retorna URL interna. Em desenvolvimento, tenta gerar PDF com Chrome/Edge headless e usa HTML como fallback.
 
 ## Arquivos
+
+### POST /files
+
+Recebe arquivo em JSON/base64 e salva no storage local de desenvolvimento.
+
+Campos:
+
+- `folder`: `uploads`, `manuals`, `signatures`, `floor-plans` ou `reports`;
+- `fileName`;
+- `mimeType`;
+- `base64`.
 
 ### GET /files/*
 
@@ -153,6 +170,14 @@ Lista plantas e pontos mockados de equipamentos.
 ### GET /qr-labels
 
 Lista etiquetas QR geradas para equipamentos.
+
+### POST /qr-labels
+
+Cria etiqueta QR em SVG para impressao e retorna `fileUrl`.
+
+### GET /qr-labels/:id/print
+
+Gera arquivo SVG de uma etiqueta existente mockada para impressao.
 
 ## Orcamentos
 
@@ -250,6 +275,12 @@ Lista templates internos planejados para mensagens de WhatsApp.
 
 Endpoint inicial para receber eventos de webhook do WhatsApp.
 
+## Auditoria
+
+### GET /audit-log
+
+Lista eventos recentes de auditoria do tenant atual. A rota exige papel `owner` ou `admin` quando o contexto autenticado informar permissao.
+
 ## Observacao
 
 Os endpoints atuais usam dados mockados. A proxima etapa tecnica e conectar estes contratos de resposta ao Prisma/PostgreSQL, preservando as rotas.
@@ -266,3 +297,5 @@ As rotas estao separadas em modulos dentro de `apps/api/src/modules`:
 - `assets.ts`
 - `operations.ts`
 - `integrations.ts`
+- `files.ts`
+- `audit.ts`

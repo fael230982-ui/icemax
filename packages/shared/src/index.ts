@@ -59,5 +59,34 @@ export const aiRequestTypes = [
 
 export type AiRequestType = (typeof aiRequestTypes)[number];
 
+export const fileFolders = ["uploads", "manuals", "signatures", "floor-plans", "reports"] as const;
+
+export type FileFolder = (typeof fileFolders)[number];
+
+export type UploadedFile = {
+  path: string;
+  url: string;
+  mimeType: string;
+};
+
+export type QrLabelPayload = {
+  equipmentCode: string;
+  equipment: string;
+  customer: string;
+  installLocation: string;
+  qrPayload?: string;
+};
+
+export type AuditEvent = {
+  id: string;
+  tenantId: string;
+  userId?: string;
+  action: string;
+  entity: string;
+  entityId?: string;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+};
+
 export { previewContractVisits } from "./contracts";
 export type { ContractVisitPreview } from "./contracts";

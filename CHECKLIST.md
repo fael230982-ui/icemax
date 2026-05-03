@@ -279,3 +279,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 21
+
+- [x] Upload local de arquivos criado.
+- [x] Gerador de etiqueta QR em SVG criado.
+- [x] Auditoria operacional criada.
+- [x] Filtros de OS adicionados.
+- [x] Console operacional conectado no painel.
+- [x] Base de offline queue criada no app mobile.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

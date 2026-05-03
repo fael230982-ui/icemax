@@ -3,6 +3,7 @@ import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
 import { createMockCustomer, createPrismaCustomer, listMockCustomers, listPrismaCustomers } from "../repositories/customers-repository";
 import { createCustomerSchema, parseBody } from "../schemas";
+import { recordAuditEvent } from "../services/audit-service";
 
 export async function registerCustomerRoutes(app: FastifyInstance) {
   app.get("/customers", async (request) => {
@@ -21,6 +22,15 @@ export async function registerCustomerRoutes(app: FastifyInstance) {
     const customer = isPrismaEnabled()
       ? await createPrismaCustomer(context.tenantId, input)
       : await createMockCustomer(context.tenantId, input);
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "customer.created",
+      entity: "customer",
+      entityId: customer.id,
+      metadata: { name: input.name },
+    });
 
     return reply.code(201).send(customer);
   });

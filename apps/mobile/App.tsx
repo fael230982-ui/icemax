@@ -1,12 +1,41 @@
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ContractCard } from "./src/components/ContractCard";
 import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
+import { SyncPanel } from "./src/components/SyncPanel";
 import { contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
+import { createCheckInAction, OfflineAction, sendOfflineAction } from "./src/services/api";
 
 export default function App() {
+  const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
+  const [syncStatus, setSyncStatus] = useState("Sem pendencias.");
+
+  function addCheckIn() {
+    const action = createCheckInAction("1048");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Acao salva para envio quando houver conexao.");
+  }
+
+  async function syncPending() {
+    if (!pendingActions.length) {
+      setSyncStatus("Nada para sincronizar.");
+      return;
+    }
+
+    try {
+      for (const action of pendingActions) {
+        await sendOfflineAction(action);
+      }
+      setPendingActions([]);
+      setSyncStatus("Fila enviada para a API.");
+    } catch (error) {
+      setSyncStatus(error instanceof Error ? error.message : "Falha ao sincronizar.");
+    }
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
@@ -20,6 +49,10 @@ export default function App() {
           {orders.map((order) => (
             <OrderCard key={order.id} {...order} />
           ))}
+        </Section>
+
+        <Section title="Modo offline">
+          <SyncPanel pendingActions={pendingActions} status={syncStatus} onAddCheckIn={addCheckIn} onSync={syncPending} />
         </Section>
 
         <Section title="Ferramentas">

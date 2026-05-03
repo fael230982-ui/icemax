@@ -40,6 +40,13 @@ test("core create endpoints validate and accept mock payloads", async () => {
   });
   assert.equal(order.statusCode, 201);
 
+  const filteredOrders = await app.inject({
+    method: "GET",
+    url: "/service-orders?priority=emergency",
+  });
+  assert.equal(filteredOrders.statusCode, 200);
+  assert.equal(filteredOrders.json().data[0].priority, "emergency");
+
   await app.close();
 });
 
@@ -66,6 +73,19 @@ test("service order execution flow accepts mock records", async () => {
   });
   assert.equal(report.statusCode, 201);
   assert.match(report.json().url, /^\/files\/reports\/os-1048\.(pdf|html)$/);
+
+  const upload = await app.inject({
+    method: "POST",
+    url: "/files",
+    payload: {
+      folder: "uploads",
+      fileName: "teste-os.txt",
+      mimeType: "text/plain",
+      base64: Buffer.from("arquivo teste").toString("base64"),
+    },
+  });
+  assert.equal(upload.statusCode, 201);
+  assert.match(upload.json().url, /^\/files\/uploads\/teste-os.txt$/);
 
   await app.close();
 });
@@ -101,6 +121,26 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
     payload: { decision: "approved", customerName: "Cliente Teste" },
   });
   assert.equal(decision.statusCode, 200);
+
+  const qr = await app.inject({
+    method: "POST",
+    url: "/qr-labels",
+    payload: {
+      equipmentCode: "ICM-AC-9000",
+      equipment: "Split teste",
+      customer: "Cliente Teste",
+      installLocation: "Sala tecnica",
+    },
+  });
+  assert.equal(qr.statusCode, 201);
+  assert.match(qr.json().fileUrl, /^\/files\/qr-labels\/ICM-AC-9000.svg$/);
+
+  const audit = await app.inject({
+    method: "GET",
+    url: "/audit-log",
+  });
+  assert.equal(audit.statusCode, 200);
+  assert.ok(audit.json().total >= 1);
 
   await app.close();
 });

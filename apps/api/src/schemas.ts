@@ -151,6 +151,21 @@ export const sendNotificationSchema = z.object({
   relatedId: z.string().optional(),
 });
 
+export const uploadFileSchema = z.object({
+  folder: z.enum(["uploads", "manuals", "signatures", "floor-plans", "reports"]).default("uploads"),
+  fileName: z.string().min(3).regex(/^[\w.\- ]+$/),
+  mimeType: z.string().min(3).default("application/octet-stream"),
+  base64: z.string().min(1),
+});
+
+export const createQrLabelSchema = z.object({
+  equipmentCode: z.string().min(2),
+  equipment: z.string().min(2),
+  customer: z.string().min(2),
+  installLocation: z.string().min(2),
+  qrPayload: z.string().min(3).optional(),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -181,3 +196,5 @@ export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStat
 export type LoginInput = z.output<typeof loginSchema>;
 export type UpdateQuoteDecisionInput = z.output<typeof updateQuoteDecisionSchema>;
 export type SendNotificationInput = z.output<typeof sendNotificationSchema>;
+export type UploadFileInput = z.output<typeof uploadFileSchema>;
+export type CreateQrLabelInput = z.output<typeof createQrLabelSchema>;

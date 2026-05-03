@@ -24,6 +24,7 @@ import {
   updatePrismaOrderStatus,
 } from "../repositories/orders-repository";
 import { saveServiceOrderReportPdf } from "../services/report-service";
+import { recordAuditEvent } from "../services/audit-service";
 import {
   addServiceOrderNoteSchema,
   addServiceOrderPartSchema,
@@ -38,12 +39,13 @@ import {
 export async function registerOrderRoutes(app: FastifyInstance) {
   app.get("/service-orders", async (request) => {
     const context = await getAuthContext(request);
+    const filters = request.query as { status?: string; priority?: string; customer?: string };
 
     if (isPrismaEnabled()) {
-      return listPrismaOrders(context.tenantId);
+      return listPrismaOrders(context.tenantId, filters);
     }
 
-    return listMockOrders();
+    return listMockOrders(filters);
   });
 
   app.get("/service-orders/:id", async (request, reply) => {
@@ -67,6 +69,15 @@ export async function registerOrderRoutes(app: FastifyInstance) {
       ? await createPrismaOrder(context.tenantId, context.userId, input)
       : await createMockOrder(context.tenantId, context.userId, input);
 
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "service_order.created",
+      entity: "service_order",
+      entityId: order.id,
+      metadata: { title: input.title, priority: input.priority },
+    });
+
     return reply.code(201).send(order);
   });
 
@@ -77,6 +88,15 @@ export async function registerOrderRoutes(app: FastifyInstance) {
     const note = isPrismaEnabled()
       ? await addPrismaOrderNote(context.tenantId, id, context.userId, input)
       : await addMockOrderNote(context.tenantId, id, context.userId, input);
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "service_order.note_added",
+      entity: "service_order",
+      entityId: id,
+      metadata: { aiReviewed: input.aiReviewed },
+    });
 
     return reply.code(201).send(note);
   });
@@ -118,10 +138,23 @@ export async function registerOrderRoutes(app: FastifyInstance) {
     const { id } = request.params as { id: string };
     const context = await getAuthContext(request);
     const input = parseBody(updateServiceOrderStatusSchema, request.body);
+    const order = isPrismaEnabled()
+      ? await updatePrismaOrderStatus(context.tenantId, id, input)
+      : await updateMockOrderStatus(context.tenantId, id, input);
 
-    return isPrismaEnabled()
-      ? updatePrismaOrderStatus(context.tenantId, id, input)
-      : updateMockOrderStatus(context.tenantId, id, input);
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "service_order.status_updated",
+      entity: "service_order",
+      entityId: id,
+      metadata: {
+        status: input.status,
+        customerSignedName: input.customerSignedName,
+      },
+    });
+
+    return order;
   });
 
   app.post("/service-orders/:id/quotes", async (request, reply) => {
@@ -131,6 +164,15 @@ export async function registerOrderRoutes(app: FastifyInstance) {
     const quote = isPrismaEnabled()
       ? await createPrismaQuoteFromOrder(context.tenantId, id, input)
       : await createMockQuoteFromOrder(context.tenantId, id, input);
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "quote.created_from_order",
+      entity: "service_order",
+      entityId: id,
+      metadata: { quoteNumber: input.number, total: quote.total },
+    });
 
     return reply.code(201).send(quote);
   });

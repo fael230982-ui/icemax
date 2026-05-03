@@ -147,3 +147,12 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionados testes de fluxos criticos da API em modo mock.
 - Script `test` adicionado ao monorepo e API.
 - `validate` passou a executar testes.
+
+## 0.5.1 - Lote 21
+
+- Adicionado upload local de arquivos por JSON/base64.
+- Adicionada geracao de etiquetas QR em SVG.
+- Adicionado log de auditoria para eventos operacionais.
+- Lista de OS passou a aceitar filtros por status, prioridade e cliente.
+- Painel web ganhou console operacional conectado a API.
+- App mobile ganhou base de fila offline e sincronizacao.

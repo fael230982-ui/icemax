@@ -10,10 +10,30 @@ import type {
   UpdateServiceOrderStatusInput,
 } from "../schemas";
 
-export async function listMockOrders() {
+type OrderFilters = {
+  status?: string;
+  priority?: string;
+  customer?: string;
+};
+
+export async function listMockOrders(filters: OrderFilters = {}) {
+  const normalizedCustomer = filters.customer?.toLowerCase();
+  const data = serviceOrders.filter((order) => {
+    if (filters.status && order.status !== filters.status) {
+      return false;
+    }
+    if (filters.priority && order.priority !== filters.priority) {
+      return false;
+    }
+    if (normalizedCustomer && !order.customer.toLowerCase().includes(normalizedCustomer)) {
+      return false;
+    }
+    return true;
+  });
+
   return {
-    data: serviceOrders,
-    total: serviceOrders.length,
+    data,
+    total: data.length,
   };
 }
 
@@ -21,10 +41,22 @@ export async function getMockOrder(id: string) {
   return serviceOrders.find((item) => item.id === id) ?? null;
 }
 
-export async function listPrismaOrders(tenantId: string) {
+export async function listPrismaOrders(tenantId: string, filters: OrderFilters = {}) {
   const prisma = getPrisma();
   const data = await prisma.serviceOrder.findMany({
-    where: { tenantId },
+    where: {
+      tenantId,
+      status: filters.status as never,
+      priority: filters.priority as never,
+      customer: filters.customer
+        ? {
+            name: {
+              contains: filters.customer,
+              mode: "insensitive",
+            },
+          }
+        : undefined,
+    },
     orderBy: { createdAt: "desc" },
     take: 50,
     include: {

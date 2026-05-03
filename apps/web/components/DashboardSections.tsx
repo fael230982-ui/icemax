@@ -17,6 +17,7 @@ import {
   customers,
 } from "../app/data";
 import { Panel } from "./Panel";
+import { OperationsConsole } from "./forms/OperationsConsole";
 import { QuickCreatePanel } from "./forms/QuickCreatePanel";
 
 export function DashboardSections() {
@@ -24,6 +25,10 @@ export function DashboardSections() {
     <section className="content">
       <Panel eyebrow="Operacao" title="Acoes rapidas" wide>
         <QuickCreatePanel />
+      </Panel>
+
+      <Panel eyebrow="Operacao" title="Console conectado" wide>
+        <OperationsConsole />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>

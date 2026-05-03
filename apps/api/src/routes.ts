@@ -3,6 +3,7 @@ import { getAuthContext } from "./auth";
 import { tenant } from "./mock-data";
 import { registerAuthRoutes } from "./modules/auth";
 import { registerAssetRoutes } from "./modules/assets";
+import { registerAuditRoutes } from "./modules/audit";
 import { registerContractRoutes } from "./modules/contracts";
 import { registerCustomerRoutes } from "./modules/customers";
 import { registerDashboardRoutes } from "./modules/dashboard";
@@ -26,4 +27,5 @@ export async function registerRoutes(app: FastifyInstance) {
   await registerAssetRoutes(app);
   await registerOperationRoutes(app);
   await registerIntegrationRoutes(app);
+  await registerAuditRoutes(app);
 }

@@ -24,9 +24,25 @@ O arquivo `apps/web/lib/api.ts` concentra chamadas para:
 - contratos;
 - orcamentos;
 - estoque;
-- integracoes.
+- integracoes;
+- upload local de arquivos;
+- geracao de etiquetas QR;
+- auditoria.
 
 As chamadas ja aceitam token Bearer opcional.
+
+## Console Operacional
+
+O painel web possui um console conectado a API com:
+
+- criacao de cliente;
+- criacao de OS;
+- filtro de OS por cliente, status e prioridade;
+- geracao de etiqueta QR;
+- upload local em base64;
+- consulta ao log de auditoria.
+
+Esse console serve para acelerar homologacao tecnica antes de criar telas finais de cada modulo.
 
 ## Variavel De Ambiente
 

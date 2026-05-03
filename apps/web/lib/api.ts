@@ -43,6 +43,21 @@ type ApiOptions = {
   method?: "GET" | "POST" | "PATCH" | "PUT";
 };
 
+function withQuery(path: string, query?: Record<string, string | undefined>) {
+  if (!query) {
+    return path;
+  }
+
+  const params = new URLSearchParams();
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      params.set(key, value);
+    }
+  });
+
+  return params.size ? `${path}?${params.toString()}` : path;
+}
+
 export async function apiRequest<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const response = await fetch(`${apiBaseUrl}${path}`, {
     method: options.method ?? "GET",
@@ -67,7 +82,8 @@ export const icemaxApi = {
     apiRequest<LoginResponse>("/auth/login", { method: "POST", body }),
   me: (token: string) => apiRequest<unknown>("/auth/me", { token }),
   dashboard: (token?: string) => apiRequest<DashboardResponse>("/dashboard", { token }),
-  serviceOrders: (token?: string) => apiRequest<ApiListResponse<unknown>>("/service-orders", { token }),
+  serviceOrders: (token?: string, filters?: { status?: string; priority?: string; customer?: string }) =>
+    apiRequest<ApiListResponse<unknown>>(withQuery("/service-orders", filters), { token }),
   createServiceOrder: (body: unknown, token?: string) =>
     apiRequest<unknown>("/service-orders", { method: "POST", body, token }),
   customers: (token?: string) => apiRequest<ApiListResponse<unknown>>("/customers", { token }),
@@ -79,4 +95,7 @@ export const icemaxApi = {
   quotes: (token?: string) => apiRequest<ApiListResponse<unknown>>("/quotes", { token }),
   stock: (token?: string) => apiRequest<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock", { token }),
   integrations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/integrations", { token }),
+  uploadFile: (body: unknown, token?: string) => apiRequest<unknown>("/files", { method: "POST", body, token }),
+  createQrLabel: (body: unknown, token?: string) => apiRequest<unknown>("/qr-labels", { method: "POST", body, token }),
+  auditLog: (token?: string) => apiRequest<ApiListResponse<unknown>>("/audit-log", { token }),
 };
