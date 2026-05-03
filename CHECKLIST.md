@@ -94,3 +94,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Auditoria de dependencias de producao executada.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 6
+
+- [x] Seed inicial criado com dados ficticios.
+- [x] Script `db:seed` criado.
+- [x] Script `validate` criado.
+- [x] API organizada por dominio.
+- [x] Documentacao local atualizada.
+- [x] Prisma Client gerado.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [ ] Auditoria de dependencias pendente de resolucao antes de release.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

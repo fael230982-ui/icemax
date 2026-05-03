@@ -117,3 +117,14 @@ Endpoint inicial para receber eventos de webhook do WhatsApp.
 ## Observacao
 
 Os endpoints atuais usam dados mockados. A proxima etapa tecnica e conectar estes contratos de resposta ao Prisma/PostgreSQL, preservando as rotas.
+
+## Organizacao Interna
+
+As rotas estao separadas em modulos dentro de `apps/api/src/modules`:
+
+- `dashboard.ts`
+- `orders.ts`
+- `contracts.ts`
+- `assets.ts`
+- `operations.ts`
+- `integrations.ts`

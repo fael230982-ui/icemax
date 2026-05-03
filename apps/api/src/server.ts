@@ -1,5 +1,4 @@
 import cors from "@fastify/cors";
-import jwt from "@fastify/jwt";
 import Fastify from "fastify";
 import { serviceOrderStatuses } from "@icemax/shared";
 import { registerRoutes } from "./routes";
@@ -8,10 +7,6 @@ const app = Fastify({ logger: true });
 
 await app.register(cors, {
   origin: true,
-});
-
-await app.register(jwt, {
-  secret: process.env.JWT_SECRET ?? "dev-secret-change-me",
 });
 
 app.get("/health", async () => ({

@@ -45,3 +45,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criada analise de referencias publicas de mercado.
 - Incluidos PMOC, PCM, check-in/out, controle de KM e satisfacao no escopo.
 - Criados modelos operacionais iniciais de checklists, pecas, garantia, relatorio e pesquisa de satisfacao.
+
+## 0.2.2 - Lote 6
+
+- Criado seed inicial do banco com dados ficticios da ICEMAX.
+- Adicionado script `db:seed`.
+- Adicionado script `validate`.
+- Adicionado script `audit:full`.
+- API reorganizada em modulos por dominio.
+- Documentado fluxo local de migrations e seed.
+- Separada validacao operacional de auditoria de dependencias.

@@ -15,6 +15,28 @@ Centralizar app tecnico, painel web, back-end, banco de dados, documentacao de p
 - `backend/`: API, regras de negocio e integracoes.
 - `database/`: schema, migrations e dados iniciais.
 
+## Desenvolvimento Local
+
+Instalar dependencias:
+
+```bash
+npm install
+```
+
+Validar projeto:
+
+```bash
+npm run validate
+```
+
+Banco local:
+
+```bash
+docker compose up -d postgres
+npm run db:migrate
+npm run db:seed
+```
+
 ## Lote Atual
 
 Lote 1: definicao do produto, arquitetura inicial e prototipo estatico navegavel.

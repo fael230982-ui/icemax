@@ -13,6 +13,10 @@
     "dev:mobile": "npm run start -w apps/mobile",
     "db:generate": "npm run db:generate -w packages/database",
     "db:migrate": "npm run db:migrate -w packages/database",
+    "db:seed": "npm run db:seed -w packages/database",
+    "validate": "npm run db:generate && npm run typecheck && npm run build -w apps/web",
+    "audit:prod": "npm audit --omit=dev --omit=optional",
+    "audit:full": "npm audit",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },

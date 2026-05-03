@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@fastify/cors": "^10.0.0",
-    "@fastify/jwt": "^9.0.0",
     "@icemax/database": "*",
     "@icemax/shared": "*",
     "fastify": "^5.0.0",
