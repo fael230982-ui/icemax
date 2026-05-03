@@ -20,6 +20,7 @@
     "audit:full": "npm audit",
     "docs:pdf": "node scripts/generate-doc-pdfs.mjs",
     "guard:secrets": "node scripts/guard-secrets.mjs",
+    "readiness": "node scripts/project-readiness.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },

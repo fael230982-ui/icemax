@@ -33,6 +33,12 @@ Validar projeto:
 npm run validate
 ```
 
+Checar prontidao do repositorio:
+
+```bash
+npm run readiness
+```
+
 Executar partes separadas:
 
 ```bash

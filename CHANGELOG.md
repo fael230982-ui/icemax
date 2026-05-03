@@ -2,6 +2,18 @@
 
 Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de releases, homologacoes ou publicacoes importantes.
 
+## 0.8.7 - Prontidao Do Repositorio
+
+- Adicionado comando `npm run readiness` para checar arquivos, scripts, CI, variaveis e pendencias de publicacao.
+- Documentada a leitura do relatorio local de prontidao.
+- README passou a listar a checagem de prontidao.
+
+## 0.8.6 - Protecao Contra Segredos
+
+- Adicionado guard local para bloquear arquivos `.env` reais e padroes comuns de chaves.
+- `npm run validate` passou a executar a verificacao contra segredos antes de typecheck, testes e build.
+- Documentado processo de trabalho seguro com chaves e tokens.
+
 ## 0.8.5 - Governanca GitHub E Publicacao
 
 - Adicionado workflow de CI para validar pull requests e pushes na branch `main`.
@@ -10,12 +22,6 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Documentado processo de publicacao controlada no GitHub.
 - README atualizado com estrutura real do monorepo e scripts atuais.
 - PDFs mantidos adiados para ganhar velocidade.
-
-## 0.8.6 - Protecao Contra Segredos
-
-- Adicionado guard local para bloquear arquivos `.env` reais e padroes comuns de chaves.
-- `npm run validate` passou a executar a verificacao contra segredos antes de typecheck, testes e build.
-- Documentado processo de trabalho seguro com chaves e tokens.
 
 ## 0.1.0 - Lote 1
 
