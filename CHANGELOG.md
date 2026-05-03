@@ -179,3 +179,16 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criada configuracao publica por tenant/slug.
 - Painel web passou a disparar solicitacao de OS pelo cliente para teste.
 - Documentado fluxo operacional do portal do cliente.
+
+## 0.6.0 - Lotes 25 A 34
+
+- Lote 25: adicionado painel de SLA operacional.
+- Lote 26: adicionada emissao inicial de termos de garantia.
+- Lote 27: adicionada criacao inicial de plano PMOC.
+- Lote 28: adicionado rascunho de faturamento.
+- Lote 29: adicionado onboarding de tecnico interno ou terceirizado.
+- Lote 30: adicionadas janelas de manutencao recorrente.
+- Lote 31: adicionada pesquisa de satisfacao/NPS.
+- Lote 32: adicionada linha do tempo de equipamento.
+- Lote 33: adicionadas sugestoes e solicitacoes de compra.
+- Lote 34: adicionada prontidao de release.

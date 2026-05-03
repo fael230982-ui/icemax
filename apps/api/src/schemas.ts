@@ -207,6 +207,76 @@ export const customerPortalOrderSchema = z.object({
   allowWhatsapp: z.boolean().default(true),
 });
 
+export const createWarrantyTermSchema = z.object({
+  serviceOrderId: z.string().min(1),
+  customerId: z.string().min(1),
+  coverageDays: z.number().int().min(1).max(365).default(90),
+  coverageText: z.string().min(10),
+  exclusions: z.array(z.string()).default([]),
+});
+
+export const createPmocPlanSchema = z.object({
+  customerId: z.string().min(1),
+  name: z.string().min(3),
+  responsibleTechnician: z.string().min(2),
+  startDate: z.string().datetime(),
+  equipmentIds: z.array(z.string()).min(1),
+  inspectionFrequencyMonths: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(6)]).default(3),
+});
+
+export const createInvoiceDraftSchema = z.object({
+  customerId: z.string().min(1),
+  serviceOrderIds: z.array(z.string()).min(1),
+  dueDate: z.string().datetime(),
+  items: z.array(z.object({
+    description: z.string().min(2),
+    quantity: z.number().positive().default(1),
+    unitPrice: z.number().nonnegative(),
+  })).min(1),
+});
+
+export const onboardTechnicianSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email().optional(),
+  phone: z.string().min(8),
+  kind: z.enum(["internal", "outsourced"]),
+  specialties: z.array(z.string()).default([]),
+  documentStatus: z.enum(["pending", "approved", "expired"]).default("pending"),
+});
+
+export const createMaintenanceWindowSchema = z.object({
+  contractId: z.string().min(1),
+  customerId: z.string().min(1),
+  preferredWeekday: z.number().int().min(0).max(6),
+  preferredPeriod: z.enum(["morning", "afternoon", "night"]),
+  recurrenceMonths: z.union([z.literal(3), z.literal(4), z.literal(6)]),
+  nextDate: z.string().datetime(),
+});
+
+export const satisfactionSurveySchema = z.object({
+  serviceOrderId: z.string().min(1),
+  customerId: z.string().min(1),
+  score: z.number().int().min(0).max(10),
+  comment: z.string().optional(),
+});
+
+export const equipmentTimelineSchema = z.object({
+  equipmentId: z.string().min(1),
+});
+
+export const createPurchaseRequestSchema = z.object({
+  partId: z.string().min(1),
+  quantity: z.number().positive(),
+  reason: z.string().min(3),
+  preferredSupplier: z.string().optional(),
+});
+
+export const releaseReadinessSchema = z.object({
+  version: z.string().min(3),
+  checkedBy: z.string().min(2),
+  includeSecurityReview: z.boolean().default(true),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -244,3 +314,12 @@ export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
 export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
+export type CreateWarrantyTermInput = z.output<typeof createWarrantyTermSchema>;
+export type CreatePmocPlanInput = z.output<typeof createPmocPlanSchema>;
+export type CreateInvoiceDraftInput = z.output<typeof createInvoiceDraftSchema>;
+export type OnboardTechnicianInput = z.output<typeof onboardTechnicianSchema>;
+export type CreateMaintenanceWindowInput = z.output<typeof createMaintenanceWindowSchema>;
+export type SatisfactionSurveyInput = z.output<typeof satisfactionSurveySchema>;
+export type EquipmentTimelineInput = z.output<typeof equipmentTimelineSchema>;
+export type CreatePurchaseRequestInput = z.output<typeof createPurchaseRequestSchema>;
+export type ReleaseReadinessInput = z.output<typeof releaseReadinessSchema>;

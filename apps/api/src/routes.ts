@@ -5,6 +5,7 @@ import { registerAuthRoutes } from "./modules/auth";
 import { registerAiRoutes } from "./modules/ai";
 import { registerAssetRoutes } from "./modules/assets";
 import { registerAuditRoutes } from "./modules/audit";
+import { registerBusinessSuiteRoutes } from "./modules/business-suite";
 import { registerContractRoutes } from "./modules/contracts";
 import { registerCustomerPortalRoutes } from "./modules/customer-portal";
 import { registerCustomerRoutes } from "./modules/customers";
@@ -22,6 +23,7 @@ export async function registerRoutes(app: FastifyInstance) {
 
   await registerAuthRoutes(app);
   await registerAiRoutes(app);
+  await registerBusinessSuiteRoutes(app);
   await registerFileRoutes(app);
   await registerDashboardRoutes(app);
   await registerDispatchRoutes(app);

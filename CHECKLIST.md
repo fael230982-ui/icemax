@@ -334,3 +334,22 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Dos Lotes 25 A 34
+
+- [x] Lote 25: SLA operacional criado.
+- [x] Lote 26: termos de garantia criados.
+- [x] Lote 27: PMOC criado.
+- [x] Lote 28: faturamento rascunho criado.
+- [x] Lote 29: onboarding de terceirizados criado.
+- [x] Lote 30: janelas de manutencao criadas.
+- [x] Lote 31: satisfacao/NPS criado.
+- [x] Lote 32: historico de equipamento criado.
+- [x] Lote 33: compras/reposicao criado.
+- [x] Lote 34: prontidao de release criada.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

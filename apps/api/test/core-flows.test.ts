@@ -241,3 +241,125 @@ test("customer portal can request optional service order", async () => {
 
   await app.close();
 });
+
+test("business operations suite connects ten management flows", async () => {
+  const app = await buildApp();
+  const now = new Date().toISOString();
+  const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const sla = await app.inject({ method: "GET", url: "/sla/board" });
+  assert.equal(sla.statusCode, 200);
+  assert.ok(sla.json().total >= 1);
+
+  const warranty = await app.inject({
+    method: "POST",
+    url: "/warranty-terms",
+    payload: {
+      serviceOrderId: "1048",
+      customerId: "customer-001",
+      coverageDays: 90,
+      coverageText: "Garantia de mao de obra conforme condicoes do atendimento.",
+    },
+  });
+  assert.equal(warranty.statusCode, 201);
+
+  const pmoc = await app.inject({
+    method: "POST",
+    url: "/pmoc/plans",
+    payload: {
+      customerId: "customer-001",
+      name: "PMOC ClimaSul",
+      responsibleTechnician: "Rafael Martins",
+      startDate: now,
+      equipmentIds: ["equipment-001"],
+      inspectionFrequencyMonths: 3,
+    },
+  });
+  assert.equal(pmoc.statusCode, 201);
+
+  const invoice = await app.inject({
+    method: "POST",
+    url: "/billing/invoices/draft",
+    payload: {
+      customerId: "customer-001",
+      serviceOrderIds: ["1048"],
+      dueDate,
+      items: [{ description: "Atendimento corretivo", quantity: 1, unitPrice: 450 }],
+    },
+  });
+  assert.equal(invoice.statusCode, 201);
+  assert.equal(invoice.json().total, 450);
+
+  const onboarding = await app.inject({
+    method: "POST",
+    url: "/technicians/onboarding",
+    payload: {
+      name: "Tecnico Terceiro",
+      phone: "+5500000000000",
+      kind: "outsourced",
+      specialties: ["split"],
+      documentStatus: "pending",
+    },
+  });
+  assert.equal(onboarding.statusCode, 201);
+
+  const maintenanceWindow = await app.inject({
+    method: "POST",
+    url: "/maintenance-windows",
+    payload: {
+      contractId: "contract-001",
+      customerId: "customer-001",
+      preferredWeekday: 2,
+      preferredPeriod: "morning",
+      recurrenceMonths: 3,
+      nextDate: dueDate,
+    },
+  });
+  assert.equal(maintenanceWindow.statusCode, 201);
+
+  const survey = await app.inject({
+    method: "POST",
+    url: "/satisfaction-surveys",
+    payload: {
+      serviceOrderId: "1048",
+      customerId: "customer-001",
+      score: 9,
+      comment: "Atendimento rapido.",
+    },
+  });
+  assert.equal(survey.statusCode, 201);
+  assert.equal(survey.json().npsGroup, "promoter");
+
+  const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
+  assert.equal(timeline.statusCode, 200);
+  assert.ok(timeline.json().total >= 1);
+
+  const suggestions = await app.inject({ method: "GET", url: "/purchase-requests/suggestions" });
+  assert.equal(suggestions.statusCode, 200);
+  assert.ok(suggestions.json().total >= 1);
+
+  const purchase = await app.inject({
+    method: "POST",
+    url: "/purchase-requests",
+    payload: {
+      partId: "part-001",
+      quantity: 4,
+      reason: "Reposicao de estoque minimo",
+    },
+  });
+  assert.equal(purchase.statusCode, 201);
+
+  const release = await app.inject({
+    method: "POST",
+    url: "/release-readiness",
+    payload: {
+      version: "0.5.5",
+      checkedBy: "RAFAEL DA SILVA BEZEERA",
+      includeSecurityReview: true,
+    },
+  });
+  assert.equal(release.statusCode, 201);
+  assert.equal(release.json().checks.length, 5);
+
+  await app.close();
+});

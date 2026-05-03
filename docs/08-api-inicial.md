@@ -118,6 +118,70 @@ Cria orcamento vinculado a uma OS.
 
 Gera relatorio local da OS e retorna URL interna. Em desenvolvimento, tenta gerar PDF com Chrome/Edge headless e usa HTML como fallback.
 
+## SLA
+
+### GET /sla/board
+
+Retorna painel de prazos por OS, prioridade, risco e minutos restantes.
+
+## Garantias
+
+### POST /warranty-terms
+
+Cria termo de garantia vinculado a OS e cliente.
+
+## PMOC
+
+### POST /pmoc/plans
+
+Cria plano PMOC com responsavel tecnico, equipamentos e frequencia.
+
+## Faturamento
+
+### POST /billing/invoices/draft
+
+Cria rascunho de cobranca a partir de OS e itens.
+
+## Tecnicos E Terceirizados
+
+### POST /technicians/onboarding
+
+Cadastra tecnico interno ou terceirizado para aprovacao operacional.
+
+## Janelas De Manutencao
+
+### POST /maintenance-windows
+
+Cria preferencia de periodo para visitas recorrentes de contrato.
+
+## Satisfacao
+
+### POST /satisfaction-surveys
+
+Registra nota e comentario de satisfacao apos OS.
+
+## Historico De Equipamento
+
+### GET /equipment/:id/timeline
+
+Retorna linha do tempo operacional do equipamento.
+
+## Compras
+
+### GET /purchase-requests/suggestions
+
+Lista sugestoes de compra por estoque abaixo do minimo.
+
+### POST /purchase-requests
+
+Cria solicitacao de compra.
+
+## Release
+
+### POST /release-readiness
+
+Cria checklist de prontidao para homologacao ou release.
+
 ## Arquivos
 
 ### POST /files

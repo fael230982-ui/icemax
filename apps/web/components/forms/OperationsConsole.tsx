@@ -126,6 +126,72 @@ export function OperationsConsole() {
     );
   }
 
+  function runBusinessSuite() {
+    void run("Suite operacional", async () => {
+      const now = new Date().toISOString();
+      const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const results = await Promise.all([
+        icemaxApi.slaBoard(token || undefined),
+        icemaxApi.createWarrantyTerm({
+          serviceOrderId: "1048",
+          customerId: "customer-001",
+          coverageDays: 90,
+          coverageText: "Garantia de mao de obra conforme condicoes do atendimento.",
+          exclusions: ["mau uso", "intervencao de terceiros"],
+        }, token || undefined),
+        icemaxApi.createPmocPlan({
+          customerId: "customer-001",
+          name: "PMOC ClimaSul",
+          responsibleTechnician: "Rafael Martins",
+          startDate: now,
+          equipmentIds: ["equipment-001"],
+          inspectionFrequencyMonths: 3,
+        }, token || undefined),
+        icemaxApi.createInvoiceDraft({
+          customerId: "customer-001",
+          serviceOrderIds: ["1048"],
+          dueDate,
+          items: [{ description: "Atendimento corretivo", quantity: 1, unitPrice: 450 }],
+        }, token || undefined),
+        icemaxApi.onboardTechnician({
+          name: "Tecnico Terceiro",
+          phone: "+5500000000000",
+          kind: "outsourced",
+          specialties: ["split", "cassete"],
+          documentStatus: "pending",
+        }, token || undefined),
+        icemaxApi.createMaintenanceWindow({
+          contractId: "contract-001",
+          customerId: "customer-001",
+          preferredWeekday: 2,
+          preferredPeriod: "morning",
+          recurrenceMonths: 3,
+          nextDate: dueDate,
+        }, token || undefined),
+        icemaxApi.recordSatisfactionSurvey({
+          serviceOrderId: "1048",
+          customerId: "customer-001",
+          score: 9,
+          comment: "Atendimento rapido.",
+        }, token || undefined),
+        icemaxApi.equipmentTimeline("equipment-001", token || undefined),
+        icemaxApi.purchaseSuggestions(token || undefined),
+        icemaxApi.createPurchaseRequest({
+          partId: "part-001",
+          quantity: 4,
+          reason: "Reposicao de estoque minimo",
+        }, token || undefined),
+        icemaxApi.createReleaseReadiness({
+          version: "0.5.5",
+          checkedBy: "RAFAEL DA SILVA BEZEERA",
+          includeSecurityReview: true,
+        }, token || undefined),
+      ]);
+
+      return { modules: results.length, results };
+    });
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -209,6 +275,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
+        <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}
