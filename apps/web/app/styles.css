@@ -519,6 +519,30 @@ dt {
   margin-top: 4px;
 }
 
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.miniMetric {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.miniMetric span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.miniMetric strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 21px;
+}
+
 .aiGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

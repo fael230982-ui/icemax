@@ -2,11 +2,13 @@ import {
   checklists,
   contracts,
   floorPlan,
+  integrations,
   manuals,
   metrics,
   notifications,
   orders,
   qrLabels,
+  quality,
   quotes,
   serviceFlow,
   stockAlerts,
@@ -25,7 +27,7 @@ export default function Home() {
         </div>
 
         <nav aria-label="Menu principal">
-          {["Dashboard", "Ordens", "Contratos", "Orcamentos", "Checklists", "Mapas", "QR", "Agenda", "Campo", "Estoque", "Manuais", "IA", "Notificacoes", "Whitelabel"].map((item) => (
+          {["Dashboard", "Ordens", "Contratos", "PMOC", "Orcamentos", "Checklists", "Mapas", "QR", "Agenda", "Campo", "Estoque", "Manuais", "IA", "Notificacoes", "Integracoes", "Whitelabel"].map((item) => (
             <a className={item === "Dashboard" ? "active" : ""} href={`#${item.toLowerCase()}`} key={item}>
               {item}
             </a>
@@ -123,6 +125,24 @@ export default function Home() {
                   <span>{quote.customer}</span>
                   <b>{quote.total}</b>
                   <small>{quote.status}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel" id="pmoc">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Qualidade</p>
+                <h2>PMOC, KM e satisfacao</h2>
+              </div>
+              <span className="pill">PCM</span>
+            </div>
+            <div className="miniGrid">
+              {quality.map((item) => (
+                <div className="miniMetric" key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
                 </div>
               ))}
             </div>
@@ -311,6 +331,24 @@ export default function Home() {
                   <strong>{notification.subject}</strong>
                   <span>{notification.channel}</span>
                   <small>{notification.status}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel" id="integracoes">
+            <div className="panelHeader">
+              <div>
+                <p className="eyebrow">Setup</p>
+                <h2>Integracoes externas</h2>
+              </div>
+            </div>
+            <div className="stack">
+              {integrations.map((integration) => (
+                <div className="simpleItem" key={integration.name}>
+                  <strong>{integration.name}</strong>
+                  <span>{integration.purpose}</span>
+                  <small>{integration.status}</small>
                 </div>
               ))}
             </div>

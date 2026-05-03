@@ -5,6 +5,7 @@ import {
   checklistTemplates,
   dashboardMetrics,
   floorPlans,
+  integrations,
   manuals,
   notifications,
   qrLabels,
@@ -13,6 +14,7 @@ import {
   serviceOrders,
   stock,
   tenant,
+  whatsappTemplates,
 } from "./mock-data";
 
 export async function registerRoutes(app: FastifyInstance) {
@@ -108,5 +110,21 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get("/notifications", async () => ({
     data: notifications,
     total: notifications.length,
+  }));
+
+  app.get("/integrations", async () => ({
+    data: integrations,
+    total: integrations.length,
+  }));
+
+  app.get("/whatsapp/templates", async () => ({
+    data: whatsappTemplates,
+    total: whatsappTemplates.length,
+  }));
+
+  app.post("/webhooks/whatsapp", async (request) => ({
+    received: true,
+    provider: "whatsapp",
+    payload: request.body,
   }));
 }

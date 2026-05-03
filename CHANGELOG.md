@@ -35,3 +35,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionada logica compartilhada para pre-visualizacao de visitas recorrentes de contrato.
 - Adicionado `docker-compose.yml` para PostgreSQL local.
 - Documentado ambiente local.
+
+## 0.2.1 - Lote 5
+
+- Adicionado WhatsApp como integracao formal do produto.
+- Documentadas contas e chaves externas para OpenAI, Google Maps, WhatsApp, e-mail, hospedagem e dominio.
+- Atualizado schema com templates de notificacao, eventos de WhatsApp e configuracoes de integracao.
+- API mockada ampliada com integracoes, templates de WhatsApp e webhook inicial.
+- Criada analise de referencias publicas de mercado.
+- Incluidos PMOC, PCM, check-in/out, controle de KM e satisfacao no escopo.
+- Criados modelos operacionais iniciais de checklists, pecas, garantia, relatorio e pesquisa de satisfacao.

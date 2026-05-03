@@ -356,3 +356,38 @@ Etiquetas QR geradas para equipamentos.
 - action
 - metadata
 - created_at
+
+### notification_templates
+
+- id
+- tenant_id
+- channel
+- name
+- subject
+- body
+- active
+- created_at
+- updated_at
+
+### whatsapp_events
+
+- id
+- tenant_id
+- phone_number_id
+- message_id
+- direction
+- from_number
+- to_number
+- payload
+- processed_at
+- created_at
+
+### integration_settings
+
+- id
+- tenant_id
+- provider
+- status
+- config
+- created_at
+- updated_at

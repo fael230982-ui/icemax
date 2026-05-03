@@ -12,11 +12,18 @@ const tools = [
   { title: "QR Code", detail: "Abrir ficha do equipamento" },
   { title: "Manuais", detail: "Consulta por marca e modelo" },
   { title: "Pecas", detail: "Baixa e solicitacao em campo" },
+  { title: "WhatsApp", detail: "Enviar link ao cliente" },
+  { title: "Check-in/out", detail: "Registrar chegada e saida" },
 ];
 
 const contracts = [
   { customer: "Clinica Vida", due: "12/05/2026", cycle: "3 meses" },
   { customer: "ClimaSul Hotel", due: "20/05/2026", cycle: "4 meses" },
+];
+
+const quality = [
+  { title: "KM", value: "36 km hoje" },
+  { title: "Satisfacao", value: "Pesquisa apos OS" },
 ];
 
 export default function App() {
@@ -57,6 +64,16 @@ export default function App() {
             <Text style={styles.status}>Proxima visita: {contract.due}</Text>
           </View>
         ))}
+
+        <Text style={styles.sectionTitle}>Qualidade</Text>
+        <View style={styles.grid}>
+          {quality.map((item) => (
+            <View key={item.title} style={styles.tool}>
+              <Text style={styles.toolTitle}>{item.title}</Text>
+              <Text style={styles.detail}>{item.value}</Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

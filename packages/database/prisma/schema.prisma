@@ -83,6 +83,9 @@ model Tenant {
   manuals    Manual[]
   quotes     Quote[]
   notifications Notification[]
+  notificationTemplates NotificationTemplate[]
+  whatsappEvents WhatsappEvent[]
+  integrations IntegrationSetting[]
   auditLogs  AuditLog[]
   aiRequests AiRequest[]
 }
@@ -606,6 +609,56 @@ model Notification {
 
   @@index([tenantId, status])
   @@index([tenantId, relatedType, relatedId])
+}
+
+model NotificationTemplate {
+  id        String              @id @default(uuid())
+  tenantId  String
+  channel   NotificationChannel
+  name      String
+  subject   String?
+  body      String
+  active    Boolean             @default(true)
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, channel, name])
+  @@index([tenantId, active])
+}
+
+model WhatsappEvent {
+  id          String   @id @default(uuid())
+  tenantId    String
+  phoneNumberId String?
+  messageId   String?
+  direction   String
+  fromNumber  String?
+  toNumber    String?
+  payload     Json
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, messageId])
+  @@index([tenantId, createdAt])
+}
+
+model IntegrationSetting {
+  id        String   @id @default(uuid())
+  tenantId  String
+  provider  String
+  status    String   @default("not_configured")
+  config    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, provider])
+  @@index([tenantId, status])
 }
 
 model AuditLog {

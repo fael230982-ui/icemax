@@ -55,6 +55,16 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Dashboard deve mostrar contratos ativos, proximas visitas e visitas vencidas.
 - Historico do contrato deve mostrar OS executadas, pendentes e reagendadas.
 
+### PMOC, PCM E Satisfacao
+
+- Controle de PMOC para clientes que exigem plano formal de manutencao.
+- Cronograma anual por equipamento.
+- Associar responsavel tecnico quando aplicavel.
+- Checklists especificos para PMOC e PCM.
+- Pesquisa de satisfacao apos atendimento.
+- Indicadores de qualidade, como nota media e NPS.
+- Controle de check-in, check-out e KM rodado por atendimento.
+
 ### Agenda
 
 - Agenda manual no MVP.
@@ -109,6 +119,8 @@ Regra de produto: ICEMAX nao deve ficar fixo no codigo, no banco ou nas regras d
 - Link de aprovacao de orcamento.
 - Link de acompanhamento da OS.
 - Alertas internos sobre contratos vencendo, estoque minimo e OS atrasada.
+- WhatsApp para acompanhamento de OS, aprovacao de orcamento e lembrete de contrato.
+- Templates configuraveis por empresa.
 
 ### Manuais
 

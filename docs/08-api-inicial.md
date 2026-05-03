@@ -98,6 +98,22 @@ Lista solicitacoes mockadas de IA.
 
 Lista notificacoes mockadas de e-mail, WhatsApp, push ou internas.
 
+## Integracoes
+
+### GET /integrations
+
+Lista status mockado das integracoes externas.
+
+## WhatsApp
+
+### GET /whatsapp/templates
+
+Lista templates internos planejados para mensagens de WhatsApp.
+
+### POST /webhooks/whatsapp
+
+Endpoint inicial para receber eventos de webhook do WhatsApp.
+
 ## Observacao
 
 Os endpoints atuais usam dados mockados. A proxima etapa tecnica e conectar estes contratos de resposta ao Prisma/PostgreSQL, preservando as rotas.

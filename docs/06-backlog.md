@@ -126,5 +126,29 @@
 - E-mail de conclusao.
 - E-mail de aprovacao de orcamento.
 - E-mail de visita preventiva proxima.
+- WhatsApp de acompanhamento da OS.
+- WhatsApp de aprovacao de orcamento.
+- WhatsApp de lembrete de visita preventiva.
 - Alertas internos.
 - Templates por empresa.
+
+## Epico 15 - Integracoes Externas
+
+- Configurar OpenAI no back-end.
+- Configurar Google Maps.
+- Configurar provedor de e-mail.
+- Configurar WhatsApp Business Platform.
+- Configurar webhooks de WhatsApp.
+- Criar tela de status das integracoes por empresa.
+
+## Epico 16 - PMOC, PCM E Satisfacao
+
+- Cadastro de plano PMOC por cliente/equipamento.
+- Cronograma anual por equipamento.
+- Responsavel tecnico do PMOC.
+- Exportacao de relatorio PMOC.
+- Controle PCM para manutencao preventiva.
+- Pesquisa de satisfacao pos-atendimento.
+- Indicador NPS.
+- Controle de KM rodado por tecnico/OS.
+- Registro de check-in e check-out.

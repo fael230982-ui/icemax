@@ -124,5 +124,20 @@ export const manuals = [
 export const notifications = [
   { channel: "E-mail", subject: "OS concluida", status: "Pendente" },
   { channel: "E-mail", subject: "Aprovacao de orcamento", status: "Enviado" },
+  { channel: "WhatsApp", subject: "Link de acompanhamento", status: "Fila" },
   { channel: "Interno", subject: "Contrato vence em 7 dias", status: "Fila" },
+];
+
+export const integrations = [
+  { name: "OpenAI", purpose: "IA tecnica", status: "Pendente" },
+  { name: "Google Maps", purpose: "Rotas e deslocamento", status: "Pendente" },
+  { name: "WhatsApp", purpose: "Cliente e automacoes", status: "Pendente" },
+  { name: "E-mail", purpose: "Relatorios e orcamentos", status: "Pendente" },
+];
+
+export const quality = [
+  { label: "PMOC ativos", value: "12" },
+  { label: "Check-ins hoje", value: "9" },
+  { label: "KM rodado", value: "184 km" },
+  { label: "Satisfacao", value: "4,8/5" },
 ];

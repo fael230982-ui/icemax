@@ -79,3 +79,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 5
+
+- [x] WhatsApp incluido no escopo.
+- [x] Integracoes externas documentadas.
+- [x] Schema Prisma atualizado com configuracoes e eventos de integracao.
+- [x] API mockada atualizada com WhatsApp e integracoes.
+- [x] Referencias publicas de mercado documentadas sem copia de material proprietario.
+- [x] Modelos operacionais iniciais criados.
+- [x] Prisma Client gerado.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Auditoria de dependencias de producao executada.
+- [ ] Commit local criado.
+- [ ] Push inicial pendente.

@@ -201,4 +201,30 @@ export const aiRequests = [
 export const notifications = [
   { id: "notif-001", channel: "email", recipient: "ordens@icemax.com.br", subject: "OS #1048 concluida", status: "pending" },
   { id: "notif-002", channel: "email", recipient: "cliente@climasul.com.br", subject: "Aprovacao de orcamento", status: "sent" },
+  { id: "notif-003", channel: "whatsapp", recipient: "+5500000000000", subject: "Link de acompanhamento da OS", status: "queued" },
+];
+
+export const integrations = [
+  { provider: "openai", label: "OpenAI", status: "not_configured", requiredEnv: "OPENAI_API_KEY" },
+  { provider: "google_maps", label: "Google Maps", status: "not_configured", requiredEnv: "MAPS_API_KEY" },
+  { provider: "email", label: "E-mail transacional", status: "not_configured", requiredEnv: "EMAIL_API_KEY" },
+  { provider: "whatsapp", label: "WhatsApp Business", status: "not_configured", requiredEnv: "WHATSAPP_ACCESS_TOKEN" },
+];
+
+export const whatsappTemplates = [
+  {
+    name: "os_tracking_link",
+    title: "Acompanhamento de OS",
+    body: "Ola, sua ordem de servico esta em andamento. Acompanhe pelo link: {{tracking_link}}",
+  },
+  {
+    name: "quote_approval",
+    title: "Aprovacao de orcamento",
+    body: "Seu orcamento esta pronto para aprovacao: {{approval_link}}",
+  },
+  {
+    name: "contract_visit_reminder",
+    title: "Lembrete de manutencao",
+    body: "Sua manutencao preventiva esta prevista para {{visit_date}}.",
+  },
 ];

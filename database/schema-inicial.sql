@@ -359,6 +359,43 @@ create table notifications (
   created_at timestamptz not null default now()
 );
 
+create table notification_templates (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  channel text not null,
+  name text not null,
+  subject text,
+  body text not null,
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (tenant_id, channel, name)
+);
+
+create table whatsapp_events (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  phone_number_id text,
+  message_id text,
+  direction text not null,
+  from_number text,
+  to_number text,
+  payload jsonb not null,
+  processed_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create table integration_settings (
+  id uuid primary key,
+  tenant_id uuid not null references tenants(id),
+  provider text not null,
+  status text not null default 'not_configured',
+  config jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (tenant_id, provider)
+);
+
 create table audit_logs (
   id uuid primary key,
   tenant_id uuid not null references tenants(id),
