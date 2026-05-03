@@ -18,6 +18,8 @@ npm install
 docker compose up -d postgres
 ```
 
+Se Docker nao estiver instalado, use temporariamente um PostgreSQL hospedado, como Neon, Supabase, Railway ou outro provedor compativel, e configure `DATABASE_URL`.
+
 Variavel esperada:
 
 ```bash
@@ -73,6 +75,8 @@ Depois que o PostgreSQL local estiver rodando:
 npm run db:migrate
 npm run db:seed
 ```
+
+Com banco remoto, os mesmos comandos funcionam desde que `DATABASE_URL` esteja configurada no ambiente.
 
 O seed cria dados ficticios da ICEMAX para desenvolvimento:
 

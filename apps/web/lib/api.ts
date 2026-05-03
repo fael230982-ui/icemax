@@ -21,13 +21,37 @@ export type DashboardResponse = {
   upcomingContractVisits: unknown[];
 };
 
+export type LoginResponse = {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  tenant: {
+    id: string;
+    name: string;
+  };
+};
+
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333";
 
-export async function apiGet<T>(path: string): Promise<T> {
+type ApiOptions = {
+  token?: string;
+  body?: unknown;
+  method?: "GET" | "POST" | "PATCH" | "PUT";
+};
+
+export async function apiRequest<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const response = await fetch(`${apiBaseUrl}${path}`, {
+    method: options.method ?? "GET",
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
     },
+    body: options.body ? JSON.stringify(options.body) : undefined,
     cache: "no-store",
   });
 
@@ -39,10 +63,20 @@ export async function apiGet<T>(path: string): Promise<T> {
 }
 
 export const icemaxApi = {
-  dashboard: () => apiGet<DashboardResponse>("/dashboard"),
-  serviceOrders: () => apiGet<ApiListResponse<unknown>>("/service-orders"),
-  contracts: () => apiGet<ApiListResponse<unknown>>("/contracts"),
-  quotes: () => apiGet<ApiListResponse<unknown>>("/quotes"),
-  stock: () => apiGet<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock"),
-  integrations: () => apiGet<ApiListResponse<unknown>>("/integrations"),
+  login: (body: { email: string; password: string; tenantId?: string }) =>
+    apiRequest<LoginResponse>("/auth/login", { method: "POST", body }),
+  me: (token: string) => apiRequest<unknown>("/auth/me", { token }),
+  dashboard: (token?: string) => apiRequest<DashboardResponse>("/dashboard", { token }),
+  serviceOrders: (token?: string) => apiRequest<ApiListResponse<unknown>>("/service-orders", { token }),
+  createServiceOrder: (body: unknown, token?: string) =>
+    apiRequest<unknown>("/service-orders", { method: "POST", body, token }),
+  customers: (token?: string) => apiRequest<ApiListResponse<unknown>>("/customers", { token }),
+  createCustomer: (body: unknown, token?: string) => apiRequest<unknown>("/customers", { method: "POST", body, token }),
+  equipment: (token?: string) => apiRequest<ApiListResponse<unknown>>("/equipment", { token }),
+  createEquipment: (body: unknown, token?: string) => apiRequest<unknown>("/equipment", { method: "POST", body, token }),
+  contracts: (token?: string) => apiRequest<ApiListResponse<unknown>>("/contracts", { token }),
+  createContract: (body: unknown, token?: string) => apiRequest<unknown>("/contracts", { method: "POST", body, token }),
+  quotes: (token?: string) => apiRequest<ApiListResponse<unknown>>("/quotes", { token }),
+  stock: (token?: string) => apiRequest<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock", { token }),
+  integrations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/integrations", { token }),
 };

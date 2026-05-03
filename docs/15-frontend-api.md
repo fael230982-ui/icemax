@@ -11,6 +11,23 @@ O painel web ainda renderiza dados locais para manter desenvolvimento rapido e s
 3. Substituir cada bloco local por chamada real de forma incremental.
 4. Preservar os contratos de resposta ja documentados em `docs/08-api-inicial.md`.
 
+## Cliente De API
+
+O arquivo `apps/web/lib/api.ts` concentra chamadas para:
+
+- login;
+- sessao atual;
+- dashboard;
+- OS;
+- clientes;
+- equipamentos;
+- contratos;
+- orcamentos;
+- estoque;
+- integracoes.
+
+As chamadas ja aceitam token Bearer opcional.
+
 ## Variavel De Ambiente
 
 ```bash

@@ -122,3 +122,9 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criado gerador HTML de relatorio de OS.
 - Adicionado endpoint para gerar relatorio de OS.
 - Adicionada rota local para servir arquivos em desenvolvimento.
+
+## 0.4.2 - Lote 17
+
+- Verificado que Docker nao esta disponivel no ambiente atual.
+- Documentada alternativa com PostgreSQL remoto via `DATABASE_URL`.
+- Cliente de API do painel expandido para login e criacao de entidades principais.

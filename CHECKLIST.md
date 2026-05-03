@@ -232,3 +232,15 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 17
+
+- [x] Docker verificado.
+- [x] Indisponibilidade de Docker documentada.
+- [x] Alternativa com PostgreSQL remoto documentada.
+- [x] Cliente API do painel expandido para login e criacao.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
