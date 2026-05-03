@@ -141,3 +141,14 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 10
+
+- [x] Painel web refatorado em componentes.
+- [x] Secoes de clientes e equipamentos adicionadas.
+- [x] API de orcamentos, estoque e checklists preparada para mock/Prisma.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

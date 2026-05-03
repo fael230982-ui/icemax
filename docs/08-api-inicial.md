@@ -94,17 +94,23 @@ Lista etiquetas QR geradas para equipamentos.
 
 Lista orcamentos mockados, incluindo status, itens e validade.
 
+Quando `API_DATA_SOURCE="prisma"`, lista orcamentos do tenant atual com itens e cliente vinculado pela OS.
+
 ## Checklists
 
 ### GET /checklists
 
 Lista modelos de checklist por tipo de atendimento.
 
+Quando `API_DATA_SOURCE="prisma"`, lista modelos e itens ordenados.
+
 ## Estoque
 
 ### GET /stock
 
 Lista itens de estoque e alertas de quantidade minima.
+
+Quando `API_DATA_SOURCE="prisma"`, lista saldo por peca/local e calcula alertas por estoque minimo.
 
 ## Manuais
 

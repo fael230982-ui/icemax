@@ -44,6 +44,18 @@ export const orders = [
   },
 ];
 
+export const customers = [
+  { name: "ClimaSul Hotel", email: "cliente@climasul.local", contracts: 1, equipment: 18 },
+  { name: "Clinica Vida", email: "cliente@clinicavida.local", contracts: 1, equipment: 8 },
+  { name: "Mercado Avante", email: "cliente@mercadoavante.local", contracts: 1, equipment: 5 },
+];
+
+export const equipmentList = [
+  { serial: "ICM-AC-0001", model: "Carrier Piso Teto 60k", customer: "ClimaSul Hotel", location: "Recepcao" },
+  { serial: "ICM-AC-0002", model: "Midea Cassete 36k", customer: "Clinica Vida", location: "Sala 03" },
+  { serial: "ICM-AC-0003", model: "Split Hi Wall 24k", customer: "Mercado Avante", location: "Caixa 03" },
+];
+
 export const technicians = [
   { name: "Rafael Martins", kind: "Interno", status: "Em atendimento", location: "Ultima posicao ha 2 min" },
   { name: "Joao Pereira", kind: "Interno", status: "Em rota", location: "Chegada prevista 08:43" },

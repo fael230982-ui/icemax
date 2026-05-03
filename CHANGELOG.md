@@ -77,3 +77,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionados endpoints iniciais de clientes e equipamentos.
 - Contratos passaram a suportar mock e Prisma.
 - Adicionados repositorios de clientes, equipamentos e contratos.
+
+## 0.3.0 - Lote 10
+
+- Painel web refatorado em componentes reutilizaveis.
+- Adicionadas secoes de clientes e equipamentos ao painel.
+- Dados locais ampliados para clientes e equipamentos.
+- API de orcamentos, checklists e estoque preparada para mock/Prisma.
