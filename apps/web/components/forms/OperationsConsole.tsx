@@ -232,6 +232,7 @@ export function OperationsConsole() {
         icemaxApi.platformModules(token || undefined),
         icemaxApi.platformRoles(token || undefined),
         icemaxApi.platformDiagnostics(token || undefined),
+        icemaxApi.preReleaseGate(token || undefined),
       ]);
 
       return { checks: results.length, results };

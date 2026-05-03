@@ -89,3 +89,54 @@ export function getPlatformDiagnostics() {
     },
   };
 }
+
+export function getPreReleaseGate() {
+  const checks = [
+    {
+      key: "data_source",
+      label: "Fonte de dados",
+      status: isPrismaEnabled() ? "pass" : "block",
+      detail: isPrismaEnabled() ? "API usando Prisma." : "API ainda esta em modo mock.",
+    },
+    {
+      key: "database_url",
+      label: "DATABASE_URL",
+      status: process.env.DATABASE_URL ? "pass" : "block",
+      detail: process.env.DATABASE_URL ? "Variavel configurada." : "Banco real ainda nao configurado.",
+    },
+    {
+      key: "jwt_secret",
+      label: "JWT_SECRET",
+      status: process.env.JWT_SECRET && !config.jwtSecret.includes("dev-secret") ? "pass" : "block",
+      detail: "Segredo JWT precisa ser longo, privado e diferente do valor de desenvolvimento.",
+    },
+    {
+      key: "integrations",
+      label: "Integracoes externas",
+      status: integrations.every((item) => item.status === "configured") ? "pass" : "warn",
+      detail: "OpenAI, mapas, e-mail e WhatsApp podem ficar pendentes ate homologacao controlada.",
+    },
+    {
+      key: "validation",
+      label: "Validacao tecnica",
+      status: "manual",
+      detail: "Executar npm run validate antes de push, homologacao e release.",
+    },
+    {
+      key: "pdf_docs",
+      label: "PDFs de documentacao",
+      status: "deferred",
+      detail: "PDFs adiados por decisao do Rafael para ganhar velocidade.",
+    },
+  ];
+  const blocking = checks.filter((item) => item.status === "block");
+
+  return {
+    status: blocking.length ? "blocked" : "ready",
+    blocking: blocking.length,
+    checks,
+    recommendation: blocking.length
+      ? "Manter desenvolvimento local e nao liberar homologacao externa ainda."
+      : "Pode preparar homologacao controlada.",
+  };
+}

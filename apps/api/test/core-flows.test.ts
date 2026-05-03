@@ -451,6 +451,11 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(diagnostics.statusCode, 200);
   assert.equal(diagnostics.json().validation.zod, true);
 
+  const gate = await app.inject({ method: "GET", url: "/platform/pre-release-gate" });
+  assert.equal(gate.statusCode, 200);
+  assert.equal(gate.json().status, "blocked");
+  assert.ok(gate.json().checks.length >= 5);
+
   await app.close();
 });
 

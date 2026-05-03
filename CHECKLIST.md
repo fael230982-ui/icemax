@@ -439,3 +439,15 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Gate De Pre-Release
+
+- [x] Endpoint de gate criado.
+- [x] Gate conectado ao diagnostico do painel.
+- [x] Teste de bloqueio em modo mock criado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

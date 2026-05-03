@@ -248,3 +248,9 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionado plano de seed inicial.
 - Adicionado checklist de variaveis de ambiente.
 - Painel web passou a consultar diagnostico de virada para banco.
+
+## 0.8.4 - Gate De Pre-Release
+
+- Adicionado endpoint de semaforo pre-release.
+- Gate passou a checar banco, fonte de dados, JWT, integracoes e validacao.
+- Console web passou a incluir gate no diagnostico.

@@ -141,6 +141,7 @@ export const icemaxApi = {
   platformModules: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/modules", { token }),
   platformRoles: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/roles", { token }),
   platformDiagnostics: (token?: string) => apiRequest<unknown>("/platform/diagnostics", { token }),
+  preReleaseGate: (token?: string) => apiRequest<unknown>("/platform/pre-release-gate", { token }),
   apiContracts: (token?: string) => apiRequest<ApiListResponse<unknown> & { version: string }>("/api-contract/routes", { token }),
   homologationScenarios: (token?: string) => apiRequest<ApiListResponse<unknown>>("/homologation/scenarios", { token }),
   runHomologationScenario: (key: string, token?: string) =>

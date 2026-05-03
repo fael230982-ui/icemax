@@ -288,6 +288,10 @@ Retorna matriz inicial de papeis e permissoes.
 
 Retorna diagnostico tecnico de ambiente, storage e dependencias externas.
 
+### GET /platform/pre-release-gate
+
+Retorna semaforo de pre-release com bloqueios, alertas e recomendacao.
+
 ## Homologacao E Observabilidade
 
 ### GET /api-contract/routes
