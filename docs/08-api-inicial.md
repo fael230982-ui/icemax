@@ -50,17 +50,29 @@ Lista ordens de servico.
 
 Retorna detalhe de uma ordem de servico.
 
+### POST /service-orders
+
+Cria uma ordem de servico.
+
 ## Clientes
 
 ### GET /customers
 
 Lista clientes do tenant atual.
 
+### POST /customers
+
+Cria cliente no tenant atual.
+
 ## Equipamentos
 
 ### GET /equipment
 
 Lista equipamentos do tenant atual.
+
+### POST /equipment
+
+Cria equipamento vinculado a cliente.
 
 ## Contratos
 
@@ -75,6 +87,10 @@ Lista contratos com visitas proximas ou que precisam gerar OS.
 ### GET /contracts/:id/visits/preview
 
 Retorna uma pre-visualizacao das proximas visitas de contrato conforme recorrencia configurada.
+
+### POST /contracts
+
+Cria contrato recorrente com periodicidade de 3, 4 ou 6 meses.
 
 ## Mapas E Plantas
 

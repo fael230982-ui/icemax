@@ -1,5 +1,6 @@
 import { getPrisma } from "../database";
 import { serviceOrders } from "../mock-data";
+import type { CreateServiceOrderInput } from "../schemas";
 
 export async function listMockOrders() {
   return {
@@ -43,6 +44,35 @@ export async function getPrismaOrder(tenantId: string, id: string) {
       notes: true,
       partsUsed: true,
       quotes: true,
+    },
+  });
+}
+
+export async function createMockOrder(tenantId: string, openedByUserId: string, input: CreateServiceOrderInput) {
+  return {
+    id: `${Date.now()}`,
+    tenantId,
+    openedByUserId,
+    status: "open",
+    ...input,
+  };
+}
+
+export async function createPrismaOrder(tenantId: string, openedByUserId: string, input: CreateServiceOrderInput) {
+  return getPrisma().serviceOrder.create({
+    data: {
+      tenantId,
+      openedByUserId,
+      customerId: input.customerId,
+      equipmentId: input.equipmentId,
+      addressId: input.addressId,
+      assignedTechnicianId: input.assignedTechnicianId,
+      title: input.title,
+      description: input.description,
+      priority: input.priority,
+      status: "open",
+      scheduledStart: input.scheduledStart ? new Date(input.scheduledStart) : undefined,
+      scheduledEnd: input.scheduledEnd ? new Date(input.scheduledEnd) : undefined,
     },
   });
 }

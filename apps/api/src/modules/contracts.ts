@@ -3,6 +3,8 @@ import { previewContractVisits } from "@icemax/shared";
 import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
 import {
+  createMockContract,
+  createPrismaContract,
   getMockContract,
   getPrismaContract,
   listMockContracts,
@@ -10,6 +12,7 @@ import {
   listPrismaContracts,
   listPrismaDueContracts,
 } from "../repositories/contracts-repository";
+import { createContractSchema, parseBody } from "../schemas";
 
 export async function registerContractRoutes(app: FastifyInstance) {
   app.get("/contracts", async (request) => {
@@ -52,5 +55,15 @@ export async function registerContractRoutes(app: FastifyInstance) {
         occurrences: 6,
       }),
     };
+  });
+
+  app.post("/contracts", async (request, reply) => {
+    const context = getAuthContext(request);
+    const input = parseBody(createContractSchema, request.body);
+    const contract = isPrismaEnabled()
+      ? await createPrismaContract(context.tenantId, input)
+      : await createMockContract(context.tenantId, input);
+
+    return reply.code(201).send(contract);
   });
 }

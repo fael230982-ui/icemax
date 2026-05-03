@@ -90,3 +90,9 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - App tecnico refatorado em componentes reutilizaveis.
 - Dados locais do mobile separados.
 - App tecnico ampliado com prioridade, offline e qualidade.
+
+## 0.3.2 - Lote 12
+
+- Adicionadas validacoes de entrada com Zod na API.
+- Criados endpoints POST para clientes, equipamentos, ordens de servico e contratos.
+- Adicionado handler global de erros da API.

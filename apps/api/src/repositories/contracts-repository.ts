@@ -1,5 +1,6 @@
 import { getPrisma } from "../database";
 import { serviceContracts } from "../mock-data";
+import type { CreateContractInput } from "../schemas";
 
 export async function listMockContracts() {
   return {
@@ -62,5 +63,40 @@ export async function listPrismaDueContracts(tenantId: string) {
 export async function getPrismaContract(tenantId: string, id: string) {
   return getPrisma().serviceContract.findFirst({
     where: { tenantId, id },
+  });
+}
+
+export async function createMockContract(tenantId: string, input: CreateContractInput) {
+  return {
+    id: `contract-${Date.now()}`,
+    tenantId,
+    active: true,
+    ...input,
+  };
+}
+
+export async function createPrismaContract(tenantId: string, input: CreateContractInput) {
+  return getPrisma().serviceContract.create({
+    data: {
+      tenantId,
+      customerId: input.customerId,
+      addressId: input.addressId,
+      name: input.name,
+      recurrenceMonths: input.recurrenceMonths,
+      startDate: new Date(input.startDate),
+      endDate: input.endDate ? new Date(input.endDate) : undefined,
+      includesPreventive: input.includesPreventive,
+      includesCleaning: input.includesCleaning,
+      notes: input.notes,
+      equipment: {
+        create: input.equipmentIds.map((equipmentId) => ({
+          tenantId,
+          equipmentId,
+        })),
+      },
+    },
+    include: {
+      equipment: true,
+    },
   });
 }

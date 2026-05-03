@@ -162,3 +162,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 12
+
+- [x] Validadores de entrada criados.
+- [x] POST de clientes criado.
+- [x] POST de equipamentos criado.
+- [x] POST de OS criado.
+- [x] POST de contratos criado.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

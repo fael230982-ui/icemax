@@ -1,7 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
-import { getMockOrder, getPrismaOrder, listMockOrders, listPrismaOrders } from "../repositories/orders-repository";
+import { createMockOrder, createPrismaOrder, getMockOrder, getPrismaOrder, listMockOrders, listPrismaOrders } from "../repositories/orders-repository";
+import { createServiceOrderSchema, parseBody } from "../schemas";
 
 export async function registerOrderRoutes(app: FastifyInstance) {
   app.get("/service-orders", async (request) => {
@@ -26,5 +27,15 @@ export async function registerOrderRoutes(app: FastifyInstance) {
     }
 
     return order;
+  });
+
+  app.post("/service-orders", async (request, reply) => {
+    const context = getAuthContext(request);
+    const input = parseBody(createServiceOrderSchema, request.body);
+    const order = isPrismaEnabled()
+      ? await createPrismaOrder(context.tenantId, context.userId, input)
+      : await createMockOrder(context.tenantId, context.userId, input);
+
+    return reply.code(201).send(order);
   });
 }

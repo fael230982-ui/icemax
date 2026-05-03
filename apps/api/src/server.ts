@@ -1,10 +1,23 @@
 import cors from "@fastify/cors";
 import Fastify from "fastify";
+import { ZodError } from "zod";
 import { serviceOrderStatuses } from "@icemax/shared";
 import { config } from "./config";
 import { registerRoutes } from "./routes";
 
 const app = Fastify({ logger: true });
+
+app.setErrorHandler((error, _request, reply) => {
+  if (error instanceof ZodError) {
+    return reply.code(400).send({
+      message: "Dados invalidos.",
+      issues: error.issues,
+    });
+  }
+
+  app.log.error(error);
+  return reply.code(500).send({ message: "Erro interno." });
+});
 
 await app.register(cors, {
   origin: true,
