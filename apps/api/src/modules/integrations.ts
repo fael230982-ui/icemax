@@ -23,7 +23,7 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
   }));
 
   app.get("/notifications", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaNotifications(context.tenantId);
@@ -33,7 +33,7 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
   });
 
   app.get("/integrations", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaIntegrations(context.tenantId);
@@ -43,7 +43,7 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
   });
 
   app.put("/integrations/:provider", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const { provider } = request.params as { provider: string };
     const input = parseBody(updateIntegrationStatusSchema, {
       ...(request.body as object),
@@ -56,7 +56,7 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
   });
 
   app.get("/notification-templates", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaNotificationTemplates(context.tenantId);
@@ -66,7 +66,7 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
   });
 
   app.post("/notification-templates", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createNotificationTemplateSchema, request.body);
     const template = isPrismaEnabled()
       ? await createPrismaNotificationTemplate(context.tenantId, input)

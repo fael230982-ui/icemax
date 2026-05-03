@@ -34,7 +34,7 @@ import {
 
 export async function registerOrderRoutes(app: FastifyInstance) {
   app.get("/service-orders", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaOrders(context.tenantId);
@@ -45,7 +45,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.get("/service-orders/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const order = isPrismaEnabled()
       ? await getPrismaOrder(context.tenantId, id)
       : await getMockOrder(id);
@@ -58,7 +58,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
   });
 
   app.post("/service-orders", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createServiceOrderSchema, request.body);
     const order = isPrismaEnabled()
       ? await createPrismaOrder(context.tenantId, context.userId, input)
@@ -69,7 +69,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.post("/service-orders/:id/notes", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(addServiceOrderNoteSchema, request.body);
     const note = isPrismaEnabled()
       ? await addPrismaOrderNote(context.tenantId, id, context.userId, input)
@@ -80,7 +80,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.post("/service-orders/:id/photos", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(addServiceOrderPhotoSchema, request.body);
     const photo = isPrismaEnabled()
       ? await addPrismaOrderPhoto(context.tenantId, id, context.userId, input)
@@ -91,7 +91,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.post("/service-orders/:id/checklist-answers", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(answerChecklistSchema, request.body);
     const answer = isPrismaEnabled()
       ? await answerPrismaChecklist(context.tenantId, id, input)
@@ -102,7 +102,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.post("/service-orders/:id/parts", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(addServiceOrderPartSchema, request.body);
     const part = isPrismaEnabled()
       ? await addPrismaOrderPart(context.tenantId, id, input)
@@ -113,7 +113,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.patch("/service-orders/:id/status", async (request) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(updateServiceOrderStatusSchema, request.body);
 
     return isPrismaEnabled()
@@ -123,7 +123,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
 
   app.post("/service-orders/:id/quotes", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createQuoteFromOrderSchema, request.body);
     const quote = isPrismaEnabled()
       ? await createPrismaQuoteFromOrder(context.tenantId, id, input)

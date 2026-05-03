@@ -5,7 +5,7 @@ import { getMockDashboard, getPrismaDashboard } from "../repositories/dashboard-
 
 export async function registerDashboardRoutes(app: FastifyInstance) {
   app.get("/dashboard", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return getPrismaDashboard(context.tenantId);

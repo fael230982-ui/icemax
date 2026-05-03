@@ -21,7 +21,7 @@ import { createPartSchema, createStockLocationSchema, createStockMovementSchema,
 
 export async function registerOperationRoutes(app: FastifyInstance) {
   app.get("/quotes", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaQuotes(context.tenantId);
@@ -31,7 +31,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.get("/checklists", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaChecklists(context.tenantId);
@@ -41,7 +41,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.get("/stock", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaStock(context.tenantId);
@@ -51,7 +51,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.post("/parts", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createPartSchema, request.body);
     const part = isPrismaEnabled()
       ? await createPrismaPart(context.tenantId, input)
@@ -61,7 +61,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.get("/stock-locations", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaStockLocations(context.tenantId);
@@ -71,7 +71,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.post("/stock-locations", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createStockLocationSchema, request.body);
     const location = isPrismaEnabled()
       ? await createPrismaStockLocation(context.tenantId, input)
@@ -81,7 +81,7 @@ export async function registerOperationRoutes(app: FastifyInstance) {
   });
 
   app.post("/stock-movements", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createStockMovementSchema, request.body);
     const movement = isPrismaEnabled()
       ? await createPrismaStockMovement(context.tenantId, context.userId, input)

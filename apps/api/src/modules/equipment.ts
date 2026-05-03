@@ -6,7 +6,7 @@ import { createEquipmentSchema, parseBody } from "../schemas";
 
 export async function registerEquipmentRoutes(app: FastifyInstance) {
   app.get("/equipment", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaEquipment(context.tenantId);
@@ -16,7 +16,7 @@ export async function registerEquipmentRoutes(app: FastifyInstance) {
   });
 
   app.post("/equipment", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createEquipmentSchema, request.body);
     const equipment = isPrismaEnabled()
       ? await createPrismaEquipment(context.tenantId, input)

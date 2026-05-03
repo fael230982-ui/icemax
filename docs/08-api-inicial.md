@@ -34,6 +34,14 @@ Headers de desenvolvimento:
 
 Enquanto login real nao estiver implementado, a API usa `tenant-icemax` e papel `owner` como padrao.
 
+### POST /auth/login
+
+Realiza login quando `API_DATA_SOURCE="prisma"` e retorna token JWT.
+
+### GET /auth/me
+
+Retorna usuario e tenant da sessao atual quando informado `Authorization: Bearer <token>`.
+
 ## Dashboard
 
 ### GET /dashboard

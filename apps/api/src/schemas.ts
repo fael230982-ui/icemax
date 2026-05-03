@@ -136,6 +136,12 @@ export const updateIntegrationStatusSchema = z.object({
   config: z.record(z.unknown()).optional(),
 });
 
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  tenantId: z.string().optional(),
+});
+
 export function parseBody<T extends z.ZodTypeAny>(schema: T, body: unknown): z.output<T> {
   return schema.parse(body);
 }
@@ -157,3 +163,4 @@ export type GenerateContractVisitsInput = z.output<typeof generateContractVisits
 export type CreateOrderFromContractVisitInput = z.output<typeof createOrderFromContractVisitSchema>;
 export type CreateNotificationTemplateInput = z.output<typeof createNotificationTemplateSchema>;
 export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStatusSchema>;
+export type LoginInput = z.output<typeof loginSchema>;

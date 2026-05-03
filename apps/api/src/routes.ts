@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "./auth";
 import { tenant } from "./mock-data";
+import { registerAuthRoutes } from "./modules/auth";
 import { registerAssetRoutes } from "./modules/assets";
 import { registerContractRoutes } from "./modules/contracts";
 import { registerCustomerRoutes } from "./modules/customers";
@@ -14,6 +15,7 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get("/tenant/current", async () => tenant);
   app.get("/auth/context", async (request) => getAuthContext(request));
 
+  await registerAuthRoutes(app);
   await registerDashboardRoutes(app);
   await registerCustomerRoutes(app);
   await registerEquipmentRoutes(app);

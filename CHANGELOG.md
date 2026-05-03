@@ -108,3 +108,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Movimentacao de estoque com transacao Prisma para atualizar saldos.
 - Contratos acelerados com geracao de visitas recorrentes e OS preventiva a partir da visita.
 - Integracoes aceleradas com templates de notificacao e atualizacao de status.
+
+## 0.4.0 - Lote 15
+
+- Adicionada autenticacao real com argon2 e JWT via jose.
+- Criadas rotas `/auth/login` e `/auth/me`.
+- Contexto multiempresa passou a aceitar Bearer token.
+- Seed passou a criar senha local com hash seguro.

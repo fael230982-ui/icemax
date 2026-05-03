@@ -6,7 +6,7 @@ import { createCustomerSchema, parseBody } from "../schemas";
 
 export async function registerCustomerRoutes(app: FastifyInstance) {
   app.get("/customers", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaCustomers(context.tenantId);
@@ -16,7 +16,7 @@ export async function registerCustomerRoutes(app: FastifyInstance) {
   });
 
   app.post("/customers", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createCustomerSchema, request.body);
     const customer = isPrismaEnabled()
       ? await createPrismaCustomer(context.tenantId, input)

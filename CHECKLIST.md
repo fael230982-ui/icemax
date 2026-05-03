@@ -206,3 +206,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 15
+
+- [x] Dependencias seguras de auth instaladas.
+- [x] Login com argon2 criado.
+- [x] JWT com jose criado.
+- [x] Rota `/auth/login` criada.
+- [x] Rota `/auth/me` criada.
+- [x] Seed atualizado com senha hash.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

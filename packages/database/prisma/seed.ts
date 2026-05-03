@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import argon2 from "argon2";
 
 const prisma = new PrismaClient();
 
@@ -16,6 +17,7 @@ async function main() {
       reportEmail: "adm.rcsolutions@gmail.com",
     },
   });
+  const devPasswordHash = await argon2.hash("icemax-dev-123");
 
   const admin = await prisma.user.upsert({
     where: { tenantId_email: { tenantId: tenant.id, email: "adm.rcsolutions@gmail.com" } },
@@ -24,7 +26,7 @@ async function main() {
       tenantId: tenant.id,
       name: "RAFAEL DA SILVA BEZEERA",
       email: "adm.rcsolutions@gmail.com",
-      passwordHash: "dev-only-change-before-production",
+      passwordHash: devPasswordHash,
       role: "owner",
     },
   });
@@ -36,7 +38,7 @@ async function main() {
       tenantId: tenant.id,
       name: "Tecnico ICEMAX",
       email: "tecnico@icemax.local",
-      passwordHash: "dev-only-change-before-production",
+      passwordHash: devPasswordHash,
       role: "technician",
     },
   });
@@ -192,6 +194,7 @@ async function main() {
   console.log({
     tenant: tenant.name,
     owner: admin.email,
+    devPassword: "icemax-dev-123",
     technician: technician.email,
     customer: customer.name,
     equipment: equipment.serialNumber,

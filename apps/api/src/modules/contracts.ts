@@ -20,7 +20,7 @@ import { createContractSchema, createOrderFromContractVisitSchema, generateContr
 
 export async function registerContractRoutes(app: FastifyInstance) {
   app.get("/contracts", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaContracts(context.tenantId);
@@ -30,7 +30,7 @@ export async function registerContractRoutes(app: FastifyInstance) {
   });
 
   app.get("/contracts/due", async (request) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
 
     if (isPrismaEnabled()) {
       return listPrismaDueContracts(context.tenantId);
@@ -41,7 +41,7 @@ export async function registerContractRoutes(app: FastifyInstance) {
 
   app.get("/contracts/:id/visits/preview", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const contract = isPrismaEnabled()
       ? await getPrismaContract(context.tenantId, id)
       : await getMockContract(id);
@@ -62,7 +62,7 @@ export async function registerContractRoutes(app: FastifyInstance) {
   });
 
   app.post("/contracts", async (request, reply) => {
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createContractSchema, request.body);
     const contract = isPrismaEnabled()
       ? await createPrismaContract(context.tenantId, input)
@@ -73,7 +73,7 @@ export async function registerContractRoutes(app: FastifyInstance) {
 
   app.post("/contracts/:id/visits/generate", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(generateContractVisitsSchema, request.body);
     const visits = isPrismaEnabled()
       ? await generatePrismaContractVisits(context.tenantId, id, input)
@@ -84,7 +84,7 @@ export async function registerContractRoutes(app: FastifyInstance) {
 
   app.post("/contract-visits/:id/service-order", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const context = getAuthContext(request);
+    const context = await getAuthContext(request);
     const input = parseBody(createOrderFromContractVisitSchema, request.body);
     const order = isPrismaEnabled()
       ? await createPrismaOrderFromContractVisit(context.tenantId, id, context.userId, input)

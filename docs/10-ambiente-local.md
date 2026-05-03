@@ -89,6 +89,13 @@ O seed cria dados ficticios da ICEMAX para desenvolvimento:
 - manual;
 - integracoes pendentes.
 
+Login de desenvolvimento criado pelo seed:
+
+- E-mail: `adm.rcsolutions@gmail.com`
+- Senha: `icemax-dev-123`
+
+Essa senha e apenas para ambiente local e deve ser trocada antes de qualquer homologacao real.
+
 ## Aplicacoes
 
 API:
