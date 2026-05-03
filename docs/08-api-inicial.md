@@ -182,6 +182,80 @@ Cria solicitacao de compra.
 
 Cria checklist de prontidao para homologacao ou release.
 
+## Suite De Escala
+
+### POST /whitelabel/brands
+
+Cria marca whitelabel em rascunho.
+
+### POST /permissions/policies
+
+Cria politica de permissao.
+
+### POST /security/incidents
+
+Registra incidente de seguranca.
+
+### POST /lgpd/requests
+
+Registra solicitacao LGPD.
+
+### POST /maps/geocode-preview
+
+Simula geocodificacao local.
+
+### POST /communications/preview
+
+Gera previa de comunicacao por e-mail, WhatsApp ou push.
+
+### POST /service-catalog/items
+
+Cria item de catalogo de servico.
+
+### POST /price-books
+
+Cria tabela de preco.
+
+### GET /kpis/executive
+
+Retorna resumo executivo.
+
+### POST /km-reimbursements
+
+Cria reembolso de KM.
+
+### POST /technician-payables
+
+Cria repasse para tecnico.
+
+### POST /contract-renewals
+
+Cria proposta de renovacao de contrato.
+
+### GET /customers/:id/health
+
+Retorna saude do cliente.
+
+### GET /equipment/:id/depreciation
+
+Retorna depreciacao estimada do equipamento.
+
+### POST /training/checklists
+
+Cria checklist de treinamento.
+
+### POST /manuals/import-jobs
+
+Cria fila de importacao de manuais.
+
+### POST /backup-plans
+
+Cria plano de backup.
+
+### POST /incident-playbooks
+
+Cria playbook de incidente.
+
 ## Arquivos
 
 ### POST /files

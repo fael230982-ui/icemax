@@ -363,3 +363,40 @@ test("business operations suite connects ten management flows", async () => {
 
   await app.close();
 });
+
+test("enterprise scale suite connects twenty expansion flows", async () => {
+  const app = await buildApp();
+
+  const requests = [
+    app.inject({ method: "POST", url: "/whitelabel/brands", payload: { name: "ICEMAX Azul", description: "Tema piloto" } }),
+    app.inject({ method: "POST", url: "/permissions/policies", payload: { name: "Politica Operacional", description: "Permissoes por papel" } }),
+    app.inject({ method: "POST", url: "/security/incidents", payload: { name: "Tentativa suspeita", description: "Evento simulado" } }),
+    app.inject({ method: "POST", url: "/lgpd/requests", payload: { customerId: "customer-001", requestType: "export", requesterEmail: "cliente@local.dev" } }),
+    app.inject({ method: "POST", url: "/maps/geocode-preview", payload: { name: "Rua Teste, 100", description: "Endereco do cliente" } }),
+    app.inject({ method: "POST", url: "/communications/preview", payload: { channel: "email", recipient: "cliente@local.dev", template: "os_concluida", variables: { os: "1048" } } }),
+    app.inject({ method: "POST", url: "/communications/preview", payload: { channel: "whatsapp", recipient: "+5500000000000", template: "visita_agendada", variables: { data: "2026-05-10" } } }),
+    app.inject({ method: "POST", url: "/communications/preview", payload: { channel: "push", recipient: "tech-001", template: "nova_os", variables: { os: "1048" } } }),
+    app.inject({ method: "POST", url: "/service-catalog/items", payload: { name: "Higienizacao split", description: "Servico padrao" } }),
+    app.inject({ method: "POST", url: "/price-books", payload: { name: "Tabela 2026", description: "Precos base" } }),
+    app.inject({ method: "GET", url: "/kpis/executive" }),
+    app.inject({ method: "POST", url: "/km-reimbursements", payload: { technicianUserId: "tech-001", serviceOrderId: "1048", kilometers: 36, ratePerKm: 1.35 } }),
+    app.inject({ method: "POST", url: "/technician-payables", payload: { technicianUserId: "tech-001", serviceOrderIds: ["1048"], grossAmount: 300, discountAmount: 0 } }),
+    app.inject({ method: "POST", url: "/contract-renewals", payload: { contractId: "contract-001", proposedRecurrenceMonths: 3, proposedValue: 1200 } }),
+    app.inject({ method: "GET", url: "/customers/customer-001/health" }),
+    app.inject({ method: "GET", url: "/equipment/equipment-001/depreciation" }),
+    app.inject({ method: "POST", url: "/training/checklists", payload: { name: "Treinamento tecnico", description: "Checklist de integracao" } }),
+    app.inject({ method: "POST", url: "/manuals/import-jobs", payload: { name: "Importacao Carrier", description: "Lote de manuais" } }),
+    app.inject({ method: "POST", url: "/backup-plans", payload: { name: "Backup diario", frequency: "daily", retentionDays: 30 } }),
+    app.inject({ method: "POST", url: "/incident-playbooks", payload: { name: "Falha API", description: "Resposta a incidente" } }),
+  ];
+
+  const responses = await Promise.all(requests);
+  responses.forEach((response) => {
+    assert.ok([200, 201].includes(response.statusCode));
+  });
+  assert.equal(responses.length, 20);
+  assert.equal(responses[10].json().tenant, "ICEMAX Ar Condicionado");
+  assert.equal(responses[19].json().steps.length, 5);
+
+  await app.close();
+});

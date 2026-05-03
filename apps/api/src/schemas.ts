@@ -277,6 +277,50 @@ export const releaseReadinessSchema = z.object({
   includeSecurityReview: z.boolean().default(true),
 });
 
+export const namedRecordSchema = z.object({
+  name: z.string().min(2),
+  description: z.string().optional(),
+});
+
+export const communicationPreviewSchema = z.object({
+  channel: z.enum(["email", "whatsapp", "push"]),
+  recipient: z.string().min(3),
+  template: z.string().min(2),
+  variables: z.record(z.string()).default({}),
+});
+
+export const lgpdRequestSchema = z.object({
+  customerId: z.string().min(1),
+  requestType: z.enum(["export", "delete", "correct", "consent_review"]),
+  requesterEmail: z.string().email(),
+});
+
+export const kmReimbursementSchema = z.object({
+  technicianUserId: z.string().min(1),
+  serviceOrderId: z.string().optional(),
+  kilometers: z.number().nonnegative(),
+  ratePerKm: z.number().nonnegative().default(1.2),
+});
+
+export const technicianPayableSchema = z.object({
+  technicianUserId: z.string().min(1),
+  serviceOrderIds: z.array(z.string()).min(1),
+  grossAmount: z.number().nonnegative(),
+  discountAmount: z.number().nonnegative().default(0),
+});
+
+export const contractRenewalSchema = z.object({
+  contractId: z.string().min(1),
+  proposedRecurrenceMonths: z.union([z.literal(3), z.literal(4), z.literal(6)]),
+  proposedValue: z.number().nonnegative(),
+});
+
+export const backupPlanSchema = z.object({
+  name: z.string().min(2),
+  frequency: z.enum(["daily", "weekly", "monthly"]),
+  retentionDays: z.number().int().min(1).max(365),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -323,3 +367,10 @@ export type SatisfactionSurveyInput = z.output<typeof satisfactionSurveySchema>;
 export type EquipmentTimelineInput = z.output<typeof equipmentTimelineSchema>;
 export type CreatePurchaseRequestInput = z.output<typeof createPurchaseRequestSchema>;
 export type ReleaseReadinessInput = z.output<typeof releaseReadinessSchema>;
+export type NamedRecordInput = z.output<typeof namedRecordSchema>;
+export type CommunicationPreviewInput = z.output<typeof communicationPreviewSchema>;
+export type LgpdRequestInput = z.output<typeof lgpdRequestSchema>;
+export type KmReimbursementInput = z.output<typeof kmReimbursementSchema>;
+export type TechnicianPayableInput = z.output<typeof technicianPayableSchema>;
+export type ContractRenewalInput = z.output<typeof contractRenewalSchema>;
+export type BackupPlanInput = z.output<typeof backupPlanSchema>;

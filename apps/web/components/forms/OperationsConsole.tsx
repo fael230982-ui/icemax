@@ -192,6 +192,35 @@ export function OperationsConsole() {
     });
   }
 
+  function runEnterpriseSuite() {
+    void run("Suite escala", async () => {
+      const results = await Promise.all([
+        icemaxApi.createWhitelabelBrand({ name: "ICEMAX Azul", description: "Tema piloto" }, token || undefined),
+        icemaxApi.createPermissionPolicy({ name: "Politica Operacional", description: "Permissoes por papel" }, token || undefined),
+        icemaxApi.createSecurityIncident({ name: "Tentativa suspeita", description: "Evento simulado" }, token || undefined),
+        icemaxApi.createLgpdRequest({ customerId: "customer-001", requestType: "export", requesterEmail: "cliente@local.dev" }, token || undefined),
+        icemaxApi.geocodePreview({ name: "Rua Teste, 100", description: "Endereco do cliente" }, token || undefined),
+        icemaxApi.communicationPreview({ channel: "email", recipient: "cliente@local.dev", template: "os_concluida", variables: { os: "1048" } }, token || undefined),
+        icemaxApi.communicationPreview({ channel: "whatsapp", recipient: "+5500000000000", template: "visita_agendada", variables: { data: "2026-05-10" } }, token || undefined),
+        icemaxApi.communicationPreview({ channel: "push", recipient: "tech-001", template: "nova_os", variables: { os: "1048" } }, token || undefined),
+        icemaxApi.createServiceCatalogItem({ name: "Higienizacao split", description: "Servico padrao" }, token || undefined),
+        icemaxApi.createPriceBook({ name: "Tabela 2026", description: "Precos base" }, token || undefined),
+        icemaxApi.executiveKpis(token || undefined),
+        icemaxApi.createKmReimbursement({ technicianUserId: "tech-001", serviceOrderId: "1048", kilometers: 36, ratePerKm: 1.35 }, token || undefined),
+        icemaxApi.createTechnicianPayable({ technicianUserId: "tech-001", serviceOrderIds: ["1048"], grossAmount: 300, discountAmount: 0 }, token || undefined),
+        icemaxApi.createContractRenewal({ contractId: "contract-001", proposedRecurrenceMonths: 3, proposedValue: 1200 }, token || undefined),
+        icemaxApi.customerHealth("customer-001", token || undefined),
+        icemaxApi.equipmentDepreciation("equipment-001", token || undefined),
+        icemaxApi.createTrainingChecklist({ name: "Treinamento tecnico", description: "Checklist de integracao" }, token || undefined),
+        icemaxApi.createManualImportJob({ name: "Importacao Carrier", description: "Lote de manuais" }, token || undefined),
+        icemaxApi.createBackupPlan({ name: "Backup diario", frequency: "daily", retentionDays: 30 }, token || undefined),
+        icemaxApi.createIncidentPlaybook({ name: "Falha API", description: "Resposta a incidente" }, token || undefined),
+      ]);
+
+      return { modules: results.length, results };
+    });
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -276,6 +305,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
+        <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}
