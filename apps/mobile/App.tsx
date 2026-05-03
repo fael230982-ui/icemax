@@ -7,7 +7,7 @@ import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
 import { contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
-import { createCheckInAction, OfflineAction, sendOfflineAction } from "./src/services/api";
+import { createCheckInAction, createLocationAction, OfflineAction, sendOfflineAction } from "./src/services/api";
 
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
@@ -15,7 +15,8 @@ export default function App() {
 
   function addCheckIn() {
     const action = createCheckInAction("1048");
-    setPendingActions((current) => [action, ...current]);
+    const location = createLocationAction("tech-001", "1048");
+    setPendingActions((current) => [location, action, ...current]);
     setSyncStatus("Acao salva para envio quando houver conexao.");
   }
 

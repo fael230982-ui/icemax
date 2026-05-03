@@ -77,6 +77,19 @@ export function OperationsConsole() {
     void run("Auditoria", () => icemaxApi.auditLog(token || undefined));
   }
 
+  function optimizeRoute() {
+    void run("Rota otimizada", () =>
+      icemaxApi.optimizeRoute({
+        technicianUserId: "tech-001",
+        serviceOrderIds: ["1048", "1049", "1050"],
+      }, token || undefined),
+    );
+  }
+
+  function loadLocations() {
+    void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -155,6 +168,8 @@ export function OperationsConsole() {
       <div className="opsActions">
         <button type="button" className="secondary" onClick={uploadSample}>Enviar arquivo teste</button>
         <button type="button" className="secondary" onClick={loadAudit}>Ver auditoria</button>
+        <button type="button" className="secondary" onClick={loadLocations}>Ver equipe no mapa</button>
+        <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}

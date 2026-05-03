@@ -294,3 +294,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 22
+
+- [x] Endpoint de localizacao da equipe criado.
+- [x] Endpoint de envio de localizacao do tecnico criado.
+- [x] Endpoint de otimizacao de rota criado.
+- [x] Console web conectado a despacho e rotas.
+- [x] App mobile adiciona localizacao na fila offline.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

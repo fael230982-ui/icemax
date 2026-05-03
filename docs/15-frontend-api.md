@@ -28,6 +28,8 @@ O arquivo `apps/web/lib/api.ts` concentra chamadas para:
 - upload local de arquivos;
 - geracao de etiquetas QR;
 - auditoria.
+- localizacao de tecnicos;
+- otimizacao de rotas.
 
 As chamadas ja aceitam token Bearer opcional.
 
@@ -41,6 +43,8 @@ O painel web possui um console conectado a API com:
 - geracao de etiqueta QR;
 - upload local em base64;
 - consulta ao log de auditoria.
+- visualizacao da localizacao mockada da equipe;
+- solicitacao de rota otimizada.
 
 Esse console serve para acelerar homologacao tecnica antes de criar telas finais de cada modulo.
 

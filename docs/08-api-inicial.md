@@ -48,6 +48,28 @@ Retorna usuario e tenant da sessao atual quando informado `Authorization: Bearer
 
 Retorna indicadores principais, OS urgentes e visitas de contrato proximas.
 
+## Despacho, Agenda E Rotas
+
+### GET /technicians/locations
+
+Lista ultima localizacao conhecida dos tecnicos em modo mock/local.
+
+### POST /technicians/:id/location
+
+Registra localizacao enviada pelo app tecnico.
+
+Campos:
+
+- `latitude`;
+- `longitude`;
+- `accuracy`;
+- `serviceOrderId`;
+- `capturedAt`.
+
+### POST /dispatch/routes/optimize
+
+Retorna uma rota sugerida para um tecnico, priorizando urgencia e depois distancia aproximada. No modo atual, usa calculo local para desenvolvimento; em producao, deve ser substituido por integracao com mapas.
+
 ## Ordens De Servico
 
 ### GET /service-orders
@@ -290,6 +312,7 @@ Os endpoints atuais usam dados mockados. A proxima etapa tecnica e conectar este
 As rotas estao separadas em modulos dentro de `apps/api/src/modules`:
 
 - `dashboard.ts`
+- `dispatch.ts`
 - `orders.ts`
 - `contracts.ts`
 - `customers.ts`

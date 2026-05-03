@@ -60,3 +60,19 @@ export function createCheckInAction(serviceOrderId: string) {
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createLocationAction(technicianUserId: string, serviceOrderId: string) {
+  return {
+    id: `location-${Date.now()}`,
+    label: `Localizacao ${serviceOrderId}`,
+    method: "POST",
+    path: `/technicians/${technicianUserId}/location`,
+    payload: {
+      serviceOrderId,
+      latitude: -23.55052,
+      longitude: -46.633308,
+      accuracy: 25,
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

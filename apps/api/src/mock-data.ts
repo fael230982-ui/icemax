@@ -49,6 +49,48 @@ export const serviceOrders = [
   },
 ];
 
+export const technicianLocations = [
+  {
+    id: "loc-tech-001",
+    tenantId: tenant.id,
+    technicianUserId: "tech-001",
+    technician: "Rafael Martins",
+    latitude: -23.55052,
+    longitude: -46.633308,
+    status: "in_progress",
+    serviceOrderId: "1048",
+    capturedAt: "2026-05-03T11:00:00.000Z",
+  },
+  {
+    id: "loc-tech-002",
+    tenantId: tenant.id,
+    technicianUserId: "tech-002",
+    technician: "Joao Pereira",
+    latitude: -23.56287,
+    longitude: -46.6544,
+    status: "available",
+    serviceOrderId: null,
+    capturedAt: "2026-05-03T10:58:00.000Z",
+  },
+  {
+    id: "loc-tech-003",
+    tenantId: tenant.id,
+    technicianUserId: "team-north",
+    technician: "Equipe Norte",
+    latitude: -23.52071,
+    longitude: -46.61886,
+    status: "en_route",
+    serviceOrderId: "1050",
+    capturedAt: "2026-05-03T10:59:00.000Z",
+  },
+];
+
+export const serviceOrderStops = [
+  { serviceOrderId: "1048", customer: "ClimaSul Hotel", latitude: -23.5489, longitude: -46.6388, priority: "emergency" },
+  { serviceOrderId: "1049", customer: "Mercado Avante", latitude: -23.5662, longitude: -46.6441, priority: "high" },
+  { serviceOrderId: "1050", customer: "Clinica Vida", latitude: -23.5365, longitude: -46.6179, priority: "normal" },
+];
+
 export const customers = [
   {
     id: "customer-001",

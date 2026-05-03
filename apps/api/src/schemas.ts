@@ -166,6 +166,23 @@ export const createQrLabelSchema = z.object({
   qrPayload: z.string().min(3).optional(),
 });
 
+export const technicianLocationSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  accuracy: z.number().nonnegative().optional(),
+  serviceOrderId: z.string().optional(),
+  capturedAt: z.string().datetime().optional(),
+});
+
+export const optimizeRouteSchema = z.object({
+  technicianUserId: z.string().min(1),
+  origin: z.object({
+    latitude: z.number().min(-90).max(90),
+    longitude: z.number().min(-180).max(180),
+  }).optional(),
+  serviceOrderIds: z.array(z.string()).min(1).max(20),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -198,3 +215,5 @@ export type UpdateQuoteDecisionInput = z.output<typeof updateQuoteDecisionSchema
 export type SendNotificationInput = z.output<typeof sendNotificationSchema>;
 export type UploadFileInput = z.output<typeof uploadFileSchema>;
 export type CreateQrLabelInput = z.output<typeof createQrLabelSchema>;
+export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
+export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;

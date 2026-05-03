@@ -144,3 +144,40 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
 
   await app.close();
 });
+
+test("dispatch location and route optimization endpoints respond", async () => {
+  const app = await buildApp();
+
+  const locations = await app.inject({
+    method: "GET",
+    url: "/technicians/locations",
+  });
+  assert.equal(locations.statusCode, 200);
+  assert.ok(locations.json().total >= 1);
+
+  const location = await app.inject({
+    method: "POST",
+    url: "/technicians/tech-001/location",
+    payload: {
+      latitude: -23.55,
+      longitude: -46.63,
+      accuracy: 20,
+      serviceOrderId: "1048",
+    },
+  });
+  assert.equal(location.statusCode, 201);
+
+  const route = await app.inject({
+    method: "POST",
+    url: "/dispatch/routes/optimize",
+    payload: {
+      technicianUserId: "tech-001",
+      serviceOrderIds: ["1048", "1049", "1050"],
+    },
+  });
+  assert.equal(route.statusCode, 201);
+  assert.equal(route.json().stops[0].serviceOrderId, "1048");
+  assert.ok(route.json().totalTravelMinutes > 0);
+
+  await app.close();
+});

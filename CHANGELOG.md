@@ -156,3 +156,11 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Lista de OS passou a aceitar filtros por status, prioridade e cliente.
 - Painel web ganhou console operacional conectado a API.
 - App mobile ganhou base de fila offline e sincronizacao.
+
+## 0.5.2 - Lote 22
+
+- Adicionadas rotas de despacho e localizacao de tecnicos.
+- Criada otimizacao local de rota por prioridade e distancia aproximada.
+- Painel web passou a consultar equipe e solicitar rota otimizada.
+- App mobile passou a colocar localizacao na fila offline.
+- Documentado despacho, rotas e rastreamento com cuidados de LGPD.
