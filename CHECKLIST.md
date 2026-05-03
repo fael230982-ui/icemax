@@ -244,3 +244,14 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 18
+
+- [x] UI de login adicionada ao painel.
+- [x] Acoes rapidas de criacao adicionadas.
+- [x] Relatorio de OS em PDF/fallback HTML adicionado.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

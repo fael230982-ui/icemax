@@ -23,7 +23,7 @@ import {
   updateMockOrderStatus,
   updatePrismaOrderStatus,
 } from "../repositories/orders-repository";
-import { saveServiceOrderReportHtml } from "../services/report-service";
+import { saveServiceOrderReportPdf } from "../services/report-service";
 import {
   addServiceOrderNoteSchema,
   addServiceOrderPartSchema,
@@ -146,7 +146,7 @@ export async function registerOrderRoutes(app: FastifyInstance) {
       return reply.code(404).send({ message: "Ordem de servico nao encontrada." });
     }
 
-    const report = await saveServiceOrderReportHtml(id, {
+    const report = await saveServiceOrderReportPdf(id, {
       order: {
         id: order.id,
         title: "title" in order ? order.title : "Ordem de servico",

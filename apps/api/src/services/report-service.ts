@@ -1,4 +1,10 @@
 import { saveLocalFile } from "./storage-service";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+import { spawnSync } from "node:child_process";
 
 export type ServiceOrderReportInput = {
   order: {
@@ -90,4 +96,50 @@ export async function saveServiceOrderReportHtml(orderId: string, input: Service
     fileName: `os-${orderId}.html`,
     content: renderServiceOrderReportHtml(input),
   });
+}
+
+function findChrome() {
+  const candidates = [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  ];
+
+  return candidates.find((candidate) => existsSync(candidate));
+}
+
+export async function saveServiceOrderReportPdf(orderId: string, input: ServiceOrderReportInput) {
+  const chrome = findChrome();
+
+  if (!chrome) {
+    return saveServiceOrderReportHtml(orderId, input);
+  }
+
+  const html = renderServiceOrderReportHtml(input);
+  const tempDir = await mkdtemp(join(tmpdir(), "icemax-report-"));
+  const htmlPath = join(tempDir, `os-${orderId}.html`);
+  const pdfFileName = `os-${orderId}.pdf`;
+  const pdf = await saveLocalFile({
+    folder: "reports",
+    fileName: pdfFileName,
+    content: "",
+  });
+
+  await writeFile(htmlPath, html, "utf8");
+
+  const result = spawnSync(chrome, [
+    "--headless=new",
+    "--disable-gpu",
+    `--print-to-pdf=${pdf.path}`,
+    pathToFileURL(htmlPath).href,
+  ]);
+
+  await rm(tempDir, { recursive: true, force: true });
+
+  if (result.status !== 0) {
+    return saveServiceOrderReportHtml(orderId, input);
+  }
+
+  return pdf;
 }

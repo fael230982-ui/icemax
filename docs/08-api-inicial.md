@@ -88,7 +88,7 @@ Cria orcamento vinculado a uma OS.
 
 ### POST /service-orders/:id/report
 
-Gera relatorio HTML local da OS e retorna URL interna.
+Gera relatorio local da OS e retorna URL interna. Em desenvolvimento, tenta gerar PDF com Chrome/Edge headless e usa HTML como fallback.
 
 ## Arquivos
 

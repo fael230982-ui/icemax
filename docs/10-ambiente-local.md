@@ -151,3 +151,5 @@ STORAGE_LOCAL_PATH="./storage"
 ```
 
 Em producao, essa camada deve ser substituida por armazenamento S3 compativel.
+
+Relatorios de OS tentam usar Chrome/Edge headless para gerar PDF. Se navegador compativel nao estiver disponivel, a API salva HTML como fallback.

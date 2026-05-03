@@ -128,3 +128,10 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Verificado que Docker nao esta disponivel no ambiente atual.
 - Documentada alternativa com PostgreSQL remoto via `DATABASE_URL`.
 - Cliente de API do painel expandido para login e criacao de entidades principais.
+
+## 0.4.3 - Lote 18
+
+- Adicionado painel client-side de login no web.
+- Adicionado painel de criacao rapida para testar API.
+- Criados componentes de formulario inicial no painel.
+- Relatorio de OS passou a tentar gerar PDF real com Chrome/Edge headless e fallback HTML.
