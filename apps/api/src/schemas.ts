@@ -183,6 +183,17 @@ export const optimizeRouteSchema = z.object({
   serviceOrderIds: z.array(z.string()).min(1).max(20),
 });
 
+export const improveTechnicalTextSchema = z.object({
+  text: z.string().min(3),
+  tone: z.enum(["professional", "objective", "customer_friendly"]).default("professional"),
+});
+
+export const suggestIssueCausesSchema = z.object({
+  description: z.string().min(3),
+  photoHints: z.array(z.string()).default([]),
+  equipmentType: z.string().optional(),
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -217,3 +228,5 @@ export type UploadFileInput = z.output<typeof uploadFileSchema>;
 export type CreateQrLabelInput = z.output<typeof createQrLabelSchema>;
 export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
 export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
+export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
+export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;

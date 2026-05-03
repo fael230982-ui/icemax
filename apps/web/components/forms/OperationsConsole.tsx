@@ -90,6 +90,25 @@ export function OperationsConsole() {
     void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
   }
 
+  function improveText() {
+    void run("Revisao IA", () =>
+      icemaxApi.improveText({
+        text: "limpei filtro e tava com pouco gas, precisa olhar vazamento",
+        tone: "professional",
+      }, token || undefined),
+    );
+  }
+
+  function suggestCauses() {
+    void run("Causas provaveis", () =>
+      icemaxApi.suggestCauses({
+        description: "serpentina congelada e cliente relata que nao gela",
+        photoHints: ["gelo na evaporadora", "filtro sujo"],
+        equipmentType: "split",
+      }, token || undefined),
+    );
+  }
+
   function filterOrders(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -170,6 +189,8 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadAudit}>Ver auditoria</button>
         <button type="button" className="secondary" onClick={loadLocations}>Ver equipe no mapa</button>
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
+        <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
+        <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
       </div>
 
       {result ? <pre className="apiResult">{result}</pre> : null}

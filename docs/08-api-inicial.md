@@ -257,6 +257,14 @@ Lista manuais tecnicos disponiveis no app e painel.
 
 Lista solicitacoes mockadas de IA.
 
+### POST /ai/text-improve
+
+Revisa texto tecnico com regras locais enquanto a chave OpenAI nao esta configurada.
+
+### POST /ai/issue-cause-suggestions
+
+Sugere causas provaveis a partir de descricao, tipo de equipamento e pistas de foto.
+
 ## Notificacoes
 
 ### GET /notifications

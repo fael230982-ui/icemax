@@ -181,3 +181,32 @@ test("dispatch location and route optimization endpoints respond", async () => {
 
   await app.close();
 });
+
+test("local ai assistant improves text and suggests causes", async () => {
+  const app = await buildApp();
+
+  const improved = await app.inject({
+    method: "POST",
+    url: "/ai/text-improve",
+    payload: {
+      text: "limpei filtro e tava com pouco gas",
+      tone: "professional",
+    },
+  });
+  assert.equal(improved.statusCode, 201);
+  assert.match(improved.json().outputText, /avaliacao tecnica/);
+
+  const causes = await app.inject({
+    method: "POST",
+    url: "/ai/issue-cause-suggestions",
+    payload: {
+      description: "serpentina congelada e nao gela",
+      photoHints: ["gelo na evaporadora"],
+      equipmentType: "split",
+    },
+  });
+  assert.equal(causes.statusCode, 201);
+  assert.ok(causes.json().suggestions.length >= 1);
+
+  await app.close();
+});

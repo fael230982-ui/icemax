@@ -308,3 +308,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 23
+
+- [x] Endpoint local de revisao de texto criado.
+- [x] Endpoint local de sugestao de causas criado.
+- [x] Console web conectado a IA operacional.
+- [x] Testes de IA adicionados.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

@@ -164,3 +164,11 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web passou a consultar equipe e solicitar rota otimizada.
 - App mobile passou a colocar localizacao na fila offline.
 - Documentado despacho, rotas e rastreamento com cuidados de LGPD.
+
+## 0.5.3 - Lote 23
+
+- Adicionados endpoints locais de IA operacional.
+- Criada revisao de texto tecnico sem dependencia externa.
+- Criada sugestao local de causas provaveis por regras.
+- Painel web passou a acionar revisao de texto e sugestao de causas.
+- Documentadas regras de uso assistivo da IA.
