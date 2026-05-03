@@ -84,3 +84,9 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionadas secoes de clientes e equipamentos ao painel.
 - Dados locais ampliados para clientes e equipamentos.
 - API de orcamentos, checklists e estoque preparada para mock/Prisma.
+
+## 0.3.1 - Lote 11
+
+- App tecnico refatorado em componentes reutilizaveis.
+- Dados locais do mobile separados.
+- App tecnico ampliado com prioridade, offline e qualidade.

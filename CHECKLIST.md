@@ -152,3 +152,13 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro Do Lote 11
+
+- [x] App mobile refatorado em componentes.
+- [x] Dados locais do mobile separados.
+- [x] Secoes operacionais do app ampliadas.
+- [x] PDFs dos documentos gerados.
+- [x] Typecheck executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
