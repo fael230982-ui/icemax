@@ -101,6 +101,7 @@ export const icemaxApi = {
   auditLog: (token?: string) => apiRequest<ApiListResponse<unknown>>("/audit-log", { token }),
   technicianLocations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/technicians/locations", { token }),
   optimizeRoute: (body: unknown, token?: string) => apiRequest<unknown>("/dispatch/routes/optimize", { method: "POST", body, token }),
+  dispatchRecommendations: (token?: string) => apiRequest<unknown>("/dispatch/recommendations", { token }),
   improveText: (body: unknown, token?: string) => apiRequest<unknown>("/ai/text-improve", { method: "POST", body, token }),
   suggestCauses: (body: unknown, token?: string) =>
     apiRequest<unknown>("/ai/issue-cause-suggestions", { method: "POST", body, token }),

@@ -188,6 +188,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(route.json().stops[0].serviceOrderId, "1048");
   assert.ok(route.json().totalTravelMinutes > 0);
 
+  const recommendations = await app.inject({
+    method: "GET",
+    url: "/dispatch/recommendations?serviceOrderIds=1048,1049,1050",
+  });
+  assert.equal(recommendations.statusCode, 200);
+  assert.equal(recommendations.json().summary.serviceOrders, 3);
+  assert.equal(recommendations.json().data[0].serviceOrderId, "1048");
+  assert.ok(recommendations.json().data[0].recommendedTechnician.score > 0);
+
   await app.close();
 });
 

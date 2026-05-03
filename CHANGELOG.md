@@ -2,6 +2,13 @@
 
 Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de releases, homologacoes ou publicacoes importantes.
 
+## 0.8.9 - Despacho Inteligente
+
+- Adicionado endpoint de recomendacao de tecnico por OS.
+- Score passou a considerar prioridade, status do tecnico, distancia estimada e vinculo atual.
+- Console web passou a consultar recomendacoes de despacho.
+- Teste automatizado cobre recomendacoes de equipe.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

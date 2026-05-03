@@ -1,4 +1,4 @@
-import { serviceOrderStops, technicianLocations } from "../mock-data";
+import { serviceOrders, serviceOrderStops, technicianLocations } from "../mock-data";
 import type { OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 
 const priorityWeight: Record<string, number> = {
@@ -84,5 +84,93 @@ export function optimizeMockRoute(input: OptimizeRouteInput) {
     totalDistanceKm: Number(totalDistanceKm.toFixed(2)),
     totalTravelMinutes: orderedStops.reduce((sum, stop) => sum + stop.estimatedTravelMinutes, 0),
     strategy: "priority_then_distance",
+  };
+}
+
+const technicianStatusPenalty: Record<string, number> = {
+  available: 0,
+  en_route: 18,
+  in_progress: 35,
+  reported: 8,
+};
+
+const serviceOrderPriorityScore: Record<string, number> = {
+  emergency: 100,
+  high: 72,
+  normal: 45,
+  low: 20,
+};
+
+function explainRecommendation(params: {
+  priority: string;
+  technicianStatus: string;
+  distanceKm: number;
+  score: number;
+}) {
+  const reasons = [
+    `Prioridade ${params.priority} considerada no score.`,
+    `Tecnico com status ${params.technicianStatus}.`,
+    `Deslocamento estimado de ${params.distanceKm.toFixed(2)} km.`,
+  ];
+
+  if (params.score >= 80) {
+    reasons.push("Recomendacao forte para acionamento imediato.");
+  } else if (params.score >= 55) {
+    reasons.push("Boa opcao para encaixe na agenda.");
+  } else {
+    reasons.push("Opcao secundaria; avaliar impacto na rota.");
+  }
+
+  return reasons;
+}
+
+export function recommendMockDispatchAssignments(input?: { serviceOrderIds?: string[] }) {
+  const candidateStops = serviceOrderStops.filter((stop) => !input?.serviceOrderIds?.length || input.serviceOrderIds.includes(stop.serviceOrderId));
+  const data = candidateStops.map((stop) => {
+    const order = serviceOrders.find((item) => item.id === stop.serviceOrderId);
+    const candidates = technicianLocations.map((technician) => {
+      const distance = distanceKm(technician, stop);
+      const priorityScore = serviceOrderPriorityScore[stop.priority] ?? 40;
+      const statusPenalty = technicianStatusPenalty[technician.status] ?? 12;
+      const distancePenalty = Math.min(45, distance * 6);
+      const sameOrderBonus = technician.serviceOrderId === stop.serviceOrderId ? 18 : 0;
+      const score = Math.max(0, Math.round(priorityScore - statusPenalty - distancePenalty + sameOrderBonus));
+
+      return {
+        technicianUserId: technician.technicianUserId,
+        technician: technician.technician,
+        technicianStatus: technician.status,
+        currentServiceOrderId: technician.serviceOrderId,
+        distanceKm: Number(distance.toFixed(2)),
+        estimatedTravelMinutes: Math.max(5, Math.round((distance / 28) * 60)),
+        score,
+        reasons: explainRecommendation({
+          priority: stop.priority,
+          technicianStatus: technician.status,
+          distanceKm: distance,
+          score,
+        }),
+      };
+    }).sort((a, b) => b.score - a.score || a.estimatedTravelMinutes - b.estimatedTravelMinutes);
+
+    return {
+      serviceOrderId: stop.serviceOrderId,
+      customer: stop.customer,
+      issue: order?.issue ?? "Atendimento tecnico",
+      priority: stop.priority,
+      recommendedTechnician: candidates[0],
+      alternatives: candidates.slice(1),
+    };
+  }).sort((a, b) => (serviceOrderPriorityScore[b.priority] ?? 0) - (serviceOrderPriorityScore[a.priority] ?? 0));
+
+  return {
+    strategy: "priority_status_distance_score",
+    generatedAt: new Date().toISOString(),
+    summary: {
+      serviceOrders: data.length,
+      techniciansEvaluated: technicianLocations.length,
+      immediateActions: data.filter((item) => item.recommendedTechnician.score >= 80).length,
+    },
+    data,
   };
 }

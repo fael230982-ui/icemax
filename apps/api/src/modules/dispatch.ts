@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { listMockTechnicianLocations, optimizeMockRoute, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -48,5 +48,15 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     });
 
     return reply.code(201).send(route);
+  });
+
+  app.get("/dispatch/recommendations", async (request) => {
+    const query = request.query as { serviceOrderIds?: string };
+    const serviceOrderIds = query.serviceOrderIds
+      ?.split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    return recommendMockDispatchAssignments({ serviceOrderIds });
   });
 }
