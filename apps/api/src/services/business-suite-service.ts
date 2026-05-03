@@ -153,3 +153,45 @@ export function createReleaseReadiness(input: ReleaseReadinessInput) {
     ...input,
   };
 }
+
+export function createPostServicePlan(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const urgent = order.priority === "emergency" || order.priority === "high";
+  const followUpDate = new Date();
+  followUpDate.setDate(followUpDate.getDate() + (urgent ? 2 : 7));
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: "planned",
+    communication: {
+      emailCopyToCustomer: true,
+      channels: ["email", "whatsapp"],
+      subject: `Relatorio tecnico da OS ${serviceOrderId}`,
+      message: `Ola, segue o resumo do atendimento realizado no equipamento ${order.equipment}.`,
+    },
+    warranty: {
+      suggestedCoverageDays: urgent ? 90 : 60,
+      term: "Garantia condicionada ao uso adequado do equipamento e ausencia de intervencao de terceiros.",
+    },
+    satisfaction: {
+      sendAfterHours: 2,
+      question: "Como voce avalia o atendimento tecnico recebido?",
+    },
+    followUp: {
+      date: followUpDate.toISOString().slice(0, 10),
+      reason: urgent ? "Confirmar estabilidade apos atendimento urgente." : "Confirmar satisfacao e funcionamento.",
+    },
+    commercialNextActions: [
+      "Atualizar historico do equipamento.",
+      "Verificar oportunidade de contrato recorrente.",
+      "Sugerir preventiva quando houver reincidencia.",
+    ],
+  };
+}

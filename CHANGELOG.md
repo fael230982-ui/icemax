@@ -23,6 +23,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Criado rascunho profissional de relatorio com assistente local.
 - Console web passou a consultar a revisao de conclusao.
 
+## 0.8.12 - Pos-Atendimento
+
+- Adicionado endpoint de plano de pos-atendimento por OS.
+- Plano passou a sugerir comunicacao, garantia, pesquisa de satisfacao, follow-up e proximas acoes comerciais.
+- Console web passou a consultar o plano de pos-atendimento.
+- Teste automatizado cobre o plano pos-OS.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

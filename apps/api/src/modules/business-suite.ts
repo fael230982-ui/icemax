@@ -17,6 +17,7 @@ import {
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
+  createPostServicePlan,
   createPurchaseRequest,
   createReleaseReadiness,
   createWarrantyTerm,
@@ -100,5 +101,16 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     const readiness = createReleaseReadiness(input);
     await recordAuditEvent({ tenantId: context.tenantId, userId: context.userId, action: "release_readiness.created", entity: "release_readiness", entityId: readiness.id });
     return reply.code(201).send(readiness);
+  });
+
+  app.get("/service-orders/:id/post-service-plan", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const plan = createPostServicePlan(id);
+
+    if (!plan) {
+      return reply.code(404).send({ message: "OS nao encontrada para plano de pos-atendimento." });
+    }
+
+    return plan;
   });
 }
