@@ -71,3 +71,9 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionada camada inicial para alternar API entre mock e Prisma.
 - Criados repositorios iniciais de dashboard e ordens.
 - Criado contexto de autenticacao simulado por headers.
+
+## 0.2.5 - Lote 9
+
+- Adicionados endpoints iniciais de clientes e equipamentos.
+- Contratos passaram a suportar mock e Prisma.
+- Adicionados repositorios de clientes, equipamentos e contratos.

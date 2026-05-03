@@ -49,6 +49,48 @@ export const serviceOrders = [
   },
 ];
 
+export const customers = [
+  {
+    id: "customer-001",
+    tenantId: tenant.id,
+    name: "ClimaSul Hotel",
+    email: "cliente@climasul.local",
+    phone: "+5500000000000",
+  },
+  {
+    id: "customer-002",
+    tenantId: tenant.id,
+    name: "Clinica Vida",
+    email: "cliente@clinicavida.local",
+    phone: "+5500000000001",
+  },
+];
+
+export const equipment = [
+  {
+    id: "equipment-001",
+    tenantId: tenant.id,
+    customerId: "customer-001",
+    type: "split_piso_teto",
+    brand: "Carrier",
+    model: "Piso Teto 60.000",
+    serialNumber: "ICM-AC-0001",
+    capacityBtu: 60000,
+    installationLocation: "Recepcao",
+  },
+  {
+    id: "equipment-002",
+    tenantId: tenant.id,
+    customerId: "customer-002",
+    type: "cassete",
+    brand: "Midea",
+    model: "Cassete 36.000",
+    serialNumber: "ICM-AC-0002",
+    capacityBtu: 36000,
+    installationLocation: "Sala 03",
+  },
+];
+
 export const serviceContracts = [
   {
     id: "contract-001",

@@ -50,6 +50,18 @@ Lista ordens de servico.
 
 Retorna detalhe de uma ordem de servico.
 
+## Clientes
+
+### GET /customers
+
+Lista clientes do tenant atual.
+
+## Equipamentos
+
+### GET /equipment
+
+Lista equipamentos do tenant atual.
+
 ## Contratos
 
 ### GET /contracts
@@ -139,6 +151,8 @@ As rotas estao separadas em modulos dentro de `apps/api/src/modules`:
 - `dashboard.ts`
 - `orders.ts`
 - `contracts.ts`
+- `customers.ts`
+- `equipment.ts`
 - `assets.ts`
 - `operations.ts`
 - `integrations.ts`
