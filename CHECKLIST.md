@@ -1586,3 +1586,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Esteira De Contratos Recorrentes
+
+- [x] Endpoint de esteira comercial criado.
+- [x] Classificacao por etapa, score e contrato existente criada.
+- [x] Receita recorrente estimada incluida.
+- [x] Painel web de pipeline criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

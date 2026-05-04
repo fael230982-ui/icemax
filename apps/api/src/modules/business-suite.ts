@@ -30,6 +30,7 @@ import {
   createServiceOrderCommunicationPackage,
   createServiceOrderCommunicationQueue,
   createContractOpportunityFromServiceOrder,
+  createContractOpportunityPipeline,
   createContractProposalFromServiceOrder,
   createPostServicePlan,
   createPostServiceCommandCenter,
@@ -203,6 +204,8 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
 
     return opportunity;
   });
+
+  app.get("/contracts/opportunity-pipeline", async () => createContractOpportunityPipeline());
 
   app.get("/service-orders/:id/contract-proposal", async (request, reply) => {
     const { id } = request.params as { id: string };

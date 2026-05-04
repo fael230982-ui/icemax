@@ -526,6 +526,73 @@ export function createContractProposalFromServiceOrder(serviceOrderId: string) {
   };
 }
 
+export function createContractOpportunityPipeline() {
+  const rows = serviceOrders.map((order) => {
+    const opportunity = createContractOpportunityFromServiceOrder(order.id);
+    const postService = createPostServiceCommandCenter(order.id);
+    const existingContract = serviceContracts.find((contract) => contract.customer === order.customer);
+
+    if (!opportunity) {
+      return null;
+    }
+
+    const stage = existingContract
+      ? "existing_contract"
+      : opportunity.opportunityScore >= 85
+        ? "proposal_priority"
+        : opportunity.opportunityScore >= 70
+          ? "proposal_recommended"
+          : "nurture";
+    const nextContactDate = postService?.summary.followUpDate ?? new Date().toISOString().slice(0, 10);
+
+    return {
+      serviceOrderId: order.id,
+      customer: order.customer,
+      equipment: order.equipment,
+      issue: order.issue,
+      priority: order.priority,
+      stage,
+      opportunityScore: opportunity.opportunityScore,
+      recommendedPlan: opportunity.recommendedPlan,
+      recurringRevenue: {
+        monthly: opportunity.recommendedPlan.estimatedMonthlyValue,
+        annual: opportunity.recommendedPlan.estimatedAnnualValue,
+      },
+      nextContactDate,
+      existingContractId: existingContract?.id ?? null,
+      risks: [
+        ...(order.priority === "emergency" ? ["Cliente teve urgencia; abordar preventiva sem parecer oportunismo."] : []),
+        ...(existingContract ? ["Cliente ja possui contrato; avaliar upsell ou equipamento adicional."] : []),
+        ...(opportunity.opportunityScore < 70 ? ["Score comercial moderado; nutrir com educacao preventiva."] : []),
+      ],
+      nextAction: existingContract
+        ? "Avaliar inclusao do equipamento ou melhoria do contrato atual."
+        : opportunity.opportunityScore >= 70
+          ? "Preparar proposta recorrente e abordar decisor no follow-up."
+          : "Manter contato educativo e revisar reincidencia no proximo atendimento.",
+    };
+  }).filter((row): row is NonNullable<typeof row> => Boolean(row));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      opportunities: rows.length,
+      priority: rows.filter((row) => row.stage === "proposal_priority").length,
+      recommended: rows.filter((row) => row.stage === "proposal_recommended").length,
+      nurture: rows.filter((row) => row.stage === "nurture").length,
+      existingContracts: rows.filter((row) => row.stage === "existing_contract").length,
+      estimatedMonthlyRevenue: rows.reduce((sum, row) => sum + (row.stage === "existing_contract" ? 0 : row.recurringRevenue.monthly), 0),
+    },
+    governance: {
+      auditEvent: "commercial.contract_opportunity_pipeline_viewed",
+      hidesInternalMargin: true,
+      requiresHumanApprovalBeforeProposal: true,
+      source: "post_service_and_service_order_history",
+    },
+    rows: rows.sort((a, b) => b.opportunityScore - a.opportunityScore),
+  };
+}
+
 export function createContractActivationPlanFromServiceOrder(serviceOrderId: string) {
   const proposal = createContractProposalFromServiceOrder(serviceOrderId);
 

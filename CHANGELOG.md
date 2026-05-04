@@ -524,6 +524,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre tarefas, garantia e governanca do pos-atendimento.
 - Documentado o fluxo de suporte, qualidade e comercial apos fechamento da OS.
 
+## 0.8.79 - Esteira De Contratos Recorrentes
+
+- Adicionado endpoint `GET /contracts/opportunity-pipeline`.
+- Esteira comercial classifica oportunidades por score, etapa e contrato existente.
+- Painel web ganhou secao para oportunidades recorrentes com filtros e receita estimada.
+- Teste automatizado cobre o contrato da esteira e ordenacao por score.
+- Documentado o fluxo comercial pos-OS para contratos recorrentes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

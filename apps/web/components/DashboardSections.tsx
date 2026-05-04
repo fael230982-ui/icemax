@@ -19,6 +19,7 @@ import {
 import { Panel } from "./Panel";
 import { CloseoutArchivePanel } from "./CloseoutArchivePanel";
 import { CompletionEmailQueuePanel } from "./CompletionEmailQueuePanel";
+import { ContractOpportunityPipelinePanel } from "./ContractOpportunityPipelinePanel";
 import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
 import { PostServiceCommandPanel } from "./PostServiceCommandPanel";
 import { OperationsConsole } from "./forms/OperationsConsole";
@@ -49,6 +50,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Pos-atendimento" title="Garantia, pesquisa e contrato" action={<span className="pill">Receita recorrente</span>} wide>
         <PostServiceCommandPanel />
+      </Panel>
+
+      <Panel eyebrow="Comercial" title="Esteira de contratos recorrentes" action={<span className="pill">Pipeline</span>} wide>
+        <ContractOpportunityPipelinePanel />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>

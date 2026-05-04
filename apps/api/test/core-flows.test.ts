@@ -864,6 +864,13 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(activationPlan.json().firstYearCalendar.length, 4);
   assert.match(activationPlan.json().firstServiceOrderDraft.title, /Preventiva contratual/);
 
+  const opportunityPipeline = await app.inject({ method: "GET", url: "/contracts/opportunity-pipeline" });
+  assert.equal(opportunityPipeline.statusCode, 200);
+  assert.equal(opportunityPipeline.json().governance.auditEvent, "commercial.contract_opportunity_pipeline_viewed");
+  assert.ok(opportunityPipeline.json().summary.opportunities >= 3);
+  assert.ok(opportunityPipeline.json().summary.estimatedMonthlyRevenue >= 0);
+  assert.ok(opportunityPipeline.json().rows[0].opportunityScore >= opportunityPipeline.json().rows.at(-1).opportunityScore);
+
   const acceptancePackage = await app.inject({ method: "GET", url: "/service-orders/1048/contract-acceptance-package" });
   assert.equal(acceptancePackage.statusCode, 200);
   assert.equal(acceptancePackage.json().serviceOrderId, "1048");

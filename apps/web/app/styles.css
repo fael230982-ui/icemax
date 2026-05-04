@@ -713,6 +713,98 @@ h2 {
   line-height: 1.3;
 }
 
+.pipelinePanel {
+  display: grid;
+  gap: 14px;
+}
+
+.pipelineSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pipelineSummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 84px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.pipelineSummary span,
+.pipelineControls span,
+.pipelineRows span,
+.pipelineRows small {
+  color: var(--muted);
+}
+
+.pipelineSummary strong {
+  font-size: 23px;
+}
+
+.pipelineSummary .attention {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.pipelineControls {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 320px) 1fr;
+  gap: 10px;
+  align-items: end;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.pipelineControls div,
+.pipelineControls label {
+  display: grid;
+  gap: 6px;
+}
+
+.pipelineControls label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pipelineControls select {
+  width: 100%;
+}
+
+.pipelineRows {
+  display: grid;
+  gap: 10px;
+}
+
+.pipelineRows article {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr 1.05fr 0.8fr 1.25fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.pipelineRows strong,
+.pipelineRows small,
+.pipelineRows span {
+  display: block;
+}
+
+.pipelineRows strong,
+.pipelineRows small {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1788,7 +1880,10 @@ dd {
   .archiveTimeline,
   .postServiceControls,
   .postServiceHeader,
-  .postServiceTasks {
+  .postServiceTasks,
+  .pipelineSummary,
+  .pipelineControls,
+  .pipelineRows article {
     grid-template-columns: 1fr;
   }
 }
