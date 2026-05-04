@@ -1160,5 +1160,11 @@ test("database transition exposes cutover schema seed and environment plans", as
   assert.ok(readiness.json().summary.averageReadiness > 50);
   assert.ok(readiness.json().recommendedSequence.includes("clientes"));
 
+  const isolation = await app.inject({ method: "GET", url: "/database/tenant-isolation-gate" });
+  assert.equal(isolation.statusCode, 200);
+  assert.equal(isolation.json().productionCutoverAllowed, false);
+  assert.ok(isolation.json().summary.blocked >= 1);
+  assert.ok(isolation.json().minimumRules[0].includes("tenantId"));
+
   await app.close();
 });

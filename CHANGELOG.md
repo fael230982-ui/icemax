@@ -596,6 +596,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre media de prontidao, governanca e sequencia recomendada.
 - Documentado plano de migracao por dominio antes da virada para producao.
 
+## 0.8.88 - Gate De Isolamento Multiempresa
+
+- Adicionado endpoint `GET /database/tenant-isolation-gate`.
+- Gate informa dominios prontos, parciais e bloqueados para virada multiempresa.
+- Console operacional passou a validar isolamento junto da virada para banco.
+- Teste automatizado cobre bloqueio de producao enquanto houver dominio sem isolamento completo.
+- Documentadas regras minimas para tenantId, portal publico, storage privado e jobs.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

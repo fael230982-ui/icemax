@@ -78,6 +78,65 @@ const migrationReadiness = [
   },
 ];
 
+const tenantIsolationGates = [
+  {
+    domain: "multiempresa",
+    status: "ready",
+    requiredControls: ["tenantId em JWT", "DEFAULT_TENANT_ID", "auditoria por tenant"],
+    evidence: ["auth.getRequestContext", "seed de tenant ICEMAX", "AuditLog no schema"],
+    productionBlockers: [],
+  },
+  {
+    domain: "clientes",
+    status: "ready",
+    requiredControls: ["Customer.tenantId", "CustomerAddress por cliente", "Equipment.tenantId"],
+    evidence: ["repositorios Prisma recebem tenantId", "rotas de contrato e OS usam contexto autenticado"],
+    productionBlockers: [],
+  },
+  {
+    domain: "ordens",
+    status: "partial",
+    requiredControls: ["ServiceOrder.tenantId", "fotos privadas por tenant", "assinatura vinculada a OS"],
+    evidence: ["ServiceOrder e ServiceOrderNote previstos no schema", "fluxo mock ja separado por tenant"],
+    productionBlockers: ["storage privado de fotos", "assinatura digital persistida"],
+  },
+  {
+    domain: "contratos",
+    status: "partial",
+    requiredControls: ["ServiceContract.tenantId", "visitas recorrentes por contrato", "agenda preventiva isolada"],
+    evidence: ["rotas de contratos recebem context.tenantId", "calendario e capacidade ja possuem contrato de API"],
+    productionBlockers: ["parcelas recorrentes persistidas", "aceite auditavel do contrato"],
+  },
+  {
+    domain: "estoque",
+    status: "blocked",
+    requiredControls: ["StockLocation.tenantId", "saldo por local", "movimento com usuario e origem"],
+    evidence: ["schema de estoque planejado", "mini ERP web previsto no painel"],
+    productionBlockers: ["bloqueio de saldo negativo", "concorrencia em reservas", "inventario inicial validado"],
+  },
+  {
+    domain: "portal_cliente",
+    status: "blocked",
+    requiredControls: ["token publico com hash", "escopo por cliente", "expiracao e revogacao"],
+    evidence: ["politica de acesso documentada", "resumo financeiro mockado"],
+    productionBlockers: ["persistencia de token seguro", "rate limit por link", "log de acesso do cliente"],
+  },
+  {
+    domain: "comunicacao",
+    status: "blocked",
+    requiredControls: ["templates por tenant", "fila idempotente", "logs de envio"],
+    evidence: ["contratos de notificacao planejados", "e-mail e WhatsApp isolados no desenho"],
+    productionBlockers: ["provedores reais", "fila persistida", "controle de reenvio"],
+  },
+  {
+    domain: "documentos",
+    status: "blocked",
+    requiredControls: ["storage por tenant", "permissao por entidade", "versao e auditoria"],
+    evidence: ["Manual, FloorPlan e EquipmentQrLabel previstos no schema"],
+    productionBlockers: ["storage privado", "varredura de arquivo", "politica de download"],
+  },
+];
+
 export function getDatabaseCutoverPlan() {
   const steps = [
     "Criar PostgreSQL local ou remoto",
@@ -178,5 +237,35 @@ export function getDataReadinessBoard() {
       requiresTenantIsolationReview: true,
     },
     domains: sorted,
+  };
+}
+
+export function getTenantIsolationGate() {
+  const ready = tenantIsolationGates.filter((item) => item.status === "ready");
+  const partial = tenantIsolationGates.filter((item) => item.status === "partial");
+  const blocked = tenantIsolationGates.filter((item) => item.status === "blocked");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    currentMode: isPrismaEnabled() ? "prisma" : "mock",
+    defaultTenantId: config.defaultTenantId,
+    productionCutoverAllowed: blocked.length === 0 && partial.length === 0,
+    summary: {
+      domains: tenantIsolationGates.length,
+      ready: ready.length,
+      partial: partial.length,
+      blocked: blocked.length,
+    },
+    minimumRules: [
+      "Toda consulta produtiva deve receber tenantId pelo contexto autenticado.",
+      "Nenhum endpoint publico pode acessar dados financeiros sem token persistido, expiravel e auditavel.",
+      "Arquivos, fotos, plantas, manuais e assinaturas devem usar storage privado separado por tenant.",
+      "Qualquer job de agenda, cobranca ou notificacao deve registrar tenantId, usuario de origem e idempotencia.",
+    ],
+    nextReleaseFocus: blocked.map((item) => ({
+      domain: item.domain,
+      unblock: item.productionBlockers[0],
+    })),
+    gates: tenantIsolationGates,
   };
 }

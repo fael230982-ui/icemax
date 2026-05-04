@@ -1720,3 +1720,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Isolamento Multiempresa
+
+- [x] Endpoint de tenant isolation gate criado.
+- [x] Dominios classificados como prontos, parciais e bloqueados.
+- [x] Regras minimas de isolamento whitelabel incluidas.
+- [x] Console operacional conectado ao gate.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
