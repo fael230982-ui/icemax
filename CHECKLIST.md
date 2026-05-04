@@ -1052,3 +1052,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Portal Publico De Aprovacao De Orcamento
+
+- [x] Rota web `/orcamentos/[token]` criada.
+- [x] Dados publicos do orcamento organizados para decisao do cliente.
+- [x] Botoes de aprovar, solicitar revisao e recusar incluidos.
+- [x] Estilos responsivos adicionados.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

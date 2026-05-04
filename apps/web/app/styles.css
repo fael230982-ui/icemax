@@ -1017,6 +1017,159 @@ dd {
   background: #fbfdff;
 }
 
+.quotePage {
+  min-height: 100vh;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 26px;
+  background: #f4f8fb;
+}
+
+.quoteHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 340px);
+  gap: 18px;
+  align-items: end;
+  border-radius: 8px;
+  padding: 24px;
+  color: #ffffff;
+  background: #06243a;
+}
+
+.quoteHero h1 {
+  margin-bottom: 6px;
+  font-size: 34px;
+}
+
+.quoteHero p:not(.eyebrow) {
+  margin-bottom: 0;
+  color: #c9e8f5;
+}
+
+.quoteTotal,
+.quoteSummary article,
+.quotePanel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.quoteTotal {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  color: var(--ink);
+}
+
+.quoteTotal span,
+.quoteTotal small,
+.quoteSummary span,
+.quotePanelHeader span,
+.quoteIssue span,
+.quoteItem span,
+.quoteDecision p,
+.quoteFooter {
+  color: var(--muted);
+}
+
+.quoteTotal strong {
+  font-size: 26px;
+}
+
+.quoteSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quoteSummary article {
+  display: grid;
+  gap: 8px;
+  min-height: 92px;
+  padding: 16px;
+}
+
+.quoteLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.quotePanel {
+  padding: 18px;
+}
+
+.quotePanelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.quotePanelHeader span {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.quoteIssue,
+.quoteItem {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.quoteIssue {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.quoteItems {
+  display: grid;
+  gap: 10px;
+}
+
+.quoteItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.quoteItem div,
+.quoteDecision,
+.quoteTerms {
+  display: grid;
+  gap: 10px;
+}
+
+.quoteDecision button {
+  width: 100%;
+}
+
+.quoteDecision p {
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+.quoteTerms {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.quoteFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
 @media (max-width: 1180px) {
   .content,
   .metrics {
@@ -1062,6 +1215,9 @@ dd {
   .portalHero,
   .portalLayout,
   .portalFormGrid,
+  .quoteHero,
+  .quoteLayout,
+  .quoteSummary,
   .trackingHero,
   .trackingGrid,
   .trackingSteps,

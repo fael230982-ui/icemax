@@ -248,6 +248,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile registra nota em `POST /service-orders/:id/notes`.
 - Fluxo aproxima tecnico, cliente e link de aprovacao quando nao ha internet.
 
+## 0.8.43 - Portal Publico De Aprovacao De Orcamento
+
+- Adicionada rota web publica `/orcamentos/[token]`.
+- Tela exibe cliente, OS vinculada, equipamento, itens, total e validade.
+- Portal separa decisao do cliente entre aprovar, solicitar revisao e recusar.
+- Layout protege dados internos e prepara a integracao futura com token real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
