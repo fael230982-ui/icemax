@@ -64,6 +64,65 @@ function buildCustomerTracking(serviceOrderId: string) {
   };
 }
 
+function createTrackingSharePackage(serviceOrderId: string) {
+  const tracking = buildCustomerTracking(serviceOrderId);
+
+  if (!tracking) {
+    return null;
+  }
+
+  const issuedAt = new Date();
+  const expiresAt = new Date(issuedAt);
+  expiresAt.setDate(expiresAt.getDate() + 7);
+  const token = `track_${serviceOrderId}_${issuedAt.getTime()}`;
+  const publicUrl = `https://app.icemax.local/acompanhamento/${token}`;
+
+  return {
+    serviceOrderId,
+    status: "share_package_ready",
+    token,
+    publicUrl,
+    issuedAt: issuedAt.toISOString(),
+    expiresAt: expiresAt.toISOString(),
+    expiresInDays: 7,
+    customer: tracking.customer,
+    channels: [
+      {
+        channel: "whatsapp",
+        recipient: "+5500000000000",
+        template: "os_tracking_link",
+        message: `Ola! Acompanhe sua OS ${serviceOrderId} pelo link: ${publicUrl}`,
+      },
+      {
+        channel: "email",
+        recipient: "cliente@local.dev",
+        subject: `Acompanhamento da OS ${serviceOrderId}`,
+        template: "os_tracking_link_email",
+        message: `Ola, voce pode acompanhar o andamento da sua OS ${serviceOrderId} pelo link ${publicUrl}.`,
+      },
+    ],
+    security: {
+      tokenType: "opaque_mock",
+      requiresLogin: false,
+      expiresAutomatically: true,
+      hidesFinancialData: tracking.privacy.hidesFinancialData,
+      hidesInternalNotes: tracking.privacy.hidesInternalNotes,
+      canBeRevoked: true,
+    },
+    audit: {
+      event: "customer_portal.tracking_link_created",
+      entity: "service_order",
+      entityId: serviceOrderId,
+    },
+    nextActions: [
+      "Persistir token publico no banco real.",
+      "Enviar link pela fila de comunicacao.",
+      "Registrar abertura do link em auditoria.",
+      "Expirar link apos prazo configurado.",
+    ],
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -123,5 +182,27 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     }
 
     return tracking;
+  });
+
+  app.post("/customer-portal/service-orders/:id/tracking-link", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const sharePackage = createTrackingSharePackage(id);
+
+    if (!sharePackage) {
+      return reply.code(404).send({ message: "OS nao encontrada para gerar link de acompanhamento." });
+    }
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: sharePackage.audit.event,
+      entity: sharePackage.audit.entity,
+      entityId: sharePackage.audit.entityId,
+      metadata: {
+        expiresAt: sharePackage.expiresAt,
+        channels: sharePackage.channels.map((item) => item.channel),
+      },
+    });
+
+    return reply.code(201).send(sharePackage);
   });
 }

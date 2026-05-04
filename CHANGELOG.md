@@ -125,6 +125,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar acompanhamento de OS do cliente.
 - Teste automatizado cobre privacidade, linha do tempo e refresh.
 
+## 0.8.26 - Link Compartilhavel De OS
+
+- Adicionado endpoint para gerar pacote de link publico de acompanhamento da OS.
+- Pacote inclui token mock, URL publica, validade, canais de envio e mensagens prontas.
+- Regras de seguranca indicam expiracao, revogacao e ocultacao de dados sensiveis.
+- Console web passou a gerar link de acompanhamento.
+- Teste automatizado cobre token, validade, WhatsApp e privacidade.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

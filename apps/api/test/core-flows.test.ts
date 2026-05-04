@@ -339,6 +339,17 @@ test("customer portal can request optional service order", async () => {
   assert.ok(tracking.json().timeline.length >= 5);
   assert.equal(tracking.json().refreshSeconds, 45);
 
+  const trackingLink = await app.inject({
+    method: "POST",
+    url: "/customer-portal/service-orders/1048/tracking-link",
+  });
+  assert.equal(trackingLink.statusCode, 201);
+  assert.equal(trackingLink.json().serviceOrderId, "1048");
+  assert.match(trackingLink.json().token, /^track_1048_/);
+  assert.equal(trackingLink.json().expiresInDays, 7);
+  assert.ok(trackingLink.json().channels.some((item: { channel: string }) => item.channel === "whatsapp"));
+  assert.equal(trackingLink.json().security.hidesFinancialData, true);
+
   await app.close();
 });
 

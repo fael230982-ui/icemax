@@ -790,3 +790,21 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Link Compartilhavel De OS
+
+- [x] Endpoint de geracao de link de acompanhamento criado.
+- [x] Token mock, URL publica e validade de 7 dias incluidos.
+- [x] Mensagens prontas para WhatsApp e e-mail incluidas.
+- [x] Regras de seguranca e privacidade incluidas.
+- [x] Auditoria de criacao de link registrada.
+- [x] Console web conectado ao link de acompanhamento.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
