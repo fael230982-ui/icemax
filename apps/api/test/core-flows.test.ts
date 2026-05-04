@@ -253,6 +253,17 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(quoteTimeline.json().events.length >= 5);
   assert.equal(quoteTimeline.json().governance.auditEvent, "quote.approval_timeline_viewed");
 
+  const quoteBoard = await app.inject({
+    method: "GET",
+    url: "/quotes/approval-board",
+  });
+  assert.equal(quoteBoard.statusCode, 200);
+  assert.equal(quoteBoard.json().status, "quote_approval_board_ready");
+  assert.equal(quoteBoard.json().summary.total, 2);
+  assert.equal(quoteBoard.json().summary.approvedReadyToExecute, 1);
+  assert.ok(quoteBoard.json().lanes.some((lane: { key: string }) => lane.key === "waiting_customer_decision"));
+  assert.equal(quoteBoard.json().governance.auditEvent, "quote.approval_board_viewed");
+
   const publicQuote = await app.inject({
     method: "GET",
     url: `/public/quotes/${approvalPackage.json().token}`,

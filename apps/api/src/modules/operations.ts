@@ -5,6 +5,7 @@ import {
   createMockPart,
   createMockQuoteApprovalPackage,
   createMockQuoteApprovalActivation,
+  createMockQuoteApprovalBoard,
   createMockQuoteApprovalTimeline,
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
@@ -15,6 +16,7 @@ import {
   createPrismaPart,
   createPrismaQuoteApprovalPackage,
   createPrismaQuoteApprovalActivation,
+  createPrismaQuoteApprovalBoard,
   createPrismaQuoteApprovalTimeline,
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
@@ -53,6 +55,14 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return listMockQuotes();
+  });
+
+  app.get("/quotes/approval-board", async (request) => {
+    const context = await getAuthContext(request);
+
+    return isPrismaEnabled()
+      ? createPrismaQuoteApprovalBoard(context.tenantId)
+      : createMockQuoteApprovalBoard(context.tenantId);
   });
 
   app.patch("/quotes/:id/decision", async (request) => {

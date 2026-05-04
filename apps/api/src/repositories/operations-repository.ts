@@ -833,6 +833,163 @@ export async function createPrismaQuoteApprovalTimeline(tenantId: string, quoteI
   });
 }
 
+function buildQuoteApprovalBoard(tenantId: string, quoteList: Array<{
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}>) {
+  const today = new Date("2026-05-04T12:00:00.000Z");
+  const rows = quoteList.map((quote) => {
+    const status = quote.status ?? "draft";
+    const validUntil = quote.validUntil ? new Date(quote.validUntil) : null;
+    const daysToExpire = validUntil
+      ? Math.ceil((validUntil.getTime() - today.getTime()) / (24 * 60 * 60 * 1000))
+      : null;
+    const approved = status === "approved";
+    const rejected = status === "rejected";
+    const pendingDecision = !approved && !rejected;
+    const riskLevel = approved
+      ? "execution"
+      : daysToExpire !== null && daysToExpire <= 1
+        ? "critical"
+        : daysToExpire !== null && daysToExpire <= 3
+          ? "attention"
+          : "normal";
+
+    return {
+      quoteId: quote.id,
+      quoteNumber: quote.number ?? quote.id,
+      serviceOrderId: quote.serviceOrderId,
+      customer: quote.customer ?? "Cliente",
+      status,
+      total: Number(quote.total ?? 0),
+      formattedTotal: `R$ ${Number(quote.total ?? 0).toFixed(2)}`,
+      validUntil: validUntil?.toISOString() ?? null,
+      daysToExpire,
+      riskLevel,
+      lane: approved ? "approved_ready_to_execute" : rejected ? "commercial_review" : "waiting_customer_decision",
+      sla: {
+        targetHours: pendingDecision ? 24 : approved ? 8 : 48,
+        currentHours: approved ? 2 : pendingDecision ? 12 : 6,
+        status: riskLevel === "critical" ? "breach_risk" : approved ? "ready" : "inside_sla",
+      },
+      communication: {
+        recommendedChannel: pendingDecision ? "whatsapp_email" : approved ? "internal_dispatch" : "commercial_followup",
+        nextMessage: pendingDecision
+          ? `Lembrete amigavel para decisao do orcamento ${quote.number ?? quote.id}.`
+          : approved
+            ? `Orcamento ${quote.number ?? quote.id} aprovado; liberar despacho e preparar OS ${quote.serviceOrderId}.`
+            : `Revisar proposta ${quote.number ?? quote.id} com o cliente antes de reenviar.`,
+      },
+      nextAction: approved
+        ? "Ativar execucao e conferir prontidao de despacho."
+        : rejected
+          ? "Revisar motivo comercial e preparar nova versao."
+          : "Monitorar abertura, enviar lembrete autorizado e acompanhar validade.",
+    };
+  });
+
+  const summary = {
+    total: rows.length,
+    waitingCustomerDecision: rows.filter((row) => row.lane === "waiting_customer_decision").length,
+    approvedReadyToExecute: rows.filter((row) => row.lane === "approved_ready_to_execute").length,
+    commercialReview: rows.filter((row) => row.lane === "commercial_review").length,
+    critical: rows.filter((row) => row.riskLevel === "critical").length,
+    attention: rows.filter((row) => row.riskLevel === "attention").length,
+    totalPipeline: rows.reduce((sum, row) => sum + row.total, 0),
+  };
+
+  return {
+    tenantId,
+    status: "quote_approval_board_ready",
+    generatedAt: today.toISOString(),
+    summary: {
+      ...summary,
+      formattedPipeline: `R$ ${summary.totalPipeline.toFixed(2)}`,
+    },
+    lanes: [
+      {
+        key: "waiting_customer_decision",
+        title: "Aguardando cliente",
+        total: summary.waitingCustomerDecision,
+        rows: rows.filter((row) => row.lane === "waiting_customer_decision"),
+      },
+      {
+        key: "approved_ready_to_execute",
+        title: "Aprovados para execucao",
+        total: summary.approvedReadyToExecute,
+        rows: rows.filter((row) => row.lane === "approved_ready_to_execute"),
+      },
+      {
+        key: "commercial_review",
+        title: "Revisao comercial",
+        total: summary.commercialReview,
+        rows: rows.filter((row) => row.lane === "commercial_review"),
+      },
+    ],
+    alerts: rows
+      .filter((row) => row.riskLevel === "critical" || row.riskLevel === "attention" || row.lane === "approved_ready_to_execute")
+      .map((row) => ({
+        quoteId: row.quoteId,
+        quoteNumber: row.quoteNumber,
+        severity: row.riskLevel === "critical" ? "critical" : row.lane === "approved_ready_to_execute" ? "execution" : "attention",
+        message: row.nextAction,
+      })),
+    governance: {
+      auditEvent: "quote.approval_board_viewed",
+      hidesInternalMargin: true,
+      requiresCustomerOptInForWhatsapp: true,
+      boardRefreshSeconds: 300,
+    },
+    nextActions: [
+      "Priorizar orcamentos criticos ou proximos do vencimento.",
+      "Ativar execucao dos aprovados antes de perder janela operacional.",
+      "Registrar motivos de recusa e reenviar nova proposta quando aplicavel.",
+      "Usar comunicacao autorizada para lembretes ao cliente.",
+    ],
+  };
+}
+
+export async function createMockQuoteApprovalBoard(tenantId: string) {
+  return buildQuoteApprovalBoard(tenantId, quotes);
+}
+
+export async function createPrismaQuoteApprovalBoard(tenantId: string) {
+  const data = await getPrisma().quote.findMany({
+    where: { tenantId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  return buildQuoteApprovalBoard(tenantId, data.map((quote) => ({
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  })));
+}
+
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 

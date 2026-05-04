@@ -329,6 +329,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Cliente visualiza etapas concluidas e proximos passos depois da decisao.
 - Estilos responsivos foram adicionados para cards de timeline no desktop e mobile.
 
+## 0.8.54 - Board Gerencial De Orcamentos
+
+- Adicionado endpoint `GET /quotes/approval-board`.
+- Board classifica orcamentos em aguardando cliente, aprovados para execucao e revisao comercial.
+- Retorno inclui SLA, validade, risco, alertas, comunicacao recomendada e proximas acoes.
+- Console web ganhou acao para consultar o board gerencial de orcamentos.
+- Teste automatizado cobre resumo, lanes e governanca do board.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

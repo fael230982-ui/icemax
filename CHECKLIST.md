@@ -1209,3 +1209,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Board Gerencial De Orcamentos
+
+- [x] Endpoint de board de aprovacao criado.
+- [x] Lanes de aguardando cliente, aprovado para execucao e revisao comercial incluidas.
+- [x] SLA, validade, risco e alertas incluidos.
+- [x] Console web atualizado com acao do board.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
