@@ -4,6 +4,7 @@ import { isPrismaEnabled } from "../config";
 import {
   createMockPart,
   createMockQuoteApprovalPackage,
+  createMockQuoteApprovalActivation,
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
   createMockQuoteDecisionHandoff,
@@ -12,6 +13,7 @@ import {
   createMockStockMovement,
   createPrismaPart,
   createPrismaQuoteApprovalPackage,
+  createPrismaQuoteApprovalActivation,
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
   createPrismaQuoteDecisionHandoff,
@@ -115,6 +117,20 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return handoff;
+  });
+
+  app.post("/quotes/:id/approval-activation", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const activation = isPrismaEnabled()
+      ? await createPrismaQuoteApprovalActivation(context.tenantId, id)
+      : await createMockQuoteApprovalActivation(context.tenantId, id);
+
+    if (!activation) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para ativacao de aprovacao." });
+    }
+
+    return reply.code(201).send(activation);
   });
 
   app.get("/public/quotes/:token", async (request, reply) => {

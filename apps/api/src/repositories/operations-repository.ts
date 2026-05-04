@@ -528,6 +528,129 @@ export async function createPrismaQuoteDecisionHandoff(tenantId: string, quoteId
   });
 }
 
+function buildQuoteApprovalActivation(tenantId: string, quote: {
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}) {
+  const handoff = buildQuoteDecisionHandoff(tenantId, quote);
+  const approved = quote.status === "approved";
+  const partItems = quote.items?.filter((item) => item.kind === "part") ?? [];
+
+  return {
+    quoteId: quote.id,
+    quoteNumber: quote.number ?? quote.id,
+    serviceOrderId: quote.serviceOrderId,
+    tenantId,
+    customer: quote.customer ?? "Cliente",
+    status: approved ? "activation_ready" : "activation_blocked",
+    activationAllowed: approved,
+    blocker: approved ? null : "Orcamento precisa estar aprovado para liberar execucao operacional.",
+    serviceOrderUpdate: {
+      targetStatus: approved ? "scheduled" : "waiting_approval",
+      reason: approved
+        ? "Orcamento aprovado pelo cliente e pronto para execucao."
+        : "Execucao bloqueada ate aprovacao do orcamento.",
+    },
+    stockReservation: {
+      required: approved && partItems.length > 0,
+      sourceLocation: "Almoxarifado",
+      targetLocation: "Veiculo Rafael",
+      items: partItems.map((item) => ({
+        description: item.description ?? "Peca do orcamento",
+        quantity: item.quantity ?? 1,
+        status: approved ? "reservation_required" : "blocked_until_approval",
+      })),
+    },
+    dispatch: {
+      required: approved,
+      recommendedTechnicianId: "tech-001",
+      readinessCheck: quote.serviceOrderId ? `/dispatch/service-orders/${quote.serviceOrderId}/readiness?technicianUserId=tech-001` : null,
+      visitPreparationEndpoint: "/dispatch/visit-preparation",
+      message: approved
+        ? "Despacho pode ser reavaliado com pecas aprovadas e janela do cliente."
+        : "Despacho nao deve ser executado sem aprovacao do orcamento.",
+    },
+    communications: {
+      internal: handoff.communications.internalSubject,
+      technician: handoff.communications.technicianMessage,
+      customer: handoff.communications.customerMessage,
+    },
+    audit: {
+      event: "quote.approval_activation_prepared",
+      entity: "quote",
+      entityId: quote.id,
+      requiresPersistence: true,
+      idempotencyKey: `quote:${quote.id}:approval-activation`,
+    },
+    nextActions: approved
+      ? [
+          "Persistir mudanca de status da OS.",
+          "Criar reserva de pecas para itens aprovados.",
+          "Rodar prontidao e preparo da visita.",
+          "Avisar tecnico e cliente sobre proxima etapa.",
+          "Registrar auditoria de ativacao do orcamento.",
+        ]
+      : [
+          "Manter OS bloqueada para execucao.",
+          "Aguardar aprovacao do cliente ou revisao comercial.",
+          "Nao reservar pecas nem despachar tecnico.",
+        ],
+  };
+}
+
+export async function createMockQuoteApprovalActivation(tenantId: string, quoteId: string) {
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalActivation(tenantId, quote);
+}
+
+export async function createPrismaQuoteApprovalActivation(tenantId: string, quoteId: string) {
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalActivation(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  });
+}
+
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 

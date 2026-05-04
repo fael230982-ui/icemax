@@ -1139,3 +1139,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Ativacao De Orcamento Aprovado
+
+- [x] Endpoint de ativacao de orcamento aprovado criado.
+- [x] Bloqueio operacional para orcamento pendente incluido.
+- [x] Plano de OS, estoque, despacho e comunicacao incluido.
+- [x] Console web atualizado com acao de ativacao.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

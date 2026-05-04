@@ -293,6 +293,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para consultar handoff de orcamento.
 - Teste automatizado cobre o handoff de decisao.
 
+## 0.8.49 - Ativacao De Orcamento Aprovado
+
+- Adicionado endpoint `POST /quotes/:id/approval-activation`.
+- Ativacao prepara mudanca de status da OS, reserva de pecas, despacho e comunicacoes.
+- Orcamentos pendentes ficam bloqueados para execucao operacional.
+- Console web ganhou acao para ativar orcamento aprovado.
+- Teste automatizado cobre ativacao bloqueada e ativacao aprovada.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

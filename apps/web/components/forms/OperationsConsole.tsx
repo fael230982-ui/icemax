@@ -236,6 +236,10 @@ export function OperationsConsole() {
     void run("Handoff do orcamento", () => icemaxApi.quoteDecisionHandoff("quote-001", token || undefined));
   }
 
+  function activateApprovedQuote() {
+    void run("Ativar orcamento aprovado", () => icemaxApi.activateApprovedQuote("quote-002", token || undefined));
+  }
+
   function createCustomerTrackingLink() {
     void run("Link acompanhamento", () => icemaxApi.createCustomerTrackingLink("1048"));
   }
@@ -535,6 +539,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadQuoteCommunicationPackage}>Comunicar orcamento</button>
         <button type="button" className="secondary" onClick={createQuoteCommunicationQueue}>Fila do orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteDecisionHandoff}>Handoff orcamento</button>
+        <button type="button" className="secondary" onClick={activateApprovedQuote}>Ativar orcamento</button>
         <button type="button" className="secondary" onClick={createCustomerTrackingLink}>Link acompanhamento</button>
         <button type="button" className="secondary" onClick={createCustomerPortalAttachments}>Anexos portal</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>

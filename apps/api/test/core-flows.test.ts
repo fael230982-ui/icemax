@@ -225,6 +225,23 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(quoteHandoff.json().status, "waiting_customer_decision");
   assert.equal(quoteHandoff.json().governance.auditEvent, "quote.decision_handoff_prepared");
 
+  const blockedActivation = await app.inject({
+    method: "POST",
+    url: "/quotes/quote-001/approval-activation",
+  });
+  assert.equal(blockedActivation.statusCode, 201);
+  assert.equal(blockedActivation.json().status, "activation_blocked");
+  assert.equal(blockedActivation.json().activationAllowed, false);
+
+  const approvedActivation = await app.inject({
+    method: "POST",
+    url: "/quotes/quote-002/approval-activation",
+  });
+  assert.equal(approvedActivation.statusCode, 201);
+  assert.equal(approvedActivation.json().status, "activation_ready");
+  assert.equal(approvedActivation.json().activationAllowed, true);
+  assert.equal(approvedActivation.json().audit.event, "quote.approval_activation_prepared");
+
   const publicQuote = await app.inject({
     method: "GET",
     url: `/public/quotes/${approvalPackage.json().token}`,
