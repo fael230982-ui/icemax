@@ -131,6 +131,7 @@ export const icemaxApi = {
   customerPortalConfig: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/config`),
   createPortalOrder: (body: unknown) => apiRequest<unknown>("/customer-portal/service-orders", { method: "POST", body }),
   slaBoard: (token?: string) => apiRequest<ApiListResponse<unknown>>("/sla/board", { token }),
+  dayCommandCenter: (token?: string) => apiRequest<unknown>("/operations/day-command-center", { token }),
   createWarrantyTerm: (body: unknown, token?: string) => apiRequest<unknown>("/warranty-terms", { method: "POST", body, token }),
   createPmocPlan: (body: unknown, token?: string) => apiRequest<unknown>("/pmoc/plans", { method: "POST", body, token }),
   createInvoiceDraft: (body: unknown, token?: string) => apiRequest<unknown>("/billing/invoices/draft", { method: "POST", body, token }),

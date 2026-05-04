@@ -21,6 +21,7 @@ import {
   createContractActivationPlanFromServiceOrder,
   createContractBillingPlan,
   createContractCommunicationPackage,
+  createDayCommandCenter,
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
@@ -40,6 +41,8 @@ import { recordAuditEvent } from "../services/audit-service";
 
 export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
   app.get("/sla/board", async () => calculateSlaBoard());
+
+  app.get("/operations/day-command-center", async () => createDayCommandCenter());
 
   app.post("/warranty-terms", async (request, reply) => {
     const context = await getAuthContext(request);

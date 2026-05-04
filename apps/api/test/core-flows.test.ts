@@ -323,6 +323,13 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(sla.statusCode, 200);
   assert.ok(sla.json().total >= 1);
 
+  const commandCenter = await app.inject({ method: "GET", url: "/operations/day-command-center" });
+  assert.equal(commandCenter.statusCode, 200);
+  assert.equal(commandCenter.json().tenant, "ICEMAX Ar Condicionado");
+  assert.ok(commandCenter.json().summary.urgentOrders >= 1);
+  assert.ok(commandCenter.json().dispatch.immediateDispatch.length >= 1);
+  assert.ok(commandCenter.json().communications.contracts.length >= 1);
+
   const warranty = await app.inject({
     method: "POST",
     url: "/warranty-terms",

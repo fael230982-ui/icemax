@@ -256,6 +256,10 @@ export function OperationsConsole() {
     void run("Comunicacao do contrato", () => icemaxApi.contractCommunicationPackage("contract-001", token || undefined));
   }
 
+  function loadDayCommandCenter() {
+    void run("Comando do dia", () => icemaxApi.dayCommandCenter(token || undefined));
+  }
+
   function runEnterpriseSuite() {
     void run("Suite escala", async () => {
       const results = await Promise.all([
@@ -428,6 +432,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
         <button type="button" className="secondary" onClick={loadServiceOrderCommunicationPackage}>Comunicacao OS</button>
         <button type="button" className="secondary" onClick={loadContractCommunicationPackage}>Comunicacao contrato</button>
+        <button type="button" className="secondary" onClick={loadDayCommandCenter}>Comando do dia</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>

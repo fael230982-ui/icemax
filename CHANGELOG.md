@@ -103,6 +103,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar comunicacao da OS e comunicacao do contrato.
 - Teste automatizado cobre canais, templates e regra de auditoria.
 
+## 0.8.23 - Comando Do Dia
+
+- Adicionado endpoint de cockpit operacional diario.
+- Cockpit consolida OS urgentes, despacho, contratos, estoque, comunicacoes e decisoes do gestor.
+- Console web passou a consultar o comando do dia.
+- Teste automatizado cobre resumo, despacho e comunicacoes do cockpit.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

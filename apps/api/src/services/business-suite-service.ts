@@ -1,5 +1,6 @@
 import { equipment, serviceContracts, serviceOrders, stock } from "../mock-data";
 import { previewContractVisits } from "@icemax/shared";
+import { recommendMockDispatchAssignments } from "./dispatch-service";
 import type {
   CreateInvoiceDraftInput,
   CreateMaintenanceWindowInput,
@@ -645,6 +646,89 @@ export function createContractCommunicationPackage(contractId: string) {
       "Enviar aviso interno ao financeiro.",
       "Registrar consentimento de WhatsApp.",
       "Conciliar envio com calendario do contrato.",
+    ],
+  };
+}
+
+export function createDayCommandCenter() {
+  const dispatch = recommendMockDispatchAssignments();
+  const urgentOrders = serviceOrders.filter((order) => order.priority === "emergency" || order.priority === "high");
+  const blockedStock = stock.filter((item) => item.quantity <= item.minimum);
+  const contractVisits = serviceContracts.map((contract) => {
+    const billingPlan = createContractBillingPlan(contract.id);
+
+    return {
+      contractId: contract.id,
+      customer: contract.customer,
+      nextVisit: contract.nextVisit,
+      status: contract.status,
+      recurrenceMonths: contract.recurrenceMonths,
+      coveredEquipment: contract.coveredEquipment,
+      nextInstallment: billingPlan?.installments[0],
+      communicationStatus: "ready",
+    };
+  });
+
+  const serviceOrderCommunications = urgentOrders.map((order) => createServiceOrderCommunicationPackage(order.id)).filter(Boolean);
+  const immediateDispatch = dispatch.data.filter((item) => item.recommendedTechnician.score >= 55);
+  const blockedDispatch = serviceOrders
+    .map((order) => ({
+      order,
+      readiness: order.id === "1048" ? "attention" : blockedStock.length ? "blocked" : "ready",
+    }))
+    .filter((item) => item.readiness !== "ready");
+
+  return {
+    date: new Date().toISOString().slice(0, 10),
+    tenant: "ICEMAX Ar Condicionado",
+    status: blockedDispatch.length || blockedStock.length ? "attention" : "ready",
+    summary: {
+      serviceOrders: serviceOrders.length,
+      urgentOrders: urgentOrders.length,
+      techniciansEvaluated: dispatch.summary.techniciansEvaluated,
+      contractsWithUpcomingVisits: contractVisits.length,
+      stockAlerts: blockedStock.length,
+      communicationsReady: serviceOrderCommunications.length + contractVisits.length,
+    },
+    priorityQueue: urgentOrders.map((order) => ({
+      serviceOrderId: order.id,
+      customer: order.customer,
+      issue: order.issue,
+      priority: order.priority,
+      status: order.status,
+      technician: order.technician,
+      eta: order.eta,
+      recommendedAction: order.priority === "emergency" ? "acompanhar em tempo real e preparar comunicacao de conclusao" : "confirmar rota, peca provavel e janela do cliente",
+    })),
+    dispatch: {
+      strategy: dispatch.strategy,
+      immediateDispatch,
+      blocked: blockedDispatch.map((item) => ({
+        serviceOrderId: item.order.id,
+        customer: item.order.customer,
+        status: item.readiness,
+        reason: item.readiness === "attention" ? "OS urgente exige acompanhamento do gestor." : "Ha peca em alerta antes do deslocamento.",
+      })),
+    },
+    contracts: contractVisits,
+    stockAlerts: blockedStock.map((item) => ({
+      sku: item.sku,
+      name: item.name,
+      location: item.location,
+      quantity: item.quantity,
+      minimum: item.minimum,
+      recommendedAction: "abrir solicitacao de compra ou transferir de outro estoque",
+    })),
+    communications: {
+      serviceOrders: serviceOrderCommunications,
+      contracts: serviceContracts.map((contract) => createContractCommunicationPackage(contract.id)).filter(Boolean),
+    },
+    managerDecisions: [
+      "Priorizar OS emergencial antes de encaixes comerciais.",
+      "Confirmar disponibilidade de R410A antes de novo deslocamento corretivo.",
+      "Liberar lembretes de contrato para visitas dos proximos dias.",
+      "Revisar comunicacoes pendentes antes do fim do expediente.",
+      "Registrar qualquer bloqueio critico na auditoria operacional.",
     ],
   };
 }

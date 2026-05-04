@@ -736,3 +736,23 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Comando Do Dia
+
+- [x] Endpoint de cockpit operacional diario criado.
+- [x] Fila de prioridades de OS criada.
+- [x] Despacho imediato e bloqueios consolidados.
+- [x] Contratos, financeiro e visitas proximas consolidados.
+- [x] Alertas de estoque incluidos.
+- [x] Comunicacoes de OS e contrato incluidas.
+- [x] Decisoes do gestor registradas.
+- [x] Console web conectado ao comando do dia.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
