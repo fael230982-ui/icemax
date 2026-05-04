@@ -130,6 +130,7 @@ export const icemaxApi = {
   quoteDecisionHandoff: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/decision-handoff`, { token }),
   activateApprovedQuote: (quoteId: string, token?: string) =>
     apiRequest<unknown>(`/quotes/${quoteId}/approval-activation`, { method: "POST", token }),
+  quoteExecutionReadiness: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/execution-readiness`, { token }),
   quoteApprovalTimeline: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/approval-timeline`, { token }),
   publicQuote: (publicToken: string) => apiRequest<unknown>(`/public/quotes/${publicToken}`),
   publicQuoteDecision: (publicToken: string, body: unknown) =>

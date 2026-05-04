@@ -359,6 +359,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Modo offline ganhou acao para registrar lembrete apresentado em campo.
 - SyncPanel recebeu botao `Lembrete orcamento`.
 
+## 0.8.58 - Prontidao De Execucao Do Orcamento
+
+- Adicionado endpoint `GET /quotes/:id/execution-readiness`.
+- Prontidao consolida aprovacao, OS vinculada, reserva de pecas, despacho e comunicacao.
+- Retorno indica se o orcamento pode executar, bloqueios, atencoes e integracoes operacionais.
+- Console web ganhou acao para consultar prontidao do orcamento aprovado.
+- Teste automatizado cobre checks e auditoria da prontidao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

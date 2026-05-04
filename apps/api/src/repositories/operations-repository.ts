@@ -651,6 +651,152 @@ export async function createPrismaQuoteApprovalActivation(tenantId: string, quot
   });
 }
 
+function buildQuoteExecutionReadiness(tenantId: string, quote: {
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}) {
+  const activation = buildQuoteApprovalActivation(tenantId, quote);
+  const approved = quote.status === "approved";
+  const partItems = quote.items?.filter((item) => item.kind === "part") ?? [];
+  const checks = [
+    {
+      key: "customer_approval",
+      label: "Aprovacao do cliente",
+      status: approved ? "ready" : "blocked",
+      detail: approved ? "Orcamento aprovado pelo cliente." : "A execucao depende da aprovacao do orcamento.",
+    },
+    {
+      key: "service_order_link",
+      label: "OS vinculada",
+      status: quote.serviceOrderId ? "ready" : "blocked",
+      detail: quote.serviceOrderId ? `OS ${quote.serviceOrderId} vinculada ao orcamento.` : "Orcamento sem OS vinculada.",
+    },
+    {
+      key: "stock_reservation",
+      label: "Reserva de pecas",
+      status: partItems.length ? "attention" : "ready",
+      detail: partItems.length
+        ? "Ha itens de peca no orcamento; reservar antes do despacho."
+        : "Orcamento sem item de estoque obrigatorio.",
+    },
+    {
+      key: "dispatch_readiness",
+      label: "Prontidao de despacho",
+      status: approved && quote.serviceOrderId ? "attention" : "blocked",
+      detail: approved && quote.serviceOrderId
+        ? `Rodar ${activation.dispatch.readinessCheck} antes de deslocar o tecnico.`
+        : "Despacho bloqueado ate aprovacao e OS vinculada.",
+    },
+    {
+      key: "customer_communication",
+      label: "Comunicacao ao cliente",
+      status: approved ? "ready" : "pending",
+      detail: approved
+        ? "Cliente deve ser avisado sobre a proxima etapa da programacao."
+        : "Aguardar decisao antes de avisar programacao.",
+    },
+  ];
+  const blocked = checks.filter((check) => check.status === "blocked");
+  const attention = checks.filter((check) => check.status === "attention");
+
+  return {
+    quoteId: quote.id,
+    quoteNumber: quote.number ?? quote.id,
+    serviceOrderId: quote.serviceOrderId,
+    tenantId,
+    customer: quote.customer ?? "Cliente",
+    status: blocked.length ? "execution_blocked" : attention.length ? "execution_needs_attention" : "execution_ready",
+    canExecute: blocked.length === 0,
+    activationAllowed: activation.activationAllowed,
+    activation,
+    checks,
+    requiredActions: [
+      ...(approved ? [] : ["Obter aprovacao do cliente antes de executar."]),
+      ...(quote.serviceOrderId ? [] : ["Vincular orcamento a uma OS operacional."]),
+      ...(partItems.length ? ["Criar reserva de pecas aprovadas antes do deslocamento."] : []),
+      ...(approved && quote.serviceOrderId ? ["Rodar prontidao de despacho e preparo da visita."] : []),
+      ...(approved ? ["Avisar tecnico e cliente sobre a programacao."] : []),
+    ],
+    integrations: {
+      stockReservationEndpoint: quote.serviceOrderId ? `/service-orders/${quote.serviceOrderId}/parts-reservation` : null,
+      dispatchReadinessEndpoint: activation.dispatch.readinessCheck,
+      visitPreparationEndpoint: activation.dispatch.visitPreparationEndpoint,
+      mobileAckSource: "mobile_offline_quote_execution_readiness",
+    },
+    governance: {
+      auditEvent: "quote.execution_readiness_checked",
+      blocksExecutionWithoutApproval: true,
+      hidesInternalMargin: true,
+      requiresDispatchAudit: true,
+    },
+    nextActions: blocked.length
+      ? [
+          "Resolver bloqueios antes de liberar execucao.",
+          "Manter OS fora da fila de despacho.",
+          "Registrar pendencia no historico do orcamento.",
+        ]
+      : [
+          "Criar reserva de pecas se houver item de estoque.",
+          "Rodar prontidao e preparo da visita.",
+          "Enviar pacote para o app do tecnico.",
+          "Atualizar cliente sobre programacao.",
+        ],
+  };
+}
+
+export async function createMockQuoteExecutionReadiness(tenantId: string, quoteId: string) {
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteExecutionReadiness(tenantId, quote);
+}
+
+export async function createPrismaQuoteExecutionReadiness(tenantId: string, quoteId: string) {
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteExecutionReadiness(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  });
+}
+
 function buildQuoteApprovalTimeline(tenantId: string, quote: {
   id: string;
   number?: string;

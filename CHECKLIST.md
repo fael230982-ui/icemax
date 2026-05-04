@@ -1267,3 +1267,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Prontidao De Execucao Do Orcamento
+
+- [x] Endpoint de prontidao de execucao criado.
+- [x] Checks de aprovacao, OS, estoque, despacho e comunicacao incluidos.
+- [x] Integracoes operacionais de estoque, despacho e mobile incluidas.
+- [x] Console web atualizado com acao de prontidao.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

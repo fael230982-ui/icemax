@@ -11,6 +11,7 @@ import {
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
   createMockQuoteDecisionHandoff,
+  createMockQuoteExecutionReadiness,
   createMockPublicQuoteApprovalPackage,
   createMockStockLocation,
   createMockStockMovement,
@@ -23,6 +24,7 @@ import {
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
   createPrismaQuoteDecisionHandoff,
+  createPrismaQuoteExecutionReadiness,
   createPrismaPublicQuoteApprovalPackage,
   createPrismaStockLocation,
   createPrismaStockMovement,
@@ -154,6 +156,20 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return reply.code(201).send(activation);
+  });
+
+  app.get("/quotes/:id/execution-readiness", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const readiness = isPrismaEnabled()
+      ? await createPrismaQuoteExecutionReadiness(context.tenantId, id)
+      : await createMockQuoteExecutionReadiness(context.tenantId, id);
+
+    if (!readiness) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para prontidao de execucao." });
+    }
+
+    return readiness;
   });
 
   app.get("/quotes/:id/approval-timeline", async (request, reply) => {

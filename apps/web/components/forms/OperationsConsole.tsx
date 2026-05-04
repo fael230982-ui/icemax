@@ -248,6 +248,10 @@ export function OperationsConsole() {
     void run("Ativar orcamento aprovado", () => icemaxApi.activateApprovedQuote("quote-002", token || undefined));
   }
 
+  function loadQuoteExecutionReadiness() {
+    void run("Prontidao do orcamento", () => icemaxApi.quoteExecutionReadiness("quote-002", token || undefined));
+  }
+
   function loadQuoteApprovalTimeline() {
     void run("Linha do tempo do orcamento", () => icemaxApi.quoteApprovalTimeline("quote-002", token || undefined));
   }
@@ -554,6 +558,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createQuoteCommunicationQueue}>Fila do orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteDecisionHandoff}>Handoff orcamento</button>
         <button type="button" className="secondary" onClick={activateApprovedQuote}>Ativar orcamento</button>
+        <button type="button" className="secondary" onClick={loadQuoteExecutionReadiness}>Prontidao orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteApprovalTimeline}>Timeline orcamento</button>
         <button type="button" className="secondary" onClick={createCustomerTrackingLink}>Link acompanhamento</button>
         <button type="button" className="secondary" onClick={createCustomerPortalAttachments}>Anexos portal</button>
