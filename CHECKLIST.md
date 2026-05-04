@@ -1339,3 +1339,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Comunicacao De Deslocamento
+
+- [x] Endpoint de pacote de aviso de deslocamento criado.
+- [x] Mensagens de WhatsApp, e-mail e comunicacao interna incluidas.
+- [x] Privacidade, opt-in, preflight e auditoria incluidos.
+- [x] Console web atualizado com acao de aviso.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

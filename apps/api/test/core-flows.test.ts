@@ -408,6 +408,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(assignmentDecision.json().status, "assignment_confirmed");
   assert.equal(assignmentDecision.json().audit.event, "dispatch.assignment_decision_recorded");
 
+  const departureCommunication = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1049/departure-communication?technicianUserId=tech-002&quoteId=quote-002",
+  });
+  assert.equal(departureCommunication.statusCode, 200);
+  assert.equal(departureCommunication.json().serviceOrderId, "1049");
+  assert.equal(departureCommunication.json().audit.event, "dispatch.departure_communication_prepared");
+  assert.ok(departureCommunication.json().channels.length >= 3);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

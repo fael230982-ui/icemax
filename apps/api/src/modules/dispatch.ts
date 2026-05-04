@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchAssignmentDecision, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -98,6 +98,22 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return readiness;
+  });
+
+  app.get("/dispatch/service-orders/:id/departure-communication", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string; quoteId?: string };
+    const communication = createMockDispatchDepartureCommunicationPackage({
+      serviceOrderId: id,
+      technicianUserId: query.technicianUserId,
+      quoteId: query.quoteId,
+    });
+
+    if (!communication) {
+      return reply.code(404).send({ message: "OS nao encontrada para comunicacao de deslocamento." });
+    }
+
+    return communication;
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

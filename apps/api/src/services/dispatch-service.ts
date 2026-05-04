@@ -306,6 +306,93 @@ export function createMockDispatchAssignmentDecision(input: DispatchAssignmentDe
   };
 }
 
+export function createMockDispatchDepartureCommunicationPackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const technician = technicianLocations.find((item) => item.technicianUserId === input.technicianUserId) ?? technicianLocations[0];
+  const readiness = getMockServiceOrderDispatchReadiness(input.serviceOrderId, technician.technicianUserId);
+  const quote = input.quoteId ? quotes.find((item) => item.id === input.quoteId) : quotes.find((item) => item.serviceOrderId === input.serviceOrderId);
+
+  if (!order || !readiness) {
+    return null;
+  }
+
+  const canNotifyCustomer = readiness.status !== "blocked";
+  const etaText = `${readiness.route.totalTravelMinutes} min`;
+  const trackingUrl = `https://app.icemax.local/acompanhamento/${input.serviceOrderId}`;
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: quote?.id ?? null,
+    customer: order.customer,
+    technician: {
+      technicianUserId: technician.technicianUserId,
+      name: technician.technician,
+      status: technician.status,
+    },
+    status: canNotifyCustomer ? "departure_communication_ready" : "departure_communication_blocked",
+    canNotifyCustomer,
+    eta: {
+      travelMinutes: readiness.route.totalTravelMinutes,
+      totalDistanceKm: readiness.route.totalDistanceKm,
+      label: etaText,
+    },
+    channels: [
+      {
+        channel: "whatsapp",
+        allowed: canNotifyCustomer,
+        template: "dispatch_departure_whatsapp",
+        preview: `Ola, ${order.customer}. O tecnico ${technician.technician} esta a caminho para a OS ${order.id}. Previsao aproximada: ${etaText}. Acompanhe: ${trackingUrl}`,
+      },
+      {
+        channel: "email",
+        allowed: canNotifyCustomer,
+        template: "dispatch_departure_email",
+        subject: `Tecnico a caminho - OS ${order.id}`,
+        preview: `Confirmamos que ${technician.technician} esta em deslocamento para atendimento. Previsao aproximada: ${etaText}. Link de acompanhamento: ${trackingUrl}`,
+      },
+      {
+        channel: "internal",
+        allowed: true,
+        template: "dispatch_departure_internal",
+        preview: `OS ${order.id} liberada para deslocamento com ${technician.technician}. Status de prontidao: ${readiness.status}.`,
+      },
+    ],
+    privacy: {
+      hidesInternalMargin: true,
+      hidesTechnicianPersonalPhone: true,
+      hidesExactLocationUntilDeparture: true,
+      customerCopyOptional: true,
+    },
+    preflight: {
+      readinessStatus: readiness.status,
+      requiresManagerApproval: readiness.status === "attention" || order.priority === "emergency",
+      blocksWhenReadinessBlocked: true,
+      optInRequiredForWhatsapp: true,
+    },
+    audit: {
+      event: "dispatch.departure_communication_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `dispatch:${order.id}:${technician.technicianUserId}:departure-communication`,
+    },
+    nextActions: canNotifyCustomer
+      ? [
+          "Confirmar aceite do tecnico antes do envio real.",
+          "Enviar aviso ao cliente pelo canal autorizado.",
+          "Iniciar rastreamento operacional ate o check-in.",
+        ]
+      : [
+          "Resolver bloqueios de prontidao antes de avisar o cliente.",
+          "Manter comunicacao somente interna.",
+          "Reavaliar tecnico e rota apos correcao.",
+        ],
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 

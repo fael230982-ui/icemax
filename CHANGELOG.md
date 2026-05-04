@@ -396,6 +396,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Aceite tecnico`.
 - Teste automatizado cobre aceite da atribuicao.
 
+## 0.8.63 - Comunicacao De Deslocamento
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/departure-communication`.
+- Pacote prepara mensagens de WhatsApp, e-mail e comunicacao interna para tecnico a caminho.
+- Incluidas regras de privacidade, opt-in, preflight de prontidao e auditoria.
+- Painel web ganhou acao `Aviso deslocamento`.
+- Teste automatizado cobre pacote de comunicacao de saida.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
