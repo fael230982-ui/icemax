@@ -1296,3 +1296,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Fila De Despacho De Orcamentos Aprovados
+
+- [x] Endpoint de fila de orcamentos aprovados criado.
+- [x] Fila conectada a recomendacao de tecnico e prontidao da OS.
+- [x] Console web atualizado com botao da fila.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

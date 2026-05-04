@@ -145,6 +145,7 @@ export const icemaxApi = {
   technicianLocations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/technicians/locations", { token }),
   optimizeRoute: (body: unknown, token?: string) => apiRequest<unknown>("/dispatch/routes/optimize", { method: "POST", body, token }),
   dispatchRecommendations: (token?: string) => apiRequest<unknown>("/dispatch/recommendations", { token }),
+  quoteExecutionDispatchQueue: (token?: string) => apiRequest<unknown>("/dispatch/quote-execution-queue", { token }),
   dispatchReadiness: (serviceOrderId: string, technicianUserId: string, token?: string) =>
     apiRequest<unknown>(withQuery(`/dispatch/service-orders/${serviceOrderId}/readiness`, { technicianUserId }), { token }),
   createVisitPreparation: (body: unknown, token?: string) =>

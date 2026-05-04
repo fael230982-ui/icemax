@@ -374,6 +374,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Modo offline ganhou acao para registrar conferencia de prontidao antes da execucao.
 - SyncPanel recebeu botao `Prontidao orcamento`.
 
+## 0.8.60 - Fila De Despacho De Orcamentos Aprovados
+
+- Adicionado endpoint `GET /dispatch/quote-execution-queue`.
+- Fila conecta orcamentos aprovados, prontidao da OS, tecnico recomendado e rota.
+- Painel web ganhou acao `Fila orcamentos aprovados`.
+- Teste automatizado cobre a fila de despacho para orcamentos aprovados.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

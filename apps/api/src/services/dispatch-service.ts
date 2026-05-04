@@ -1,4 +1,4 @@
-import { serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
+import { quotes, serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
 import type { DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 import { createVisualDiagnosisPackage } from "./ai-assistant-service";
 
@@ -171,6 +171,70 @@ export function recommendMockDispatchAssignments(input?: { serviceOrderIds?: str
       serviceOrders: data.length,
       techniciansEvaluated: technicianLocations.length,
       immediateActions: data.filter((item) => item.recommendedTechnician.score >= 80).length,
+    },
+    data,
+  };
+}
+
+export function createMockQuoteExecutionDispatchQueue() {
+  const approvedQuotes = quotes.filter((quote) => quote.status === "approved" && quote.serviceOrderId);
+  const recommendations = recommendMockDispatchAssignments({
+    serviceOrderIds: approvedQuotes.map((quote) => quote.serviceOrderId),
+  });
+
+  const data = approvedQuotes.map((quote) => {
+    const recommendation = recommendations.data.find((item) => item.serviceOrderId === quote.serviceOrderId);
+    const technicianUserId = recommendation?.recommendedTechnician.technicianUserId ?? technicianLocations[0].technicianUserId;
+    const readiness = getMockServiceOrderDispatchReadiness(quote.serviceOrderId, technicianUserId);
+    const canDispatch = readiness?.status !== "blocked";
+
+    return {
+      quoteId: quote.id,
+      quoteNumber: quote.number,
+      serviceOrderId: quote.serviceOrderId,
+      customer: quote.customer,
+      total: quote.total,
+      priority: recommendation?.priority ?? "normal",
+      status: canDispatch ? "ready_for_dispatch" : "needs_preparation",
+      canDispatch,
+      recommendedTechnician: recommendation?.recommendedTechnician,
+      route: readiness?.route,
+      readinessStatus: readiness?.status ?? "blocked",
+      blockers: readiness?.checks.filter((check) => check.status === "blocked") ?? [],
+      attention: readiness?.checks.filter((check) => check.status === "attention") ?? [],
+      dispatchPackage: {
+        readinessEndpoint: `/dispatch/service-orders/${quote.serviceOrderId}/readiness?technicianUserId=${technicianUserId}`,
+        visitPreparationEndpoint: "/dispatch/visit-preparation",
+        mobileAckSource: "mobile_offline_quote_execution_readiness",
+      },
+      nextActions: canDispatch
+        ? [
+            "Enviar pacote para o app do tecnico.",
+            "Confirmar janela com o cliente.",
+            "Registrar saida e rota otimizada.",
+          ]
+        : [
+            "Resolver bloqueios antes de deslocar tecnico.",
+            "Manter orcamento fora da execucao ate preparo.",
+            "Acionar gestor se houver urgencia comercial.",
+          ],
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    strategy: "approved_quote_readiness_then_dispatch_score",
+    summary: {
+      approvedQuotes: approvedQuotes.length,
+      readyForDispatch: data.filter((item) => item.canDispatch).length,
+      needsPreparation: data.filter((item) => !item.canDispatch).length,
+      techniciansEvaluated: recommendations.summary.techniciansEvaluated,
+    },
+    governance: {
+      requiresCustomerApproval: true,
+      requiresReadinessBeforeDispatch: true,
+      auditEvent: "dispatch.quote_execution_queue_viewed",
+      blocksUnapprovedQuotes: true,
     },
     data,
   };

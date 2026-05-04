@@ -90,6 +90,10 @@ export function OperationsConsole() {
     void run("Despacho inteligente", () => icemaxApi.dispatchRecommendations(token || undefined));
   }
 
+  function loadQuoteExecutionDispatchQueue() {
+    void run("Fila de orcamentos aprovados", () => icemaxApi.quoteExecutionDispatchQueue(token || undefined));
+  }
+
   function loadDispatchReadiness() {
     void run("Prontidao da OS", () => icemaxApi.dispatchReadiness("1048", "tech-001", token || undefined));
   }
@@ -534,6 +538,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadFloorPlanOperationalView}>Planta operacional</button>
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
+        <button type="button" className="secondary" onClick={loadQuoteExecutionDispatchQueue}>Fila orcamentos aprovados</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>
