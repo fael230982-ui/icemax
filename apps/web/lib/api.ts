@@ -185,6 +185,7 @@ export const icemaxApi = {
   createVisualDiagnosisPackage: (body: unknown, token?: string) =>
     apiRequest<unknown>("/ai/visual-diagnosis-package", { method: "POST", body, token }),
   customerPortalConfig: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/config`),
+  customerPortalBillingSummary: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/billing-summary`),
   previewPortalTriage: (body: unknown) => apiRequest<unknown>("/customer-portal/triage", { method: "POST", body }),
   createPortalOrder: (body: unknown) => apiRequest<unknown>("/customer-portal/service-orders", { method: "POST", body }),
   customerOrderTracking: (serviceOrderId: string) => apiRequest<unknown>(`/customer-portal/service-orders/${serviceOrderId}/tracking`),

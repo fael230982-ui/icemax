@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { serviceOrders, tenant, technicianLocations } from "../mock-data";
+import { serviceContracts, serviceOrders, tenant, technicianLocations } from "../mock-data";
 import {
   customerPortalAttachmentSchema,
   customerPortalOrderSchema,
@@ -9,6 +9,7 @@ import {
   type CustomerPortalTriageInput,
 } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
+import { createContractBillingPlan } from "../services/business-suite-service";
 
 function classifyPortalTriage(input: CustomerPortalTriageInput) {
   const description = input.problemDescription.toLowerCase();
@@ -237,6 +238,59 @@ function createAttachmentManifest(serviceOrderId: string, input: CustomerPortalA
   };
 }
 
+function buildCustomerBillingSummary(tenantSlug: string) {
+  const contracts = serviceContracts.map((contract) => {
+    const billingPlan = createContractBillingPlan(contract.id);
+    const nextInstallment = billingPlan?.installments[0];
+    const status = contract.status === "generate_order" ? "visita_pendente" : contract.status === "scheduled" ? "em_dia" : "proximo_vencimento";
+
+    return {
+      contractId: contract.id,
+      customer: contract.customer,
+      plan: contract.plan,
+      recurrenceMonths: contract.recurrenceMonths,
+      coveredEquipment: contract.coveredEquipment,
+      nextVisit: contract.nextVisit,
+      nextDueDate: nextInstallment?.dueDate,
+      nextAmount: nextInstallment?.amount,
+      status,
+      customerAction: status === "visita_pendente"
+        ? "Aguardar confirmacao da empresa para a proxima visita preventiva."
+        : "Manter dados de contato e acesso ao equipamento atualizados.",
+    };
+  });
+
+  return {
+    tenantSlug,
+    tenant: {
+      name: tenant.name,
+      supportEmail: tenant.supportEmail,
+      primaryColor: tenant.primaryColor,
+      secondaryColor: tenant.secondaryColor,
+    },
+    generatedAt: new Date().toISOString(),
+    summary: {
+      contracts: contracts.length,
+      monthlyTotal: contracts.reduce((sum, contract) => sum + (contract.nextAmount ?? 0), 0),
+      coveredEquipment: contracts.reduce((sum, contract) => sum + contract.coveredEquipment, 0),
+      upcomingVisits: contracts.filter((contract) => contract.status === "visita_pendente" || contract.status === "proximo_vencimento").length,
+    },
+    contracts,
+    privacy: {
+      customerVisible: true,
+      hidesInternalMargin: true,
+      hidesCollectionPolicy: true,
+      hidesInternalNotes: true,
+      requiresSecureCustomerIdentityInProduction: true,
+    },
+    nextActions: [
+      "Confirmar identidade do cliente antes de liberar dados reais.",
+      "Conectar pagamentos somente apos escolha de provedor financeiro.",
+      "Permitir download de comprovantes quando storage privado estiver configurado.",
+    ],
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -250,6 +304,12 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
       serviceOrderOpeningEnabled: true,
       whatsappOptInEnabled: true,
     };
+  });
+
+  app.get("/customer-portal/:tenantSlug/billing-summary", async (request) => {
+    const { tenantSlug } = request.params as { tenantSlug: string };
+
+    return buildCustomerBillingSummary(tenantSlug);
   });
 
   app.post("/customer-portal/service-orders", async (request, reply) => {

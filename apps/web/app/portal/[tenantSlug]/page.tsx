@@ -1,3 +1,4 @@
+import { PortalBillingSummary } from "./PortalBillingSummary";
 import { PortalOrderForm } from "./PortalOrderForm";
 
 type PortalPageProps = {
@@ -63,6 +64,10 @@ export default async function PortalPage({ params }: PortalPageProps) {
             <span>Este portal coleta somente dados necessarios para triagem e atendimento tecnico.</span>
           </div>
         </aside>
+
+        <article className="portalPanel mainPortalPanel">
+          <PortalBillingSummary tenantSlug={tenantSlug} />
+        </article>
       </section>
     </main>
   );

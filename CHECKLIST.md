@@ -1661,3 +1661,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Portal Financeiro Do Cliente
+
+- [x] Endpoint de resumo financeiro do portal criado.
+- [x] Contratos, mensalidade e proximas visitas incluidos.
+- [x] Regras de privacidade do cliente incluidas.
+- [x] Componente web do portal criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -564,6 +564,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou secao de regua de cobranca com filtro de bloqueios.
 - Teste automatizado cobre fila mock, bloqueios e governanca.
 
+## 0.8.84 - Portal Financeiro Do Cliente
+
+- Adicionado endpoint `GET /customer-portal/:tenantSlug/billing-summary`.
+- Portal do cliente passou a mostrar contratos, mensalidade, equipamentos e proximas visitas.
+- Dados internos, margem, politica de cobranca e observacoes administrativas seguem ocultos.
+- Teste automatizado cobre resumo financeiro publico e privacidade.
+- Documentado limite de seguranca para identidade do cliente em producao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

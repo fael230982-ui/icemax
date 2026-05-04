@@ -678,6 +678,15 @@ test("customer portal can request optional service order", async () => {
   assert.equal(config.statusCode, 200);
   assert.equal(config.json().serviceOrderOpeningEnabled, true);
 
+  const billingSummary = await app.inject({
+    method: "GET",
+    url: "/customer-portal/icemax/billing-summary",
+  });
+  assert.equal(billingSummary.statusCode, 200);
+  assert.equal(billingSummary.json().privacy.hidesInternalMargin, true);
+  assert.ok(billingSummary.json().summary.monthlyTotal > 0);
+  assert.ok(billingSummary.json().contracts.length >= 3);
+
   const order = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders",
