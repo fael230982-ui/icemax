@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -210,6 +210,23 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return signature;
+  });
+
+  app.get("/dispatch/service-orders/:id/completion-email", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string; quoteId?: string; emailCopyToCustomer?: string };
+    const email = createMockFieldCompletionEmailPackage({
+      serviceOrderId: id,
+      technicianUserId: query.technicianUserId,
+      quoteId: query.quoteId,
+      emailCopyToCustomer: query.emailCopyToCustomer === undefined ? undefined : query.emailCopyToCustomer === "true",
+    });
+
+    if (!email) {
+      return reply.code(404).send({ message: "OS nao encontrada para e-mail de conclusao." });
+    }
+
+    return email;
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

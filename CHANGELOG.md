@@ -452,6 +452,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Assinatura cliente`.
 - Teste automatizado cobre pacote de assinatura do cliente.
 
+## 0.8.70 - E-Mail De Conclusao Da OS
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/completion-email`.
+- Pacote prepara destinatario da empresa, copia opcional ao cliente, assunto, corpo e anexos.
+- Envio fica bloqueado ate assinatura do cliente e fechamento tecnico consistente.
+- Painel web ganhou acao `E-mail conclusao`.
+- Teste automatizado cobre pacote de e-mail final da OS.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -164,6 +164,8 @@ export const icemaxApi = {
     apiRequest<unknown>(withQuery(`/dispatch/service-orders/${serviceOrderId}/execution-closeout`, { technicianUserId, quoteId }), { token }),
   fieldCustomerSignature: (serviceOrderId: string, technicianUserId: string, quoteId: string, token?: string) =>
     apiRequest<unknown>(withQuery(`/dispatch/service-orders/${serviceOrderId}/customer-signature`, { technicianUserId, quoteId }), { token }),
+  fieldCompletionEmail: (serviceOrderId: string, technicianUserId: string, quoteId: string, emailCopyToCustomer: string, token?: string) =>
+    apiRequest<unknown>(withQuery(`/dispatch/service-orders/${serviceOrderId}/completion-email`, { technicianUserId, quoteId, emailCopyToCustomer }), { token }),
   createVisitPreparation: (body: unknown, token?: string) =>
     apiRequest<unknown>("/dispatch/visit-preparation", { method: "POST", body, token }),
   improveText: (body: unknown, token?: string) => apiRequest<unknown>("/ai/text-improve", { method: "POST", body, token }),

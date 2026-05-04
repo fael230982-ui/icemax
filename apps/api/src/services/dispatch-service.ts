@@ -1,4 +1,4 @@
-import { quotes, serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
+import { customers, quotes, serviceOrders, serviceOrderStops, stock, technicianLocations, tenant } from "../mock-data";
 import type { DispatchAssignmentDecisionInput, DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 import { createVisualDiagnosisPackage } from "./ai-assistant-service";
 
@@ -840,6 +840,83 @@ export function createMockFieldCustomerSignaturePackage(input: {
           "Apresentar termos ao responsavel.",
           "Coletar assinatura digital e identificacao.",
           "Registrar decisao de copia por e-mail ao cliente.",
+      ],
+  };
+}
+
+export function createMockFieldCompletionEmailPackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+  emailCopyToCustomer?: boolean;
+}) {
+  const signature = createMockFieldCustomerSignaturePackage(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const customer = order ? customers.find((item) => item.name === order.customer) : null;
+
+  if (!signature || !order) {
+    return null;
+  }
+
+  const copyToCustomer = input.emailCopyToCustomer ?? signature.emailDecision.defaultCustomerCopy;
+  const signatureCaptured = false;
+  const blockedReasons = [
+    ...(signature.canCaptureSignature && !signatureCaptured ? ["assinatura digital ainda nao capturada"] : []),
+    ...(!signature.canCaptureSignature ? ["pacote de assinatura bloqueado pelo fechamento tecnico"] : []),
+    ...(copyToCustomer && !customer?.email ? ["cliente sem e-mail cadastrado para copia"] : []),
+  ];
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: signature.quoteId,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: signature.technician,
+    status: blockedReasons.length ? "completion_email_blocked" : "completion_email_ready",
+    canQueueEmail: blockedReasons.length === 0,
+    signature,
+    recipients: {
+      company: tenant.supportEmail,
+      customerCopy: copyToCustomer ? customer?.email ?? null : null,
+      copyToCustomer,
+    },
+    subject: `OS ${order.id} concluida - ${order.customer}`,
+    bodyPreview: [
+      `Ola, segue o fechamento tecnico da OS ${order.id}.`,
+      `Cliente: ${order.customer}. Equipamento: ${order.equipment}.`,
+      `Resumo tecnico: ${signature.closeout.reportDraft.text}`,
+      "Anexos previstos: relatorio tecnico, evidencias de campo, assinatura digital e termo de garantia quando aplicavel.",
+    ].join("\n\n"),
+    attachments: [
+      { key: "technical_report", label: "Relatorio tecnico", required: true, status: "pending_generation" },
+      { key: "field_evidences", label: "Evidencias de campo", required: true, status: "pending_package" },
+      { key: "customer_signature", label: "Assinatura digital", required: true, status: signatureCaptured ? "ready" : "pending_signature" },
+      { key: "warranty_terms", label: "Termo de garantia", required: false, status: "recommended" },
+    ],
+    deliveryPolicy: {
+      sendAfterCustomerSignature: true,
+      companyEmailConfiguredByTenant: true,
+      customerCopyOptional: true,
+      requiresAuditEvent: true,
+      canRetry: true,
+    },
+    blockers: blockedReasons,
+    audit: {
+      event: "field.completion_email_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `field:${order.id}:${signature.technician.technicianUserId}:completion-email`,
+    },
+    nextActions: blockedReasons.length
+      ? [
+          "Capturar assinatura digital do cliente.",
+          "Resolver bloqueios do fechamento tecnico.",
+          "Confirmar se o cliente recebera copia por e-mail.",
+        ]
+      : [
+          "Enfileirar envio para e-mail da empresa.",
+          "Anexar relatorio, evidencias e assinatura.",
+          "Registrar auditoria do envio e status de entrega.",
         ],
   };
 }

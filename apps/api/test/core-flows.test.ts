@@ -473,6 +473,16 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(customerSignature.json().captureFields.length >= 5);
   assert.equal(customerSignature.json().emailDecision.customerCopyOptional, true);
 
+  const completionEmail = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1049/completion-email?technicianUserId=tech-002&quoteId=quote-002&emailCopyToCustomer=false",
+  });
+  assert.equal(completionEmail.statusCode, 200);
+  assert.equal(completionEmail.json().serviceOrderId, "1049");
+  assert.equal(completionEmail.json().audit.event, "field.completion_email_package_prepared");
+  assert.equal(completionEmail.json().recipients.company, "adm.rcsolutions@gmail.com");
+  assert.equal(completionEmail.json().deliveryPolicy.customerCopyOptional, true);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

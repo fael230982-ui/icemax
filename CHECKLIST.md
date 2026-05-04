@@ -1445,3 +1445,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## E-Mail De Conclusao Da OS
+
+- [x] Endpoint de pacote de e-mail final criado.
+- [x] Destinatario da empresa incluido pelo tenant.
+- [x] Copia opcional ao cliente incluida.
+- [x] Assunto, corpo e anexos esperados estruturados.
+- [x] Console web atualizado com acao de e-mail final.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
