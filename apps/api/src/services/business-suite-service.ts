@@ -460,3 +460,55 @@ export function createContractAcceptancePackageFromServiceOrder(serviceOrderId: 
     },
   };
 }
+
+export function createContractBillingPlan(contractId: string) {
+  const contract = serviceContracts.find((item) => item.id === contractId);
+
+  if (!contract) {
+    return null;
+  }
+
+  const monthlyValue = contract.recurrenceMonths === 3 ? 390 : contract.recurrenceMonths === 4 ? 320 : 240;
+  const startDate = new Date(`${contract.nextVisit}T00:00:00.000Z`);
+  startDate.setDate(10);
+
+  const installments = Array.from({ length: 12 }, (_, index) => {
+    const dueDate = new Date(startDate);
+    dueDate.setMonth(dueDate.getMonth() + index);
+
+    return {
+      sequence: index + 1,
+      dueDate: dueDate.toISOString().slice(0, 10),
+      amount: monthlyValue,
+      status: index === 0 ? "next_due" : "planned",
+      description: `${contract.plan} - mensalidade ${index + 1}/12`,
+    };
+  });
+
+  return {
+    contractId,
+    customer: contract.customer,
+    plan: contract.plan,
+    status: "billing_ready",
+    recurrenceMonths: contract.recurrenceMonths,
+    coveredEquipment: contract.coveredEquipment,
+    monthlyValue,
+    annualValue: monthlyValue * 12,
+    billingRules: {
+      billingModel: "mensal recorrente",
+      dueDay: 10,
+      minimumTermMonths: 12,
+      lateFeePercent: 2,
+      monthlyInterestPercent: 1,
+      invoiceDeliveryChannels: ["email", "whatsapp"],
+    },
+    installments,
+    handoff: [
+      "Conferir dados fiscais do cliente.",
+      "Cadastrar forma de pagamento preferencial.",
+      "Programar envio mensal de cobranca.",
+      "Conciliar pagamento com contrato ativo.",
+      "Bloquear renovacao automatica se houver inadimplencia critica.",
+    ],
+  };
+}

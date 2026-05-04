@@ -89,6 +89,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar planta operacional.
 - Teste automatizado cobre pontos e payload QR da planta.
 
+## 0.8.21 - Financeiro De Contrato
+
+- Adicionado endpoint de plano financeiro de contrato.
+- Plano inclui valor mensal, valor anual, regras de vencimento e 12 mensalidades.
+- Console web passou a consultar financeiro do contrato.
+- Teste automatizado cobre mensalidades e regra de vencimento.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

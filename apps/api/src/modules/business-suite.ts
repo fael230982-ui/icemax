@@ -19,6 +19,7 @@ import {
   calculateSlaBoard,
   createContractAcceptancePackageFromServiceOrder,
   createContractActivationPlanFromServiceOrder,
+  createContractBillingPlan,
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
@@ -218,5 +219,16 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     });
 
     return reply.code(201).send(result);
+  });
+
+  app.get("/contracts/:id/billing-plan", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const billingPlan = createContractBillingPlan(id);
+
+    if (!billingPlan) {
+      return reply.code(404).send({ message: "Contrato nao encontrado para plano financeiro." });
+    }
+
+    return billingPlan;
   });
 }

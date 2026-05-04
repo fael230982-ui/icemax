@@ -244,6 +244,10 @@ export function OperationsConsole() {
     void run("Calendario de contratos", () => icemaxApi.contractMaintenanceCalendar(token || undefined));
   }
 
+  function loadContractBillingPlan() {
+    void run("Plano financeiro", () => icemaxApi.contractBillingPlan("contract-001", token || undefined));
+  }
+
   function runEnterpriseSuite() {
     void run("Suite escala", async () => {
       const results = await Promise.all([
@@ -413,6 +417,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={activateAcceptedContract}>Contrato aceito</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
+        <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>

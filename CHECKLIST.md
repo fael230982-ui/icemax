@@ -703,3 +703,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Financeiro De Contrato
+
+- [x] Endpoint de plano financeiro de contrato criado.
+- [x] Mensalidades, valor anual e regras de vencimento criadas.
+- [x] Handoff financeiro criado.
+- [x] Console web conectado ao financeiro do contrato.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -119,6 +119,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(calendar.json().summary.totalVisits, 6);
   assert.equal(calendar.json().data[0].status, "due_soon");
 
+  const billingPlan = await app.inject({
+    method: "GET",
+    url: "/contracts/contract-001/billing-plan",
+  });
+  assert.equal(billingPlan.statusCode, 200);
+  assert.equal(billingPlan.json().contractId, "contract-001");
+  assert.equal(billingPlan.json().installments.length, 12);
+  assert.equal(billingPlan.json().billingRules.dueDay, 10);
+
   const movement = await app.inject({
     method: "POST",
     url: "/stock-movements",

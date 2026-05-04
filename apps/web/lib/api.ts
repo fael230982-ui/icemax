@@ -106,6 +106,7 @@ export const icemaxApi = {
   createEquipment: (body: unknown, token?: string) => apiRequest<unknown>("/equipment", { method: "POST", body, token }),
   contracts: (token?: string) => apiRequest<ApiListResponse<unknown>>("/contracts", { token }),
   contractMaintenanceCalendar: (token?: string) => apiRequest<unknown>("/contracts/maintenance-calendar?occurrences=4", { token }),
+  contractBillingPlan: (contractId: string, token?: string) => apiRequest<unknown>(`/contracts/${contractId}/billing-plan`, { token }),
   createContract: (body: unknown, token?: string) => apiRequest<unknown>("/contracts", { method: "POST", body, token }),
   quotes: (token?: string) => apiRequest<ApiListResponse<unknown>>("/quotes", { token }),
   stock: (token?: string) => apiRequest<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock", { token }),
