@@ -1511,3 +1511,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Finalizacao No Painel Web
+
+- [x] Componente visual de finalizacao criado.
+- [x] Consulta da API e fallback local incluidos.
+- [x] Secao dedicada adicionada ao painel principal.
+- [x] CSS responsivo criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -17,6 +17,7 @@ import {
   customers,
 } from "../app/data";
 import { Panel } from "./Panel";
+import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
 import { OperationsConsole } from "./forms/OperationsConsole";
 import { QuickCreatePanel } from "./forms/QuickCreatePanel";
 
@@ -29,6 +30,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Operacao" title="Console conectado" wide>
         <OperationsConsole />
+      </Panel>
+
+      <Panel eyebrow="Fechamento" title="Board de finalizacao da OS" action={<span className="pill danger">Assinatura e e-mail</span>} wide>
+        <FieldFinalizationBoard />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>

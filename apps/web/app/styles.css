@@ -273,6 +273,124 @@ h2 {
   line-height: 1.5;
 }
 
+.finalizationBoard {
+  display: grid;
+  gap: 14px;
+}
+
+.finalizationSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.finalizationSummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 84px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.finalizationSummary span,
+.finalizationMeta,
+.finalizationRow span,
+.finalizationRow small {
+  color: var(--muted);
+}
+
+.finalizationSummary strong {
+  font-size: 23px;
+}
+
+.finalizationSummary .attention {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.finalizationSummary .ready {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.finalizationMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.finalizationRows {
+  display: grid;
+  gap: 10px;
+}
+
+.finalizationRow {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr 0.95fr 0.8fr 1.25fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.finalizationRow div {
+  min-width: 0;
+}
+
+.finalizationRow strong,
+.finalizationRow small,
+.finalizationRow span {
+  display: block;
+}
+
+.finalizationRow strong {
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.finalizationRow small {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.rowId {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.statusStack {
+  display: grid;
+  gap: 5px;
+}
+
+.statusPill {
+  width: fit-content;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 9px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.statusPill.attention {
+  color: #7c2d12;
+  background: #ffedd5;
+}
+
+.statusPill.ready {
+  color: #065f46;
+  background: #dcfce7;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1334,7 +1452,9 @@ dd {
   }
 
   .opsHeader,
-  .formGrid {
+  .formGrid,
+  .finalizationSummary,
+  .finalizationRow {
     grid-template-columns: 1fr;
   }
 }

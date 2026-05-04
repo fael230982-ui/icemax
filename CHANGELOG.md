@@ -484,6 +484,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Governanca indica assinatura, evidencias e auditoria de e-mail como obrigatorias.
 - Teste automatizado cobre o board de finalizacao.
 
+## 0.8.74 - Board De Finalizacao No Painel Web
+
+- Criado componente visual `FieldFinalizationBoard` no painel web.
+- Board web consulta a API local e usa fallback local quando a API nao estiver ativa.
+- Painel principal passou a exibir resumo, bloqueios e proxima acao por OS.
+- CSS responsivo criado para a experiencia gerencial.
+- Documentado o uso do board visual de finalizacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
