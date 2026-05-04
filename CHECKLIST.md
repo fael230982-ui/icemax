@@ -1383,3 +1383,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Inicio De Execucao Em Campo
+
+- [x] Endpoint de inicio de execucao criado.
+- [x] Evidencias obrigatorias e escopo aprovado incluidos.
+- [x] Checklist inicial conectado ao pacote.
+- [x] Console web atualizado com acao de inicio.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

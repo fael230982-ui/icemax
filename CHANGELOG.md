@@ -420,6 +420,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre pacote de chegada.
 - Fluxo prepara abertura segura da OS em campo.
 
+## 0.8.66 - Inicio De Execucao Em Campo
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/execution-start`.
+- Pacote conecta check-in, evidencias obrigatorias, escopo aprovado e checklist inicial.
+- Painel web ganhou acao `Inicio execucao`.
+- Teste automatizado cobre pacote de inicio de execucao.
+- Fluxo bloqueia intervencao sem check-in valido.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

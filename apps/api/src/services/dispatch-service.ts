@@ -536,6 +536,78 @@ export function createMockDispatchArrivalCheckInPackage(input: {
   };
 }
 
+export function createMockFieldExecutionStartPackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const arrival = createMockDispatchArrivalCheckInPackage(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const quote = input.quoteId ? quotes.find((item) => item.id === input.quoteId) : quotes.find((item) => item.serviceOrderId === input.serviceOrderId);
+
+  if (!arrival || !order) {
+    return null;
+  }
+
+  const requiredEvidence = [
+    { key: "checkin_location", label: "Check-in com localizacao", status: arrival.canCheckIn ? "ready" : "blocked" },
+    { key: "equipment_identity", label: "Equipamento conferido por QR Code ou placa", status: "pending" },
+    { key: "before_photo", label: "Foto inicial do equipamento", status: "pending" },
+    { key: "approved_scope", label: "Escopo aprovado conferido", status: quote ? "ready" : "attention" },
+    { key: "safety_orientation", label: "Orientacao de seguranca revisada", status: "pending" },
+  ];
+  const blockers = requiredEvidence.filter((item) => item.status === "blocked");
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: quote?.id ?? null,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: arrival.technician,
+    status: blockers.length ? "execution_start_blocked" : "execution_start_ready",
+    canStartExecution: blockers.length === 0,
+    arrival,
+    requiredEvidence,
+    checklistStart: {
+      template: order.issue.toLowerCase().includes("dreno") ? "corretiva_dreno" : "hvac_initial_diagnosis",
+      requiredBeforeIntervention: true,
+      firstItems: [
+        "Confirmar equipamento e ambiente atendido.",
+        "Registrar foto antes da intervencao.",
+        "Desenergizar equipamento quando aplicavel.",
+        "Validar escopo aprovado com responsavel no local.",
+      ],
+    },
+    technicianScript: [
+      "Confirmar com o responsavel que a equipe chegou.",
+      "Explicar que a avaliacao inicial sera registrada com fotos.",
+      "Nao executar itens fora do escopo sem nova autorizacao.",
+    ],
+    managerVisibility: {
+      notifyExecutionStarted: blockers.length === 0,
+      requiresOverride: blockers.length > 0,
+      auditBeforeIntervention: true,
+    },
+    audit: {
+      event: "field.execution_start_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `field:${order.id}:${arrival.technician.technicianUserId}:execution-start`,
+    },
+    nextActions: blockers.length
+      ? [
+          "Resolver bloqueios antes de iniciar execucao.",
+          "Permitir override gerencial somente com justificativa.",
+          "Manter OS em check-in aguardando liberacao.",
+        ]
+      : [
+          "Liberar checklist tecnico.",
+          "Registrar evidencias obrigatorias.",
+          "Iniciar atendimento com escopo aprovado.",
+        ],
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 
