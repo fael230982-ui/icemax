@@ -118,6 +118,14 @@ Cria orcamento vinculado a uma OS.
 
 Gera relatorio local da OS e retorna URL interna. Em desenvolvimento, tenta gerar PDF com Chrome/Edge headless e usa HTML como fallback.
 
+### GET /service-orders/:id/completion-review
+
+Retorna checklist de conclusao da OS, texto profissional sugerido, recomendacao de envio e bloqueios antes do fechamento administrativo.
+
+### GET /service-orders/:id/evidence-manifest
+
+Retorna manifesto de evidencias da OS com fotos, relatorio, assinatura, identificacao do equipamento, contato do cliente, sensibilidade e politica de retencao.
+
 ## SLA
 
 ### GET /sla/board

@@ -88,6 +88,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/service-orders", { method: "POST", body, token }),
   serviceOrderCompletionReview: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/completion-review`, { token }),
+  serviceOrderEvidenceManifest: (serviceOrderId: string, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/evidence-manifest`, { token }),
   postServicePlan: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/post-service-plan`, { token }),
   postServiceCommandCenter: (serviceOrderId: string, token?: string) =>

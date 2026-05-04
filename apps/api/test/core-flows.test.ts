@@ -83,6 +83,15 @@ test("service order execution flow accepts mock records", async () => {
   assert.ok(completionReview.json().checks.length >= 5);
   assert.match(completionReview.json().reportDraft.professionalSummary, /Foi identificado/);
 
+  const evidenceManifest = await app.inject({
+    method: "GET",
+    url: "/service-orders/1048/evidence-manifest",
+  });
+  assert.equal(evidenceManifest.statusCode, 200);
+  assert.equal(evidenceManifest.json().governance.auditEvent, "service_order.evidence_manifest_viewed");
+  assert.equal(evidenceManifest.json().governance.requiresPrivateStorage, true);
+  assert.ok(evidenceManifest.json().summary.total >= 4);
+
   const upload = await app.inject({
     method: "POST",
     url: "/files",

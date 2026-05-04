@@ -124,3 +124,85 @@ export function buildOrderCompletionReview(order: CompletionOrder) {
   };
 }
 
+export function buildOrderEvidenceManifest(order: CompletionOrder) {
+  const photos = order.photos?.map((photo, index) => ({
+    key: `photo_${index + 1}`,
+    type: "photo",
+    label: photo.type ?? "Foto tecnica",
+    source: photo.fileUrl ?? "sem arquivo vinculado",
+    sensitivity: "restricted",
+    requiredForCloseout: index === 0,
+    status: photo.fileUrl ? "ready" : "blocked",
+  })) ?? [];
+
+  const documents = [
+    {
+      key: "technical_report",
+      type: "document",
+      label: "Relatorio tecnico final",
+      source: `/files/reports/os-${order.id}.pdf`,
+      sensitivity: "confidential",
+      requiredForCloseout: true,
+      status: order.status === "completed" ? "ready" : "pending",
+    },
+    {
+      key: "customer_signature",
+      type: "signature",
+      label: "Assinatura do cliente",
+      source: order.customerSignedName ?? "assinatura nao capturada",
+      sensitivity: "restricted",
+      requiredForCloseout: true,
+      status: order.customerSignedName ? "ready" : "blocked",
+    },
+    {
+      key: "equipment_identity",
+      type: "metadata",
+      label: "Identificacao do equipamento",
+      source: order.equipment?.serialNumber ?? order.equipment?.model ?? "equipamento incompleto",
+      sensitivity: "internal",
+      requiredForCloseout: true,
+      status: order.equipment?.serialNumber || order.equipment?.model ? "ready" : "attention",
+    },
+    {
+      key: "customer_contact",
+      type: "metadata",
+      label: "Contato do cliente",
+      source: order.customer?.email ?? order.customer?.phone ?? "contato nao informado",
+      sensitivity: "confidential",
+      requiredForCloseout: true,
+      status: order.customer?.email || order.customer?.phone ? "ready" : "blocked",
+    },
+  ];
+
+  const items = [...photos, ...documents];
+  const blocked = items.filter((item) => item.status === "blocked");
+  const attention = items.filter((item) => item.status === "attention" || item.status === "pending");
+
+  return {
+    serviceOrderId: order.id,
+    generatedAt: new Date().toISOString(),
+    status: blocked.length > 0 ? "blocked" : attention.length > 0 ? "attention" : "ready",
+    summary: {
+      total: items.length,
+      photos: photos.length,
+      documents: documents.length,
+      blocked: blocked.length,
+      attention: attention.length,
+    },
+    retentionPolicy: {
+      default: "manter pelo prazo de garantia, contrato e obrigacoes fiscais aplicaveis",
+      signatures: "armazenar em storage privado com hash e auditoria",
+      customerSharing: "somente liberar via e-mail auditado, portal autenticado ou link expiravel",
+    },
+    governance: {
+      auditEvent: "service_order.evidence_manifest_viewed",
+      requiresPrivateStorage: true,
+      requiresTenantScope: true,
+      requiresVirusScanBeforeExternalShare: true,
+    },
+    items,
+    nextActions: blocked.length > 0
+      ? blocked.map((item) => `Resolver evidencia obrigatoria: ${item.label}.`)
+      : ["Manifesto pronto para arquivo da OS e envio controlado ao cliente."],
+  };
+}

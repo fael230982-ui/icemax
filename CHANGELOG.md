@@ -620,6 +620,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre politica deny-by-default, pastas privadas e bloqueio em modo local.
 - Documentado caminho para substituir storage local por storage privado em producao.
 
+## 0.8.91 - Manifesto De Evidencias Da OS
+
+- Adicionado endpoint `GET /service-orders/:id/evidence-manifest`.
+- Manifesto consolida fotos, relatorio, assinatura, equipamento e contato do cliente.
+- Cada evidencia recebe sensibilidade, obrigatoriedade, status e politica de retencao.
+- Console operacional passou a consultar manifesto junto da revisao de conclusao da OS.
+- Teste automatizado cobre governanca, storage privado e total de evidencias.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

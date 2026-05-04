@@ -232,7 +232,14 @@ export function OperationsConsole() {
   }
 
   function reviewServiceOrderCompletion() {
-    void run("Revisao de conclusao da OS", () => icemaxApi.serviceOrderCompletionReview("1048", token || undefined));
+    void run("Revisao de conclusao da OS", async () => {
+      const results = await Promise.all([
+        icemaxApi.serviceOrderCompletionReview("1048", token || undefined),
+        icemaxApi.serviceOrderEvidenceManifest("1048", token || undefined),
+      ]);
+
+      return { checks: results.length, results };
+    });
   }
 
   function loadPostServicePlan() {

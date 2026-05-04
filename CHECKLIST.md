@@ -1765,3 +1765,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Manifesto De Evidencias Da OS
+
+- [x] Endpoint de evidence manifest criado.
+- [x] Fotos, relatorio, assinatura, equipamento e contato consolidados.
+- [x] Sensibilidade, obrigatoriedade e retencao incluidas por evidencia.
+- [x] Console operacional conectado ao manifesto.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
