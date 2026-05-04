@@ -1310,3 +1310,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Fila De Despacho No Mobile
+
+- [x] Secao mobile de fila de despacho criada.
+- [x] Acao offline de ciencia da fila criada.
+- [x] SyncPanel atualizado com botao de fila de despacho.
+- [x] Documentacao operacional criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

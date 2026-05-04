@@ -114,6 +114,15 @@ export const quoteExecutionReadiness = [
   { title: "Bloqueio", detail: "Pendencias de aceite, estoque, rota ou comunicacao impedem execucao imediata" },
 ];
 
+export const quoteExecutionDispatchQueue = [
+  { title: "Fila", detail: "ORC-2026-002 entrou na fila de despacho da OS 1049" },
+  { title: "Tecnico", detail: "Joao Pereira recomendado para atendimento com rota validada" },
+  { title: "Rota", detail: "Deslocamento deve ser confirmado antes da saida e recalculado se a agenda mudar" },
+  { title: "Cliente", detail: "Confirmar janela e responsavel no local antes de iniciar deslocamento" },
+  { title: "Bloqueios", detail: "Se houver peca, aceite ou prontidao pendente, manter OS sem execucao" },
+  { title: "Mobile", detail: "Tecnico registra ciencia offline e sincroniza quando recuperar conexao" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

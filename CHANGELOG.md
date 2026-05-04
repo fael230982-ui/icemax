@@ -381,6 +381,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Fila orcamentos aprovados`.
 - Teste automatizado cobre a fila de despacho para orcamentos aprovados.
 
+## 0.8.61 - Fila De Despacho No Mobile
+
+- App mobile passou a exibir secao de fila de despacho para orcamento aprovado.
+- Modo offline ganhou acao para registrar ciencia do tecnico sobre a fila.
+- SyncPanel recebeu botao `Fila despacho`.
+- Documentado fluxo mobile em `docs/92-fila-despacho-mobile.md`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

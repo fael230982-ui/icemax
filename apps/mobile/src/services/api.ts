@@ -343,3 +343,22 @@ export function createQuoteExecutionReadinessAckAction(serviceOrderId: string, q
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteExecutionDispatchQueueAckAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-dispatch-queue"),
+    label: `Fila despacho OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Fila de despacho do orcamento aprovado ${quoteId} recebida e conferida no app tecnico.`,
+      source: "mobile_offline_quote_dispatch_queue",
+      mobileAck: {
+        quoteId,
+        acknowledgedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

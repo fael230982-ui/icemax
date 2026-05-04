@@ -6,7 +6,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -19,6 +19,7 @@ import {
   createPhotoEvidenceAction,
   createQuoteApprovalPresentedAction,
   createQuoteBoardViewedAction,
+  createQuoteExecutionDispatchQueueAckAction,
   createQuoteExecutionReadinessAckAction,
   createQuoteReminderPresentedAction,
   createQuoteTimelineViewedAction,
@@ -128,6 +129,12 @@ export default function App() {
     setSyncStatus("Prontidao do orcamento salva offline.");
   }
 
+  function addQuoteExecutionDispatchQueueAck() {
+    const action = createQuoteExecutionDispatchQueueAckAction("1049", "quote-002");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Fila de despacho do orcamento salva offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -177,6 +184,7 @@ export default function App() {
             onAddQuoteBoard={addQuoteBoardViewed}
             onAddQuoteReminder={addQuoteReminderPresented}
             onAddQuoteExecutionReadiness={addQuoteExecutionReadinessAck}
+            onAddQuoteExecutionDispatchQueue={addQuoteExecutionDispatchQueueAck}
             onSync={syncPending}
           />
         </Section>
@@ -240,6 +248,14 @@ export default function App() {
         <Section title="Prontidao do orcamento">
           <View style={styles.grid}>
             {quoteExecutionReadiness.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Fila de despacho">
+          <View style={styles.grid}>
+            {quoteExecutionDispatchQueue.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>
