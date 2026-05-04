@@ -377,6 +377,12 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(contractOpportunity.json().recommendedPlan.recurrenceMonths, 3);
   assert.ok(contractOpportunity.json().opportunityScore >= 80);
 
+  const contractProposal = await app.inject({ method: "GET", url: "/service-orders/1048/contract-proposal" });
+  assert.equal(contractProposal.statusCode, 200);
+  assert.equal(contractProposal.json().serviceOrderId, "1048");
+  assert.equal(contractProposal.json().commercialTerms.minimumTermMonths, 12);
+  assert.match(contractProposal.json().customerMessages.whatsappBody, /plano/i);
+
   const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
   assert.equal(timeline.statusCode, 200);
   assert.ok(timeline.json().total >= 1);

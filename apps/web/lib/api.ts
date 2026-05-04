@@ -92,6 +92,8 @@ export const icemaxApi = {
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/post-service-plan`, { token }),
   contractOpportunity: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-opportunity`, { token }),
+  contractProposal: (serviceOrderId: string, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-proposal`, { token }),
   customers: (token?: string) => apiRequest<ApiListResponse<unknown>>("/customers", { token }),
   createCustomer: (body: unknown, token?: string) => apiRequest<unknown>("/customers", { method: "POST", body, token }),
   equipment: (token?: string) => apiRequest<ApiListResponse<unknown>>("/equipment", { token }),

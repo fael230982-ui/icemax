@@ -256,3 +256,65 @@ export function createContractOpportunityFromServiceOrder(serviceOrderId: string
     ],
   };
 }
+
+export function createContractProposalFromServiceOrder(serviceOrderId: string) {
+  const opportunity = createContractOpportunityFromServiceOrder(serviceOrderId);
+
+  if (!opportunity) {
+    return null;
+  }
+
+  const annualValue = opportunity.recommendedPlan.estimatedAnnualValue;
+  const monthlyValue = opportunity.recommendedPlan.estimatedMonthlyValue;
+
+  return {
+    id: `proposal-${serviceOrderId}`,
+    serviceOrderId,
+    status: "draft_ready",
+    customer: opportunity.customer,
+    equipment: opportunity.equipment,
+    title: `Proposta de manutencao recorrente - ${opportunity.customer}`,
+    executiveSummary: `Com base no atendimento da OS ${serviceOrderId}, recomendamos o plano ${opportunity.recommendedPlan.name} para reduzir chamados emergenciais, manter o equipamento higienizado e aumentar a previsibilidade das visitas tecnicas.`,
+    plan: opportunity.recommendedPlan,
+    commercialTerms: {
+      monthlyValue,
+      annualValue,
+      billingModel: "mensal recorrente",
+      paymentDueDay: 10,
+      minimumTermMonths: 12,
+      renewal: "renovacao automatica mediante aceite do cliente",
+      cancellationNoticeDays: 30,
+    },
+    includedServices: opportunity.suggestedScope,
+    notIncludedServices: [
+      "Troca de compressor, placa eletronica, serpentina ou motor.",
+      "Pecas, gases refrigerantes e consumiveis fora do escopo preventivo.",
+      "Servicos eletricos, civis ou adequacoes estruturais.",
+      "Chamados causados por mau uso, oscilacao eletrica ou intervencao de terceiros.",
+    ],
+    serviceLevel: {
+      preventiveScheduling: "agenda programada conforme recorrencia contratada",
+      urgentSupport: "prioridade comercial para chamados corretivos",
+      reportDelivery: "relatorio tecnico enviado apos cada visita",
+      customerSignature: "assinatura digital no encerramento de cada OS",
+    },
+    customerMessages: {
+      emailSubject: `Proposta de contrato de manutencao - OS ${serviceOrderId}`,
+      emailBody: `Ola, identificamos uma oportunidade de reduzir paradas e aumentar a vida util do equipamento ${opportunity.equipment}. Segue proposta do plano ${opportunity.recommendedPlan.name}, com ${opportunity.recommendedPlan.visitsPerYear} visitas ao ano e investimento mensal estimado de R$ ${monthlyValue.toFixed(2)}.`,
+      whatsappBody: `Ola! Apos a OS ${serviceOrderId}, recomendamos o plano ${opportunity.recommendedPlan.name} para manter o equipamento ${opportunity.equipment} em dia. Valor mensal estimado: R$ ${monthlyValue.toFixed(2)}.`,
+    },
+    acceptanceFlow: [
+      "Enviar proposta para decisor do cliente.",
+      "Registrar aceite por assinatura digital ou confirmacao formal.",
+      "Criar contrato recorrente no sistema.",
+      "Gerar calendario preventivo anual.",
+      "Programar primeira visita preventiva.",
+    ],
+    internalChecklist: [
+      "Validar quantidade de equipamentos cobertos.",
+      "Confirmar endereco e janelas permitidas de atendimento.",
+      "Revisar condicoes de garantia e exclusoes.",
+      "Conferir margem antes do envio final.",
+    ],
+  };
+}

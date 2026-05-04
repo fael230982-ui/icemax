@@ -587,3 +587,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Proposta De Contrato
+
+- [x] Endpoint de proposta comercial por OS criado.
+- [x] Termos comerciais, escopo, exclusoes e SLA criados.
+- [x] Textos para e-mail e WhatsApp criados.
+- [x] Fluxo de aceite e checklist interno criados.
+- [x] Console web conectado a proposta.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

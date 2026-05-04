@@ -37,6 +37,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar oportunidade comercial por OS.
 - Teste automatizado cobre sugestao de contrato trimestral para urgencia.
 
+## 0.8.14 - Proposta De Contrato
+
+- Adicionado endpoint para gerar proposta comercial de contrato a partir da OS.
+- Proposta inclui valores estimados, escopo, exclusoes, SLA comercial e fluxo de aceite.
+- Criados textos prontos para e-mail e WhatsApp.
+- Console web passou a consultar proposta comercial por OS.
+- Teste automatizado cobre termos comerciais e mensagem ao cliente.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
