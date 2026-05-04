@@ -218,6 +218,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile cria payload para `POST /satisfaction-surveys`.
 - Fluxo prepara follow-up, historico e oportunidade de contrato apos a visita.
 
+## 0.8.39 - Pacote De Manual Tecnico Por OS
+
+- Adicionado endpoint `GET /service-orders/:id/manual-package`.
+- Pacote seleciona manual provavel pelo equipamento da OS.
+- Retorno inclui checklist de campo, notas de seguranca e cache offline sugerido.
+- Console web passou a consultar manual tecnico da OS.
+- Teste automatizado cobre selecao de manual Carrier para OS 1048.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

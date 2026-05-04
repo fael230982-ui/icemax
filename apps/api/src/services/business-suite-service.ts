@@ -1,4 +1,4 @@
-import { equipment, serviceContracts, serviceOrders, stock } from "../mock-data";
+import { equipment, manuals, serviceContracts, serviceOrders, stock } from "../mock-data";
 import { previewContractVisits } from "@icemax/shared";
 import { recommendMockDispatchAssignments } from "./dispatch-service";
 import type {
@@ -255,6 +255,70 @@ export function createServiceOrderWarrantyPackage(serviceOrderId: string) {
       "Emitir termo de garantia vinculado a OS.",
       "Enviar e-mail para a empresa com copia opcional ao cliente.",
       "Registrar aceite e envio na auditoria operacional.",
+    ],
+  };
+}
+
+export function createServiceOrderManualPackage(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const orderEquipment = order.equipment.toLowerCase();
+  const matches = manuals.filter((manual) => {
+    const brand = manual.brand.toLowerCase();
+    const model = manual.model.toLowerCase();
+    const type = manual.equipmentType.toLowerCase();
+
+    return orderEquipment.includes(brand) || orderEquipment.includes(model.split(" ")[0]) || orderEquipment.includes(type);
+  });
+  const selectedManual = matches[0] ?? manuals[0];
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: selectedManual ? "manual_package_ready" : "manual_missing",
+    selectedManual: selectedManual
+      ? {
+          id: selectedManual.id,
+          title: selectedManual.title,
+          brand: selectedManual.brand,
+          model: selectedManual.model,
+          equipmentType: selectedManual.equipmentType,
+          source: "mock_catalog",
+        }
+      : null,
+    alternatives: matches.slice(1).map((manual) => ({
+      id: manual.id,
+      title: manual.title,
+      brand: manual.brand,
+      model: manual.model,
+    })),
+    fieldChecklist: [
+      "Conferir modelo e capacidade na etiqueta do equipamento.",
+      "Validar tensao eletrica e disjuntor antes de intervir.",
+      "Consultar codigos de erro informados no display ou controle.",
+      "Registrar foto da placa de identificacao quando houver divergencia.",
+      "Anotar qualquer diferenca entre manual e equipamento instalado.",
+    ],
+    safetyNotes: [
+      "Desenergizar equipamento antes de acessar componentes internos.",
+      "Usar EPI adequado e bloquear religamento acidental.",
+      "Nao improvisar componente fora da especificacao do fabricante.",
+    ],
+    offlinePack: {
+      shouldCacheBeforeDispatch: true,
+      suggestedFileName: `${selectedManual?.brand ?? "manual"}-${serviceOrderId}.pdf`.toLowerCase().replace(/[^a-z0-9.-]/g, "-"),
+      cacheKey: `manual:${serviceOrderId}:${selectedManual?.id ?? "missing"}`,
+    },
+    nextActions: [
+      "Baixar manual no app antes da saida.",
+      "Confirmar modelo real por QR Code ou etiqueta.",
+      "Abrir checklist tecnico do fabricante durante o atendimento.",
+      "Sinalizar ausencia de manual para importacao posterior.",
     ],
   };
 }

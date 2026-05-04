@@ -542,6 +542,14 @@ test("business operations suite connects ten management flows", async () => {
   assert.ok(warrantyPackage.json().operationalChecks.length >= 5);
   assert.match(warrantyPackage.json().customerMessages.emailSubject, /garantia/i);
 
+  const manualPackage = await app.inject({ method: "GET", url: "/service-orders/1048/manual-package" });
+  assert.equal(manualPackage.statusCode, 200);
+  assert.equal(manualPackage.json().serviceOrderId, "1048");
+  assert.equal(manualPackage.json().status, "manual_package_ready");
+  assert.equal(manualPackage.json().selectedManual.brand, "Carrier");
+  assert.ok(manualPackage.json().fieldChecklist.length >= 5);
+  assert.equal(manualPackage.json().offlinePack.shouldCacheBeforeDispatch, true);
+
   const contractOpportunity = await app.inject({ method: "GET", url: "/service-orders/1048/contract-opportunity" });
   assert.equal(contractOpportunity.statusCode, 200);
   assert.equal(contractOpportunity.json().serviceOrderId, "1048");

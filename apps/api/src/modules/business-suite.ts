@@ -34,6 +34,7 @@ import {
   createPostServicePlan,
   createPurchaseRequest,
   createReleaseReadiness,
+  createServiceOrderManualPackage,
   createServiceOrderPartsReservation,
   createServiceOrderWarrantyPackage,
   createWarrantyTerm,
@@ -167,6 +168,17 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return warrantyPackage;
+  });
+
+  app.get("/service-orders/:id/manual-package", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const manualPackage = createServiceOrderManualPackage(id);
+
+    if (!manualPackage) {
+      return reply.code(404).send({ message: "OS nao encontrada para pacote de manual tecnico." });
+    }
+
+    return manualPackage;
   });
 
   app.get("/service-orders/:id/contract-opportunity", async (request, reply) => {

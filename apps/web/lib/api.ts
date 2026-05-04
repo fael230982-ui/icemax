@@ -92,6 +92,8 @@ export const icemaxApi = {
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/post-service-plan`, { token }),
   serviceOrderWarrantyPackage: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/warranty-package`, { token }),
+  serviceOrderManualPackage: (serviceOrderId: string, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/manual-package`, { token }),
   contractOpportunity: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-opportunity`, { token }),
   contractProposal: (serviceOrderId: string, token?: string) =>

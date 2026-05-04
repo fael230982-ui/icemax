@@ -993,3 +993,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Pacote De Manual Tecnico Por OS
+
+- [x] Endpoint `GET /service-orders/:id/manual-package` criado.
+- [x] Selecao de manual provavel por equipamento criada.
+- [x] Checklist tecnico, seguranca e cache offline incluidos.
+- [x] Console web conectado ao manual tecnico da OS.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
