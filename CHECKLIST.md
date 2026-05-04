@@ -1690,3 +1690,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Politica De Acesso Do Portal
+
+- [x] Endpoint de politica de acesso criado.
+- [x] Zonas publicas, tokenizadas e seguras definidas.
+- [x] Regras deny-by-default e auditoria sensivel incluidas.
+- [x] Portal web passou a exibir politica resumida.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

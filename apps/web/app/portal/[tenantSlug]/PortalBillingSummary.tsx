@@ -33,6 +33,19 @@ type AccessLinkState = {
   expiresInDays?: number;
 };
 
+type AccessPolicy = {
+  zones: Array<{
+    key: string;
+    label: string;
+    accessLevel: string;
+    identityRequirement: string;
+  }>;
+  enforcement: {
+    denyByDefaultInProduction: boolean;
+    auditEverySensitiveAccess: boolean;
+  };
+};
+
 const fallbackBilling: BillingSummary = {
   summary: {
     contracts: 0,
@@ -63,6 +76,7 @@ function statusLabel(status: string) {
 
 export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
   const [billing, setBilling] = useState<BillingSummary>(fallbackBilling);
+  const [policy, setPolicy] = useState<AccessPolicy | null>(null);
   const [source, setSource] = useState("carregando");
   const [accessLink, setAccessLink] = useState<AccessLinkState>({
     status: "idle",
@@ -83,6 +97,18 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
         if (active) {
           setBilling(fallbackBilling);
           setSource("indisponivel");
+        }
+      });
+
+    void icemaxApi.customerPortalAccessPolicy(tenantSlug)
+      .then((response) => {
+        if (active) {
+          setPolicy(response as AccessPolicy);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setPolicy(null);
         }
       });
 
@@ -152,6 +178,23 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
           {accessLink.status === "creating" ? "Preparando" : "Gerar link"}
         </button>
       </div>
+
+      {policy ? (
+        <div className="portalAccessPolicy">
+          <div>
+            <span>Politica de acesso</span>
+            <strong>{policy.enforcement.denyByDefaultInProduction ? "Negar por padrao" : "Permissivo"}</strong>
+            <small>{policy.enforcement.auditEverySensitiveAccess ? "auditoria sensivel ativa" : "auditoria pendente"}</small>
+          </div>
+          {policy.zones.map((zone) => (
+            <div key={zone.key}>
+              <span>{zone.label}</span>
+              <strong>{zone.accessLevel.replaceAll("_", " ")}</strong>
+              <small>{zone.identityRequirement}</small>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       <div className="portalBillingList">
         {billing.contracts.map((contract) => (

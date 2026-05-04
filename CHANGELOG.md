@@ -580,6 +580,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre token, expiracao, restricoes e seguranca.
 - Documentado fluxo futuro de validacao de identidade antes de dados reais.
 
+## 0.8.86 - Politica De Acesso Do Portal
+
+- Adicionado endpoint `GET /customer-portal/:tenantSlug/access-policy`.
+- Politica separa areas publicas, links opacos e area financeira segura.
+- Portal do cliente passou a mostrar zonas de acesso e requisitos de identidade.
+- Teste automatizado cobre deny-by-default, zona financeira e checks de release.
+- Documentado gate de acesso para evolucao segura em producao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

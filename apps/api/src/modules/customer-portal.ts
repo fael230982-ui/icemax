@@ -357,6 +357,52 @@ function createCustomerBillingAccessPackage(tenantSlug: string) {
   };
 }
 
+function buildCustomerPortalAccessPolicy(tenantSlug: string) {
+  return {
+    tenantSlug,
+    generatedAt: new Date().toISOString(),
+    zones: [
+      {
+        key: "service_order_request",
+        label: "Abertura de solicitacao",
+        accessLevel: "public_form",
+        allowedData: ["dados de contato", "endereco", "descricao do problema", "opt-in WhatsApp"],
+        blockedData: ["historico financeiro", "notas internas", "margem", "politica de cobranca"],
+        identityRequirement: "validacao posterior pela empresa",
+      },
+      {
+        key: "service_order_tracking",
+        label: "Acompanhamento da OS",
+        accessLevel: "opaque_link",
+        allowedData: ["status da OS", "linha do tempo", "ETA", "nome do tecnico"],
+        blockedData: ["telefone pessoal do tecnico", "notas internas", "dados financeiros"],
+        identityRequirement: "token com expiracao",
+      },
+      {
+        key: "billing_summary",
+        label: "Resumo financeiro",
+        accessLevel: "secure_customer_area",
+        allowedData: ["contratos", "proximos vencimentos", "equipamentos cobertos", "proximas visitas"],
+        blockedData: ["margem interna", "politica de cobranca", "score comercial", "observacoes administrativas"],
+        identityRequirement: "token + confirmacao de identidade em producao",
+      },
+    ],
+    enforcement: {
+      mockMode: true,
+      denyByDefaultInProduction: true,
+      auditEverySensitiveAccess: true,
+      hashTokensInDatabase: true,
+      rotateTokensOnCustomerRequest: true,
+    },
+    releaseChecks: [
+      { key: "token_hashing", status: "required_before_production", detail: "Persistir apenas hash do token." },
+      { key: "customer_identity", status: "required_before_production", detail: "Validar e-mail, telefone ou documento antes de dados financeiros." },
+      { key: "access_audit", status: "required_before_production", detail: "Auditar abertura, expiracao e revogacao." },
+      { key: "tenant_isolation", status: "required_before_production", detail: "Garantir que um tenant nunca leia dados de outro." },
+    ],
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -376,6 +422,12 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     const { tenantSlug } = request.params as { tenantSlug: string };
 
     return buildCustomerBillingSummary(tenantSlug);
+  });
+
+  app.get("/customer-portal/:tenantSlug/access-policy", async (request) => {
+    const { tenantSlug } = request.params as { tenantSlug: string };
+
+    return buildCustomerPortalAccessPolicy(tenantSlug);
   });
 
   app.post("/customer-portal/:tenantSlug/billing-access-link", async (request, reply) => {
