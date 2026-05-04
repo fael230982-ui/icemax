@@ -680,6 +680,93 @@ export function createMockFieldExecutionEvidencePackage(input: {
           "Resolver bloqueios de inicio de execucao.",
           "Nao permitir conclusao da OS.",
           "Acionar gestor para liberar override se necessario.",
+      ],
+  };
+}
+
+export function createMockFieldExecutionCloseoutPackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const evidence = createMockFieldExecutionEvidencePackage(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+
+  if (!evidence || !order) {
+    return null;
+  }
+
+  const requiredPending = evidence.evidenceItems.filter((item) => item.required && item.status === "pending");
+  const stockNeedsConfirmation = evidence.stockUsagePlan.length > 0;
+  const blockers = [
+    ...requiredPending.map((item) => ({
+      key: item.key,
+      label: item.label,
+      reason: "Evidencia obrigatoria ainda pendente no pacote de campo.",
+    })),
+    ...(stockNeedsConfirmation
+      ? [{
+          key: "stock_usage_confirmation",
+          label: "Confirmacao de pecas",
+          reason: "Baixa de estoque precisa ser confirmada antes da conclusao.",
+        }]
+      : []),
+  ];
+  const professionalReportDraft = [
+    `Atendimento tecnico realizado para ${order.customer} no equipamento ${order.equipment}.`,
+    `Foram previstas evidencias fotograficas, medicoes operacionais e validacao do escopo aprovado.`,
+    stockNeedsConfirmation
+      ? "O tecnico deve confirmar as pecas utilizadas para atualizar o estoque e compor o relatorio final."
+      : "Nao ha peca obrigatoria prevista para baixa neste atendimento.",
+    "A conclusao deve ser assinada pelo responsavel apos revisao do relatorio e anexos.",
+  ].join(" ");
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: evidence.quoteId,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: evidence.technician,
+    status: blockers.length ? "field_closeout_blocked" : "field_closeout_ready",
+    canRequestCustomerSignature: blockers.length === 0,
+    evidence,
+    blockers,
+    completionChecklist: [
+      { key: "required_photos", label: "Fotos obrigatorias anexadas", status: blockers.some((item) => item.key.includes("photo")) ? "blocked" : "ready" },
+      { key: "technical_measurements", label: "Medicoes tecnicas registradas", status: blockers.some((item) => item.key === "measurements") ? "blocked" : "ready" },
+      { key: "stock_usage", label: "Pecas conferidas e baixadas", status: stockNeedsConfirmation ? "attention" : "ready" },
+      { key: "professional_report", label: "Relatorio tecnico revisado", status: "draft_ready" },
+      { key: "customer_signature", label: "Assinatura do cliente", status: blockers.length ? "locked" : "ready" },
+    ],
+    reportDraft: {
+      source: "local_professional_report_draft",
+      requiresAiReview: true,
+      text: professionalReportDraft,
+      recommendedTone: "profissional, claro e sem termos informais",
+    },
+    customerSignatureGate: {
+      requiresResponsibleName: true,
+      requiresDocumentOrRole: true,
+      requiresEmailCopyDecision: true,
+      emailCopyOptional: true,
+      lockedUntilBlockersResolved: blockers.length > 0,
+    },
+    audit: {
+      event: "field.execution_closeout_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `field:${order.id}:${evidence.technician.technicianUserId}:execution-closeout`,
+    },
+    nextActions: blockers.length
+      ? [
+          "Concluir evidencias obrigatorias antes de solicitar assinatura.",
+          "Confirmar uso de pecas e baixa no estoque.",
+          "Revisar o texto tecnico antes de apresentar ao cliente.",
+        ]
+      : [
+          "Enviar relatorio para revisao final.",
+          "Solicitar assinatura do responsavel.",
+          "Preparar e-mail de conclusao para empresa e cliente.",
         ],
   };
 }

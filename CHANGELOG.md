@@ -436,6 +436,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Evidencias campo`.
 - Teste automatizado cobre pacote de evidencias.
 
+## 0.8.68 - Fechamento De Execucao Em Campo
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/execution-closeout`.
+- Pacote inclui bloqueios, checklist de conclusao, rascunho de relatorio e gate de assinatura.
+- Assinatura fica bloqueada enquanto houver evidencia obrigatoria ou baixa de estoque pendente.
+- Painel web ganhou acao `Fechamento campo`.
+- Teste automatizado cobre pacote de fechamento tecnico.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

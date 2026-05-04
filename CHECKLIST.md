@@ -1413,3 +1413,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Fechamento De Execucao Em Campo
+
+- [x] Endpoint de fechamento tecnico criado.
+- [x] Bloqueios de evidencias e estoque incluidos.
+- [x] Checklist de conclusao e gate de assinatura incluidos.
+- [x] Rascunho profissional de relatorio preparado.
+- [x] Console web atualizado com acao de fechamento.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
