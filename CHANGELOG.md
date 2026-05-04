@@ -532,6 +532,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre o contrato da esteira e ordenacao por score.
 - Documentado o fluxo comercial pos-OS para contratos recorrentes.
 
+## 0.8.80 - Capacidade Da Agenda Recorrente
+
+- Adicionado endpoint `GET /contracts/capacity-board`.
+- Board calcula carga semanal por visitas e equipamentos cobertos.
+- Painel web ganhou secao de capacidade da agenda recorrente.
+- Teste automatizado cobre capacidade, semanas e governanca.
+- Documentado uso operacional para preventivas, terceirizados e novas vendas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

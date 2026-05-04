@@ -65,6 +65,63 @@ function summarizeCalendar(items: MaintenanceCalendarItem[]) {
   };
 }
 
+function buildCapacityBoard(calendar: { generatedAt: string; summary: ReturnType<typeof summarizeCalendar>; data: MaintenanceCalendarItem[] }) {
+  const weeks = new Map<string, MaintenanceCalendarItem[]>();
+
+  calendar.data.forEach((visit) => {
+    const date = new Date(`${visit.expectedDate}T00:00:00.000Z`);
+    const weekStart = new Date(date);
+    weekStart.setUTCDate(date.getUTCDate() - date.getUTCDay() + 1);
+    const key = weekStart.toISOString().slice(0, 10);
+    weeks.set(key, [...(weeks.get(key) ?? []), visit]);
+  });
+
+  const weeklyCapacity = 8;
+  const weeklyEquipmentCapacity = 45;
+  const weeksData = [...weeks.entries()].map(([weekStart, visits]) => {
+    const coveredEquipment = visits.reduce((sum, visit) => sum + visit.coveredEquipment, 0);
+    const loadPercent = Math.round(Math.max((visits.length / weeklyCapacity) * 100, (coveredEquipment / weeklyEquipmentCapacity) * 100));
+    const status = loadPercent >= 100 ? "over_capacity" : loadPercent >= 75 ? "attention" : "healthy";
+
+    return {
+      weekStart,
+      visits: visits.length,
+      coveredEquipment,
+      loadPercent,
+      status,
+      contracts: [...new Set(visits.map((visit) => visit.contractId))].length,
+      recommendedAction: status === "over_capacity"
+        ? "Rebalancear visitas, abrir janelas extras ou acionar tecnico terceirizado."
+        : status === "attention"
+          ? "Reservar capacidade e confirmar janelas com antecedencia."
+          : "Capacidade saudavel para manter agenda preventiva.",
+    };
+  }).sort((a, b) => a.weekStart.localeCompare(b.weekStart));
+
+  return {
+    generatedAt: calendar.generatedAt,
+    summary: {
+      ...calendar.summary,
+      weeks: weeksData.length,
+      healthyWeeks: weeksData.filter((week) => week.status === "healthy").length,
+      attentionWeeks: weeksData.filter((week) => week.status === "attention").length,
+      overCapacityWeeks: weeksData.filter((week) => week.status === "over_capacity").length,
+      weeklyCapacity,
+      weeklyEquipmentCapacity,
+    },
+    governance: {
+      auditEvent: "contracts.capacity_board_viewed",
+      capacityModel: "visits_and_equipment_per_week_mock",
+      supportsOutsourcedTechnicians: true,
+      requiresHumanReviewBeforeReschedule: true,
+    },
+    weeks: weeksData,
+    criticalVisits: calendar.data
+      .filter((visit) => visit.status === "overdue" || visit.status === "due_soon")
+      .slice(0, 8),
+  };
+}
+
 export async function getMockContractMaintenanceCalendar(params: { occurrences?: number; fromDate?: string }) {
   const today = new Date(`${(params.fromDate ?? new Date().toISOString()).slice(0, 10)}T00:00:00.000Z`);
   const occurrences = params.occurrences ?? 4;
@@ -95,6 +152,10 @@ export async function getMockContractMaintenanceCalendar(params: { occurrences?:
     summary: summarizeCalendar(data),
     data,
   };
+}
+
+export async function getMockContractCapacityBoard(params: { occurrences?: number; fromDate?: string }) {
+  return buildCapacityBoard(await getMockContractMaintenanceCalendar(params));
 }
 
 export async function getMockContract(id: string) {
@@ -193,6 +254,10 @@ export async function getPrismaContractMaintenanceCalendar(tenantId: string, par
     summary: summarizeCalendar(data),
     data,
   };
+}
+
+export async function getPrismaContractCapacityBoard(tenantId: string, params: { occurrences?: number; fromDate?: string }) {
+  return buildCapacityBoard(await getPrismaContractMaintenanceCalendar(tenantId, params));
 }
 
 export async function getPrismaContract(tenantId: string, id: string) {

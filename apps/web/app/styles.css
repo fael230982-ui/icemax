@@ -805,6 +805,117 @@ h2 {
   line-height: 1.35;
 }
 
+.capacityPanel {
+  display: grid;
+  gap: 14px;
+}
+
+.capacitySummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.capacitySummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 84px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.capacitySummary span,
+.capacityControls span,
+.capacityWeeks span,
+.capacityWeeks small,
+.capacityCritical span,
+.capacityCritical small {
+  color: var(--muted);
+}
+
+.capacitySummary strong {
+  font-size: 23px;
+}
+
+.capacitySummary .attention {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.capacityControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(260px, auto);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.capacityControls div {
+  display: grid;
+  gap: 6px;
+}
+
+.capacityControls label {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  align-items: center;
+  font-weight: 800;
+}
+
+.capacityControls input {
+  min-height: 18px;
+}
+
+.capacityWeeks,
+.capacityCritical {
+  display: grid;
+  gap: 10px;
+}
+
+.capacityWeeks article {
+  display: grid;
+  grid-template-columns: 0.8fr 0.8fr 1.4fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.capacityCritical {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.capacityCritical article {
+  display: grid;
+  gap: 6px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.capacityWeeks strong,
+.capacityWeeks small,
+.capacityWeeks span,
+.capacityCritical strong,
+.capacityCritical small,
+.capacityCritical span {
+  display: block;
+}
+
+.capacityWeeks strong,
+.capacityWeeks small {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1883,7 +1994,11 @@ dd {
   .postServiceTasks,
   .pipelineSummary,
   .pipelineControls,
-  .pipelineRows article {
+  .pipelineRows article,
+  .capacitySummary,
+  .capacityControls,
+  .capacityWeeks article,
+  .capacityCritical {
     grid-template-columns: 1fr;
   }
 }

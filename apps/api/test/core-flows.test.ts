@@ -119,6 +119,16 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(calendar.json().summary.totalVisits, 6);
   assert.equal(calendar.json().data[0].status, "due_soon");
 
+  const capacityBoard = await app.inject({
+    method: "GET",
+    url: "/contracts/capacity-board?occurrences=4&fromDate=2026-05-03",
+  });
+  assert.equal(capacityBoard.statusCode, 200);
+  assert.equal(capacityBoard.json().governance.auditEvent, "contracts.capacity_board_viewed");
+  assert.ok(capacityBoard.json().summary.totalVisits >= 6);
+  assert.ok(capacityBoard.json().weeks.length >= 1);
+  assert.ok(capacityBoard.json().summary.weeklyCapacity > 0);
+
   const billingPlan = await app.inject({
     method: "GET",
     url: "/contracts/contract-001/billing-plan",

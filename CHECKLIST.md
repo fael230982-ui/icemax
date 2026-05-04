@@ -1601,3 +1601,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Capacidade Da Agenda Recorrente
+
+- [x] Endpoint de capacidade criado.
+- [x] Carga semanal por visitas e equipamentos incluida.
+- [x] Visitas criticas incluidas.
+- [x] Painel web de capacidade criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
