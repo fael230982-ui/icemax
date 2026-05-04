@@ -979,3 +979,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Pos-Atendimento Offline No Mobile
+
+- [x] Secao mobile de pos-atendimento criada.
+- [x] Cards de pesquisa, follow-up, contrato e historico incluidos.
+- [x] Acao offline de pesquisa de satisfacao criada.
+- [x] SyncPanel atualizado com botao de pesquisa do cliente.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

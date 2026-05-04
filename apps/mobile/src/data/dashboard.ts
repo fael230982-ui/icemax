@@ -48,6 +48,13 @@ export const warrantyPackage = [
   { title: "Envio", detail: "Termo sera enviado por e-mail com copia opcional ao cliente" },
 ];
 
+export const postService = [
+  { title: "Pesquisa", detail: "Cliente avalia atendimento apos assinatura da OS" },
+  { title: "Follow-up", detail: "Retorno em 2 dias para confirmar estabilidade do equipamento" },
+  { title: "Contrato", detail: "Verificar oportunidade de preventiva recorrente" },
+  { title: "Historico", detail: "Atualizar ficha do cliente e do equipamento" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

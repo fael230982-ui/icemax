@@ -192,3 +192,23 @@ export function createWarrantyPresentedAction(serviceOrderId: string, customerId
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createSatisfactionSurveyAction(serviceOrderId: string, customerId: string, score: number) {
+  return {
+    id: offlineId("survey"),
+    label: `Pesquisa OS ${serviceOrderId}`,
+    method: "POST",
+    path: "/satisfaction-surveys",
+    payload: {
+      serviceOrderId,
+      customerId,
+      score,
+      comment: score >= 9 ? "Cliente satisfeito com o atendimento." : "Cliente solicitou acompanhamento do gestor.",
+      mobileAck: {
+        answeredAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

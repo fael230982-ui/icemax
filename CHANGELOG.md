@@ -211,6 +211,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile cria payload para `POST /warranty-terms`.
 - Fluxo aproxima tecnico, assinatura, termo de garantia e envio posterior.
 
+## 0.8.38 - Pos-Atendimento Offline No Mobile
+
+- App mobile passou a exibir secao de pos-atendimento.
+- Modo offline ganhou acao de pesquisa de satisfacao do cliente.
+- Servico mobile cria payload para `POST /satisfaction-surveys`.
+- Fluxo prepara follow-up, historico e oportunidade de contrato apos a visita.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

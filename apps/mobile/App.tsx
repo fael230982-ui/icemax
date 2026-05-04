@@ -15,6 +15,7 @@ import {
   createPartsLoadAckAction,
   createPartUsageAction,
   createPhotoEvidenceAction,
+  createSatisfactionSurveyAction,
   createVisitPreparationAckAction,
   createWarrantyPresentedAction,
   OfflineAction,
@@ -23,6 +24,7 @@ import {
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
 import { warrantyPackage } from "./src/data/dashboard";
+import { postService } from "./src/data/dashboard";
 
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
@@ -69,6 +71,12 @@ export default function App() {
     setSyncStatus("Garantia apresentada ao cliente salva offline.");
   }
 
+  function addSatisfactionSurvey() {
+    const action = createSatisfactionSurveyAction("1048", "customer-001", 9);
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Pesquisa de satisfacao salva offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -110,6 +118,7 @@ export default function App() {
             onAddVisitPreparation={addVisitPreparationAck}
             onAddPartsLoad={addPartsLoadAck}
             onAddWarranty={addWarrantyPresented}
+            onAddSurvey={addSatisfactionSurvey}
             onSync={syncPending}
           />
         </Section>
@@ -133,6 +142,14 @@ export default function App() {
         <Section title="Garantia da OS">
           <View style={styles.grid}>
             {warrantyPackage.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Pos-atendimento">
+          <View style={styles.grid}>
+            {postService.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>
