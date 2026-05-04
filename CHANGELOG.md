@@ -572,6 +572,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre resumo financeiro publico e privacidade.
 - Documentado limite de seguranca para identidade do cliente em producao.
 
+## 0.8.85 - Acesso Seguro Financeiro Do Cliente
+
+- Adicionado endpoint `POST /customer-portal/:tenantSlug/billing-access-link`.
+- Criado pacote de acesso com token mock, expiracao, escopo, canais e restricoes.
+- Portal do cliente ganhou acao para preparar link financeiro seguro.
+- Teste automatizado cobre token, expiracao, restricoes e seguranca.
+- Documentado fluxo futuro de validacao de identidade antes de dados reais.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

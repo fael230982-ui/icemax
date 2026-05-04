@@ -687,6 +687,16 @@ test("customer portal can request optional service order", async () => {
   assert.ok(billingSummary.json().summary.monthlyTotal > 0);
   assert.ok(billingSummary.json().contracts.length >= 3);
 
+  const billingAccess = await app.inject({
+    method: "POST",
+    url: "/customer-portal/icemax/billing-access-link",
+  });
+  assert.equal(billingAccess.statusCode, 201);
+  assert.match(billingAccess.json().token, /^billing_icemax_/);
+  assert.equal(billingAccess.json().expiresInDays, 3);
+  assert.equal(billingAccess.json().security.requiresCustomerIdentityInProduction, true);
+  assert.ok(billingAccess.json().restrictions.some((item: string) => item.includes("margem interna")));
+
   const order = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders",

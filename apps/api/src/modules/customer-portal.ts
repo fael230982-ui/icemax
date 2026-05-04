@@ -291,6 +291,72 @@ function buildCustomerBillingSummary(tenantSlug: string) {
   };
 }
 
+function createCustomerBillingAccessPackage(tenantSlug: string) {
+  const issuedAt = new Date();
+  const expiresAt = new Date(issuedAt);
+  expiresAt.setDate(expiresAt.getDate() + 3);
+  const token = `billing_${tenantSlug}_${issuedAt.getTime()}`;
+  const publicUrl = `https://app.icemax.local/portal/${tenantSlug}?billingToken=${token}`;
+  const billingSummary = buildCustomerBillingSummary(tenantSlug);
+
+  return {
+    tenantSlug,
+    status: "billing_access_package_ready",
+    token,
+    publicUrl,
+    issuedAt: issuedAt.toISOString(),
+    expiresAt: expiresAt.toISOString(),
+    expiresInDays: 3,
+    tenant: billingSummary.tenant,
+    accessScope: [
+      "contracts_summary",
+      "next_due_dates",
+      "covered_equipment",
+      "next_visits",
+      "customer_actions",
+    ],
+    restrictions: [
+      "Nao exibe margem interna.",
+      "Nao exibe politicas internas de cobranca.",
+      "Nao exibe observacoes administrativas.",
+      "Nao permite alteracao de contrato ou pagamento real.",
+    ],
+    channels: [
+      {
+        channel: "email",
+        recipient: "cliente@local.dev",
+        subject: "Acesso ao resumo do contrato",
+        template: "customer_billing_access_email",
+        message: `Acesse o resumo dos seus contratos pelo link ${publicUrl}.`,
+      },
+      {
+        channel: "whatsapp",
+        recipient: "+5500000000000",
+        template: "customer_billing_access_whatsapp",
+        message: `Ola! Seu resumo de contrato esta disponivel por 3 dias: ${publicUrl}`,
+      },
+    ],
+    security: {
+      tokenType: "opaque_mock",
+      requiresCustomerIdentityInProduction: true,
+      expiresAutomatically: true,
+      canBeRevoked: true,
+      auditEveryAccess: true,
+    },
+    audit: {
+      event: "customer_portal.billing_access_link_created",
+      entity: "customer_portal",
+      entityId: tenantSlug,
+    },
+    nextActions: [
+      "Persistir token no banco real com hash, expiracao e tenant.",
+      "Exigir validacao de identidade antes de exibir dados reais.",
+      "Enviar link pela fila oficial de comunicacao quando provedores estiverem configurados.",
+      "Registrar abertura, expiracao e revogacao do link em auditoria.",
+    ],
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -310,6 +376,25 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     const { tenantSlug } = request.params as { tenantSlug: string };
 
     return buildCustomerBillingSummary(tenantSlug);
+  });
+
+  app.post("/customer-portal/:tenantSlug/billing-access-link", async (request, reply) => {
+    const { tenantSlug } = request.params as { tenantSlug: string };
+    const accessPackage = createCustomerBillingAccessPackage(tenantSlug);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: accessPackage.audit.event,
+      entity: accessPackage.audit.entity,
+      entityId: accessPackage.audit.entityId,
+      metadata: {
+        expiresAt: accessPackage.expiresAt,
+        accessScope: accessPackage.accessScope,
+        channels: accessPackage.channels.map((item) => item.channel),
+      },
+    });
+
+    return reply.code(201).send(accessPackage);
   });
 
   app.post("/customer-portal/service-orders", async (request, reply) => {

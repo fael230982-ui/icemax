@@ -1800,6 +1800,39 @@ dd {
   line-height: 1.45;
 }
 
+.portalBillingAccess {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.portalBillingAccess div,
+.portalBillingAccess span,
+.portalBillingAccess small {
+  display: grid;
+  gap: 4px;
+}
+
+.portalBillingAccess span,
+.portalBillingAccess small {
+  color: var(--muted);
+}
+
+.portalBillingAccess.ready {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+
+.portalBillingAccess.error {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
 .quotePage {
   min-height: 100vh;
   display: grid;
@@ -2105,6 +2138,7 @@ dd {
   .portalLayout,
   .portalFormGrid,
   .portalBillingGrid,
+  .portalBillingAccess,
   .portalBillingList article,
   .quoteHero,
   .quoteLayout,

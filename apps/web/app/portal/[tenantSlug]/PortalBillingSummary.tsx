@@ -26,6 +26,13 @@ type BillingSummary = {
   contracts: BillingContract[];
 };
 
+type AccessLinkState = {
+  status: "idle" | "creating" | "ready" | "error";
+  message: string;
+  publicUrl?: string;
+  expiresInDays?: number;
+};
+
 const fallbackBilling: BillingSummary = {
   summary: {
     contracts: 0,
@@ -57,6 +64,10 @@ function statusLabel(status: string) {
 export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
   const [billing, setBilling] = useState<BillingSummary>(fallbackBilling);
   const [source, setSource] = useState("carregando");
+  const [accessLink, setAccessLink] = useState<AccessLinkState>({
+    status: "idle",
+    message: "Prepare um link seguro para consultar este resumo depois.",
+  });
 
   useEffect(() => {
     let active = true;
@@ -79,6 +90,32 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
       active = false;
     };
   }, [tenantSlug]);
+
+  async function createAccessLink() {
+    setAccessLink({
+      status: "creating",
+      message: "Preparando link seguro...",
+    });
+
+    try {
+      const response = await icemaxApi.createCustomerPortalBillingAccessLink(tenantSlug) as {
+        publicUrl?: string;
+        expiresInDays?: number;
+      };
+
+      setAccessLink({
+        status: "ready",
+        message: "Link preparado para envio pelos canais oficiais.",
+        publicUrl: response.publicUrl,
+        expiresInDays: response.expiresInDays,
+      });
+    } catch {
+      setAccessLink({
+        status: "error",
+        message: "Nao foi possivel preparar o link agora.",
+      });
+    }
+  }
 
   return (
     <div className="portalBilling">
@@ -103,6 +140,17 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
           <span>Equipamentos</span>
           <strong>{billing.summary.coveredEquipment}</strong>
         </article>
+      </div>
+
+      <div className={`portalBillingAccess ${accessLink.status}`}>
+        <div>
+          <strong>Acesso seguro</strong>
+          <span>{accessLink.message}</span>
+          {accessLink.publicUrl ? <small>Expira em {accessLink.expiresInDays} dias</small> : null}
+        </div>
+        <button type="button" onClick={createAccessLink} disabled={accessLink.status === "creating"}>
+          {accessLink.status === "creating" ? "Preparando" : "Gerar link"}
+        </button>
       </div>
 
       <div className="portalBillingList">
