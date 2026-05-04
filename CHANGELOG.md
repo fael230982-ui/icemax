@@ -412,6 +412,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre acompanhamento de rota mockado.
 - Fluxo permanece independente de provedor real de mapas nesta fase.
 
+## 0.8.65 - Pacote De Chegada E Check-In
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/arrival-checkin`.
+- Pacote valida proximidade, ETA, status de check-in e portoes de checklist.
+- Painel web ganhou acao `Pacote chegada`.
+- Teste automatizado cobre pacote de chegada.
+- Fluxo prepara abertura segura da OS em campo.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

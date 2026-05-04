@@ -466,6 +466,76 @@ export function createMockDispatchRouteTrackingSnapshot(input: {
   };
 }
 
+export function createMockDispatchArrivalCheckInPackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const tracking = createMockDispatchRouteTrackingSnapshot(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const technician = technicianLocations.find((item) => item.technicianUserId === input.technicianUserId) ?? technicianLocations[0];
+  const stop = serviceOrderStops.find((item) => item.serviceOrderId === input.serviceOrderId);
+
+  if (!tracking || !order || !stop) {
+    return null;
+  }
+
+  const distanceToCustomerKm = Number(distanceKm(technician, stop).toFixed(2));
+  const withinCheckInRadius = distanceToCustomerKm <= 0.3;
+  const canCheckIn = withinCheckInRadius || tracking.eta.remainingMinutes <= 5;
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: input.quoteId ?? tracking.quoteId,
+    customer: order.customer,
+    technician: tracking.technician,
+    status: canCheckIn ? "arrival_checkin_ready" : "arrival_checkin_waiting_route",
+    canCheckIn,
+    validation: {
+      distanceToCustomerKm,
+      acceptedRadiusKm: 0.3,
+      etaMinutes: tracking.eta.remainingMinutes,
+      locationSource: "mock_mobile_location",
+    },
+    checklistGate: [
+      { key: "gps_position", label: "Posicao do tecnico", status: canCheckIn ? "ok" : "attention" },
+      { key: "customer_site", label: "Local do cliente", status: canCheckIn ? "ok" : "pending" },
+      { key: "photos_before", label: "Fotos antes da intervencao", status: "pending" },
+      { key: "safety", label: "Seguranca antes da abertura do equipamento", status: "pending" },
+      { key: "scope", label: "Escopo aprovado conferido", status: input.quoteId ? "ok" : "attention" },
+    ],
+    mobileActions: [
+      "Registrar check-in com localizacao.",
+      "Capturar foto inicial do equipamento.",
+      "Conferir QR Code ou identificacao do equipamento.",
+      "Abrir checklist tecnico antes de intervir.",
+    ],
+    managerVisibility: {
+      notifyArrival: canCheckIn,
+      keepTrackingOpen: !canCheckIn,
+      customerCanSeeArrival: canCheckIn,
+      requiresManualOverride: !canCheckIn,
+    },
+    audit: {
+      event: "dispatch.arrival_checkin_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `dispatch:${order.id}:${tracking.technician.technicianUserId}:arrival-checkin`,
+    },
+    nextActions: canCheckIn
+      ? [
+          "Liberar check-in no app do tecnico.",
+          "Abrir checklist da OS.",
+          "Manter rastreio ate o inicio da execucao.",
+        ]
+      : [
+          "Aguardar aproximacao do tecnico.",
+          "Permitir override do gestor somente com justificativa.",
+          "Manter cliente informado se houver atraso.",
+        ],
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 
