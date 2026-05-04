@@ -212,3 +212,22 @@ export function createSatisfactionSurveyAction(serviceOrderId: string, customerI
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createManualConsultedAction(serviceOrderId: string, manualId: string) {
+  return {
+    id: offlineId("manual"),
+    label: `Manual consultado OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Manual tecnico ${manualId} consultado e mantido em cache offline antes da execucao.`,
+      source: "mobile_offline_manual",
+      mobileAck: {
+        manualId,
+        cachedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

@@ -55,6 +55,13 @@ export const postService = [
   { title: "Historico", detail: "Atualizar ficha do cliente e do equipamento" },
 ];
 
+export const manualPackage = [
+  { title: "Carrier 60k", detail: "Manual provavel: Carrier Piso Teto 60.000 BTUs" },
+  { title: "Cache", detail: "Baixar manual antes do deslocamento para consulta offline" },
+  { title: "Seguranca", detail: "Desenergizar equipamento antes de acessar componentes internos" },
+  { title: "Etiqueta", detail: "Conferir modelo real no QR Code ou placa de identificacao" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

@@ -226,6 +226,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar manual tecnico da OS.
 - Teste automatizado cobre selecao de manual Carrier para OS 1048.
 
+## 0.8.40 - Manual Tecnico Offline No Mobile
+
+- App mobile passou a exibir secao de manual tecnico da OS.
+- Modo offline ganhou acao de manual consultado e cacheado.
+- Servico mobile cria nota tecnica em `POST /service-orders/:id/notes`.
+- Fluxo registra consulta ao manual antes da execucao em campo.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

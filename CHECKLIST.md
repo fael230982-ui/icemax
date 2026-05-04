@@ -1008,3 +1008,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Manual Tecnico Offline No Mobile
+
+- [x] Secao mobile de manual tecnico criada.
+- [x] Cards de manual, cache, seguranca e etiqueta incluidos.
+- [x] Acao offline de manual consultado criada.
+- [x] SyncPanel atualizado com botao de manual consultado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
