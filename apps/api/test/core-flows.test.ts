@@ -711,6 +711,15 @@ test("customer portal can request optional service order", async () => {
   assert.ok(accessPolicy.json().zones.some((zone: { key: string }) => zone.key === "billing_summary"));
   assert.ok(accessPolicy.json().releaseChecks.length >= 4);
 
+  const sharingPolicy = await app.inject({
+    method: "GET",
+    url: "/customer-portal/icemax/external-sharing-policy",
+  });
+  assert.equal(sharingPolicy.statusCode, 200);
+  assert.equal(sharingPolicy.json().governance.auditEvent, "customer_portal.external_sharing_policy_viewed");
+  assert.equal(sharingPolicy.json().governance.requiresEvidenceManifest, true);
+  assert.ok(sharingPolicy.json().summary.sensitivePayloadsBlockedOnPublicLink >= 3);
+
   const billingAccess = await app.inject({
     method: "POST",
     url: "/customer-portal/icemax/billing-access-link",

@@ -403,6 +403,66 @@ function buildCustomerPortalAccessPolicy(tenantSlug: string) {
   };
 }
 
+function buildCustomerExternalSharingPolicy(tenantSlug: string) {
+  const channels = [
+    {
+      channel: "email",
+      allowed: true,
+      allowedPayloads: ["relatorio tecnico", "termo de garantia", "comprovante de conclusao"],
+      requiredControls: ["fila auditada", "destinatario validado", "copia opcional ao cliente"],
+      blockedPayloads: ["notas internas", "margem", "telefone pessoal do tecnico"],
+    },
+    {
+      channel: "portal",
+      allowed: true,
+      allowedPayloads: ["status da OS", "historico liberado", "documentos aprovados"],
+      requiredControls: ["token expiravel", "auditoria de acesso", "escopo por cliente"],
+      blockedPayloads: ["financeiro sem identidade confirmada", "documentos sem antivirus"],
+    },
+    {
+      channel: "public_link",
+      allowed: false,
+      allowedPayloads: ["acompanhamento basico da OS"],
+      requiredControls: ["token opaco", "expiracao curta", "revogacao"],
+      blockedPayloads: ["assinatura", "relatorio completo", "fotos", "dados financeiros"],
+    },
+    {
+      channel: "whatsapp",
+      allowed: true,
+      allowedPayloads: ["link de acompanhamento", "confirmacao de agenda", "aviso de conclusao"],
+      requiredControls: ["opt-in", "template aprovado", "registro de envio"],
+      blockedPayloads: ["anexo sensivel direto", "cobranca detalhada sem identidade"],
+    },
+  ];
+
+  return {
+    tenantSlug,
+    generatedAt: new Date().toISOString(),
+    status: "sharing_policy_ready",
+    defaultDecision: "deny_sensitive_until_verified",
+    channels,
+    evidenceRules: [
+      "Fotos, assinaturas e plantas exigem storage privado antes de compartilhamento externo.",
+      "Relatorio final so deve sair apos manifesto de evidencias sem bloqueios obrigatorios.",
+      "Dados financeiros exigem confirmacao de identidade do cliente em producao.",
+      "Todo envio externo deve registrar tenantId, entidade, destinatario, canal e provedor.",
+    ],
+    summary: {
+      channels: channels.length,
+      allowedChannels: channels.filter((item) => item.allowed).length,
+      blockedChannels: channels.filter((item) => !item.allowed).length,
+      sensitivePayloadsBlockedOnPublicLink: channels.find((item) => item.channel === "public_link")?.blockedPayloads.length ?? 0,
+    },
+    governance: {
+      auditEvent: "customer_portal.external_sharing_policy_viewed",
+      denyByDefault: true,
+      requiresEvidenceManifest: true,
+      requiresPrivateStorageForSensitiveFiles: true,
+      requiresProviderReceipt: true,
+    },
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -428,6 +488,12 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     const { tenantSlug } = request.params as { tenantSlug: string };
 
     return buildCustomerPortalAccessPolicy(tenantSlug);
+  });
+
+  app.get("/customer-portal/:tenantSlug/external-sharing-policy", async (request) => {
+    const { tenantSlug } = request.params as { tenantSlug: string };
+
+    return buildCustomerExternalSharingPolicy(tenantSlug);
   });
 
   app.post("/customer-portal/:tenantSlug/billing-access-link", async (request, reply) => {

@@ -1780,3 +1780,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Politica De Compartilhamento Externo
+
+- [x] Endpoint de external sharing policy criado.
+- [x] Canais e cargas permitidas/bloqueadas definidos.
+- [x] Regras de evidencias, storage privado e link publico incluidas.
+- [x] Homologacao web conectada a politica.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

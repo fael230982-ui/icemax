@@ -377,6 +377,18 @@ Cria cliente no tenant atual.
 
 Retorna configuracao publica minima do portal do cliente para a empresa whitelabel.
 
+### GET /customer-portal/:tenantSlug/access-policy
+
+Retorna politica de acesso do portal, zonas publicas, zonas tokenizadas, dados permitidos/bloqueados e checks de producao.
+
+### GET /customer-portal/:tenantSlug/external-sharing-policy
+
+Retorna politica de compartilhamento externo por canal, cargas permitidas, cargas bloqueadas, controles obrigatorios e governanca.
+
+### POST /customer-portal/:tenantSlug/billing-access-link
+
+Gera pacote de link seguro para acesso do cliente ao resumo de contratos e vencimentos.
+
 ### POST /customer-portal/service-orders
 
 Permite que o cliente abra uma OS opcionalmente, sem obrigar uso do app. A solicitacao entra como `open` para triagem da empresa.

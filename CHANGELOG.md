@@ -628,6 +628,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console operacional passou a consultar manifesto junto da revisao de conclusao da OS.
 - Teste automatizado cobre governanca, storage privado e total de evidencias.
 
+## 0.8.92 - Politica De Compartilhamento Externo
+
+- Adicionado endpoint `GET /customer-portal/:tenantSlug/external-sharing-policy`.
+- Politica define canais permitidos, cargas bloqueadas e controles por e-mail, portal, link publico e WhatsApp.
+- Homologacao web passou a consultar a politica junto dos demais checks.
+- Teste automatizado cobre governanca, manifesto de evidencias e bloqueio de dados sensiveis em link publico.
+- Documentadas regras de compartilhamento externo para relatorios, fotos, assinaturas e dados financeiros.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -517,6 +517,7 @@ export function OperationsConsole() {
         icemaxApi.observabilitySummary(token || undefined),
         icemaxApi.demoDataSnapshot(token || undefined),
         icemaxApi.storageReadiness(token || undefined),
+        icemaxApi.customerPortalExternalSharingPolicy("icemax"),
       ]);
 
       return { checks: results.length, results };
