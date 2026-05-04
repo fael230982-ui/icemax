@@ -34,7 +34,7 @@ const requiredScripts = [
 const requiredChecklistTerms = [
   "Registro De Governanca GitHub E Publicacao",
   "Registro De Protecao Contra Segredos",
-  "Push inicial pendente",
+  "Push inicial enviado ao GitHub",
 ];
 
 const requiredEnvNames = [
@@ -141,4 +141,3 @@ for (const check of checks) {
 if (summary.fail > 0) {
   process.exit(1);
 }
-

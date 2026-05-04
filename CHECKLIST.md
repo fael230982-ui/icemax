@@ -36,7 +36,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Prisma Client gerado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
 - [x] Repositorio remoto `origin` configurado localmente.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 - [x] E-mail correto de autoria confirmado e registrado.
 
 ## Registro Do Lote 2
@@ -49,7 +49,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado em todos os workspaces.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 3
 
@@ -62,7 +62,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado em todos os workspaces.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 4
 
@@ -78,7 +78,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado em todos os workspaces.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada sem vulnerabilidades.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 5
 
@@ -93,7 +93,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Auditoria de dependencias de producao executada.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 6
 
@@ -107,7 +107,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [ ] Auditoria de dependencias pendente de resolucao antes de release.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 7
 
@@ -117,7 +117,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 8
 
@@ -129,7 +129,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 9
 
@@ -140,7 +140,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 10
 
@@ -151,7 +151,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 11
 
@@ -161,7 +161,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] PDFs dos documentos gerados.
 - [x] Typecheck executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 12
 
@@ -174,7 +174,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 13
 
@@ -189,7 +189,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 14
 
@@ -205,7 +205,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 15
 
@@ -219,7 +219,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 16
 
@@ -231,7 +231,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 17
 
@@ -243,7 +243,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 18
 
@@ -254,7 +254,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 19
 
@@ -264,7 +264,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Typecheck executado.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 20
 
@@ -278,7 +278,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 21
 
@@ -293,7 +293,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 22
 
@@ -307,7 +307,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 23
 
@@ -320,7 +320,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Lote 24
 
@@ -333,7 +333,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Dos Lotes 25 A 34
 
@@ -352,7 +352,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Dos Lotes 35 A 54
 
@@ -381,7 +381,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Da Suite De Aceleracao
 
@@ -395,7 +395,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Diagnostico De Plataforma
 
@@ -409,7 +409,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Homologacao E Observabilidade
 
@@ -424,7 +424,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Transicao Para Banco Real
 
@@ -438,7 +438,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro Do Gate De Pre-Release
 
@@ -450,7 +450,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Governanca GitHub E Publicacao
 
@@ -465,7 +465,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Protecao Contra Segredos
 
@@ -479,7 +479,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Prontidao Do Repositorio
 
@@ -494,7 +494,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Calendario De Contratos Recorrentes
 
@@ -509,7 +509,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Despacho Inteligente
 
@@ -524,7 +524,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Prontidao De Despacho Da OS
 
@@ -539,7 +539,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Revisao De Conclusao Da OS
 
@@ -555,7 +555,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Pos-Atendimento
 
@@ -570,7 +570,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Oportunidade De Contrato
 
@@ -586,7 +586,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Proposta De Contrato
 
@@ -603,7 +603,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Ativacao De Contrato
 
@@ -621,7 +621,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Aceite De Contrato
 
@@ -639,7 +639,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push inicial pendente.
+- [x] Push inicial enviado ao GitHub.
 
 ## Registro De Encerramento Do Dia
 
