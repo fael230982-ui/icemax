@@ -39,6 +39,124 @@ export async function updateMockQuoteDecision(tenantId: string, quoteId: string,
   };
 }
 
+function buildQuoteApprovalPackage(tenantId: string, quote: {
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}) {
+  const issuedAt = new Date();
+  const expiresAt = quote.validUntil ? new Date(quote.validUntil) : new Date(issuedAt);
+
+  if (!quote.validUntil) {
+    expiresAt.setDate(expiresAt.getDate() + 7);
+  }
+
+  const token = `quote_${quote.id}_${issuedAt.getTime()}`;
+  const publicUrl = `https://app.icemax.local/orcamentos/${token}`;
+  const total = Number(quote.total ?? 0);
+
+  return {
+    quoteId: quote.id,
+    quoteNumber: quote.number ?? quote.id,
+    serviceOrderId: quote.serviceOrderId,
+    tenantId,
+    status: "approval_package_ready",
+    customer: quote.customer ?? "Cliente",
+    currentQuoteStatus: quote.status ?? "draft",
+    total,
+    issuedAt: issuedAt.toISOString(),
+    expiresAt: expiresAt.toISOString(),
+    token,
+    publicUrl,
+    financialSummary: {
+      total,
+      formattedTotal: `R$ ${total.toFixed(2)}`,
+      items: quote.items?.map((item, index) => ({
+        sequence: index + 1,
+        kind: item.kind ?? "service",
+        description: item.description ?? "Item do orcamento",
+        quantity: item.quantity ?? 1,
+        unitPrice: item.unitPrice ?? 0,
+        subtotal: (item.quantity ?? 1) * (item.unitPrice ?? 0),
+      })) ?? [],
+    },
+    approvalOptions: [
+      { decision: "approved", label: "Aprovar orcamento", nextStatus: "waiting_execution" },
+      { decision: "rejected", label: "Recusar orcamento", nextStatus: "commercial_review" },
+    ],
+    customerMessages: {
+      whatsappBody: `Ola! Seu orcamento ${quote.number ?? quote.id} esta pronto para aprovacao: ${publicUrl}`,
+      emailSubject: `Aprovacao do orcamento ${quote.number ?? quote.id}`,
+      emailBody: `Ola, acesse ${publicUrl} para revisar e aprovar o orcamento no valor de R$ ${total.toFixed(2)}.`,
+    },
+    governance: {
+      requiresCustomerIdentification: true,
+      recordsIpAndUserAgent: true,
+      hidesInternalMargin: true,
+      auditEvent: "quote.approval_package_created",
+      decisionEndpoint: `/quotes/${quote.id}/decision`,
+    },
+    nextActions: [
+      "Enviar link pela fila de comunicacao.",
+      "Registrar abertura e decisao do cliente.",
+      "Se aprovado, liberar execucao e reserva de pecas.",
+      "Se recusado, solicitar motivo e revisar proposta comercial.",
+    ],
+  };
+}
+
+export async function createMockQuoteApprovalPackage(tenantId: string, quoteId: string) {
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalPackage(tenantId, quote);
+}
+
+export async function createPrismaQuoteApprovalPackage(tenantId: string, quoteId: string) {
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalPackage(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  });
+}
+
 export async function updatePrismaQuoteDecision(tenantId: string, quoteId: string, input: UpdateQuoteDecisionInput) {
   const status = input.decision;
   return getPrisma().quote.update({

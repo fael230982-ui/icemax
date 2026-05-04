@@ -1022,3 +1022,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Pacote De Aprovacao De Orcamento
+
+- [x] Endpoint `GET /quotes/:id/approval-package` criado.
+- [x] Link publico, mensagens e validade incluidos.
+- [x] Opcoes de aprovacao e recusa incluidas.
+- [x] Governanca e endpoint de decisao incluidos.
+- [x] Console web conectado ao pacote de aprovacao.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

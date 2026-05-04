@@ -121,6 +121,7 @@ export const icemaxApi = {
     apiRequest<unknown>(`/contracts/${contractId}/communication-queue`, { method: "POST", token }),
   createContract: (body: unknown, token?: string) => apiRequest<unknown>("/contracts", { method: "POST", body, token }),
   quotes: (token?: string) => apiRequest<ApiListResponse<unknown>>("/quotes", { token }),
+  quoteApprovalPackage: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/approval-package`, { token }),
   stock: (token?: string) => apiRequest<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock", { token }),
   integrations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/integrations", { token }),
   uploadFile: (body: unknown, token?: string) => apiRequest<unknown>("/files", { method: "POST", body, token }),

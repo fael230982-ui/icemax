@@ -3,9 +3,11 @@ import { getAuthContext } from "../auth";
 import { isPrismaEnabled } from "../config";
 import {
   createMockPart,
+  createMockQuoteApprovalPackage,
   createMockStockLocation,
   createMockStockMovement,
   createPrismaPart,
+  createPrismaQuoteApprovalPackage,
   createPrismaStockLocation,
   createPrismaStockMovement,
   listMockChecklists,
@@ -40,6 +42,20 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     return isPrismaEnabled()
       ? updatePrismaQuoteDecision(context.tenantId, id, input)
       : updateMockQuoteDecision(context.tenantId, id, input);
+  });
+
+  app.get("/quotes/:id/approval-package", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const approvalPackage = isPrismaEnabled()
+      ? await createPrismaQuoteApprovalPackage(context.tenantId, id)
+      : await createMockQuoteApprovalPackage(context.tenantId, id);
+
+    if (!approvalPackage) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para pacote de aprovacao." });
+    }
+
+    return approvalPackage;
   });
 
   app.get("/checklists", async (request) => {

@@ -233,6 +233,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile cria nota tecnica em `POST /service-orders/:id/notes`.
 - Fluxo registra consulta ao manual antes da execucao em campo.
 
+## 0.8.41 - Pacote De Aprovacao De Orcamento
+
+- Adicionado endpoint `GET /quotes/:id/approval-package`.
+- Pacote prepara link publico, mensagens, validade e opcoes de decisao.
+- Governanca oculta margem interna e aponta endpoint de decisao do orcamento.
+- Console web passou a consultar pacote de aprovacao.
+- Teste automatizado cobre pacote de aprovacao do `quote-001`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -185,6 +185,17 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   });
   assert.equal(decision.statusCode, 200);
 
+  const approvalPackage = await app.inject({
+    method: "GET",
+    url: "/quotes/quote-001/approval-package",
+  });
+  assert.equal(approvalPackage.statusCode, 200);
+  assert.equal(approvalPackage.json().quoteId, "quote-001");
+  assert.equal(approvalPackage.json().status, "approval_package_ready");
+  assert.match(approvalPackage.json().publicUrl, /\/orcamentos\/quote_quote-001_/);
+  assert.equal(approvalPackage.json().governance.decisionEndpoint, "/quotes/quote-001/decision");
+  assert.ok(approvalPackage.json().approvalOptions.length >= 2);
+
   const qr = await app.inject({
     method: "POST",
     url: "/qr-labels",

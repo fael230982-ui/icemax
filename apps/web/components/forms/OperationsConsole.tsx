@@ -220,6 +220,10 @@ export function OperationsConsole() {
     void run("Acompanhamento cliente", () => icemaxApi.customerOrderTracking("1048"));
   }
 
+  function loadQuoteApprovalPackage() {
+    void run("Aprovacao de orcamento", () => icemaxApi.quoteApprovalPackage("quote-001", token || undefined));
+  }
+
   function createCustomerTrackingLink() {
     void run("Link acompanhamento", () => icemaxApi.createCustomerTrackingLink("1048"));
   }
@@ -515,6 +519,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={activateAcceptedContract}>Contrato aceito</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadCustomerTracking}>Acompanhar OS cliente</button>
+        <button type="button" className="secondary" onClick={loadQuoteApprovalPackage}>Aprovar orcamento</button>
         <button type="button" className="secondary" onClick={createCustomerTrackingLink}>Link acompanhamento</button>
         <button type="button" className="secondary" onClick={createCustomerPortalAttachments}>Anexos portal</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
