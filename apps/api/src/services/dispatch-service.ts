@@ -1,5 +1,6 @@
 import { serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
-import type { OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
+import type { DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
+import { createVisualDiagnosisPackage } from "./ai-assistant-service";
 
 const priorityWeight: Record<string, number> = {
   emergency: 0,
@@ -273,5 +274,93 @@ export function getMockServiceOrderDispatchReadiness(serviceOrderId: string, tec
       : attention > 0
         ? "Liberar com acompanhamento do gestor."
         : "Liberado para despacho.",
+  };
+}
+
+export function createMockVisitPreparationPackage(input: DispatchVisitPreparationInput) {
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const readiness = getMockServiceOrderDispatchReadiness(input.serviceOrderId, input.technicianUserId);
+
+  if (!order || !readiness) {
+    return null;
+  }
+
+  const diagnosis = input.includeVisualDiagnosis
+    ? createVisualDiagnosisPackage({
+      serviceOrderId: order.id,
+      equipmentType: order.equipment,
+      description: order.issue,
+      photoHints: input.includeCustomerPortalEvidence
+        ? ["foto do cliente indica sintoma principal", "anexos pendentes de conferencia no painel"]
+        : [],
+      symptoms: [order.priority, order.status],
+    })
+    : null;
+  const blockedChecks = readiness.checks.filter((item) => item.status === "blocked");
+  const attentionChecks = readiness.checks.filter((item) => item.status === "attention");
+  const canDispatch = blockedChecks.length === 0;
+
+  return {
+    serviceOrderId: order.id,
+    status: canDispatch ? "ready_for_dispatch" : "needs_preparation",
+    customer: order.customer,
+    equipment: order.equipment,
+    issue: order.issue,
+    priority: order.priority,
+    technician: readiness.technician,
+    route: readiness.route,
+    readinessStatus: readiness.status,
+    dispatchDecision: {
+      canDispatch,
+      requiresManagerApproval: attentionChecks.length > 0 || order.priority === "emergency",
+      reason: canDispatch
+        ? "Visita preparada com recursos minimos para deslocamento."
+        : "Existem bloqueios antes de liberar o tecnico.",
+    },
+    preparationChecklist: [
+      {
+        key: "parts",
+        label: "Separar pecas provaveis",
+        status: readiness.parts.every((part) => part.available) ? "done" : "blocked",
+        detail: readiness.parts.map((part) => `${part.sku} - ${part.quantity} em ${part.location}`).join("; "),
+      },
+      {
+        key: "manual",
+        label: "Conferir manual no app",
+        status: "pending",
+        detail: "Tecnico deve abrir manual antes da execucao e registrar divergencias.",
+      },
+      {
+        key: "diagnosis",
+        label: "Revisar diagnostico assistido",
+        status: diagnosis ? "done" : "pending",
+        detail: diagnosis ? diagnosis.likelyCauses.map((item) => item.cause).join("; ") : "Diagnostico visual nao solicitado.",
+      },
+      {
+        key: "customer_access",
+        label: "Confirmar acesso com cliente",
+        status: order.priority === "emergency" ? "attention" : "pending",
+        detail: order.priority === "emergency" ? "Confirmar acesso imediato antes do deslocamento." : "Confirmar janela e responsavel no local.",
+      },
+      {
+        key: "safety",
+        label: "Orientacao de seguranca",
+        status: diagnosis?.riskFlags.includes("risco_eletrico") ? "attention" : "done",
+        detail: diagnosis?.safetyGuidance ?? "Sem alerta critico preliminar.",
+      },
+    ],
+    partsToLoad: readiness.parts,
+    diagnosis,
+    managerNotes: [
+      canDispatch ? "Despacho pode ser liberado pelo operador." : "Resolver bloqueios de pecas antes de enviar tecnico.",
+      order.priority === "emergency" ? "Prioridade emergencial exige acompanhamento do gestor." : "Prioridade sem regra especial de emergencia.",
+      "Registrar fotos, pecas usadas e relatorio revisado antes de concluir a OS.",
+    ],
+    nextActions: [
+      "Enviar pacote para o app mobile do tecnico.",
+      "Gerar comunicacao de saida para o cliente.",
+      "Reservar pecas provaveis no estoque quando banco real estiver ativo.",
+      "Recalcular rota se houver mudanca de agenda.",
+    ],
   };
 }

@@ -129,6 +129,8 @@ export const icemaxApi = {
   dispatchRecommendations: (token?: string) => apiRequest<unknown>("/dispatch/recommendations", { token }),
   dispatchReadiness: (serviceOrderId: string, technicianUserId: string, token?: string) =>
     apiRequest<unknown>(withQuery(`/dispatch/service-orders/${serviceOrderId}/readiness`, { technicianUserId }), { token }),
+  createVisitPreparation: (body: unknown, token?: string) =>
+    apiRequest<unknown>("/dispatch/visit-preparation", { method: "POST", body, token }),
   improveText: (body: unknown, token?: string) => apiRequest<unknown>("/ai/text-improve", { method: "POST", body, token }),
   suggestCauses: (body: unknown, token?: string) =>
     apiRequest<unknown>("/ai/issue-cause-suggestions", { method: "POST", body, token }),

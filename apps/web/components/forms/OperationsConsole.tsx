@@ -94,6 +94,17 @@ export function OperationsConsole() {
     void run("Prontidao da OS", () => icemaxApi.dispatchReadiness("1048", "tech-001", token || undefined));
   }
 
+  function createVisitPreparation() {
+    void run("Preparo da visita", () =>
+      icemaxApi.createVisitPreparation({
+        serviceOrderId: "1048",
+        technicianUserId: "tech-001",
+        includeVisualDiagnosis: true,
+        includeCustomerPortalEvidence: true,
+      }, token || undefined),
+    );
+  }
+
   function loadLocations() {
     void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
   }
@@ -469,6 +480,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
+        <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createVisualDiagnosisPackage}>Diagnostico visual IA</button>

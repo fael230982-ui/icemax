@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
-import { optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
+import { dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -70,5 +70,30 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return readiness;
+  });
+
+  app.post("/dispatch/visit-preparation", async (request, reply) => {
+    const context = await getAuthContext(request);
+    const input = parseBody(dispatchVisitPreparationSchema, request.body);
+    const preparation = createMockVisitPreparationPackage(input);
+
+    if (!preparation) {
+      return reply.code(404).send({ message: "OS nao encontrada para preparo da visita." });
+    }
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "dispatch.visit_preparation_created",
+      entity: "service_order",
+      entityId: input.serviceOrderId,
+      metadata: {
+        technicianUserId: input.technicianUserId,
+        status: preparation.status,
+        canDispatch: preparation.dispatchDecision.canDispatch,
+      },
+    });
+
+    return reply.code(201).send(preparation);
   });
 }

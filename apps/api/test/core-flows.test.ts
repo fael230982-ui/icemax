@@ -269,6 +269,23 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(["ready", "attention", "blocked"].includes(readiness.json().status));
   assert.ok(readiness.json().checks.length >= 5);
 
+  const preparation = await app.inject({
+    method: "POST",
+    url: "/dispatch/visit-preparation",
+    payload: {
+      serviceOrderId: "1048",
+      technicianUserId: "tech-001",
+      includeVisualDiagnosis: true,
+      includeCustomerPortalEvidence: true,
+    },
+  });
+  assert.equal(preparation.statusCode, 201);
+  assert.equal(preparation.json().serviceOrderId, "1048");
+  assert.ok(["ready_for_dispatch", "needs_preparation"].includes(preparation.json().status));
+  assert.ok(preparation.json().preparationChecklist.length >= 5);
+  assert.equal(preparation.json().diagnosis.status, "diagnosis_package_ready");
+  assert.ok(preparation.json().nextActions.includes("Enviar pacote para o app mobile do tecnico."));
+
   await app.close();
 });
 

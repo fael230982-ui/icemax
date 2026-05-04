@@ -168,6 +168,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a acionar diagnostico visual assistido por regras locais.
 - Teste automatizado cobre pacote de diagnostico, risco de serpentina congelada e testes tecnicos.
 
+## 0.8.32 - Preparo Inteligente Da Visita
+
+- Adicionado endpoint `POST /dispatch/visit-preparation` para montar pacote antes do deslocamento.
+- Pacote combina prontidao de despacho, rota, pecas provaveis, diagnostico assistido, checklist e decisao de despacho.
+- Console web passou a acionar o preparo da visita.
+- Teste automatizado cobre checklist, diagnostico, status de preparo e proximas acoes para o app mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

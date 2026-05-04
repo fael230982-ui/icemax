@@ -890,3 +890,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Preparo Inteligente Da Visita
+
+- [x] Endpoint `POST /dispatch/visit-preparation` criado.
+- [x] Prontidao, rota, pecas e diagnostico combinados.
+- [x] Checklist de preparo da visita criado.
+- [x] Decisao de despacho e aprovacao gerencial incluidas.
+- [x] Console web conectado ao preparo da visita.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
