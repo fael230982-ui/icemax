@@ -18,6 +18,7 @@ import {
 } from "../app/data";
 import { Panel } from "./Panel";
 import { CloseoutArchivePanel } from "./CloseoutArchivePanel";
+import { CollectionAutomationPanel } from "./CollectionAutomationPanel";
 import { CompletionEmailQueuePanel } from "./CompletionEmailQueuePanel";
 import { ContractCapacityBoardPanel } from "./ContractCapacityBoardPanel";
 import { ContractOpportunityPipelinePanel } from "./ContractOpportunityPipelinePanel";
@@ -69,6 +70,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Financeiro" title="Contas a receber" action={<span className="pill danger">Inadimplencia</span>} wide>
         <ReceivablesCollectionPanel />
+      </Panel>
+
+      <Panel eyebrow="Financeiro" title="Regua de cobranca" action={<span className="pill">Pre-fila</span>} wide>
+        <CollectionAutomationPanel />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>

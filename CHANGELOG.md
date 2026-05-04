@@ -556,6 +556,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre inadimplencia e bloqueio de automacao.
 - Documentado uso operacional sem cobranca real ate integracao financeira.
 
+## 0.8.83 - Regua De Cobranca
+
+- Adicionado endpoint `GET /billing/collection-automation-board`.
+- Regua cria pre-fila de e-mail, WhatsApp e aviso interno para recebiveis.
+- Contas criticas bloqueiam contato automatico com cliente e exigem gestor.
+- Painel web ganhou secao de regua de cobranca com filtro de bloqueios.
+- Teste automatizado cobre fila mock, bloqueios e governanca.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

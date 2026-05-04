@@ -18,6 +18,7 @@ import {
 } from "../schemas";
 import {
   calculateSlaBoard,
+  createCollectionAutomationBoard,
   createContractAcceptancePackageFromServiceOrder,
   createContractActivationPlanFromServiceOrder,
   createContractBillingPlan,
@@ -80,6 +81,7 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
 
   app.get("/billing/recurring-board", async () => createRecurringBillingBoard());
   app.get("/billing/receivables-board", async () => createReceivablesCollectionBoard());
+  app.get("/billing/collection-automation-board", async () => createCollectionAutomationBoard());
 
   app.post("/technicians/onboarding", async (request, reply) => {
     const context = await getAuthContext(request);

@@ -156,6 +156,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(receivablesBoard.json().summary.overdueTotal > 0);
   assert.ok(receivablesBoard.json().rows.some((row: { blocksAutomation: boolean }) => row.blocksAutomation));
 
+  const collectionAutomation = await app.inject({
+    method: "GET",
+    url: "/billing/collection-automation-board",
+  });
+  assert.equal(collectionAutomation.statusCode, 200);
+  assert.equal(collectionAutomation.json().governance.auditEvent, "billing.collection_automation_board_viewed");
+  assert.ok(collectionAutomation.json().summary.readyToSend > 0);
+  assert.ok(collectionAutomation.json().summary.blocked > 0);
+
   const serviceOrderCommunication = await app.inject({
     method: "GET",
     url: "/service-orders/1048/communication-package",

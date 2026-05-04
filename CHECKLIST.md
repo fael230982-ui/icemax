@@ -1646,3 +1646,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Regua De Cobranca
+
+- [x] Endpoint de regua de cobranca criado.
+- [x] Pre-fila de e-mail, WhatsApp e interno incluida.
+- [x] Bloqueio de contato automatico para contas criticas incluido.
+- [x] Painel web financeiro criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

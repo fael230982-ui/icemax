@@ -886,6 +886,87 @@ export function createReceivablesCollectionBoard() {
   };
 }
 
+export function createCollectionAutomationBoard() {
+  const receivables = createReceivablesCollectionBoard();
+  const rows = receivables.rows.map((receivable) => {
+    const severity = receivable.blocksAutomation ? "manager_hold" : receivable.daysOverdue > 0 ? "overdue_reminder" : "pre_due_reminder";
+    const messages = [
+      {
+        channel: "email",
+        template: `collection_${severity}_email`,
+        subject: receivable.blocksAutomation
+          ? `Acao gerencial necessaria - ${receivable.customer}`
+          : `Mensalidade do contrato ${receivable.plan}`,
+        body: receivable.blocksAutomation
+          ? `Contrato ${receivable.plan} possui ${receivable.daysOverdue} dias de atraso. Revisar antes de liberar novas automacoes.`
+          : `Ola, identificamos a mensalidade do contrato ${receivable.plan} no valor de R$ ${receivable.amount.toFixed(2)}, vencimento ${receivable.dueDate}.`,
+        copyToCustomer: !receivable.blocksAutomation,
+      },
+      {
+        channel: "whatsapp",
+        template: `collection_${severity}_whatsapp`,
+        body: receivable.blocksAutomation
+          ? `Contrato ${receivable.plan} exige revisao gerencial antes de novo envio ao cliente.`
+          : `Ola! Lembrete da mensalidade do contrato ${receivable.plan}: R$ ${receivable.amount.toFixed(2)}, vencimento ${receivable.dueDate}.`,
+        copyToCustomer: !receivable.blocksAutomation,
+      },
+      {
+        channel: "internal",
+        template: `collection_${severity}_internal`,
+        subject: `Cobranca ${receivable.collectionStage} - ${receivable.customer}`,
+        body: receivable.nextAction,
+        copyToCustomer: false,
+      },
+    ];
+    const items = queueItemsFromMessages({
+      sourceType: "contract",
+      sourceId: receivable.contractId,
+      trigger: "receivable_collection",
+      recipients: {
+        companyEmail: "adm.rcsolutions@gmail.com",
+        whatsapp: "+5500000000000",
+        internal: "financeiro@icemax.local",
+      },
+      messages,
+    });
+
+    return {
+      ...receivable,
+      severity,
+      status: receivable.blocksAutomation ? "blocked_manager_review" : "queued_mock",
+      readyToSend: receivable.blocksAutomation ? 1 : items.length,
+      blocked: receivable.blocksAutomation ? 2 : 0,
+      items: receivable.blocksAutomation
+        ? items.map((item) => item.channel === "internal" ? item : { ...item, status: "blocked_manager_review", priority: "blocked" })
+        : items,
+      preflight: [
+        { key: "provider_credentials", status: "pending_external_key", result: "fila criada sem envio real" },
+        { key: "lgpd_basis", status: receivable.blocksAutomation ? "manager_review" : "ok", result: "execucao de contrato recorrente" },
+        { key: "collection_policy", status: receivable.blocksAutomation ? "approval_required" : "ok", result: receivable.collectionStage },
+      ],
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      receivables: rows.length,
+      readyToSend: rows.reduce((sum, row) => sum + row.readyToSend, 0),
+      blocked: rows.reduce((sum, row) => sum + row.blocked, 0),
+      managerHolds: rows.filter((row) => row.severity === "manager_hold").length,
+      emailItems: rows.reduce((sum, row) => sum + row.items.filter((item) => item.channel === "email").length, 0),
+      whatsappItems: rows.reduce((sum, row) => sum + row.items.filter((item) => item.channel === "whatsapp").length, 0),
+    },
+    governance: {
+      auditEvent: "billing.collection_automation_board_viewed",
+      mockUntilProvidersConfigured: true,
+      requiresManagerApprovalForCriticalOverdue: true,
+      blocksCustomerContactWhenManagerHold: true,
+    },
+    rows,
+  };
+}
+
 export function createServiceOrderCommunicationPackage(serviceOrderId: string) {
   const order = serviceOrders.find((item) => item.id === serviceOrderId);
 
