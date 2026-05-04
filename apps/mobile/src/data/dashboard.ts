@@ -105,6 +105,15 @@ export const quoteApprovalReminders = [
   { title: "Proximo", detail: "Se cliente aprovar, ativar execucao; se pedir revisao, acionar comercial" },
 ];
 
+export const quoteExecutionReadiness = [
+  { title: "Status", detail: "ORC-2026-002 pronto para executar apos aceite, OS vinculada e pecas conferidas" },
+  { title: "Cliente", detail: "Confirmar que o responsavel recebeu aviso de programacao antes do deslocamento" },
+  { title: "Estoque", detail: "Itens aprovados devem estar reservados ou carregados no veiculo" },
+  { title: "Despacho", detail: "Nao iniciar servico fora do escopo aprovado sem nova autorizacao" },
+  { title: "Auditoria", detail: "Registrar conferencias feitas pelo tecnico antes da execucao" },
+  { title: "Bloqueio", detail: "Pendencias de aceite, estoque, rota ou comunicacao impedem execucao imediata" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

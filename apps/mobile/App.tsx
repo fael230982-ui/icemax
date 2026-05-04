@@ -6,7 +6,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -19,6 +19,7 @@ import {
   createPhotoEvidenceAction,
   createQuoteApprovalPresentedAction,
   createQuoteBoardViewedAction,
+  createQuoteExecutionReadinessAckAction,
   createQuoteReminderPresentedAction,
   createQuoteTimelineViewedAction,
   createSatisfactionSurveyAction,
@@ -121,6 +122,12 @@ export default function App() {
     setSyncStatus("Lembrete do orcamento salvo offline.");
   }
 
+  function addQuoteExecutionReadinessAck() {
+    const action = createQuoteExecutionReadinessAckAction("1049", "quote-002");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Prontidao do orcamento salva offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -169,6 +176,7 @@ export default function App() {
             onAddQuoteTimeline={addQuoteTimelineViewed}
             onAddQuoteBoard={addQuoteBoardViewed}
             onAddQuoteReminder={addQuoteReminderPresented}
+            onAddQuoteExecutionReadiness={addQuoteExecutionReadinessAck}
             onSync={syncPending}
           />
         </Section>
@@ -224,6 +232,14 @@ export default function App() {
         <Section title="Lembretes de orcamento">
           <View style={styles.grid}>
             {quoteApprovalReminders.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Prontidao do orcamento">
+          <View style={styles.grid}>
+            {quoteExecutionReadiness.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>

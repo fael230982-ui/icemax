@@ -324,3 +324,22 @@ export function createQuoteReminderPresentedAction(serviceOrderId: string, quote
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteExecutionReadinessAckAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-readiness"),
+    label: `Prontidao orcamento OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Prontidao de execucao do orcamento ${quoteId} conferida pelo tecnico antes do inicio do servico.`,
+      source: "mobile_offline_quote_execution_readiness",
+      mobileAck: {
+        quoteId,
+        checkedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

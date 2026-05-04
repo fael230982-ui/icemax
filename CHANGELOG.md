@@ -367,6 +367,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para consultar prontidao do orcamento aprovado.
 - Teste automatizado cobre checks e auditoria da prontidao.
 
+## 0.8.59 - Prontidao De Orcamento No Mobile
+
+- App mobile passou a exibir secao de prontidao do orcamento aprovado.
+- Tecnico visualiza criterios de aceite, OS vinculada, estoque, despacho e comunicacao.
+- Modo offline ganhou acao para registrar conferencia de prontidao antes da execucao.
+- SyncPanel recebeu botao `Prontidao orcamento`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

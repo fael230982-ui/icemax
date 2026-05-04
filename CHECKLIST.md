@@ -1282,3 +1282,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Prontidao De Orcamento No Mobile
+
+- [x] Secao mobile de prontidao do orcamento criada.
+- [x] Cards de aceite, estoque, despacho, auditoria e bloqueio incluidos.
+- [x] Acao offline de conferencia de prontidao criada.
+- [x] SyncPanel atualizado com botao de prontidao.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
