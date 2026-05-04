@@ -298,6 +298,23 @@ test("local ai assistant improves text and suggests causes", async () => {
   assert.equal(causes.statusCode, 201);
   assert.ok(causes.json().suggestions.length >= 1);
 
+  const visualDiagnosis = await app.inject({
+    method: "POST",
+    url: "/ai/visual-diagnosis-package",
+    payload: {
+      serviceOrderId: "1048",
+      equipmentType: "split piso teto",
+      description: "Nao gela e foto mostra serpentina congelada",
+      photoHints: ["gelo na evaporadora", "filtro sujo"],
+      symptoms: ["vento fraco"],
+    },
+  });
+  assert.equal(visualDiagnosis.statusCode, 201);
+  assert.equal(visualDiagnosis.json().status, "diagnosis_package_ready");
+  assert.ok(visualDiagnosis.json().likelyCauses.length >= 1);
+  assert.ok(visualDiagnosis.json().riskFlags.includes("serpentina_congelada"));
+  assert.ok(visualDiagnosis.json().fieldTests.length >= 5);
+
   await app.close();
 });
 

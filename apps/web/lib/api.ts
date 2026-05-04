@@ -132,6 +132,8 @@ export const icemaxApi = {
   improveText: (body: unknown, token?: string) => apiRequest<unknown>("/ai/text-improve", { method: "POST", body, token }),
   suggestCauses: (body: unknown, token?: string) =>
     apiRequest<unknown>("/ai/issue-cause-suggestions", { method: "POST", body, token }),
+  createVisualDiagnosisPackage: (body: unknown, token?: string) =>
+    apiRequest<unknown>("/ai/visual-diagnosis-package", { method: "POST", body, token }),
   customerPortalConfig: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/config`),
   previewPortalTriage: (body: unknown) => apiRequest<unknown>("/customer-portal/triage", { method: "POST", body }),
   createPortalOrder: (body: unknown) => apiRequest<unknown>("/customer-portal/service-orders", { method: "POST", body }),

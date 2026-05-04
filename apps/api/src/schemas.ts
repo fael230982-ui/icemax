@@ -227,6 +227,14 @@ export const suggestIssueCausesSchema = z.object({
   equipmentType: z.string().optional(),
 });
 
+export const visualDiagnosisPackageSchema = z.object({
+  serviceOrderId: z.string().optional(),
+  equipmentType: z.string().min(2),
+  description: z.string().min(5),
+  photoHints: z.array(z.string()).default([]),
+  symptoms: z.array(z.string()).default([]),
+});
+
 export const customerPortalOrderSchema = z.object({
   tenantSlug: z.string().min(2).default("icemax"),
   customerName: z.string().min(2),
@@ -414,6 +422,7 @@ export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
 export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
+export type VisualDiagnosisPackageInput = z.output<typeof visualDiagnosisPackageSchema>;
 export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
 export type CustomerPortalTriageInput = z.output<typeof customerPortalTriageSchema>;
 export type CustomerPortalAttachmentInput = z.output<typeof customerPortalAttachmentSchema>;

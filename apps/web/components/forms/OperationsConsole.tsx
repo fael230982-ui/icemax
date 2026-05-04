@@ -121,6 +121,18 @@ export function OperationsConsole() {
     );
   }
 
+  function createVisualDiagnosisPackage() {
+    void run("Diagnostico visual IA", () =>
+      icemaxApi.createVisualDiagnosisPackage({
+        serviceOrderId: "1048",
+        equipmentType: "split piso teto",
+        description: "Cliente relata que nao gela e foto mostra serpentina congelada.",
+        photoHints: ["gelo na evaporadora", "filtro escurecido", "sem agua aparente no dreno"],
+        symptoms: ["baixa refrigeracao", "ambiente critico", "vento fraco"],
+      }, token || undefined),
+    );
+  }
+
   function reviewServiceOrderCompletion() {
     void run("Revisao de conclusao da OS", () => icemaxApi.serviceOrderCompletionReview("1048", token || undefined));
   }
@@ -459,6 +471,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
+        <button type="button" className="secondary" onClick={createVisualDiagnosisPackage}>Diagnostico visual IA</button>
         <button type="button" className="secondary" onClick={reviewServiceOrderCompletion}>Revisar conclusao OS</button>
         <button type="button" className="secondary" onClick={loadPostServicePlan}>Pos-atendimento</button>
         <button type="button" className="secondary" onClick={loadContractOpportunity}>Oportunidade contrato</button>

@@ -161,6 +161,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a acionar um pacote mock de anexos do portal.
 - Teste automatizado cobre fotos, documentos, preparo para IA e antivirus obrigatorio antes do storage.
 
+## 0.8.31 - Diagnostico Visual Assistido
+
+- Adicionado endpoint `POST /ai/visual-diagnosis-package` para combinar descricao, sintomas e pistas de fotos.
+- Pacote retorna causas provaveis, riscos, pecas provaveis, testes de campo e orientacao de seguranca.
+- Console web passou a acionar diagnostico visual assistido por regras locais.
+- Teste automatizado cobre pacote de diagnostico, risco de serpentina congelada e testes tecnicos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

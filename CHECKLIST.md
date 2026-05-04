@@ -874,3 +874,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Diagnostico Visual Assistido
+
+- [x] Endpoint `POST /ai/visual-diagnosis-package` criado.
+- [x] Descricao, sintomas e pistas de fotos combinados.
+- [x] Causas provaveis, riscos e pecas provaveis retornados.
+- [x] Testes de campo e orientacao de seguranca incluidos.
+- [x] Console web conectado ao diagnostico visual assistido.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
