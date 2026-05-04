@@ -906,3 +906,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Preparo Offline No Mobile
+
+- [x] Secao mobile de preparo da visita criada.
+- [x] Cards de despacho, rota, pecas, diagnostico, seguranca e cliente incluidos.
+- [x] Acao offline de confirmacao do preparo recebida criada.
+- [x] SyncPanel atualizado com botao de preparo da visita.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

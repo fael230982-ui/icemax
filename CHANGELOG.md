@@ -175,6 +175,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a acionar o preparo da visita.
 - Teste automatizado cobre checklist, diagnostico, status de preparo e proximas acoes para o app mobile.
 
+## 0.8.33 - Preparo Offline No Mobile
+
+- App mobile passou a exibir secao de preparo da visita com despacho, rota, pecas, diagnostico, seguranca e cliente.
+- Modo offline passou a ter acao de confirmacao do preparo recebido pelo tecnico.
+- Servico mobile criou payload de confirmacao para `POST /dispatch/visit-preparation`.
+- Fluxo aproxima o pacote de despacho do uso real em campo sem depender de conexao constante.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

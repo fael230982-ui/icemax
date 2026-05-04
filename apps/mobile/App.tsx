@@ -14,9 +14,11 @@ import {
   createLocationAction,
   createPartUsageAction,
   createPhotoEvidenceAction,
+  createVisitPreparationAckAction,
   OfflineAction,
   sendOfflineAction,
 } from "./src/services/api";
+import { visitPreparation } from "./src/data/dashboard";
 
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
@@ -43,6 +45,12 @@ export default function App() {
 
     setPendingActions((current) => [...actions, ...current]);
     setSyncStatus("Pacote completo de execucao salvo offline.");
+  }
+
+  function addVisitPreparationAck() {
+    const action = createVisitPreparationAckAction("1048", "tech-001");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Confirmacao de preparo da visita salva offline.");
   }
 
   async function syncPending() {
@@ -78,7 +86,22 @@ export default function App() {
         </Section>
 
         <Section title="Modo offline">
-          <SyncPanel pendingActions={pendingActions} status={syncStatus} onAddCheckIn={addCheckIn} onAddExecutionPack={addExecutionPack} onSync={syncPending} />
+          <SyncPanel
+            pendingActions={pendingActions}
+            status={syncStatus}
+            onAddCheckIn={addCheckIn}
+            onAddExecutionPack={addExecutionPack}
+            onAddVisitPreparation={addVisitPreparationAck}
+            onSync={syncPending}
+          />
+        </Section>
+
+        <Section title="Preparo da visita">
+          <View style={styles.grid}>
+            {visitPreparation.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
         </Section>
 
         <Section title="Ferramentas">

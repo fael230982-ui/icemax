@@ -6,10 +6,11 @@ type SyncPanelProps = {
   status: string;
   onAddCheckIn: () => void;
   onAddExecutionPack: () => void;
+  onAddVisitPreparation: () => void;
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onSync }: SyncPanelProps) {
   return (
     <View style={styles.card}>
       <View>
@@ -22,6 +23,9 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onAddExecutionPack}>
           <Text style={styles.buttonText}>Pacote OS</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddVisitPreparation}>
+          <Text style={styles.buttonText}>Preparo visita</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.secondary]} onPress={onSync}>
           <Text style={[styles.buttonText, styles.secondaryText]}>Sincronizar</Text>

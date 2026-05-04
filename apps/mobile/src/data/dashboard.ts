@@ -25,6 +25,15 @@ export const quality = [
   { title: "Fotos", value: "Obrigatorias por checklist" },
 ];
 
+export const visitPreparation = [
+  { title: "Despacho", detail: "OS 1048 exige aprovacao gerencial por emergencia" },
+  { title: "Rota", detail: "Tecnico Rafael Martins, 12 min estimados ate o cliente" },
+  { title: "Pecas", detail: "R410A e capacitor 45uF devem ser conferidos antes da saida" },
+  { title: "Diagnostico", detail: "Possivel baixa vazao, filtro obstruido ou carga de fluido" },
+  { title: "Seguranca", detail: "Confirmar acesso e registrar fotos antes de intervir" },
+  { title: "Cliente", detail: "Enviar aviso de deslocamento quando pacote for liberado" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

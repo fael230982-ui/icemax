@@ -131,3 +131,23 @@ export function createCustomerSignatureAction(serviceOrderId: string, customerSi
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createVisitPreparationAckAction(serviceOrderId: string, technicianUserId: string) {
+  return {
+    id: offlineId("visit-prep"),
+    label: `Preparo recebido OS ${serviceOrderId}`,
+    method: "POST",
+    path: "/dispatch/visit-preparation",
+    payload: {
+      serviceOrderId,
+      technicianUserId,
+      includeVisualDiagnosis: true,
+      includeCustomerPortalEvidence: true,
+      mobileAck: {
+        receivedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
