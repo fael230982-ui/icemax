@@ -197,6 +197,7 @@ export const icemaxApi = {
   createWarrantyTerm: (body: unknown, token?: string) => apiRequest<unknown>("/warranty-terms", { method: "POST", body, token }),
   createPmocPlan: (body: unknown, token?: string) => apiRequest<unknown>("/pmoc/plans", { method: "POST", body, token }),
   createInvoiceDraft: (body: unknown, token?: string) => apiRequest<unknown>("/billing/invoices/draft", { method: "POST", body, token }),
+  recurringBillingBoard: (token?: string) => apiRequest<unknown>("/billing/recurring-board", { token }),
   onboardTechnician: (body: unknown, token?: string) => apiRequest<unknown>("/technicians/onboarding", { method: "POST", body, token }),
   createMaintenanceWindow: (body: unknown, token?: string) => apiRequest<unknown>("/maintenance-windows", { method: "POST", body, token }),
   recordSatisfactionSurvey: (body: unknown, token?: string) => apiRequest<unknown>("/satisfaction-surveys", { method: "POST", body, token }),

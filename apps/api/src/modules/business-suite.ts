@@ -36,6 +36,7 @@ import {
   createPostServiceCommandCenter,
   createPurchaseRequest,
   createReleaseReadiness,
+  createRecurringBillingBoard,
   createServiceOrderManualPackage,
   createServiceOrderPartsReservation,
   createServiceOrderWarrantyPackage,
@@ -75,6 +76,8 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     await recordAuditEvent({ tenantId: context.tenantId, userId: context.userId, action: "invoice.drafted", entity: "invoice", entityId: invoice.id });
     return reply.code(201).send(invoice);
   });
+
+  app.get("/billing/recurring-board", async () => createRecurringBillingBoard());
 
   app.post("/technicians/onboarding", async (request, reply) => {
     const context = await getAuthContext(request);

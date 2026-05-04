@@ -786,6 +786,54 @@ export function createContractBillingPlan(contractId: string) {
   };
 }
 
+export function createRecurringBillingBoard() {
+  const rows = serviceContracts.map((contract) => {
+    const billingPlan = createContractBillingPlan(contract.id);
+    const nextInstallment = billingPlan?.installments[0];
+    const overdueRisk = contract.status === "generate_order" ? "attention" : contract.status === "upcoming" ? "low" : "monitor";
+
+    return {
+      contractId: contract.id,
+      customer: contract.customer,
+      plan: contract.plan,
+      status: contract.status,
+      recurrenceMonths: contract.recurrenceMonths,
+      coveredEquipment: contract.coveredEquipment,
+      monthlyValue: billingPlan?.monthlyValue ?? 0,
+      annualValue: billingPlan?.annualValue ?? 0,
+      nextDueDate: nextInstallment?.dueDate ?? null,
+      nextAmount: nextInstallment?.amount ?? 0,
+      overdueRisk,
+      riskReasons: [
+        ...(contract.status === "generate_order" ? ["Visita contratual exige geracao de OS antes da cobranca."] : []),
+        ...(contract.coveredEquipment >= 15 ? ["Contrato com muitos equipamentos exige conferencia fiscal e escopo."] : []),
+        ...(contract.recurrenceMonths === 6 ? ["Recorrencia semestral aumenta intervalo de contato com o cliente."] : []),
+      ],
+      nextAction: contract.status === "generate_order"
+        ? "Gerar OS preventiva e confirmar faturamento da mensalidade."
+        : "Conferir dados fiscais e programar envio da proxima cobranca.",
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      contracts: rows.length,
+      monthlyRecurringRevenue: rows.reduce((sum, row) => sum + row.monthlyValue, 0),
+      annualRecurringRevenue: rows.reduce((sum, row) => sum + row.annualValue, 0),
+      attention: rows.filter((row) => row.overdueRisk === "attention").length,
+      nextDueTotal: rows.reduce((sum, row) => sum + row.nextAmount, 0),
+    },
+    governance: {
+      auditEvent: "billing.recurring_board_viewed",
+      hidesInternalMargin: true,
+      requiresFiscalReviewBeforeInvoice: true,
+      mockUntilPaymentProviderConfigured: true,
+    },
+    rows: rows.sort((a, b) => (a.nextDueDate ?? "").localeCompare(b.nextDueDate ?? "")),
+  };
+}
+
 export function createServiceOrderCommunicationPackage(serviceOrderId: string) {
   const order = serviceOrders.find((item) => item.id === serviceOrderId);
 

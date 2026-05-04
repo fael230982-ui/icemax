@@ -916,6 +916,98 @@ h2 {
   line-height: 1.35;
 }
 
+.billingPanel {
+  display: grid;
+  gap: 14px;
+}
+
+.billingSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.billingSummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 84px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.billingSummary span,
+.billingControls span,
+.billingRows span,
+.billingRows small {
+  color: var(--muted);
+}
+
+.billingSummary strong {
+  font-size: 23px;
+}
+
+.billingSummary .attention {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.billingControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(250px, auto);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.billingControls div {
+  display: grid;
+  gap: 6px;
+}
+
+.billingControls label {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  align-items: center;
+  font-weight: 800;
+}
+
+.billingControls input {
+  min-height: 18px;
+}
+
+.billingRows {
+  display: grid;
+  gap: 10px;
+}
+
+.billingRows article {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.9fr 0.8fr 1.5fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.billingRows strong,
+.billingRows small,
+.billingRows span {
+  display: block;
+  line-height: 1.35;
+}
+
+.billingRows strong,
+.billingRows small {
+  margin-top: 4px;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1998,7 +2090,10 @@ dd {
   .capacitySummary,
   .capacityControls,
   .capacityWeeks article,
-  .capacityCritical {
+  .capacityCritical,
+  .billingSummary,
+  .billingControls,
+  .billingRows article {
     grid-template-columns: 1fr;
   }
 }

@@ -540,6 +540,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre capacidade, semanas e governanca.
 - Documentado uso operacional para preventivas, terceirizados e novas vendas.
 
+## 0.8.81 - Faturamento Recorrente
+
+- Adicionado endpoint `GET /billing/recurring-board`.
+- Board consolida MRR, ARR, proximos vencimentos e riscos de cobranca.
+- Painel web ganhou secao financeira de contratos recorrentes.
+- Teste automatizado cobre resumo financeiro e governanca.
+- Documentado uso do board financeiro operacional.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

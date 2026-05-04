@@ -138,6 +138,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(billingPlan.json().installments.length, 12);
   assert.equal(billingPlan.json().billingRules.dueDay, 10);
 
+  const recurringBilling = await app.inject({
+    method: "GET",
+    url: "/billing/recurring-board",
+  });
+  assert.equal(recurringBilling.statusCode, 200);
+  assert.equal(recurringBilling.json().governance.auditEvent, "billing.recurring_board_viewed");
+  assert.ok(recurringBilling.json().summary.monthlyRecurringRevenue > 0);
+  assert.ok(recurringBilling.json().rows.length >= 3);
+
   const serviceOrderCommunication = await app.inject({
     method: "GET",
     url: "/service-orders/1048/communication-package",

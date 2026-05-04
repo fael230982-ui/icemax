@@ -1616,3 +1616,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Faturamento Recorrente
+
+- [x] Endpoint de faturamento recorrente criado.
+- [x] MRR, ARR e proximos vencimentos incluidos.
+- [x] Risco financeiro por contrato incluido.
+- [x] Painel web financeiro criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

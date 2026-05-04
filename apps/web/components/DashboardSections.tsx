@@ -23,6 +23,7 @@ import { ContractCapacityBoardPanel } from "./ContractCapacityBoardPanel";
 import { ContractOpportunityPipelinePanel } from "./ContractOpportunityPipelinePanel";
 import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
 import { PostServiceCommandPanel } from "./PostServiceCommandPanel";
+import { RecurringBillingBoardPanel } from "./RecurringBillingBoardPanel";
 import { OperationsConsole } from "./forms/OperationsConsole";
 import { QuickCreatePanel } from "./forms/QuickCreatePanel";
 
@@ -59,6 +60,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Contratos" title="Capacidade da agenda recorrente" action={<span className="pill">Preventivas</span>} wide>
         <ContractCapacityBoardPanel />
+      </Panel>
+
+      <Panel eyebrow="Financeiro" title="Faturamento recorrente" action={<span className="pill">MRR</span>} wide>
+        <RecurringBillingBoardPanel />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>
