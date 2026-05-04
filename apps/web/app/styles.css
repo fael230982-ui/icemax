@@ -1152,7 +1152,72 @@ dd {
   width: 100%;
 }
 
-.quoteDecision p {
+.quoteDecisionForm {
+  display: grid;
+  gap: 10px;
+}
+
+.decisionTabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.decisionTabs button {
+  padding: 0 8px;
+}
+
+.decisionTabs button.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.quoteDecisionForm label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.quoteDecisionForm input,
+.quoteDecisionForm textarea {
+  width: 100%;
+}
+
+.quoteCheck {
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  font-weight: 600;
+}
+
+.quoteCheck input {
+  min-height: 18px;
+  margin: 1px 0 0;
+}
+
+.quoteFeedback {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.quoteFeedback.success {
+  color: #065f46;
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+
+.quoteFeedback.error {
+  color: #991b1b;
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.quoteDecision p,
+.quoteFeedback {
   margin: 4px 0 0;
   line-height: 1.5;
 }

@@ -1,3 +1,5 @@
+import { QuoteDecisionForm } from "./QuoteDecisionForm";
+
 type QuotePageProps = {
   params: Promise<{
     token: string;
@@ -111,13 +113,7 @@ export default async function QuoteApprovalPage({ params }: QuotePageProps) {
               <h2>Aprovacao do cliente</h2>
             </div>
           </div>
-          <button>Aprovar orcamento</button>
-          <button className="secondary">Solicitar revisao</button>
-          <button className="secondary">Recusar</button>
-          <p>
-            A decisao registrada neste portal devera solicitar nome, documento e aceite dos termos antes de liberar
-            execucao.
-          </p>
+          <QuoteDecisionForm token={token} />
         </aside>
       </section>
 

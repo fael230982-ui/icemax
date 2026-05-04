@@ -1080,3 +1080,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Decisao Interativa No Portal De Orcamento
+
+- [x] Formulario client-side de decisao criado.
+- [x] Acoes aprovar, revisar e recusar incluidas.
+- [x] Campos de responsavel, documento, e-mail e observacao incluidos.
+- [x] Aceite dos termos validado no front-end.
+- [x] Cliente web passou a chamar API publica de decisao.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

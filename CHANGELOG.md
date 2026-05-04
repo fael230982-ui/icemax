@@ -263,6 +263,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Aprovacao publica exige aceite dos termos antes de alterar a decisao.
 - Teste automatizado cobre consulta publica, bloqueio sem aceite e aprovacao.
 
+## 0.8.45 - Decisao Interativa No Portal De Orcamento
+
+- Portal publico de orcamento ganhou formulario de decisao do cliente.
+- Cliente informa responsavel, documento, e-mail, observacao e aceite dos termos.
+- Front-end passou a chamar `PATCH /public/quotes/:token/decision`.
+- Estados de sucesso, erro e carregamento foram incluidos na experiencia.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
