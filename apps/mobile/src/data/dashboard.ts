@@ -69,6 +69,15 @@ export const quoteApproval = [
   { title: "Decisao", detail: "Aprovado libera execucao, recusado retorna para revisao comercial" },
 ];
 
+export const approvedQuoteActivation = [
+  { title: "ORC-2026-002", detail: "Orcamento aprovado e liberado para execucao da OS 1049" },
+  { title: "OS", detail: "Status alvo: agendada, com escopo aprovado pelo cliente" },
+  { title: "Pecas", detail: "Separar itens aprovados antes do deslocamento tecnico" },
+  { title: "Despacho", detail: "Revalidar prontidao, rota e janela do cliente antes da saida" },
+  { title: "Cliente", detail: "Avisar que a equipe seguira com a programacao do atendimento" },
+  { title: "Auditoria", detail: "Registrar aceite e ativacao do orcamento na sincronizacao" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

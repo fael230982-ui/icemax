@@ -250,3 +250,21 @@ export function createQuoteApprovalPresentedAction(serviceOrderId: string, quote
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createApprovedQuoteActivationAckAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-activation"),
+    label: `Orcamento aprovado OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/quotes/${quoteId}/approval-activation`,
+    payload: {
+      serviceOrderId,
+      mobileAck: {
+        quoteId,
+        acknowledgedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

@@ -6,8 +6,9 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
 import {
+  createApprovedQuoteActivationAckAction,
   createCheckInAction,
   createChecklistAction,
   createCustomerSignatureAction,
@@ -93,6 +94,12 @@ export default function App() {
     setSyncStatus("Apresentacao do orcamento salva offline.");
   }
 
+  function addApprovedQuoteActivationAck() {
+    const action = createApprovedQuoteActivationAckAction("1049", "quote-002");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Liberacao do orcamento aprovado salva offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -137,6 +144,7 @@ export default function App() {
             onAddSurvey={addSatisfactionSurvey}
             onAddManual={addManualConsulted}
             onAddQuoteApproval={addQuoteApprovalPresented}
+            onAddQuoteActivation={addApprovedQuoteActivationAck}
             onSync={syncPending}
           />
         </Section>
@@ -160,6 +168,14 @@ export default function App() {
         <Section title="Orcamento">
           <View style={styles.grid}>
             {quoteApproval.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Orcamento liberado">
+          <View style={styles.grid}>
+            {approvedQuoteActivation.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>

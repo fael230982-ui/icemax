@@ -301,6 +301,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para ativar orcamento aprovado.
 - Teste automatizado cobre ativacao bloqueada e ativacao aprovada.
 
+## 0.8.50 - Orcamento Aprovado Offline No Mobile
+
+- App mobile passou a exibir secao de orcamento liberado para execucao.
+- Modo offline ganhou acao de aceite da liberacao do orcamento aprovado.
+- SyncPanel recebeu botao `Orcamento liberado`.
+- Fluxo diferencia orcamento apresentado de orcamento aprovado para execucao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
