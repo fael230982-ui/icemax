@@ -14,6 +14,7 @@ import {
 } from "../schemas";
 import {
   calculateSlaBoard,
+  createContractActivationPlanFromServiceOrder,
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
@@ -136,5 +137,16 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return proposal;
+  });
+
+  app.get("/service-orders/:id/contract-activation-plan", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const activationPlan = createContractActivationPlanFromServiceOrder(id);
+
+    if (!activationPlan) {
+      return reply.code(404).send({ message: "OS nao encontrada para plano de ativacao de contrato." });
+    }
+
+    return activationPlan;
   });
 }

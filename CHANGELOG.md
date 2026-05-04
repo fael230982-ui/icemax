@@ -45,6 +45,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar proposta comercial por OS.
 - Teste automatizado cobre termos comerciais e mensagem ao cliente.
 
+## 0.8.15 - Ativacao De Contrato
+
+- Adicionado endpoint para preparar ativacao de contrato a partir da OS.
+- Plano de ativacao inclui rascunho do contrato, calendario preventivo e primeira OS preventiva.
+- Criadas etapas de aceite, governanca e comunicacao ao cliente.
+- Console web passou a consultar ativacao de contrato.
+- Teste automatizado cobre calendario inicial e rascunho de OS preventiva.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

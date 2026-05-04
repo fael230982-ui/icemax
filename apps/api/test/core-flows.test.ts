@@ -383,6 +383,12 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(contractProposal.json().commercialTerms.minimumTermMonths, 12);
   assert.match(contractProposal.json().customerMessages.whatsappBody, /plano/i);
 
+  const activationPlan = await app.inject({ method: "GET", url: "/service-orders/1048/contract-activation-plan" });
+  assert.equal(activationPlan.statusCode, 200);
+  assert.equal(activationPlan.json().serviceOrderId, "1048");
+  assert.equal(activationPlan.json().firstYearCalendar.length, 4);
+  assert.match(activationPlan.json().firstServiceOrderDraft.title, /Preventiva contratual/);
+
   const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
   assert.equal(timeline.statusCode, 200);
   assert.ok(timeline.json().total >= 1);

@@ -1,4 +1,5 @@
 import { equipment, serviceContracts, serviceOrders, stock } from "../mock-data";
+import { previewContractVisits } from "@icemax/shared";
 import type {
   CreateInvoiceDraftInput,
   CreateMaintenanceWindowInput,
@@ -316,5 +317,68 @@ export function createContractProposalFromServiceOrder(serviceOrderId: string) {
       "Revisar condicoes de garantia e exclusoes.",
       "Conferir margem antes do envio final.",
     ],
+  };
+}
+
+export function createContractActivationPlanFromServiceOrder(serviceOrderId: string) {
+  const proposal = createContractProposalFromServiceOrder(serviceOrderId);
+
+  if (!proposal) {
+    return null;
+  }
+
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() + 7);
+  const startDateOnly = startDate.toISOString().slice(0, 10);
+  const visits = previewContractVisits({
+    startDate: startDateOnly,
+    recurrenceMonths: proposal.plan.recurrenceMonths as 3 | 4 | 6,
+    occurrences: 4,
+  });
+
+  return {
+    serviceOrderId,
+    proposalId: proposal.id,
+    status: "ready_for_acceptance",
+    contractDraft: {
+      name: proposal.plan.name,
+      customer: proposal.customer,
+      equipment: proposal.equipment,
+      recurrenceMonths: proposal.plan.recurrenceMonths,
+      startDate: startDateOnly,
+      minimumTermMonths: proposal.commercialTerms.minimumTermMonths,
+      monthlyValue: proposal.commercialTerms.monthlyValue,
+      includedServices: proposal.includedServices,
+      notIncludedServices: proposal.notIncludedServices,
+    },
+    firstYearCalendar: visits.map((visit) => ({
+      ...visit,
+      title: `Visita preventiva ${visit.sequence} - ${proposal.equipment}`,
+      recommendedAction: visit.sequence === 1 ? "Confirmar aceite e agendar primeira preventiva." : "Manter visita no calendario recorrente.",
+    })),
+    firstServiceOrderDraft: {
+      title: `Preventiva contratual - ${proposal.equipment}`,
+      description: `Primeira visita do ${proposal.plan.name}. Executar checklist preventivo, higienizacao e registro fotografico.`,
+      priority: "normal",
+      scheduledDate: visits[0]?.expectedDate,
+    },
+    activationSteps: [
+      "Receber aceite formal da proposta.",
+      "Cadastrar contrato recorrente com vigencia minima de 12 meses.",
+      "Vincular equipamentos cobertos e endereco de atendimento.",
+      "Gerar calendario preventivo do primeiro ano.",
+      "Criar primeira OS preventiva.",
+      "Enviar confirmacao ao cliente por e-mail e WhatsApp.",
+    ],
+    governance: [
+      "Registrar aceite e condicoes comerciais no historico do cliente.",
+      "Auditar criacao do contrato e geracao das visitas.",
+      "Bloquear alteracoes de valor sem permissao gerencial.",
+      "Revisar renovacao 30 dias antes do vencimento.",
+    ],
+    communication: {
+      customerConfirmation: `Contrato ${proposal.plan.name} pronto para ativacao. A primeira visita preventiva esta sugerida para ${visits[0]?.expectedDate}.`,
+      internalNotification: `Criar contrato recorrente para ${proposal.customer}, vinculado a OS ${serviceOrderId}.`,
+    },
   };
 }
