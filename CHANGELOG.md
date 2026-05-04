@@ -323,6 +323,12 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Modo offline ganhou acao para registrar consulta da timeline pelo tecnico.
 - SyncPanel recebeu botao `Timeline orcamento`.
 
+## 0.8.53 - Timeline Publica De Orcamento
+
+- Portal publico de orcamento passou a exibir linha do tempo de acompanhamento.
+- Cliente visualiza etapas concluidas e proximos passos depois da decisao.
+- Estilos responsivos foram adicionados para cards de timeline no desktop e mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

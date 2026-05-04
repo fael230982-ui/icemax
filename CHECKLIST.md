@@ -1196,3 +1196,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Timeline Publica De Orcamento
+
+- [x] Secao publica de linha do tempo criada.
+- [x] Etapas concluidas e proximas etapas do cliente incluidas.
+- [x] Estilos responsivos da timeline adicionados.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

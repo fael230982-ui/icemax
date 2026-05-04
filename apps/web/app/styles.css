@@ -1143,9 +1143,50 @@ dd {
 
 .quoteItem div,
 .quoteDecision,
-.quoteTerms {
+.quoteTerms,
+.quoteTimeline {
   display: grid;
   gap: 10px;
+}
+
+.quoteTimeline {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.quoteTimelineItem {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.quoteTimelineItem.done {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.quoteTimelineItem span {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: #0f5f46;
+  background: #dcfce7;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.quoteTimelineItem.pending span {
+  color: #7c2d12;
+  background: #ffedd5;
+}
+
+.quoteTimelineItem p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .quoteDecision button {
@@ -1283,6 +1324,7 @@ dd {
   .quoteHero,
   .quoteLayout,
   .quoteSummary,
+  .quoteTimeline,
   .trackingHero,
   .trackingGrid,
   .trackingSteps,

@@ -22,6 +22,7 @@ type QuotePageData = {
   status: string;
   items: Array<{ description: string; quantity: string; amount: string }>;
   conditions: string[];
+  timeline: Array<{ title: string; detail: string; status: "done" | "pending" }>;
 };
 
 type PublicQuoteResponse = {
@@ -62,6 +63,12 @@ const fallbackQuote: QuotePageData = {
     "Aprovacao libera execucao conforme disponibilidade tecnica e estoque.",
     "Garantia aplicada apenas aos itens executados e pecas substituidas.",
     "Valores validos ate a data indicada neste link.",
+  ],
+  timeline: [
+    { title: "Orcamento preparado", detail: "Escopo tecnico, valores e validade foram organizados para decisao.", status: "done" },
+    { title: "Link enviado", detail: "A empresa acompanha o envio por e-mail, WhatsApp ou atendimento interno.", status: "done" },
+    { title: "Decisao do cliente", detail: "Aprovacao libera execucao; revisao ou recusa retornam para o comercial.", status: "pending" },
+    { title: "Programacao da OS", detail: "Apos aprovacao, a equipe confirma agenda, pecas e deslocamento tecnico.", status: "pending" },
   ],
 };
 
@@ -215,6 +222,25 @@ export default async function QuoteApprovalPage({ params }: QuotePageProps) {
             <li key={condition}>{condition}</li>
           ))}
         </ul>
+      </section>
+
+      <section className="quotePanel" aria-label="Linha do tempo do orcamento">
+        <div className="quotePanelHeader">
+          <div>
+            <p className="eyebrow">Acompanhamento</p>
+            <h2>Linha do tempo</h2>
+          </div>
+          <span>Visao do cliente</span>
+        </div>
+        <div className="quoteTimeline">
+          {quote.timeline.map((event) => (
+            <article key={event.title} className={`quoteTimelineItem ${event.status}`}>
+              <span>{event.status === "done" ? "Concluido" : "Proximo"}</span>
+              <strong>{event.title}</strong>
+              <p>{event.detail}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <footer className="quoteFooter">
