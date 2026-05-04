@@ -536,6 +536,16 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(completionEmailQueue.json().summary.total >= 3);
   assert.ok(completionEmailQueue.json().rows[0].recipients.company);
 
+  const closeoutArchive = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1048/closeout-archive",
+  });
+  assert.equal(closeoutArchive.statusCode, 200);
+  assert.equal(closeoutArchive.json().governance.auditEvent, "field.closeout_archive_viewed");
+  assert.equal(closeoutArchive.json().serviceOrderId, "1048");
+  assert.ok(closeoutArchive.json().documents.length >= 5);
+  assert.ok(closeoutArchive.json().timeline.length >= 5);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

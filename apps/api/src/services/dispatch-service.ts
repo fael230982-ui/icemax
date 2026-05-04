@@ -1154,6 +1154,95 @@ export function createMockCompletionEmailQueueBoard() {
   };
 }
 
+export function createMockServiceOrderCloseoutArchive(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+  const technician = technicianLocations.find((item) => item.serviceOrderId === serviceOrderId) ?? technicianLocations[0];
+  const quote = quotes.find((item) => item.serviceOrderId === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const closeout = createMockFieldExecutionCloseoutPackage({
+    serviceOrderId,
+    technicianUserId: technician.technicianUserId,
+    quoteId: quote?.id,
+  });
+  const signature = createMockFieldCustomerSignaturePackage({
+    serviceOrderId,
+    technicianUserId: technician.technicianUserId,
+    quoteId: quote?.id,
+  });
+  const email = createMockFieldCompletionEmailPackage({
+    serviceOrderId,
+    technicianUserId: technician.technicianUserId,
+    quoteId: quote?.id,
+    emailCopyToCustomer: true,
+  });
+  const completed = Boolean(closeout && signature && email && !email.blockers.length);
+
+  return {
+    serviceOrderId,
+    quoteId: quote?.id ?? null,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: {
+      technicianUserId: technician.technicianUserId,
+      name: technician.technician,
+    },
+    status: completed ? "archive_ready" : "archive_incomplete",
+    generatedAt: new Date().toISOString(),
+    summary: {
+      issue: order.issue,
+      priority: order.priority,
+      closeoutStatus: closeout?.status ?? "not_prepared",
+      signatureStatus: signature?.status ?? "not_prepared",
+      emailStatus: email?.status ?? "not_prepared",
+      blockers: [
+        ...(closeout?.blockers.map((item) => item.label) ?? []),
+        ...(email?.blockers ?? []),
+      ],
+    },
+    documents: [
+      { key: "technical_report", label: "Relatorio tecnico revisado", status: closeout ? "prepared" : "missing", source: "field.closeout.reportDraft" },
+      { key: "field_evidences", label: "Fotos e evidencias de campo", status: closeout?.blockers.length ? "needs_review" : "prepared", source: "field.evidence.package" },
+      { key: "customer_signature", label: "Assinatura digital do cliente", status: signature?.canCaptureSignature ? "pending_capture" : "locked", source: "field.customer_signature" },
+      { key: "completion_email", label: "Comprovante de e-mail final", status: email?.canQueueEmail ? "ready_to_queue" : "blocked", source: "field.completion_email" },
+      { key: "warranty_term", label: "Termo de garantia aplicavel", status: "recommended", source: "business_suite.warranty" },
+    ],
+    timeline: [
+      { key: "os_created", label: "OS aberta", at: "2026-05-04T08:00:00.000Z", actor: "operacao" },
+      { key: "field_execution", label: "Execucao tecnica registrada", at: "2026-05-04T10:35:00.000Z", actor: technician.technician },
+      { key: "closeout_review", label: "Fechamento tecnico preparado", at: "2026-05-04T11:10:00.000Z", actor: "sistema" },
+      { key: "signature_gate", label: "Portao de assinatura avaliado", at: "2026-05-04T11:20:00.000Z", actor: "sistema" },
+      { key: "email_gate", label: "Pacote de e-mail final avaliado", at: "2026-05-04T11:30:00.000Z", actor: "sistema" },
+    ],
+    historyLinks: {
+      customerHistory: `/customers/${order.customer}/history`,
+      equipmentTimeline: `/equipment/${order.equipment}/timeline`,
+      serviceOrderArchive: `/dispatch/service-orders/${serviceOrderId}/closeout-archive`,
+    },
+    governance: {
+      auditEvent: "field.closeout_archive_viewed",
+      retentionPolicy: "tenant_operational_retention",
+      hidesInternalCost: true,
+      canShareWithCustomer: completed,
+      requiresProviderReceiptForFinalSend: true,
+    },
+    nextActions: completed
+      ? [
+          "Arquivar pacote completo no historico do cliente.",
+          "Liberar comprovante para consulta futura.",
+          "Usar dados para garantia, renovacao e indicadores.",
+        ]
+      : [
+          "Resolver bloqueios antes de considerar OS totalmente arquivada.",
+          "Manter envio real bloqueado ate assinatura e anexos.",
+          "Revisar historico do equipamento antes de nova visita.",
+        ],
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 

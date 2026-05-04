@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, fieldCompletionEmailQueueSchema, fieldCustomerSignatureRecordSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockCompletionEmailQueueBoard, createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockFieldFinalizationBoard, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, queueMockFieldCompletionEmail, recommendMockDispatchAssignments, recordMockFieldCustomerSignature, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockCompletionEmailQueueBoard, createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockFieldFinalizationBoard, createMockQuoteExecutionDispatchQueue, createMockServiceOrderCloseoutArchive, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, queueMockFieldCompletionEmail, recommendMockDispatchAssignments, recordMockFieldCustomerSignature, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -65,6 +65,17 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/dispatch/finalization-board", async () => createMockFieldFinalizationBoard());
 
   app.get("/dispatch/completion-email-queue", async () => createMockCompletionEmailQueueBoard());
+
+  app.get("/dispatch/service-orders/:id/closeout-archive", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const archive = createMockServiceOrderCloseoutArchive(id);
+
+    if (!archive) {
+      return reply.code(404).send({ message: "OS nao encontrada para pacote de arquivo de fechamento." });
+    }
+
+    return archive;
+  });
 
   app.post("/dispatch/assignment-decision", async (request, reply) => {
     const context = await getAuthContext(request);

@@ -549,6 +549,98 @@ h2 {
   line-height: 1.35;
 }
 
+.archivePanel {
+  display: grid;
+  gap: 14px;
+}
+
+.archiveControls,
+.archiveHeader,
+.archiveActions {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.archiveControls {
+  grid-template-columns: 130px repeat(3, minmax(0, 1fr));
+  align-items: end;
+}
+
+.archiveHeader {
+  grid-template-columns: 1fr 1.25fr 1fr;
+}
+
+.archiveActions {
+  grid-template-columns: 0.8fr 1.2fr;
+}
+
+.archiveControls label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.archiveControls select {
+  width: 100%;
+}
+
+.archiveControls div,
+.archiveHeader div,
+.archiveActions div {
+  display: grid;
+  gap: 5px;
+}
+
+.archiveControls span,
+.archiveHeader span,
+.archiveHeader small,
+.archiveActions span,
+.archiveActions small,
+.archiveDocuments span,
+.archiveDocuments small,
+.archiveTimeline span,
+.archiveTimeline small {
+  color: var(--muted);
+}
+
+.archiveDocuments,
+.archiveTimeline {
+  display: grid;
+  gap: 10px;
+}
+
+.archiveDocuments {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.archiveTimeline {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.archiveDocuments article,
+.archiveTimeline article {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  min-height: 96px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.archiveDocuments strong,
+.archiveTimeline strong {
+  line-height: 1.3;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1616,7 +1708,12 @@ dd {
   .finalizationRow,
   .emailQueueSummary,
   .emailQueueControls,
-  .emailQueueRow {
+  .emailQueueRow,
+  .archiveControls,
+  .archiveHeader,
+  .archiveActions,
+  .archiveDocuments,
+  .archiveTimeline {
     grid-template-columns: 1fr;
   }
 }

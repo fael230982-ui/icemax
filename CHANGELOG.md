@@ -508,6 +508,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Adicionado filtro para exibir apenas e-mails bloqueados.
 - Teste automatizado cobre o contrato da fila de e-mail final.
 
+## 0.8.77 - Arquivo De Fechamento Da OS
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/closeout-archive`.
+- Arquivo consolida relatorio, evidencias, assinatura, e-mail, garantia e linha do tempo.
+- Painel web ganhou secao para consultar o pacote de comprovacao da OS.
+- Teste automatizado cobre documentos e timeline do arquivo de fechamento.
+- Documentado uso do arquivo para historico, garantia, suporte e auditoria.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

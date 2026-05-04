@@ -148,6 +148,7 @@ export const icemaxApi = {
   quoteExecutionDispatchQueue: (token?: string) => apiRequest<unknown>("/dispatch/quote-execution-queue", { token }),
   fieldFinalizationBoard: (token?: string) => apiRequest<unknown>("/dispatch/finalization-board", { token }),
   completionEmailQueue: (token?: string) => apiRequest<unknown>("/dispatch/completion-email-queue", { token }),
+  closeoutArchive: (serviceOrderId: string, token?: string) => apiRequest<unknown>(`/dispatch/service-orders/${serviceOrderId}/closeout-archive`, { token }),
   createDispatchAssignmentDecision: (body: unknown, token?: string) =>
     apiRequest<unknown>("/dispatch/assignment-decision", { method: "POST", body, token }),
   dispatchReadiness: (serviceOrderId: string, technicianUserId: string, token?: string) =>

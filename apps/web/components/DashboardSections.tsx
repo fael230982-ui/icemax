@@ -17,6 +17,7 @@ import {
   customers,
 } from "../app/data";
 import { Panel } from "./Panel";
+import { CloseoutArchivePanel } from "./CloseoutArchivePanel";
 import { CompletionEmailQueuePanel } from "./CompletionEmailQueuePanel";
 import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
 import { OperationsConsole } from "./forms/OperationsConsole";
@@ -39,6 +40,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Fechamento" title="Fila de e-mails finais" action={<span className="pill">Auditoria</span>} wide>
         <CompletionEmailQueuePanel />
+      </Panel>
+
+      <Panel eyebrow="Historico" title="Arquivo de fechamento da OS" action={<span className="pill">Comprovantes</span>} wide>
+        <CloseoutArchivePanel />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>
