@@ -1689,7 +1689,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Politica De Acesso Do Portal
 
@@ -1704,7 +1704,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Prontidao De Dados Para Prisma
 
@@ -1719,7 +1719,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Gate De Isolamento Multiempresa
 
@@ -1734,7 +1734,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Drill De Rollback Da Virada Para Banco
 
@@ -1749,7 +1749,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Prontidao De Storage Privado
 
@@ -1764,7 +1764,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Manifesto De Evidencias Da OS
 
@@ -1779,7 +1779,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Politica De Compartilhamento Externo
 
@@ -1794,4 +1794,4 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
