@@ -128,6 +128,24 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(billingPlan.json().installments.length, 12);
   assert.equal(billingPlan.json().billingRules.dueDay, 10);
 
+  const serviceOrderCommunication = await app.inject({
+    method: "GET",
+    url: "/service-orders/1048/communication-package",
+  });
+  assert.equal(serviceOrderCommunication.statusCode, 200);
+  assert.equal(serviceOrderCommunication.json().serviceOrderId, "1048");
+  assert.ok(serviceOrderCommunication.json().messages.some((item: { channel: string }) => item.channel === "whatsapp"));
+  assert.equal(serviceOrderCommunication.json().governance.auditEvent, "communication.service_order_package_prepared");
+
+  const contractCommunication = await app.inject({
+    method: "GET",
+    url: "/contracts/contract-001/communication-package",
+  });
+  assert.equal(contractCommunication.statusCode, 200);
+  assert.equal(contractCommunication.json().contractId, "contract-001");
+  assert.ok(contractCommunication.json().automationRules.channels.includes("email"));
+  assert.ok(contractCommunication.json().messages.some((item: { template: string }) => item.template === "contrato_mensalidade"));
+
   const movement = await app.inject({
     method: "POST",
     url: "/stock-movements",

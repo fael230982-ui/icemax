@@ -248,6 +248,14 @@ export function OperationsConsole() {
     void run("Plano financeiro", () => icemaxApi.contractBillingPlan("contract-001", token || undefined));
   }
 
+  function loadServiceOrderCommunicationPackage() {
+    void run("Comunicacao da OS", () => icemaxApi.serviceOrderCommunicationPackage("1048", token || undefined));
+  }
+
+  function loadContractCommunicationPackage() {
+    void run("Comunicacao do contrato", () => icemaxApi.contractCommunicationPackage("contract-001", token || undefined));
+  }
+
   function runEnterpriseSuite() {
     void run("Suite escala", async () => {
       const results = await Promise.all([
@@ -418,6 +426,8 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
+        <button type="button" className="secondary" onClick={loadServiceOrderCommunicationPackage}>Comunicacao OS</button>
+        <button type="button" className="secondary" onClick={loadContractCommunicationPackage}>Comunicacao contrato</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>

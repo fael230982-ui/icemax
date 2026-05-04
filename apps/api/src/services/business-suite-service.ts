@@ -512,3 +512,139 @@ export function createContractBillingPlan(contractId: string) {
     ],
   };
 }
+
+export function createServiceOrderCommunicationPackage(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const postServicePlan = createPostServicePlan(serviceOrderId);
+  const completionReview = {
+    professionalSummary: `Atendimento tecnico concluido para ${order.customer}, equipamento ${order.equipment}. As informacoes foram revisadas para envio ao cliente com linguagem clara e profissional.`,
+    customerCopyEnabled: true,
+  };
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: "communication_ready",
+    trigger: "service_order_completed",
+    recipients: {
+      companyEmail: "adm.rcsolutions@gmail.com",
+      customerEmailCopy: "cliente@local.dev",
+      whatsapp: "+5500000000000",
+      internal: "operacao@icemax.local",
+    },
+    messages: [
+      {
+        channel: "email",
+        template: "os_concluida_relatorio",
+        subject: `Relatorio tecnico da OS ${serviceOrderId}`,
+        body: `Ola, segue o relatorio tecnico da OS ${serviceOrderId}. ${completionReview.professionalSummary}`,
+        copyToCustomer: completionReview.customerCopyEnabled,
+      },
+      {
+        channel: "whatsapp",
+        template: "os_concluida_resumo",
+        body: `Ola! A OS ${serviceOrderId} foi concluida. O relatorio tecnico do equipamento ${order.equipment} sera enviado por e-mail.`,
+        copyToCustomer: true,
+      },
+      {
+        channel: "internal",
+        template: "pos_atendimento_operacao",
+        subject: `Pos-atendimento OS ${serviceOrderId}`,
+        body: postServicePlan?.followUp.reason ?? "Confirmar satisfacao e atualizar historico do cliente.",
+        copyToCustomer: false,
+      },
+    ],
+    attachments: [
+      { type: "technical_report", required: true, status: "ready_to_generate" },
+      { type: "customer_signature", required: true, status: order.status === "completed" ? "expected" : "pending_completion" },
+      { type: "photo_evidence", required: false, status: "optional" },
+      { type: "warranty_term", required: false, status: "recommended" },
+    ],
+    governance: {
+      lgpdBasis: "execucao de contrato e comunicacao de atendimento solicitado",
+      auditEvent: "communication.service_order_package_prepared",
+      resendPolicy: "permitir reenvio manual com justificativa operacional",
+      blockedReasons: ["cliente sem e-mail e sem WhatsApp", "OS sem assinatura quando assinatura for obrigatoria", "relatorio tecnico ausente"],
+    },
+    nextActions: [
+      "Gerar relatorio tecnico final.",
+      "Anexar assinatura do cliente.",
+      "Enviar e-mail para a empresa com copia opcional ao cliente.",
+      "Enviar resumo por WhatsApp quando houver consentimento.",
+      "Registrar envio na auditoria da OS.",
+    ],
+  };
+}
+
+export function createContractCommunicationPackage(contractId: string) {
+  const contract = serviceContracts.find((item) => item.id === contractId);
+
+  if (!contract) {
+    return null;
+  }
+
+  const billingPlan = createContractBillingPlan(contractId);
+  const nextInstallment = billingPlan?.installments[0];
+
+  return {
+    contractId,
+    customer: contract.customer,
+    plan: contract.plan,
+    status: "communication_ready",
+    trigger: "contract_billing_and_visit_reminders",
+    recipients: {
+      companyEmail: "adm.rcsolutions@gmail.com",
+      customerEmailCopy: "cliente@local.dev",
+      whatsapp: "+5500000000000",
+      internal: "financeiro@icemax.local",
+    },
+    messages: [
+      {
+        channel: "email",
+        template: "contrato_mensalidade",
+        subject: `Mensalidade do contrato ${contract.plan}`,
+        body: `Ola, a proxima mensalidade do contrato ${contract.plan} vence em ${nextInstallment?.dueDate} no valor de R$ ${billingPlan?.monthlyValue.toFixed(2)}.`,
+        copyToCustomer: true,
+      },
+      {
+        channel: "whatsapp",
+        template: "lembrete_visita_contrato",
+        body: `Ola! Sua proxima visita preventiva do contrato ${contract.plan} esta prevista para ${contract.nextVisit}.`,
+        copyToCustomer: true,
+      },
+      {
+        channel: "internal",
+        template: "handoff_financeiro_contrato",
+        subject: `Contrato pronto para cobranca - ${contract.customer}`,
+        body: "Conferir dados fiscais, forma de pagamento e conciliacao da primeira mensalidade.",
+        copyToCustomer: false,
+      },
+    ],
+    automationRules: {
+      billingReminderDaysBefore: [7, 2, 0],
+      visitReminderDaysBefore: [5, 1],
+      channels: ["email", "whatsapp", "internal"],
+      pauseWhenDelinquent: true,
+      requireConsentForWhatsapp: true,
+    },
+    governance: {
+      lgpdBasis: "execucao de contrato recorrente",
+      auditEvent: "communication.contract_package_prepared",
+      resendPolicy: "reenvio permitido para cobranca, visita e aditivo contratual",
+      blockedReasons: ["contrato inativo", "cliente sem canal valido", "inadimplencia critica sem aprovacao gerencial"],
+    },
+    nextActions: [
+      "Programar lembrete de cobranca mensal.",
+      "Programar lembrete de visita preventiva.",
+      "Enviar aviso interno ao financeiro.",
+      "Registrar consentimento de WhatsApp.",
+      "Conciliar envio com calendario do contrato.",
+    ],
+  };
+}

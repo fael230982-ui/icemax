@@ -719,3 +719,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Comunicacao Operacional
+
+- [x] Pacote de comunicacao de OS concluida criado.
+- [x] Pacote de comunicacao de contrato recorrente criado.
+- [x] E-mail, WhatsApp e aviso interno padronizados.
+- [x] Governanca LGPD, bloqueios e politica de reenvio registradas.
+- [x] Console web conectado aos pacotes de comunicacao.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

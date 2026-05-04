@@ -96,6 +96,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar financeiro do contrato.
 - Teste automatizado cobre mensalidades e regra de vencimento.
 
+## 0.8.22 - Comunicacao Operacional
+
+- Adicionados pacotes de comunicacao para OS concluida e contrato recorrente.
+- Pacotes incluem e-mail, WhatsApp, avisos internos, anexos, governanca LGPD e bloqueios.
+- Console web passou a consultar comunicacao da OS e comunicacao do contrato.
+- Teste automatizado cobre canais, templates e regra de auditoria.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
