@@ -337,6 +337,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para consultar o board gerencial de orcamentos.
 - Teste automatizado cobre resumo, lanes e governanca do board.
 
+## 0.8.55 - Board De Orcamentos No Mobile
+
+- App mobile passou a exibir resumo de board de orcamentos para campo.
+- Tecnico visualiza orcamento aprovado, pendente de cliente, SLA, risco e comunicacao autorizada.
+- Modo offline ganhou acao para registrar consulta do board pelo tecnico.
+- SyncPanel recebeu botao `Board orcamentos`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -87,6 +87,15 @@ export const quoteApprovalTimeline = [
   { title: "Proximo", detail: "Tecnico deve conferir pecas, rota e janela antes da saida" },
 ];
 
+export const quoteApprovalBoard = [
+  { title: "Aprovado", detail: "ORC-2026-002 esta liberado para execucao da OS 1049" },
+  { title: "Aguardando", detail: "ORC-2026-001 ainda depende de decisao do cliente" },
+  { title: "SLA", detail: "Pendentes devem receber lembrete autorizado antes do vencimento" },
+  { title: "Risco", detail: "Nao executar servico fora do escopo aprovado" },
+  { title: "Comunicacao", detail: "Usar WhatsApp ou e-mail apenas conforme autorizacao do cliente" },
+  { title: "Gestor", detail: "Aprovados devem ir para despacho, recusados voltam ao comercial" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

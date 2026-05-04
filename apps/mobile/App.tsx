@@ -6,7 +6,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalTimeline, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalTimeline, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -18,6 +18,7 @@ import {
   createPartUsageAction,
   createPhotoEvidenceAction,
   createQuoteApprovalPresentedAction,
+  createQuoteBoardViewedAction,
   createQuoteTimelineViewedAction,
   createSatisfactionSurveyAction,
   createVisitPreparationAckAction,
@@ -107,6 +108,12 @@ export default function App() {
     setSyncStatus("Consulta da timeline do orcamento salva offline.");
   }
 
+  function addQuoteBoardViewed() {
+    const action = createQuoteBoardViewedAction("1049");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Consulta do board de orcamentos salva offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -153,6 +160,7 @@ export default function App() {
             onAddQuoteApproval={addQuoteApprovalPresented}
             onAddQuoteActivation={addApprovedQuoteActivationAck}
             onAddQuoteTimeline={addQuoteTimelineViewed}
+            onAddQuoteBoard={addQuoteBoardViewed}
             onSync={syncPending}
           />
         </Section>
@@ -192,6 +200,14 @@ export default function App() {
         <Section title="Timeline do orcamento">
           <View style={styles.grid}>
             {quoteApprovalTimeline.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Board de orcamentos">
+          <View style={styles.grid}>
+            {quoteApprovalBoard.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>

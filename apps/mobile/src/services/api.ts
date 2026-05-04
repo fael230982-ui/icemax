@@ -287,3 +287,21 @@ export function createQuoteTimelineViewedAction(serviceOrderId: string, quoteId:
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteBoardViewedAction(serviceOrderId: string) {
+  return {
+    id: offlineId("quote-board"),
+    label: `Board orcamentos OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: "Board de aprovacao de orcamentos consultado pelo tecnico antes de executar a OS.",
+      source: "mobile_offline_quote_board",
+      mobileAck: {
+        viewedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
