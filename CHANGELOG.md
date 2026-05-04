@@ -241,6 +241,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar pacote de aprovacao.
 - Teste automatizado cobre pacote de aprovacao do `quote-001`.
 
+## 0.8.42 - Orcamento Offline No Mobile
+
+- App mobile passou a exibir secao de orcamento da OS.
+- Modo offline ganhou acao de orcamento apresentado ao cliente.
+- Servico mobile registra nota em `POST /service-orders/:id/notes`.
+- Fluxo aproxima tecnico, cliente e link de aprovacao quando nao ha internet.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

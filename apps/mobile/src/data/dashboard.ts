@@ -62,6 +62,13 @@ export const manualPackage = [
   { title: "Etiqueta", detail: "Conferir modelo real no QR Code ou placa de identificacao" },
 ];
 
+export const quoteApproval = [
+  { title: "ORC-2026-001", detail: "R$ 1840.00 para diagnostico e reposicao de fluido" },
+  { title: "Link", detail: "Apresentar link de aprovacao ao responsavel no local" },
+  { title: "Validade", detail: "Orcamento valido ate 10/05/2026" },
+  { title: "Decisao", detail: "Aprovado libera execucao, recusado retorna para revisao comercial" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

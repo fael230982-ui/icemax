@@ -231,3 +231,22 @@ export function createManualConsultedAction(serviceOrderId: string, manualId: st
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteApprovalPresentedAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-approval"),
+    label: `Orcamento apresentado OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Link de aprovacao do orcamento ${quoteId} apresentado ao cliente em campo.`,
+      source: "mobile_offline_quote_approval",
+      mobileAck: {
+        quoteId,
+        presentedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
