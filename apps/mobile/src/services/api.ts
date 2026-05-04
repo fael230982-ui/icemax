@@ -132,6 +132,72 @@ export function createCustomerSignatureAction(serviceOrderId: string, customerSi
   } satisfies OfflineAction;
 }
 
+export function createFieldExecutionCloseoutAckAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("field-closeout"),
+    label: `Fechamento campo OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Fechamento tecnico da OS ${serviceOrderId} conferido no app antes da assinatura do cliente.`,
+      source: "mobile_offline_field_execution_closeout",
+      mobileAck: {
+        quoteId,
+        evidenceChecked: true,
+        measurementsChecked: true,
+        stockUsageChecked: true,
+        reportDraftReviewed: true,
+        acknowledgedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createFieldCustomerSignaturePackageAckAction(serviceOrderId: string, quoteId: string, customerSignedName: string) {
+  return {
+    id: offlineId("field-signature-package"),
+    label: `Pacote assinatura OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Termos de assinatura da OS ${serviceOrderId} apresentados e aceitos por ${customerSignedName}.`,
+      source: "mobile_offline_field_customer_signature",
+      mobileAck: {
+        quoteId,
+        customerSignedName,
+        termsPresented: true,
+        emailCopyDecisionCaptured: true,
+        signedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createFieldCompletionEmailAckAction(serviceOrderId: string, quoteId: string, emailCopyToCustomer: boolean) {
+  return {
+    id: offlineId("completion-email"),
+    label: `E-mail conclusao OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Pacote de e-mail final da OS ${serviceOrderId} preparado no app com copia ao cliente: ${emailCopyToCustomer ? "sim" : "nao"}.`,
+      source: "mobile_offline_completion_email",
+      mobileAck: {
+        quoteId,
+        emailCopyToCustomer,
+        attachmentsChecked: ["technical_report", "field_evidences", "customer_signature"],
+        queuedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
 export function createVisitPreparationAckAction(serviceOrderId: string, technicianUserId: string) {
   return {
     id: offlineId("visit-prep"),

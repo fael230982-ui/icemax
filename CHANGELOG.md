@@ -460,6 +460,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `E-mail conclusao`.
 - Teste automatizado cobre pacote de e-mail final da OS.
 
+## 0.8.71 - Mobile Fechamento, Assinatura E E-Mail
+
+- App mobile ganhou acoes offline para fechamento tecnico, pacote de assinatura e e-mail final.
+- Painel de sincronizacao mobile recebeu botoes `Fechamento campo`, `Assinatura campo` e `E-mail conclusao`.
+- App passou a exibir secoes de fechamento, assinatura e e-mail de conclusao.
+- Fluxo offline registra decisao de copia ao cliente e anexos esperados.
+- Documentado o caminho de evolucao para endpoints transacionais definitivos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

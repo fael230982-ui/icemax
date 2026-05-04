@@ -18,10 +18,13 @@ type SyncPanelProps = {
   onAddQuoteReminder: () => void;
   onAddQuoteExecutionReadiness: () => void;
   onAddQuoteExecutionDispatchQueue: () => void;
+  onAddFieldCloseout: () => void;
+  onAddFieldSignature: () => void;
+  onAddCompletionEmail: () => void;
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onSync }: SyncPanelProps) {
   return (
     <View style={styles.card}>
       <View>
@@ -70,6 +73,15 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onAddQuoteExecutionDispatchQueue}>
           <Text style={styles.buttonText}>Fila despacho</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddFieldCloseout}>
+          <Text style={styles.buttonText}>Fechamento campo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddFieldSignature}>
+          <Text style={styles.buttonText}>Assinatura campo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddCompletionEmail}>
+          <Text style={styles.buttonText}>E-mail conclusao</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.secondary]} onPress={onSync}>
           <Text style={[styles.buttonText, styles.secondaryText]}>Sincronizar</Text>

@@ -6,12 +6,15 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
   createChecklistAction,
   createCustomerSignatureAction,
+  createFieldCompletionEmailAckAction,
+  createFieldCustomerSignaturePackageAckAction,
+  createFieldExecutionCloseoutAckAction,
   createLocationAction,
   createManualConsultedAction,
   createPartsLoadAckAction,
@@ -135,6 +138,27 @@ export default function App() {
     setSyncStatus("Fila de despacho do orcamento salva offline.");
   }
 
+  function addFieldExecutionCloseoutAck() {
+    const action = createFieldExecutionCloseoutAckAction("1049", "quote-002");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Fechamento tecnico salvo offline.");
+  }
+
+  function addFieldCustomerSignatureAck() {
+    const actions = [
+      createFieldCustomerSignaturePackageAckAction("1049", "quote-002", "Cliente Decisor"),
+      createCustomerSignatureAction("1049", "Cliente Decisor"),
+    ];
+    setPendingActions((current) => [...actions, ...current]);
+    setSyncStatus("Assinatura e termos salvos offline.");
+  }
+
+  function addFieldCompletionEmailAck() {
+    const action = createFieldCompletionEmailAckAction("1049", "quote-002", false);
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Pacote de e-mail final salvo offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -185,6 +209,9 @@ export default function App() {
             onAddQuoteReminder={addQuoteReminderPresented}
             onAddQuoteExecutionReadiness={addQuoteExecutionReadinessAck}
             onAddQuoteExecutionDispatchQueue={addQuoteExecutionDispatchQueueAck}
+            onAddFieldCloseout={addFieldExecutionCloseoutAck}
+            onAddFieldSignature={addFieldCustomerSignatureAck}
+            onAddCompletionEmail={addFieldCompletionEmailAck}
             onSync={syncPending}
           />
         </Section>
@@ -256,6 +283,30 @@ export default function App() {
         <Section title="Fila de despacho">
           <View style={styles.grid}>
             {quoteExecutionDispatchQueue.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Fechamento de campo">
+          <View style={styles.grid}>
+            {fieldCloseoutPackage.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Assinatura do cliente">
+          <View style={styles.grid}>
+            {fieldSignaturePackage.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="E-mail de conclusao">
+          <View style={styles.grid}>
+            {completionEmailPackage.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>

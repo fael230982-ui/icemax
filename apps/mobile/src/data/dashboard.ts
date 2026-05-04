@@ -123,6 +123,33 @@ export const quoteExecutionDispatchQueue = [
   { title: "Mobile", detail: "Tecnico registra ciencia offline e sincroniza quando recuperar conexao" },
 ];
 
+export const fieldCloseoutPackage = [
+  { title: "Evidencias", detail: "Fotos antes, durante e depois devem estar conferidas antes da assinatura" },
+  { title: "Medicoes", detail: "Temperaturas, corrente e verificacoes tecnicas entram no relatorio" },
+  { title: "Pecas", detail: "Baixa de estoque precisa ser confirmada quando houver consumo" },
+  { title: "Relatorio", detail: "Texto tecnico deve ser revisado para ficar profissional" },
+  { title: "Bloqueio", detail: "Assinatura fica travada enquanto houver pendencia obrigatoria" },
+  { title: "Offline", detail: "Tecnico registra ciencia e sincroniza o fechamento quando recuperar conexao" },
+];
+
+export const fieldSignaturePackage = [
+  { title: "Termos", detail: "Responsavel visualiza aceite da OS antes de assinar" },
+  { title: "Campos", detail: "Nome, relacao com cliente e assinatura digital sao obrigatorios" },
+  { title: "Documento", detail: "Documento do responsavel pode ser registrado quando aplicavel" },
+  { title: "Copia", detail: "Tecnico confirma se o cliente recebera copia por e-mail" },
+  { title: "Privacidade", detail: "Assinatura deve ser tratada como arquivo protegido" },
+  { title: "Auditoria", detail: "Registro offline preserva horario, OS, orcamento e responsavel" },
+];
+
+export const completionEmailPackage = [
+  { title: "Empresa", detail: "Envio principal usa e-mail configurado pela empresa" },
+  { title: "Cliente", detail: "Copia ao cliente e opcional e depende da decisao registrada" },
+  { title: "Anexos", detail: "Relatorio, evidencias e assinatura devem seguir juntos" },
+  { title: "Bloqueio", detail: "E-mail final nao deve sair sem assinatura do cliente" },
+  { title: "Retentativa", detail: "Falhas de envio precisam ficar na fila para nova tentativa" },
+  { title: "Historico", detail: "Status de envio entra no historico da OS e do equipamento" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },
