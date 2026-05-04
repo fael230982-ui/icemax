@@ -622,3 +622,38 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Aceite De Contrato
+
+- [x] Endpoint de pacote de aceite por OS criado.
+- [x] Documento de aceite criado.
+- [x] Checks obrigatorios antes da ativacao criados.
+- [x] Handoff para financeiro, despacho e sucesso do cliente criado.
+- [x] Mensagens de e-mail e WhatsApp criadas.
+- [x] Console web conectado ao aceite.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.
+
+## Registro De Encerramento Do Dia
+
+- [x] Endpoint de snapshot executivo criado.
+- [x] Blocos concluidos e cobertura por modulo registrados.
+- [x] Dependencias abertas e proximos blocos registrados.
+- [x] Autorizacao de push registrada no snapshot.
+- [x] Console web conectado ao snapshot via diagnostico.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [x] Push para GitHub executado.

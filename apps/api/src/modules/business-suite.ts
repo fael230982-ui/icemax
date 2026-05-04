@@ -14,6 +14,7 @@ import {
 } from "../schemas";
 import {
   calculateSlaBoard,
+  createContractAcceptancePackageFromServiceOrder,
   createContractActivationPlanFromServiceOrder,
   createInvoiceDraft,
   createMaintenanceWindow,
@@ -148,5 +149,16 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return activationPlan;
+  });
+
+  app.get("/service-orders/:id/contract-acceptance-package", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const acceptancePackage = createContractAcceptancePackageFromServiceOrder(id);
+
+    if (!acceptancePackage) {
+      return reply.code(404).send({ message: "OS nao encontrada para pacote de aceite de contrato." });
+    }
+
+    return acceptancePackage;
   });
 }

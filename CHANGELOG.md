@@ -53,6 +53,20 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar ativacao de contrato.
 - Teste automatizado cobre calendario inicial e rascunho de OS preventiva.
 
+## 0.8.16 - Aceite De Contrato
+
+- Adicionado endpoint para pacote de aceite de contrato a partir da OS.
+- Pacote inclui documento de aceite, checks obrigatorios, handoff operacional e mensagens ao cliente.
+- Console web passou a consultar aceite de contrato.
+- Teste automatizado cobre checks obrigatorios e texto de aceite.
+
+## 0.8.17 - Encerramento Do Dia
+
+- Adicionado endpoint de snapshot executivo de encerramento do dia.
+- Snapshot resume blocos concluidos, cobertura por modulo, validacao, dependencias e proximos blocos.
+- Console web passou a incluir o snapshot no diagnostico.
+- Teste automatizado cobre projeto, autorizacao de push e proximos blocos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

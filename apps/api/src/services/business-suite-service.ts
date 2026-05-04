@@ -382,3 +382,81 @@ export function createContractActivationPlanFromServiceOrder(serviceOrderId: str
     },
   };
 }
+
+export function createContractAcceptancePackageFromServiceOrder(serviceOrderId: string) {
+  const activationPlan = createContractActivationPlanFromServiceOrder(serviceOrderId);
+
+  if (!activationPlan) {
+    return null;
+  }
+
+  const contract = activationPlan.contractDraft;
+
+  return {
+    serviceOrderId,
+    proposalId: activationPlan.proposalId,
+    status: "acceptance_ready",
+    acceptanceDocument: {
+      title: `Aceite de contrato recorrente - ${contract.customer}`,
+      customer: contract.customer,
+      plan: contract.name,
+      equipment: contract.equipment,
+      startDate: contract.startDate,
+      monthlyValue: contract.monthlyValue,
+      minimumTermMonths: contract.minimumTermMonths,
+      acceptanceText: `Declaro ciencia e aceite das condicoes do plano ${contract.name}, com recorrencia de ${contract.recurrenceMonths} meses, valor mensal de R$ ${contract.monthlyValue.toFixed(2)} e vigencia minima de ${contract.minimumTermMonths} meses.`,
+      signatureFields: [
+        "nome do responsavel",
+        "documento",
+        "cargo",
+        "data do aceite",
+        "assinatura digital",
+      ],
+    },
+    requiredChecks: [
+      { key: "customer_decision_maker", label: "Decisor do cliente confirmado", status: "required" },
+      { key: "covered_equipment", label: "Equipamentos cobertos revisados", status: "required" },
+      { key: "commercial_margin", label: "Margem comercial validada", status: "required" },
+      { key: "billing_rule", label: "Regra de faturamento definida", status: "required" },
+      { key: "lgpd_consent", label: "Consentimento de comunicacao registrado", status: "required" },
+      { key: "first_visit_window", label: "Janela da primeira visita confirmada", status: "required" },
+    ],
+    operationalHandoff: {
+      finance: [
+        `Cadastrar cobranca mensal de R$ ${contract.monthlyValue.toFixed(2)}.`,
+        "Configurar vencimento no dia combinado com o cliente.",
+        "Associar cobranca ao contrato recorrente.",
+      ],
+      dispatch: [
+        `Reservar agenda para ${activationPlan.firstServiceOrderDraft.scheduledDate}.`,
+        "Definir tecnico responsavel pela primeira preventiva.",
+        "Conferir pecas e materiais antes do deslocamento.",
+      ],
+      customerSuccess: [
+        "Enviar boas-vindas ao contrato.",
+        "Confirmar canais preferenciais de atendimento.",
+        "Agendar revisao de satisfacao apos primeira preventiva.",
+      ],
+    },
+    customerMessages: {
+      emailSubject: `Aceite do contrato ${contract.name}`,
+      emailBody: `Ola, segue o aceite do contrato ${contract.name}. Apos sua confirmacao, ativaremos o calendario preventivo e a primeira visita sugerida para ${activationPlan.firstServiceOrderDraft.scheduledDate}.`,
+      whatsappBody: `Ola! Seu contrato ${contract.name} esta pronto para aceite. Confirmando, ativaremos a primeira preventiva em ${activationPlan.firstServiceOrderDraft.scheduledDate}.`,
+    },
+    finalActivation: {
+      nextStatus: "active_contract_pending_first_visit",
+      createdEntities: [
+        "contrato recorrente",
+        "calendario preventivo",
+        "primeira OS preventiva",
+        "rotina de cobranca",
+        "registro de aceite",
+      ],
+      blockers: [
+        "sem aceite formal",
+        "sem responsavel financeiro confirmado",
+        "sem equipamentos revisados",
+      ],
+    },
+  };
+}

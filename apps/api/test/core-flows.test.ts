@@ -389,6 +389,12 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(activationPlan.json().firstYearCalendar.length, 4);
   assert.match(activationPlan.json().firstServiceOrderDraft.title, /Preventiva contratual/);
 
+  const acceptancePackage = await app.inject({ method: "GET", url: "/service-orders/1048/contract-acceptance-package" });
+  assert.equal(acceptancePackage.statusCode, 200);
+  assert.equal(acceptancePackage.json().serviceOrderId, "1048");
+  assert.equal(acceptancePackage.json().requiredChecks.length, 6);
+  assert.match(acceptancePackage.json().acceptanceDocument.acceptanceText, /aceite/i);
+
   const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
   assert.equal(timeline.statusCode, 200);
   assert.ok(timeline.json().total >= 1);
@@ -514,6 +520,12 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(gate.statusCode, 200);
   assert.equal(gate.json().status, "blocked");
   assert.ok(gate.json().checks.length >= 5);
+
+  const endOfDay = await app.inject({ method: "GET", url: "/platform/end-of-day-snapshot" });
+  assert.equal(endOfDay.statusCode, 200);
+  assert.equal(endOfDay.json().project, "ICEMAX");
+  assert.equal(endOfDay.json().github.pushAuthorizedByRafael, true);
+  assert.ok(endOfDay.json().nextRecommendedBlocks.length >= 3);
 
   await app.close();
 });

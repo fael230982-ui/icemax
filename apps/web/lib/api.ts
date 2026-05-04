@@ -96,6 +96,8 @@ export const icemaxApi = {
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-proposal`, { token }),
   contractActivationPlan: (serviceOrderId: string, token?: string) =>
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-activation-plan`, { token }),
+  contractAcceptancePackage: (serviceOrderId: string, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/contract-acceptance-package`, { token }),
   customers: (token?: string) => apiRequest<ApiListResponse<unknown>>("/customers", { token }),
   createCustomer: (body: unknown, token?: string) => apiRequest<unknown>("/customers", { method: "POST", body, token }),
   equipment: (token?: string) => apiRequest<ApiListResponse<unknown>>("/equipment", { token }),
@@ -156,6 +158,7 @@ export const icemaxApi = {
   platformRoles: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/roles", { token }),
   platformDiagnostics: (token?: string) => apiRequest<unknown>("/platform/diagnostics", { token }),
   preReleaseGate: (token?: string) => apiRequest<unknown>("/platform/pre-release-gate", { token }),
+  endOfDaySnapshot: (token?: string) => apiRequest<unknown>("/platform/end-of-day-snapshot", { token }),
   apiContracts: (token?: string) => apiRequest<ApiListResponse<unknown> & { version: string }>("/api-contract/routes", { token }),
   homologationScenarios: (token?: string) => apiRequest<ApiListResponse<unknown>>("/homologation/scenarios", { token }),
   runHomologationScenario: (key: string, token?: string) =>

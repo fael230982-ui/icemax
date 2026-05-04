@@ -137,6 +137,10 @@ export function OperationsConsole() {
     void run("Ativacao de contrato", () => icemaxApi.contractActivationPlan("1048", token || undefined));
   }
 
+  function loadContractAcceptancePackage() {
+    void run("Aceite de contrato", () => icemaxApi.contractAcceptancePackage("1048", token || undefined));
+  }
+
   function createPortalOrder() {
     void run("Portal do cliente", () =>
       icemaxApi.createPortalOrder({
@@ -265,6 +269,7 @@ export function OperationsConsole() {
         icemaxApi.platformRoles(token || undefined),
         icemaxApi.platformDiagnostics(token || undefined),
         icemaxApi.preReleaseGate(token || undefined),
+        icemaxApi.endOfDaySnapshot(token || undefined),
       ]);
 
       return { checks: results.length, results };
@@ -387,6 +392,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadContractOpportunity}>Oportunidade contrato</button>
         <button type="button" className="secondary" onClick={loadContractProposal}>Proposta contrato</button>
         <button type="button" className="secondary" onClick={loadContractActivationPlan}>Ativar contrato</button>
+        <button type="button" className="secondary" onClick={loadContractAcceptancePackage}>Aceite contrato</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>

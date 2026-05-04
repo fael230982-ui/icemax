@@ -140,3 +140,50 @@ export function getPreReleaseGate() {
       : "Pode preparar homologacao controlada.",
   };
 }
+
+export function getEndOfDaySnapshot() {
+  const readiness = getPlatformReadiness();
+  const gate = getPreReleaseGate();
+
+  return {
+    date: new Date().toISOString().slice(0, 10),
+    project: "ICEMAX",
+    owner: "RAFAEL DA SILVA BEZEERA",
+    status: "development_active",
+    completedToday: [
+      "fluxo comercial da OS para oportunidade de contrato",
+      "proposta comercial de contrato recorrente",
+      "plano de ativacao de contrato",
+      "pacote de aceite de contrato",
+      "validacao local com typecheck, testes e build",
+    ],
+    productCoverage: {
+      serviceOrders: "operacional",
+      contracts: "recorrencia planejada",
+      dispatch: "regras locais com rota estimada",
+      customerPortal: "abertura opcional de OS",
+      ai: "revisao de texto e causas provaveis em modo local",
+      whitelabel: "base preparada para multiplas empresas",
+      mobile: "estrutura inicial offline",
+    },
+    validation: {
+      localCommand: "npm run validate",
+      expectedBeforeNextPush: true,
+      readinessPass: readiness.blockingItems.length === 0,
+      releaseGate: gate.status,
+    },
+    openDependencies: readiness.blockingItems,
+    nextRecommendedBlocks: [
+      "executar ativacao real de contrato no banco Prisma",
+      "aprofundar aplicativo mobile de tecnico",
+      "evoluir mapa/planta interativa com pontos de equipamento",
+      "preparar integracoes reais de e-mail, WhatsApp, mapas e OpenAI",
+      "criar fluxo de assinatura digital e aceite auditavel",
+    ],
+    github: {
+      pushAuthorizedByRafael: true,
+      branch: "main",
+      remote: "origin",
+    },
+  };
+}
