@@ -122,6 +122,39 @@ export const createOrderFromContractVisitSchema = z.object({
   assignedTechnicianId: z.string().optional(),
 });
 
+export const activateContractFromAcceptanceSchema = z.object({
+  serviceOrderId: z.string().min(1),
+  customerId: z.string().min(1),
+  addressId: z.string().optional(),
+  equipmentIds: z.array(z.string()).default([]),
+  name: z.string().min(3),
+  recurrenceMonths: z.union([z.literal(3), z.literal(4), z.literal(6)]),
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime().optional(),
+  includesPreventive: z.boolean().default(true),
+  includesCleaning: z.boolean().default(true),
+  monthlyValue: z.number().nonnegative().optional(),
+  acceptedByName: z.string().min(2),
+  acceptedByDocument: z.string().optional(),
+  acceptedAt: z.string().datetime().optional(),
+  firstVisitTechnicianId: z.string().optional(),
+  firstVisitTitle: z.string().min(3).default("Primeira preventiva contratual"),
+  firstVisitDescription: z.string().optional(),
+  generateVisits: z.number().int().min(1).max(24).default(4),
+  notes: z.string().optional(),
+});
+
+export const activateContractFromServiceOrderSchema = z.object({
+  acceptedByName: z.string().min(2),
+  acceptedByDocument: z.string().optional(),
+  acceptedAt: z.string().datetime().optional(),
+  customerId: z.string().min(1).default("customer-001"),
+  addressId: z.string().optional(),
+  equipmentIds: z.array(z.string()).default(["equipment-001"]),
+  firstVisitTechnicianId: z.string().optional(),
+  generateVisits: z.number().int().min(1).max(24).default(4),
+});
+
 export const createNotificationTemplateSchema = z.object({
   channel: z.enum(["email", "whatsapp", "push", "internal"]),
   name: z.string().min(2),
@@ -346,6 +379,8 @@ export type CreateStockLocationInput = z.output<typeof createStockLocationSchema
 export type CreateStockMovementInput = z.output<typeof createStockMovementSchema>;
 export type GenerateContractVisitsInput = z.output<typeof generateContractVisitsSchema>;
 export type CreateOrderFromContractVisitInput = z.output<typeof createOrderFromContractVisitSchema>;
+export type ActivateContractFromAcceptanceInput = z.output<typeof activateContractFromAcceptanceSchema>;
+export type ActivateContractFromServiceOrderInput = z.output<typeof activateContractFromServiceOrderSchema>;
 export type CreateNotificationTemplateInput = z.output<typeof createNotificationTemplateSchema>;
 export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStatusSchema>;
 export type LoginInput = z.output<typeof loginSchema>;

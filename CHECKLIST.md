@@ -657,3 +657,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [x] Push para GitHub executado.
+
+## Registro De Ativacao Real De Contrato
+
+- [x] Endpoint de ativacao por aceite criado.
+- [x] Fluxo mock de contrato, visitas e primeira OS criado.
+- [x] Transacao Prisma para contrato, visitas, primeira OS e auditoria preparada.
+- [x] Console web conectado a ativacao de contrato aceito.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

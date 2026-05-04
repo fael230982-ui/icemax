@@ -1,6 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
+import { isPrismaEnabled } from "../config";
+import { activateMockContractFromAcceptance, activatePrismaContractFromAcceptance } from "../repositories/contracts-repository";
 import {
+  activateContractFromServiceOrderSchema,
   createInvoiceDraftSchema,
   createMaintenanceWindowSchema,
   createPmocPlanSchema,
@@ -160,5 +163,60 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return acceptancePackage;
+  });
+
+  app.post("/service-orders/:id/contract-acceptance/activate", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(activateContractFromServiceOrderSchema, request.body);
+    const acceptancePackage = createContractAcceptancePackageFromServiceOrder(id);
+
+    if (!acceptancePackage) {
+      return reply.code(404).send({ message: "OS nao encontrada para ativacao de contrato." });
+    }
+
+    const activationInput = {
+      serviceOrderId: id,
+      customerId: input.customerId,
+      addressId: input.addressId,
+      equipmentIds: input.equipmentIds,
+      name: acceptancePackage.acceptanceDocument.plan,
+      recurrenceMonths: acceptancePackage.acceptanceDocument.acceptanceText.includes("recorrencia de 4")
+        ? 4 as const
+        : acceptancePackage.acceptanceDocument.acceptanceText.includes("recorrencia de 6")
+          ? 6 as const
+          : 3 as const,
+      startDate: new Date(`${acceptancePackage.acceptanceDocument.startDate}T00:00:00.000Z`).toISOString(),
+      includesPreventive: true,
+      includesCleaning: true,
+      monthlyValue: acceptancePackage.acceptanceDocument.monthlyValue,
+      acceptedByName: input.acceptedByName,
+      acceptedByDocument: input.acceptedByDocument,
+      acceptedAt: input.acceptedAt,
+      firstVisitTechnicianId: input.firstVisitTechnicianId,
+      firstVisitTitle: "Primeira preventiva contratual",
+      firstVisitDescription: `Ativar contrato ${acceptancePackage.acceptanceDocument.plan} e executar primeira preventiva.`,
+      generateVisits: input.generateVisits,
+      notes: `Contrato ativado a partir da OS ${id}.`,
+    };
+
+    const result = isPrismaEnabled()
+      ? await activatePrismaContractFromAcceptance(context.tenantId, context.userId, activationInput)
+      : await activateMockContractFromAcceptance(context.tenantId, context.userId, activationInput);
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "contract.acceptance_activated",
+      entity: "service_order",
+      entityId: id,
+      metadata: {
+        status: result.status,
+        acceptedByName: input.acceptedByName,
+        createdEntities: result.createdEntities,
+      },
+    });
+
+    return reply.code(201).send(result);
   });
 }

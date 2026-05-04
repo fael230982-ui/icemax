@@ -395,6 +395,22 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(acceptancePackage.json().requiredChecks.length, 6);
   assert.match(acceptancePackage.json().acceptanceDocument.acceptanceText, /aceite/i);
 
+  const acceptedContract = await app.inject({
+    method: "POST",
+    url: "/service-orders/1048/contract-acceptance/activate",
+    payload: {
+      acceptedByName: "Cliente Decisor",
+      acceptedByDocument: "000.000.000-00",
+      customerId: "customer-001",
+      equipmentIds: ["equipment-001"],
+      generateVisits: 4,
+    },
+  });
+  assert.equal(acceptedContract.statusCode, 201);
+  assert.equal(acceptedContract.json().status, "activated_mock");
+  assert.equal(acceptedContract.json().createdEntities.visits, 4);
+  assert.equal(acceptedContract.json().createdEntities.serviceOrders, 1);
+
   const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
   assert.equal(timeline.statusCode, 200);
   assert.ok(timeline.json().total >= 1);

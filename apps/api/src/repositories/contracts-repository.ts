@@ -1,7 +1,7 @@
 import { getPrisma } from "../database";
 import { serviceContracts } from "../mock-data";
 import { previewContractVisits } from "@icemax/shared";
-import type { CreateContractInput, CreateOrderFromContractVisitInput, GenerateContractVisitsInput } from "../schemas";
+import type { ActivateContractFromAcceptanceInput, CreateContractInput, CreateOrderFromContractVisitInput, GenerateContractVisitsInput } from "../schemas";
 
 export async function listMockContracts() {
   return {
@@ -330,5 +330,175 @@ export async function createPrismaOrderFromContractVisit(tenantId: string, visit
     });
 
     return order;
+  });
+}
+
+export async function activateMockContractFromAcceptance(tenantId: string, openedByUserId: string, input: ActivateContractFromAcceptanceInput) {
+  const contractId = `contract-${Date.now()}`;
+  const visits = previewContractVisits({
+    startDate: input.startDate.slice(0, 10),
+    recurrenceMonths: input.recurrenceMonths,
+    occurrences: input.generateVisits,
+  }).map((visit) => ({
+    id: `visit-${contractId}-${visit.sequence}`,
+    tenantId,
+    contractId,
+    expectedDate: visit.expectedDate,
+    status: visit.sequence === 1 ? "scheduled" : "planned",
+    sequence: visit.sequence,
+  }));
+
+  const firstOrder = {
+    id: `order-${Date.now()}`,
+    tenantId,
+    openedByUserId,
+    customerId: input.customerId,
+    addressId: input.addressId,
+    assignedTechnicianId: input.firstVisitTechnicianId,
+    title: input.firstVisitTitle,
+    description: input.firstVisitDescription ?? `Primeira preventiva do contrato ${input.name}.`,
+    priority: "normal",
+    status: "scheduled",
+    scheduledStart: visits[0]?.expectedDate,
+  };
+
+  return {
+    status: "activated_mock",
+    contract: {
+      id: contractId,
+      tenantId,
+      customerId: input.customerId,
+      addressId: input.addressId,
+      name: input.name,
+      recurrenceMonths: input.recurrenceMonths,
+      startDate: input.startDate,
+      endDate: input.endDate,
+      active: true,
+      includesPreventive: input.includesPreventive,
+      includesCleaning: input.includesCleaning,
+      equipmentIds: input.equipmentIds,
+      monthlyValue: input.monthlyValue,
+      notes: input.notes,
+    },
+    acceptance: {
+      acceptedByName: input.acceptedByName,
+      acceptedByDocument: input.acceptedByDocument,
+      acceptedAt: input.acceptedAt ?? new Date().toISOString(),
+      sourceServiceOrderId: input.serviceOrderId,
+    },
+    visits,
+    firstOrder,
+    createdEntities: {
+      contracts: 1,
+      visits: visits.length,
+      serviceOrders: 1,
+      auditLogs: 1,
+    },
+  };
+}
+
+export async function activatePrismaContractFromAcceptance(tenantId: string, openedByUserId: string, input: ActivateContractFromAcceptanceInput) {
+  const prisma = getPrisma();
+  const visits = previewContractVisits({
+    startDate: input.startDate.slice(0, 10),
+    recurrenceMonths: input.recurrenceMonths,
+    occurrences: input.generateVisits,
+  });
+
+  return prisma.$transaction(async (tx) => {
+    const contract = await tx.serviceContract.create({
+      data: {
+        tenantId,
+        customerId: input.customerId,
+        addressId: input.addressId,
+        name: input.name,
+        recurrenceMonths: input.recurrenceMonths,
+        startDate: new Date(input.startDate),
+        endDate: input.endDate ? new Date(input.endDate) : undefined,
+        includesPreventive: input.includesPreventive,
+        includesCleaning: input.includesCleaning,
+        notes: [
+          input.notes,
+          `Aceite: ${input.acceptedByName}${input.acceptedByDocument ? ` (${input.acceptedByDocument})` : ""}`,
+          input.monthlyValue !== undefined ? `Valor mensal: R$ ${input.monthlyValue.toFixed(2)}` : null,
+          `Origem OS: ${input.serviceOrderId}`,
+        ].filter(Boolean).join("\n"),
+        equipment: {
+          create: input.equipmentIds.map((equipmentId) => ({
+            tenantId,
+            equipmentId,
+          })),
+        },
+      },
+    });
+
+    const createdVisits = await Promise.all(
+      visits.map((visit) =>
+        tx.serviceContractVisit.create({
+          data: {
+            tenantId,
+            contractId: contract.id,
+            expectedDate: new Date(`${visit.expectedDate}T00:00:00.000Z`),
+            status: visit.sequence === 1 ? "scheduled" : "planned",
+          },
+        }),
+      ),
+    );
+
+    const firstVisit = createdVisits[0];
+    const firstOrder = await tx.serviceOrder.create({
+      data: {
+        tenantId,
+        customerId: input.customerId,
+        addressId: input.addressId,
+        equipmentId: input.equipmentIds[0],
+        openedByUserId,
+        assignedTechnicianId: input.firstVisitTechnicianId,
+        title: input.firstVisitTitle,
+        description: input.firstVisitDescription ?? `Primeira preventiva do contrato ${input.name}.`,
+        priority: "normal",
+        status: "scheduled",
+        scheduledStart: firstVisit.expectedDate,
+      },
+    });
+
+    await tx.serviceContractVisit.update({
+      where: { id: firstVisit.id },
+      data: {
+        serviceOrderId: firstOrder.id,
+      },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        tenantId,
+        actorUserId: openedByUserId,
+        entityType: "service_contract",
+        entityId: contract.id,
+        action: "contract.activated_from_acceptance",
+        metadata: {
+          serviceOrderId: input.serviceOrderId,
+          acceptedByName: input.acceptedByName,
+          acceptedByDocument: input.acceptedByDocument,
+          acceptedAt: input.acceptedAt ?? new Date().toISOString(),
+          monthlyValue: input.monthlyValue,
+          visitsCreated: createdVisits.length,
+          firstServiceOrderId: firstOrder.id,
+        },
+      },
+    });
+
+    return {
+      status: "activated",
+      contract,
+      visits: createdVisits,
+      firstOrder,
+      createdEntities: {
+        contracts: 1,
+        visits: createdVisits.length,
+        serviceOrders: 1,
+        auditLogs: 1,
+      },
+    };
   });
 }

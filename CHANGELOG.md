@@ -67,6 +67,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a incluir o snapshot no diagnostico.
 - Teste automatizado cobre projeto, autorizacao de push e proximos blocos.
 
+## 0.8.18 - Ativacao Real De Contrato
+
+- Adicionado endpoint para ativar contrato a partir do aceite da OS.
+- Fluxo mock simula contrato, visitas preventivas, primeira OS e auditoria.
+- Fluxo Prisma prepara transacao para criar contrato, visitas, primeira OS e audit log.
+- Console web passou a acionar ativacao de contrato aceito.
+- Teste automatizado cobre entidades criadas na ativacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

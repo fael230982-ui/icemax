@@ -141,6 +141,18 @@ export function OperationsConsole() {
     void run("Aceite de contrato", () => icemaxApi.contractAcceptancePackage("1048", token || undefined));
   }
 
+  function activateAcceptedContract() {
+    void run("Contrato ativo", () =>
+      icemaxApi.activateContractAcceptance("1048", {
+        acceptedByName: "Cliente Decisor",
+        acceptedByDocument: "000.000.000-00",
+        customerId: "customer-001",
+        equipmentIds: ["equipment-001"],
+        generateVisits: 4,
+      }, token || undefined),
+    );
+  }
+
   function createPortalOrder() {
     void run("Portal do cliente", () =>
       icemaxApi.createPortalOrder({
@@ -393,6 +405,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadContractProposal}>Proposta contrato</button>
         <button type="button" className="secondary" onClick={loadContractActivationPlan}>Ativar contrato</button>
         <button type="button" className="secondary" onClick={loadContractAcceptancePackage}>Aceite contrato</button>
+        <button type="button" className="secondary" onClick={activateAcceptedContract}>Contrato aceito</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
