@@ -174,6 +174,10 @@ export function OperationsConsole() {
     );
   }
 
+  function loadCustomerTracking() {
+    void run("Acompanhamento cliente", () => icemaxApi.customerOrderTracking("1048"));
+  }
+
   function runBusinessSuite() {
     void run("Suite operacional", async () => {
       const now = new Date().toISOString();
@@ -436,6 +440,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadContractAcceptancePackage}>Aceite contrato</button>
         <button type="button" className="secondary" onClick={activateAcceptedContract}>Contrato aceito</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
+        <button type="button" className="secondary" onClick={loadCustomerTracking}>Acompanhar OS cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
         <button type="button" className="secondary" onClick={loadServiceOrderCommunicationPackage}>Comunicacao OS</button>

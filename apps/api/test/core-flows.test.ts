@@ -329,6 +329,16 @@ test("customer portal can request optional service order", async () => {
   assert.equal(order.statusCode, 201);
   assert.equal(order.json().openedBy, "customer_portal");
 
+  const tracking = await app.inject({
+    method: "GET",
+    url: "/customer-portal/service-orders/1048/tracking",
+  });
+  assert.equal(tracking.statusCode, 200);
+  assert.equal(tracking.json().serviceOrderId, "1048");
+  assert.equal(tracking.json().privacy.hidesFinancialData, true);
+  assert.ok(tracking.json().timeline.length >= 5);
+  assert.equal(tracking.json().refreshSeconds, 45);
+
   await app.close();
 });
 

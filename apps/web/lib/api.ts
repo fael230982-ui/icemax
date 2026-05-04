@@ -134,6 +134,7 @@ export const icemaxApi = {
     apiRequest<unknown>("/ai/issue-cause-suggestions", { method: "POST", body, token }),
   customerPortalConfig: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/config`),
   createPortalOrder: (body: unknown) => apiRequest<unknown>("/customer-portal/service-orders", { method: "POST", body }),
+  customerOrderTracking: (serviceOrderId: string) => apiRequest<unknown>(`/customer-portal/service-orders/${serviceOrderId}/tracking`),
   slaBoard: (token?: string) => apiRequest<ApiListResponse<unknown>>("/sla/board", { token }),
   dayCommandCenter: (token?: string) => apiRequest<unknown>("/operations/day-command-center", { token }),
   createWarrantyTerm: (body: unknown, token?: string) => apiRequest<unknown>("/warranty-terms", { method: "POST", body, token }),

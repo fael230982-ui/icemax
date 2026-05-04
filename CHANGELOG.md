@@ -117,6 +117,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a criar filas de comunicacao para OS e contrato.
 - Teste automatizado cobre fila, idempotencia e pendencia de chave externa.
 
+## 0.8.25 - Acompanhamento Do Cliente
+
+- Adicionado endpoint publico controlado para acompanhamento da OS pelo cliente.
+- Link retorna status, etapa, tecnico, ETA, linha do tempo e acoes do cliente.
+- Dados financeiros, notas internas e telefone pessoal do tecnico ficam ocultos.
+- Console web passou a consultar acompanhamento de OS do cliente.
+- Teste automatizado cobre privacidade, linha do tempo e refresh.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
