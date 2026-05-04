@@ -114,6 +114,10 @@ export function OperationsConsole() {
     void run("Aviso de deslocamento", () => icemaxApi.dispatchDepartureCommunication("1049", "tech-002", "quote-002", token || undefined));
   }
 
+  function loadDispatchRouteTracking() {
+    void run("Acompanhamento de rota", () => icemaxApi.dispatchRouteTracking("1049", "tech-002", "quote-002", token || undefined));
+  }
+
   function createVisitPreparation() {
     void run("Preparo da visita", () =>
       icemaxApi.createVisitPreparation({
@@ -558,6 +562,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createDispatchAssignmentDecision}>Aceite tecnico</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={loadDispatchDepartureCommunication}>Aviso deslocamento</button>
+        <button type="button" className="secondary" onClick={loadDispatchRouteTracking}>Acompanhar rota</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>

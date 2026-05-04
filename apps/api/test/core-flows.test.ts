@@ -417,6 +417,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(departureCommunication.json().audit.event, "dispatch.departure_communication_prepared");
   assert.ok(departureCommunication.json().channels.length >= 3);
 
+  const routeTracking = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1049/route-tracking?technicianUserId=tech-002&quoteId=quote-002",
+  });
+  assert.equal(routeTracking.statusCode, 200);
+  assert.equal(routeTracking.json().serviceOrderId, "1049");
+  assert.equal(routeTracking.json().governance.auditEvent, "dispatch.route_tracking_viewed");
+  assert.ok(routeTracking.json().timeline.length >= 4);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

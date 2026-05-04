@@ -1354,3 +1354,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Acompanhamento De Rota
+
+- [x] Endpoint de acompanhamento de rota criado.
+- [x] Snapshot de posicao, destino, ETA, timeline e alertas incluido.
+- [x] Console web atualizado com acao de acompanhamento.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -114,6 +114,22 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return communication;
+  });
+
+  app.get("/dispatch/service-orders/:id/route-tracking", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string; quoteId?: string };
+    const tracking = createMockDispatchRouteTrackingSnapshot({
+      serviceOrderId: id,
+      technicianUserId: query.technicianUserId,
+      quoteId: query.quoteId,
+    });
+
+    if (!tracking) {
+      return reply.code(404).send({ message: "OS nao encontrada para acompanhamento de rota." });
+    }
+
+    return tracking;
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

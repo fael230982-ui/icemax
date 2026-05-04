@@ -393,6 +393,79 @@ export function createMockDispatchDepartureCommunicationPackage(input: {
   };
 }
 
+export function createMockDispatchRouteTrackingSnapshot(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const technician = technicianLocations.find((item) => item.technicianUserId === input.technicianUserId) ?? technicianLocations[0];
+  const stop = serviceOrderStops.find((item) => item.serviceOrderId === input.serviceOrderId);
+  const readiness = getMockServiceOrderDispatchReadiness(input.serviceOrderId, technician.technicianUserId);
+  const communication = createMockDispatchDepartureCommunicationPackage(input);
+
+  if (!order || !stop || !readiness || !communication) {
+    return null;
+  }
+
+  const remainingDistanceKm = Number(distanceKm(technician, stop).toFixed(2));
+  const delayed = readiness.route.totalTravelMinutes > 30;
+  const requiresAttention = delayed || readiness.status === "attention" || order.priority === "emergency";
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: input.quoteId ?? communication.quoteId,
+    customer: order.customer,
+    status: delayed ? "route_attention" : "route_on_time",
+    technician: communication.technician,
+    currentLocation: {
+      latitude: technician.latitude,
+      longitude: technician.longitude,
+      capturedAt: technician.capturedAt,
+      accuracy: "mock",
+    },
+    destination: {
+      latitude: stop.latitude,
+      longitude: stop.longitude,
+      customer: stop.customer,
+    },
+    eta: {
+      remainingMinutes: readiness.route.totalTravelMinutes,
+      remainingDistanceKm,
+      label: `${readiness.route.totalTravelMinutes} min`,
+      delayed,
+    },
+    timeline: [
+      { key: "assignment_accepted", label: "Tecnico aceitou", status: "done" },
+      { key: "customer_notified", label: "Cliente avisado", status: communication.canNotifyCustomer ? "ready" : "blocked" },
+      { key: "departure_started", label: "Saida registrada", status: "in_progress" },
+      { key: "arrival_checkin", label: "Check-in no cliente", status: "pending" },
+    ],
+    alerts: [
+      ...(delayed ? ["ETA acima do limite desejado; avisar cliente se a janela mudar."] : []),
+      ...(readiness.status === "attention" ? ["Prontidao com atencao; gestor deve acompanhar deslocamento."] : []),
+      ...(order.priority === "emergency" ? ["OS emergencial exige monitoramento ate chegada."] : []),
+    ],
+    managerActions: requiresAttention
+      ? [
+          "Acompanhar posicao ate o check-in.",
+          "Atualizar cliente se houver atraso.",
+          "Manter tecnico alternativo em observacao.",
+        ]
+      : [
+          "Monitorar check-in.",
+          "Manter cliente informado apenas se a previsao mudar.",
+        ],
+    governance: {
+      auditEvent: "dispatch.route_tracking_viewed",
+      exposesCustomerSafeLocation: true,
+      hidesTechnicianPersonalPhone: true,
+      requiresLocationConsent: true,
+      mockUntilMapsProviderConfigured: true,
+    },
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 

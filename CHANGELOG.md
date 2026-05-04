@@ -404,6 +404,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Aviso deslocamento`.
 - Teste automatizado cobre pacote de comunicacao de saida.
 
+## 0.8.64 - Acompanhamento De Rota
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/route-tracking`.
+- Snapshot consolida posicao do tecnico, destino, ETA, timeline e alertas.
+- Painel web ganhou acao `Acompanhar rota`.
+- Teste automatizado cobre acompanhamento de rota mockado.
+- Fluxo permanece independente de provedor real de mapas nesta fase.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
