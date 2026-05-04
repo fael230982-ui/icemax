@@ -308,6 +308,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - SyncPanel recebeu botao `Orcamento liberado`.
 - Fluxo diferencia orcamento apresentado de orcamento aprovado para execucao.
 
+## 0.8.51 - Linha Do Tempo De Orcamento
+
+- Adicionado endpoint `GET /quotes/:id/approval-timeline`.
+- Linha do tempo consolida criacao, comunicacao, abertura, decisao e ativacao do orcamento.
+- Retorno inclui metricas, pendencias, proximas acoes e governanca de auditoria.
+- Console web ganhou acao para consultar a timeline do orcamento aprovado.
+- Teste automatizado cobre eventos e auditoria da linha do tempo.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -5,6 +5,7 @@ import {
   createMockPart,
   createMockQuoteApprovalPackage,
   createMockQuoteApprovalActivation,
+  createMockQuoteApprovalTimeline,
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
   createMockQuoteDecisionHandoff,
@@ -14,6 +15,7 @@ import {
   createPrismaPart,
   createPrismaQuoteApprovalPackage,
   createPrismaQuoteApprovalActivation,
+  createPrismaQuoteApprovalTimeline,
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
   createPrismaQuoteDecisionHandoff,
@@ -131,6 +133,20 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return reply.code(201).send(activation);
+  });
+
+  app.get("/quotes/:id/approval-timeline", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const timeline = isPrismaEnabled()
+      ? await createPrismaQuoteApprovalTimeline(context.tenantId, id)
+      : await createMockQuoteApprovalTimeline(context.tenantId, id);
+
+    if (!timeline) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para linha do tempo de aprovacao." });
+    }
+
+    return timeline;
   });
 
   app.get("/public/quotes/:token", async (request, reply) => {

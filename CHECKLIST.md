@@ -1167,3 +1167,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Linha Do Tempo De Orcamento
+
+- [x] Endpoint de timeline de aprovacao criado.
+- [x] Eventos de criacao, comunicacao, abertura, decisao e ativacao incluidos.
+- [x] Metricas, pendencias e proximas acoes incluidas.
+- [x] Console web atualizado com acao de timeline.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

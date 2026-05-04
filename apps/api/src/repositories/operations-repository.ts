@@ -651,6 +651,188 @@ export async function createPrismaQuoteApprovalActivation(tenantId: string, quot
   });
 }
 
+function buildQuoteApprovalTimeline(tenantId: string, quote: {
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}) {
+  const currentStatus = quote.status ?? "draft";
+  const approved = currentStatus === "approved";
+  const rejected = currentStatus === "rejected";
+  const decided = approved || rejected;
+  const opened = currentStatus !== "draft";
+  const activated = approved;
+  const issuedAt = new Date("2026-05-04T09:00:00.000Z");
+
+  const events = [
+    {
+      key: "quote.created",
+      label: "Orcamento criado",
+      status: "done",
+      actor: "comercial",
+      occurredAt: issuedAt.toISOString(),
+      detail: `Orcamento ${quote.number ?? quote.id} criado para ${quote.customer ?? "Cliente"}.`,
+    },
+    {
+      key: "quote.approval_package_created",
+      label: "Pacote de aprovacao preparado",
+      status: "done",
+      actor: "sistema",
+      occurredAt: new Date(issuedAt.getTime() + 8 * 60 * 1000).toISOString(),
+      detail: "Link publico, mensagens e termos foram preparados sem expor margem interna.",
+    },
+    {
+      key: "communication.quote_queue_created",
+      label: "Comunicacao enfileirada",
+      status: "done",
+      actor: "sistema",
+      occurredAt: new Date(issuedAt.getTime() + 12 * 60 * 1000).toISOString(),
+      detail: "E-mail, WhatsApp e aviso interno ficaram prontos para processamento.",
+    },
+    {
+      key: "quote.public_link_opened",
+      label: "Link publico aberto",
+      status: opened ? "done" : "pending",
+      actor: "cliente",
+      occurredAt: opened ? new Date(issuedAt.getTime() + 38 * 60 * 1000).toISOString() : null,
+      detail: opened
+        ? "Cliente acessou o portal publico do orcamento."
+        : "Aguardando primeiro acesso do cliente ao link de aprovacao.",
+    },
+    {
+      key: "quote.public_decision_recorded",
+      label: "Decisao registrada",
+      status: decided ? "done" : "pending",
+      actor: "cliente",
+      occurredAt: decided ? new Date(issuedAt.getTime() + 52 * 60 * 1000).toISOString() : null,
+      detail: approved
+        ? "Cliente aprovou o orcamento e aceitou os termos."
+        : rejected
+          ? "Cliente recusou ou solicitou revisao do orcamento."
+          : "Aguardando aprovacao, recusa ou solicitacao de revisao.",
+    },
+    {
+      key: "quote.approval_activation_prepared",
+      label: "Execucao liberada",
+      status: activated ? "done" : decided ? "blocked" : "pending",
+      actor: "operacao",
+      occurredAt: activated ? new Date(issuedAt.getTime() + 64 * 60 * 1000).toISOString() : null,
+      detail: activated
+        ? "Orcamento aprovado foi convertido em plano de execucao com despacho e estoque."
+        : decided
+          ? "Execucao bloqueada porque a decisao nao liberou o atendimento."
+          : "Execucao depende da decisao do cliente.",
+    },
+  ];
+
+  const nextEvent = events.find((event) => event.status !== "done");
+
+  return {
+    quoteId: quote.id,
+    quoteNumber: quote.number ?? quote.id,
+    serviceOrderId: quote.serviceOrderId,
+    tenantId,
+    customer: quote.customer ?? "Cliente",
+    status: "quote_timeline_ready",
+    currentQuoteStatus: currentStatus,
+    summary: {
+      sent: true,
+      opened,
+      decided,
+      approved,
+      rejected,
+      activated,
+      pendingReason: nextEvent?.detail ?? "Fluxo de aprovacao concluido e pronto para acompanhamento operacional.",
+    },
+    events,
+    metrics: {
+      totalEvents: events.length,
+      completedEvents: events.filter((event) => event.status === "done").length,
+      pendingEvents: events.filter((event) => event.status === "pending").length,
+      blockedEvents: events.filter((event) => event.status === "blocked").length,
+      elapsedMinutes: activated ? 64 : decided ? 52 : opened ? 38 : 12,
+      nextEvent: nextEvent?.key ?? null,
+    },
+    governance: {
+      auditEvent: "quote.approval_timeline_viewed",
+      requiresImmutableAuditLog: true,
+      recordsPublicAccess: true,
+      recordsDecisionEvidence: true,
+      hidesInternalMargin: true,
+      lgpdBasis: "execucao de contrato e registro de aceite comercial",
+    },
+    nextActions: activated
+      ? [
+          "Confirmar reserva de pecas quando houver item de estoque.",
+          "Sincronizar liberacao no app do tecnico.",
+          "Avisar cliente sobre programacao de execucao.",
+        ]
+      : decided
+        ? [
+            "Registrar motivo comercial da decisao.",
+            "Preparar nova versao se houver revisao solicitada.",
+            "Manter OS bloqueada para execucao ate novo aceite.",
+          ]
+        : [
+            "Monitorar abertura e decisao do cliente.",
+            "Reenviar lembrete por canal autorizado se vencer SLA.",
+            "Acionar comercial quando o prazo de validade estiver proximo.",
+          ],
+  };
+}
+
+export async function createMockQuoteApprovalTimeline(tenantId: string, quoteId: string) {
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalTimeline(tenantId, quote);
+}
+
+export async function createPrismaQuoteApprovalTimeline(tenantId: string, quoteId: string) {
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalTimeline(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  });
+}
+
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 
