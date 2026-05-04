@@ -41,6 +41,13 @@ export const reservedParts = [
   { title: "Compra", detail: "Se consumo for confirmado, revisar reposicao automatica" },
 ];
 
+export const warrantyPackage = [
+  { title: "Cobertura", detail: "90 dias para mao de obra e pecas fornecidas nesta OS" },
+  { title: "Exclusoes", detail: "Mau uso, terceiros, oscilacao eletrica e infraestrutura preexistente" },
+  { title: "Aceite", detail: "Cliente deve declarar ciencia das condicoes e orientacoes tecnicas" },
+  { title: "Envio", detail: "Termo sera enviado por e-mail com copia opcional ao cliente" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

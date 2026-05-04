@@ -171,3 +171,24 @@ export function createPartsLoadAckAction(serviceOrderId: string, technicianUserI
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createWarrantyPresentedAction(serviceOrderId: string, customerId: string) {
+  return {
+    id: offlineId("warranty"),
+    label: `Garantia apresentada OS ${serviceOrderId}`,
+    method: "POST",
+    path: "/warranty-terms",
+    payload: {
+      serviceOrderId,
+      customerId,
+      coverageDays: 90,
+      coverageText: "Garantia de mao de obra e pecas fornecidas conforme termo apresentado ao cliente no encerramento da OS.",
+      exclusions: ["mau uso", "intervencao de terceiros", "oscilacao eletrica", "infraestrutura inadequada"],
+      mobileAck: {
+        presentedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

@@ -204,6 +204,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre fluxo de garantia operacional.
 - Fluxo prepara emissao, envio e auditoria da garantia apos conclusao da OS.
 
+## 0.8.37 - Garantia Offline No Mobile
+
+- App mobile passou a exibir secao de garantia da OS.
+- Modo offline ganhou acao de garantia apresentada ao cliente.
+- Servico mobile cria payload para `POST /warranty-terms`.
+- Fluxo aproxima tecnico, assinatura, termo de garantia e envio posterior.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -16,11 +16,13 @@ import {
   createPartUsageAction,
   createPhotoEvidenceAction,
   createVisitPreparationAckAction,
+  createWarrantyPresentedAction,
   OfflineAction,
   sendOfflineAction,
 } from "./src/services/api";
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
+import { warrantyPackage } from "./src/data/dashboard";
 
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
@@ -59,6 +61,12 @@ export default function App() {
     const action = createPartsLoadAckAction("1048", "tech-001");
     setPendingActions((current) => [action, ...current]);
     setSyncStatus("Confirmacao de pecas carregadas salva offline.");
+  }
+
+  function addWarrantyPresented() {
+    const action = createWarrantyPresentedAction("1048", "customer-001");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Garantia apresentada ao cliente salva offline.");
   }
 
   async function syncPending() {
@@ -101,6 +109,7 @@ export default function App() {
             onAddExecutionPack={addExecutionPack}
             onAddVisitPreparation={addVisitPreparationAck}
             onAddPartsLoad={addPartsLoadAck}
+            onAddWarranty={addWarrantyPresented}
             onSync={syncPending}
           />
         </Section>
@@ -116,6 +125,14 @@ export default function App() {
         <Section title="Pecas reservadas">
           <View style={styles.grid}>
             {reservedParts.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Garantia da OS">
+          <View style={styles.grid}>
+            {warrantyPackage.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>
