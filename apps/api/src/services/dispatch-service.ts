@@ -1,5 +1,5 @@
 import { customers, quotes, serviceOrders, serviceOrderStops, stock, technicianLocations, tenant } from "../mock-data";
-import type { DispatchAssignmentDecisionInput, DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
+import type { DispatchAssignmentDecisionInput, DispatchVisitPreparationInput, FieldCompletionEmailQueueInput, FieldCustomerSignatureRecordInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 import { createVisualDiagnosisPackage } from "./ai-assistant-service";
 
 const priorityWeight: Record<string, number> = {
@@ -917,7 +917,111 @@ export function createMockFieldCompletionEmailPackage(input: {
           "Enfileirar envio para e-mail da empresa.",
           "Anexar relatorio, evidencias e assinatura.",
           "Registrar auditoria do envio e status de entrega.",
-        ],
+      ],
+  };
+}
+
+export function recordMockFieldCustomerSignature(serviceOrderId: string, input: FieldCustomerSignatureRecordInput) {
+  const signature = createMockFieldCustomerSignaturePackage({
+    serviceOrderId,
+    technicianUserId: input.technicianUserId,
+    quoteId: input.quoteId,
+  });
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!signature || !order) {
+    return null;
+  }
+
+  const accepted = input.acceptedTerms && Boolean(input.responsibleName);
+
+  return {
+    id: `sig-${serviceOrderId}-${Date.now()}`,
+    serviceOrderId,
+    quoteId: input.quoteId ?? signature.quoteId,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: signature.technician,
+    status: signature.canCaptureSignature && accepted ? "customer_signature_recorded" : "customer_signature_needs_review",
+    canCompleteServiceOrder: signature.canCaptureSignature && accepted,
+    responsible: {
+      name: input.responsibleName,
+      role: input.responsibleRole,
+      document: input.responsibleDocument ?? null,
+    },
+    signature: {
+      fileUrl: input.signatureFileUrl ?? `https://local.icemax.dev/signatures/${serviceOrderId}-${Date.now()}.png`,
+      signedAt: input.signedAt ?? new Date().toISOString(),
+      acceptedTerms: input.acceptedTerms,
+      storedAsProtectedFile: true,
+    },
+    emailCopyToCustomer: input.emailCopyToCustomer,
+    mobileOfflineId: input.mobileOfflineId ?? null,
+    audit: {
+      event: "field.customer_signature_recorded",
+      entity: "service_order",
+      entityId: serviceOrderId,
+      idempotencyKey: input.mobileOfflineId ?? `field:${serviceOrderId}:${input.technicianUserId}:signature-recorded`,
+    },
+    nextActions: [
+      "Atualizar status da OS para concluida quando os bloqueios estiverem resolvidos.",
+      "Preparar pacote de e-mail final.",
+      "Anexar assinatura ao historico da OS e do equipamento.",
+    ],
+  };
+}
+
+export function queueMockFieldCompletionEmail(serviceOrderId: string, input: FieldCompletionEmailQueueInput) {
+  const emailPackage = createMockFieldCompletionEmailPackage({
+    serviceOrderId,
+    technicianUserId: input.technicianUserId,
+    quoteId: input.quoteId,
+    emailCopyToCustomer: input.emailCopyToCustomer,
+  });
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!emailPackage || !order) {
+    return null;
+  }
+
+  const companyEmail = input.companyEmail ?? emailPackage.recipients.company;
+  const customerEmail = input.emailCopyToCustomer ? input.customerEmail ?? emailPackage.recipients.customerCopy : null;
+
+  return {
+    id: `email-${serviceOrderId}-${Date.now()}`,
+    serviceOrderId,
+    quoteId: input.quoteId ?? emailPackage.quoteId,
+    status: "queued_mock",
+    channel: "email",
+    recipients: {
+      company: companyEmail,
+      customerCopy: customerEmail,
+      copyToCustomer: input.emailCopyToCustomer,
+    },
+    subject: emailPackage.subject,
+    bodyPreview: emailPackage.bodyPreview,
+    attachments: emailPackage.attachments.map((attachment) => ({
+      ...attachment,
+      status: attachment.key === "warranty_terms" && !input.includeWarrantyTerms ? "skipped" : attachment.status,
+    })),
+    provider: {
+      configured: false,
+      mode: "mock_queue_until_email_provider_key",
+      canRetry: true,
+    },
+    requestedAt: input.requestedAt ?? new Date().toISOString(),
+    mobileOfflineId: input.mobileOfflineId ?? null,
+    audit: {
+      event: "field.completion_email_queued",
+      entity: "service_order",
+      entityId: serviceOrderId,
+      idempotencyKey: input.mobileOfflineId ?? `field:${serviceOrderId}:${input.technicianUserId}:completion-email-queued`,
+    },
+    nextActions: [
+      "Enviar quando o provedor de e-mail estiver configurado.",
+      "Registrar status de entrega ou falha.",
+      "Disponibilizar comprovante no historico do cliente.",
+    ],
   };
 }
 

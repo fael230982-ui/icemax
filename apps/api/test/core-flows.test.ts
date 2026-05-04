@@ -473,6 +473,24 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(customerSignature.json().captureFields.length >= 5);
   assert.equal(customerSignature.json().emailDecision.customerCopyOptional, true);
 
+  const recordedCustomerSignature = await app.inject({
+    method: "POST",
+    url: "/dispatch/service-orders/1049/customer-signature",
+    payload: {
+      quoteId: "quote-002",
+      technicianUserId: "tech-002",
+      responsibleName: "Cliente Decisor",
+      responsibleRole: "Gerente da unidade",
+      emailCopyToCustomer: false,
+      acceptedTerms: true,
+      mobileOfflineId: "offline-signature-1049",
+    },
+  });
+  assert.equal(recordedCustomerSignature.statusCode, 201);
+  assert.equal(recordedCustomerSignature.json().serviceOrderId, "1049");
+  assert.equal(recordedCustomerSignature.json().audit.event, "field.customer_signature_recorded");
+  assert.equal(recordedCustomerSignature.json().emailCopyToCustomer, false);
+
   const completionEmail = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1049/completion-email?technicianUserId=tech-002&quoteId=quote-002&emailCopyToCustomer=false",
@@ -482,6 +500,22 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(completionEmail.json().audit.event, "field.completion_email_package_prepared");
   assert.equal(completionEmail.json().recipients.company, "adm.rcsolutions@gmail.com");
   assert.equal(completionEmail.json().deliveryPolicy.customerCopyOptional, true);
+
+  const queuedCompletionEmail = await app.inject({
+    method: "POST",
+    url: "/dispatch/service-orders/1049/completion-email",
+    payload: {
+      quoteId: "quote-002",
+      technicianUserId: "tech-002",
+      emailCopyToCustomer: false,
+      includeWarrantyTerms: true,
+      mobileOfflineId: "offline-email-1049",
+    },
+  });
+  assert.equal(queuedCompletionEmail.statusCode, 201);
+  assert.equal(queuedCompletionEmail.json().serviceOrderId, "1049");
+  assert.equal(queuedCompletionEmail.json().audit.event, "field.completion_email_queued");
+  assert.equal(queuedCompletionEmail.json().recipients.copyToCustomer, false);
 
   const readiness = await app.inject({
     method: "GET",

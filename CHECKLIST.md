@@ -1477,3 +1477,21 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Comandos De Assinatura E E-Mail Final
+
+- [x] Schema de registro de assinatura criado.
+- [x] Schema de fila de e-mail final criado.
+- [x] Endpoint POST de assinatura criado.
+- [x] Endpoint POST de e-mail final criado.
+- [x] Mobile atualizado para comandos transacionais.
+- [x] Console web atualizado com acoes POST.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

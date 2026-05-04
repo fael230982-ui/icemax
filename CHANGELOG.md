@@ -468,6 +468,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Fluxo offline registra decisao de copia ao cliente e anexos esperados.
 - Documentado o caminho de evolucao para endpoints transacionais definitivos.
 
+## 0.8.72 - Comandos De Assinatura E E-Mail Final
+
+- Adicionados endpoints POST para registrar assinatura do cliente e enfileirar e-mail final da OS.
+- Schemas passaram a validar responsavel, aceite dos termos, copia opcional e id offline.
+- Mobile passou a sincronizar assinatura e e-mail final diretamente nos comandos de despacho.
+- Console web ganhou acoes `Registrar assinatura` e `Enfileirar e-mail`.
+- Teste automatizado cobre os comandos transacionais de assinatura e e-mail.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

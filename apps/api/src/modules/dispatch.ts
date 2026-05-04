@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
-import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
+import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, fieldCompletionEmailQueueSchema, fieldCustomerSignatureRecordSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, queueMockFieldCompletionEmail, recommendMockDispatchAssignments, recordMockFieldCustomerSignature, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -212,6 +212,33 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     return signature;
   });
 
+  app.post("/dispatch/service-orders/:id/customer-signature", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(fieldCustomerSignatureRecordSchema, request.body);
+    const signature = recordMockFieldCustomerSignature(id, input);
+
+    if (!signature) {
+      return reply.code(404).send({ message: "OS nao encontrada para registrar assinatura do cliente." });
+    }
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: signature.audit.event,
+      entity: signature.audit.entity,
+      entityId: signature.audit.entityId,
+      metadata: {
+        technicianUserId: input.technicianUserId,
+        quoteId: input.quoteId,
+        emailCopyToCustomer: input.emailCopyToCustomer,
+        mobileOfflineId: input.mobileOfflineId,
+      },
+    });
+
+    return reply.code(201).send(signature);
+  });
+
   app.get("/dispatch/service-orders/:id/completion-email", async (request, reply) => {
     const { id } = request.params as { id: string };
     const query = request.query as { technicianUserId?: string; quoteId?: string; emailCopyToCustomer?: string };
@@ -227,6 +254,33 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return email;
+  });
+
+  app.post("/dispatch/service-orders/:id/completion-email", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(fieldCompletionEmailQueueSchema, request.body);
+    const email = queueMockFieldCompletionEmail(id, input);
+
+    if (!email) {
+      return reply.code(404).send({ message: "OS nao encontrada para enfileirar e-mail de conclusao." });
+    }
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: email.audit.event,
+      entity: email.audit.entity,
+      entityId: email.audit.entityId,
+      metadata: {
+        technicianUserId: input.technicianUserId,
+        quoteId: input.quoteId,
+        emailCopyToCustomer: input.emailCopyToCustomer,
+        mobileOfflineId: input.mobileOfflineId,
+      },
+    });
+
+    return reply.code(201).send(email);
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

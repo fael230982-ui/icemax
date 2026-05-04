@@ -138,8 +138,32 @@ export function OperationsConsole() {
     void run("Assinatura do cliente", () => icemaxApi.fieldCustomerSignature("1049", "tech-002", "quote-002", token || undefined));
   }
 
+  function recordFieldCustomerSignature() {
+    void run("Registrar assinatura", () =>
+      icemaxApi.recordFieldCustomerSignature("1049", {
+        quoteId: "quote-002",
+        technicianUserId: "tech-002",
+        responsibleName: "Cliente Decisor",
+        responsibleRole: "Gerente da unidade",
+        emailCopyToCustomer: false,
+        acceptedTerms: true,
+      }, token || undefined),
+    );
+  }
+
   function loadFieldCompletionEmail() {
     void run("E-mail de conclusao", () => icemaxApi.fieldCompletionEmail("1049", "tech-002", "quote-002", "false", token || undefined));
+  }
+
+  function queueFieldCompletionEmail() {
+    void run("Enfileirar e-mail final", () =>
+      icemaxApi.queueFieldCompletionEmail("1049", {
+        quoteId: "quote-002",
+        technicianUserId: "tech-002",
+        emailCopyToCustomer: false,
+        includeWarrantyTerms: true,
+      }, token || undefined),
+    );
   }
 
   function createVisitPreparation() {
@@ -592,7 +616,9 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadFieldExecutionEvidence}>Evidencias campo</button>
         <button type="button" className="secondary" onClick={loadFieldExecutionCloseout}>Fechamento campo</button>
         <button type="button" className="secondary" onClick={loadFieldCustomerSignature}>Assinatura cliente</button>
+        <button type="button" className="secondary" onClick={recordFieldCustomerSignature}>Registrar assinatura</button>
         <button type="button" className="secondary" onClick={loadFieldCompletionEmail}>E-mail conclusao</button>
+        <button type="button" className="secondary" onClick={queueFieldCompletionEmail}>Enfileirar e-mail</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>

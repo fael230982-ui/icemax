@@ -242,6 +242,30 @@ export const dispatchAssignmentDecisionSchema = z.object({
   currentLongitude: z.number().min(-180).max(180).optional(),
 });
 
+export const fieldCustomerSignatureRecordSchema = z.object({
+  quoteId: z.string().optional(),
+  technicianUserId: z.string().min(1),
+  responsibleName: z.string().min(2),
+  responsibleRole: z.string().min(2),
+  responsibleDocument: z.string().optional(),
+  signatureFileUrl: z.string().url().optional(),
+  emailCopyToCustomer: z.boolean().default(true),
+  acceptedTerms: z.boolean().default(true),
+  signedAt: z.string().datetime().optional(),
+  mobileOfflineId: z.string().optional(),
+});
+
+export const fieldCompletionEmailQueueSchema = z.object({
+  quoteId: z.string().optional(),
+  technicianUserId: z.string().min(1),
+  emailCopyToCustomer: z.boolean().default(true),
+  customerEmail: z.string().email().optional(),
+  companyEmail: z.string().email().optional(),
+  includeWarrantyTerms: z.boolean().default(true),
+  requestedAt: z.string().datetime().optional(),
+  mobileOfflineId: z.string().optional(),
+});
+
 export const improveTechnicalTextSchema = z.object({
   text: z.string().min(3),
   tone: z.enum(["professional", "objective", "customer_friendly"]).default("professional"),
@@ -457,6 +481,8 @@ export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
 export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type DispatchVisitPreparationInput = z.output<typeof dispatchVisitPreparationSchema>;
 export type DispatchAssignmentDecisionInput = z.output<typeof dispatchAssignmentDecisionSchema>;
+export type FieldCustomerSignatureRecordInput = z.output<typeof fieldCustomerSignatureRecordSchema>;
+export type FieldCompletionEmailQueueInput = z.output<typeof fieldCompletionEmailQueueSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
 export type VisualDiagnosisPackageInput = z.output<typeof visualDiagnosisPackageSchema>;
