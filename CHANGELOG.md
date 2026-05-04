@@ -82,6 +82,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel de sincronizacao mobile passou a exibir quantidade de acoes pendentes.
 - Servico mobile ganhou criadores de acoes offline reutilizaveis.
 
+## 0.8.20 - Planta Operacional
+
+- Adicionado endpoint de visao operacional de planta.
+- Planta passou a retornar pontos com QR, manual, historico, risco e proximas acoes.
+- Console web passou a consultar planta operacional.
+- Teste automatizado cobre pontos e payload QR da planta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

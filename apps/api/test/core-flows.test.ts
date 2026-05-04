@@ -153,6 +153,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(qr.statusCode, 201);
   assert.match(qr.json().fileUrl, /^\/files\/qr-labels\/ICM-AC-9000.svg$/);
 
+  const floorPlan = await app.inject({
+    method: "GET",
+    url: "/floor-plans/floor-001/operational-view",
+  });
+  assert.equal(floorPlan.statusCode, 200);
+  assert.equal(floorPlan.json().floorPlan.id, "floor-001");
+  assert.ok(floorPlan.json().summary.totalPoints >= 3);
+  assert.ok(floorPlan.json().points[0].qrPayload);
+
   const audit = await app.inject({
     method: "GET",
     url: "/audit-log",

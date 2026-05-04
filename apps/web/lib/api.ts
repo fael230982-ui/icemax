@@ -112,6 +112,8 @@ export const icemaxApi = {
   integrations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/integrations", { token }),
   uploadFile: (body: unknown, token?: string) => apiRequest<unknown>("/files", { method: "POST", body, token }),
   createQrLabel: (body: unknown, token?: string) => apiRequest<unknown>("/qr-labels", { method: "POST", body, token }),
+  floorPlanOperationalView: (floorPlanId: string, token?: string) =>
+    apiRequest<unknown>(`/floor-plans/${floorPlanId}/operational-view`, { token }),
   auditLog: (token?: string) => apiRequest<ApiListResponse<unknown>>("/audit-log", { token }),
   technicianLocations: (token?: string) => apiRequest<ApiListResponse<unknown>>("/technicians/locations", { token }),
   optimizeRoute: (body: unknown, token?: string) => apiRequest<unknown>("/dispatch/routes/optimize", { method: "POST", body, token }),

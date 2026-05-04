@@ -98,6 +98,10 @@ export function OperationsConsole() {
     void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
   }
 
+  function loadFloorPlanOperationalView() {
+    void run("Planta operacional", () => icemaxApi.floorPlanOperationalView("floor-001", token || undefined));
+  }
+
   function improveText() {
     void run("Revisao IA", () =>
       icemaxApi.improveText({
@@ -394,6 +398,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={uploadSample}>Enviar arquivo teste</button>
         <button type="button" className="secondary" onClick={loadAudit}>Ver auditoria</button>
         <button type="button" className="secondary" onClick={loadLocations}>Ver equipe no mapa</button>
+        <button type="button" className="secondary" onClick={loadFloorPlanOperationalView}>Planta operacional</button>
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>

@@ -11,6 +11,60 @@ export async function registerAssetRoutes(app: FastifyInstance) {
     total: floorPlans.length,
   }));
 
+  app.get("/floor-plans/:id/operational-view", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const floorPlan = floorPlans.find((item) => item.id === id);
+
+    if (!floorPlan) {
+      return reply.code(404).send({ message: "Planta nao encontrada." });
+    }
+
+    const points = floorPlan.points.map((point, index) => {
+      const label = qrLabels.find((item) => item.equipmentCode === point.equipmentCode);
+      const manual = manuals.find((item) => label?.equipment.toLowerCase().includes(item.brand.toLowerCase()));
+      const risk = index === 0 ? "attention" : index === 1 ? "normal" : "planned";
+
+      return {
+        ...point,
+        risk,
+        qrPayload: label?.qrPayload ?? `icemax://equipment/${point.equipmentCode}`,
+        equipment: label?.equipment ?? point.equipmentCode,
+        installLocation: label?.installLocation ?? point.label,
+        manualId: manual?.id,
+        lastServiceOrder: index === 0 ? "1048" : index === 1 ? "1049" : null,
+        nextAction: risk === "attention" ? "Abrir OS corretiva ou revisar historico recente." : "Manter acompanhamento preventivo.",
+      };
+    });
+
+    return {
+      floorPlan: {
+        id: floorPlan.id,
+        customer: floorPlan.customer,
+        name: floorPlan.name,
+        equipmentCount: floorPlan.equipmentCount,
+      },
+      summary: {
+        totalPoints: points.length,
+        attention: points.filter((point) => point.risk === "attention").length,
+        withQr: points.filter((point) => Boolean(point.qrPayload)).length,
+        withManual: points.filter((point) => Boolean(point.manualId)).length,
+      },
+      layers: [
+        { key: "equipment", label: "Equipamentos", enabled: true },
+        { key: "qr", label: "QR Codes", enabled: true },
+        { key: "service_history", label: "Historico de OS", enabled: true },
+        { key: "risk", label: "Risco operacional", enabled: true },
+      ],
+      points,
+      nextActions: [
+        "Abrir detalhe do equipamento pelo ponto.",
+        "Ler QR Code para confirmar equipamento em campo.",
+        "Consultar historico de OS antes da visita.",
+        "Gerar OS corretiva a partir do ponto em atencao.",
+      ],
+    };
+  });
+
   app.get("/qr-labels", async () => ({
     data: qrLabels,
     total: qrLabels.length,
