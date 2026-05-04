@@ -345,6 +345,10 @@ Campos:
 - `mimeType`;
 - `base64`.
 
+### GET /files/storage-readiness
+
+Retorna prontidao de storage privado, politica deny-by-default, pastas, sensibilidade, retencao e bloqueios para producao.
+
 ### GET /files/*
 
 Serve arquivos locais gerados em desenvolvimento, como relatorios e uploads.

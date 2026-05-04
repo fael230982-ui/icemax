@@ -612,6 +612,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console operacional passou a consultar o drill junto dos checks de banco.
 - Teste automatizado cobre politica dry-run, comando de restauracao bloqueado e criterios de go/no-go.
 
+## 0.8.90 - Prontidao De Storage Privado
+
+- Adicionado endpoint `GET /files/storage-readiness`.
+- Storage passa a expor politica de acesso, pastas, sensibilidade, retencao e bloqueios.
+- Console operacional consulta prontidao de storage durante homologacao.
+- Teste automatizado cobre politica deny-by-default, pastas privadas e bloqueio em modo local.
+- Documentado caminho para substituir storage local por storage privado em producao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

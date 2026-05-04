@@ -96,6 +96,12 @@ test("service order execution flow accepts mock records", async () => {
   assert.equal(upload.statusCode, 201);
   assert.match(upload.json().url, /^\/files\/uploads\/teste-os.txt$/);
 
+  const storage = await app.inject({ method: "GET", url: "/files/storage-readiness" });
+  assert.equal(storage.statusCode, 200);
+  assert.equal(storage.json().publicAccessPolicy.default, "deny");
+  assert.ok(storage.json().summary.privateRequired >= 3);
+  assert.ok(storage.json().blockers[0].includes("STORAGE_DRIVER"));
+
   await app.close();
 });
 

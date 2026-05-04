@@ -509,6 +509,7 @@ export function OperationsConsole() {
         icemaxApi.runHomologationScenario("os-completa", token || undefined),
         icemaxApi.observabilitySummary(token || undefined),
         icemaxApi.demoDataSnapshot(token || undefined),
+        icemaxApi.storageReadiness(token || undefined),
       ]);
 
       return { checks: results.length, results };

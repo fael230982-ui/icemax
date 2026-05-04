@@ -4,9 +4,11 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { parseBody, uploadFileSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { getStorageRoot, saveLocalFile } from "../services/storage-service";
+import { getStorageReadiness, getStorageRoot, saveLocalFile } from "../services/storage-service";
 
 export async function registerFileRoutes(app: FastifyInstance) {
+  app.get("/files/storage-readiness", async () => getStorageReadiness());
+
   app.post("/files", async (request, reply) => {
     const context = await getAuthContext(request);
     const input = parseBody(uploadFileSchema, request.body);

@@ -1750,3 +1750,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Prontidao De Storage Privado
+
+- [x] Endpoint de storage readiness criado.
+- [x] Pastas classificadas por sensibilidade e retencao.
+- [x] Politica deny-by-default documentada.
+- [x] Console operacional conectado ao check de storage.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
