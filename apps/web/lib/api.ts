@@ -111,6 +111,10 @@ export const icemaxApi = {
     apiRequest<unknown>(`/service-orders/${serviceOrderId}/communication-package`, { token }),
   contractCommunicationPackage: (contractId: string, token?: string) =>
     apiRequest<unknown>(`/contracts/${contractId}/communication-package`, { token }),
+  createServiceOrderCommunicationQueue: (serviceOrderId: string, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/communication-queue`, { method: "POST", token }),
+  createContractCommunicationQueue: (contractId: string, token?: string) =>
+    apiRequest<unknown>(`/contracts/${contractId}/communication-queue`, { method: "POST", token }),
   createContract: (body: unknown, token?: string) => apiRequest<unknown>("/contracts", { method: "POST", body, token }),
   quotes: (token?: string) => apiRequest<ApiListResponse<unknown>>("/quotes", { token }),
   stock: (token?: string) => apiRequest<ApiListResponse<unknown> & { alerts: unknown[] }>("/stock", { token }),

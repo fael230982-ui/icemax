@@ -256,6 +256,14 @@ export function OperationsConsole() {
     void run("Comunicacao do contrato", () => icemaxApi.contractCommunicationPackage("contract-001", token || undefined));
   }
 
+  function createServiceOrderCommunicationQueue() {
+    void run("Fila comunicacao OS", () => icemaxApi.createServiceOrderCommunicationQueue("1048", token || undefined));
+  }
+
+  function createContractCommunicationQueue() {
+    void run("Fila comunicacao contrato", () => icemaxApi.createContractCommunicationQueue("contract-001", token || undefined));
+  }
+
   function loadDayCommandCenter() {
     void run("Comando do dia", () => icemaxApi.dayCommandCenter(token || undefined));
   }
@@ -432,6 +440,8 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
         <button type="button" className="secondary" onClick={loadServiceOrderCommunicationPackage}>Comunicacao OS</button>
         <button type="button" className="secondary" onClick={loadContractCommunicationPackage}>Comunicacao contrato</button>
+        <button type="button" className="secondary" onClick={createServiceOrderCommunicationQueue}>Fila comunicacao OS</button>
+        <button type="button" className="secondary" onClick={createContractCommunicationQueue}>Fila comunicacao contrato</button>
         <button type="button" className="secondary" onClick={loadDayCommandCenter}>Comando do dia</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>

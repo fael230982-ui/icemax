@@ -756,3 +756,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Fila De Comunicacao
+
+- [x] Fila mock de comunicacao de OS criada.
+- [x] Fila mock de comunicacao de contrato criada.
+- [x] Idempotencia, tentativas e prioridade por canal incluidas.
+- [x] Preflight de LGPD, anexos e chaves externas incluido.
+- [x] Console web conectado a criacao das filas.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

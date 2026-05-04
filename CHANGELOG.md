@@ -110,6 +110,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar o comando do dia.
 - Teste automatizado cobre resumo, despacho e comunicacoes do cockpit.
 
+## 0.8.24 - Fila De Comunicacao
+
+- Adicionados endpoints para criar fila mock de comunicacao da OS e do contrato.
+- Fila inclui canal, provedor pendente, idempotencia, tentativas, prioridade e preflight.
+- Console web passou a criar filas de comunicacao para OS e contrato.
+- Teste automatizado cobre fila, idempotencia e pendencia de chave externa.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

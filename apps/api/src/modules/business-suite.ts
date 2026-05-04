@@ -21,11 +21,13 @@ import {
   createContractActivationPlanFromServiceOrder,
   createContractBillingPlan,
   createContractCommunicationPackage,
+  createContractCommunicationQueue,
   createDayCommandCenter,
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
   createServiceOrderCommunicationPackage,
+  createServiceOrderCommunicationQueue,
   createContractOpportunityFromServiceOrder,
   createContractProposalFromServiceOrder,
   createPostServicePlan,
@@ -257,5 +259,27 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return communicationPackage;
+  });
+
+  app.post("/service-orders/:id/communication-queue", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const queue = createServiceOrderCommunicationQueue(id);
+
+    if (!queue) {
+      return reply.code(404).send({ message: "OS nao encontrada para fila de comunicacao." });
+    }
+
+    return reply.code(201).send(queue);
+  });
+
+  app.post("/contracts/:id/communication-queue", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const queue = createContractCommunicationQueue(id);
+
+    if (!queue) {
+      return reply.code(404).send({ message: "Contrato nao encontrado para fila de comunicacao." });
+    }
+
+    return reply.code(201).send(queue);
   });
 }

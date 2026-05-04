@@ -650,6 +650,137 @@ export function createContractCommunicationPackage(contractId: string) {
   };
 }
 
+type CommunicationMessage = {
+  channel: string;
+  template: string;
+  subject?: string;
+  body: string;
+  copyToCustomer: boolean;
+};
+
+function queueItemsFromMessages(params: {
+  sourceType: "service_order" | "contract";
+  sourceId: string;
+  trigger: string;
+  recipients: Record<string, string>;
+  messages: CommunicationMessage[];
+}) {
+  return params.messages.map((message, index) => {
+    const recipient = message.channel === "email"
+      ? params.recipients.companyEmail
+      : message.channel === "whatsapp"
+        ? params.recipients.whatsapp
+        : params.recipients.internal;
+
+    return {
+      id: `queue-${params.sourceType}-${params.sourceId}-${message.channel}-${index + 1}`,
+      sourceType: params.sourceType,
+      sourceId: params.sourceId,
+      trigger: params.trigger,
+      channel: message.channel,
+      provider: message.channel === "whatsapp" ? "whatsapp_business_pending" : message.channel === "email" ? "email_provider_pending" : "internal_notification",
+      recipient,
+      template: message.template,
+      subject: message.subject,
+      body: message.body,
+      copyToCustomer: message.copyToCustomer,
+      status: "queued_mock",
+      priority: message.channel === "internal" ? "normal" : "high",
+      attempts: 0,
+      maxAttempts: 3,
+      idempotencyKey: `${params.sourceType}:${params.sourceId}:${message.channel}:${message.template}`,
+      scheduledFor: new Date().toISOString(),
+    };
+  });
+}
+
+export function createServiceOrderCommunicationQueue(serviceOrderId: string) {
+  const communicationPackage = createServiceOrderCommunicationPackage(serviceOrderId);
+
+  if (!communicationPackage) {
+    return null;
+  }
+
+  const items = queueItemsFromMessages({
+    sourceType: "service_order",
+    sourceId: serviceOrderId,
+    trigger: communicationPackage.trigger,
+    recipients: communicationPackage.recipients,
+    messages: communicationPackage.messages,
+  });
+
+  return {
+    sourceType: "service_order",
+    sourceId: serviceOrderId,
+    status: "queued_mock",
+    total: items.length,
+    readyToSend: items.filter((item) => item.status === "queued_mock").length,
+    blocked: 0,
+    preflight: [
+      { key: "technical_report", status: "required", result: "ready_to_generate" },
+      { key: "customer_signature", status: "required", result: "expected_or_pending_completion" },
+      { key: "lgpd_basis", status: "ok", result: communicationPackage.governance.lgpdBasis },
+      { key: "provider_credentials", status: "pending_external_key", result: "fila criada sem envio real" },
+    ],
+    items,
+    audit: {
+      event: "communication.service_order_queue_created",
+      entity: "service_order",
+      entityId: serviceOrderId,
+    },
+    nextActions: [
+      "Persistir itens da fila no banco real.",
+      "Processar fila quando provedor de e-mail estiver configurado.",
+      "Processar WhatsApp somente com consentimento valido.",
+      "Registrar resposta do provedor em auditoria.",
+    ],
+  };
+}
+
+export function createContractCommunicationQueue(contractId: string) {
+  const communicationPackage = createContractCommunicationPackage(contractId);
+
+  if (!communicationPackage) {
+    return null;
+  }
+
+  const items = queueItemsFromMessages({
+    sourceType: "contract",
+    sourceId: contractId,
+    trigger: communicationPackage.trigger,
+    recipients: communicationPackage.recipients,
+    messages: communicationPackage.messages,
+  });
+
+  return {
+    sourceType: "contract",
+    sourceId: contractId,
+    status: "queued_mock",
+    total: items.length,
+    readyToSend: items.filter((item) => item.status === "queued_mock").length,
+    blocked: 0,
+    automationRules: communicationPackage.automationRules,
+    preflight: [
+      { key: "contract_status", status: "ok", result: "contrato apto para comunicacao recorrente" },
+      { key: "billing_rule", status: "ok", result: "mensalidade e vencimento identificados" },
+      { key: "lgpd_basis", status: "ok", result: communicationPackage.governance.lgpdBasis },
+      { key: "provider_credentials", status: "pending_external_key", result: "fila criada sem envio real" },
+    ],
+    items,
+    audit: {
+      event: "communication.contract_queue_created",
+      entity: "contract",
+      entityId: contractId,
+    },
+    nextActions: [
+      "Persistir recorrencia de lembretes no banco real.",
+      "Criar job de cobranca conforme dias configurados.",
+      "Criar job de lembrete de visita preventiva.",
+      "Pausar automacao se contrato ficar inadimplente.",
+    ],
+  };
+}
+
 export function createDayCommandCenter() {
   const dispatch = recommendMockDispatchAssignments();
   const urgentOrders = serviceOrders.filter((order) => order.priority === "emergency" || order.priority === "high");

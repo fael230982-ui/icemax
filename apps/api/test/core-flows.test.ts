@@ -146,6 +146,24 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(contractCommunication.json().automationRules.channels.includes("email"));
   assert.ok(contractCommunication.json().messages.some((item: { template: string }) => item.template === "contrato_mensalidade"));
 
+  const serviceOrderQueue = await app.inject({
+    method: "POST",
+    url: "/service-orders/1048/communication-queue",
+  });
+  assert.equal(serviceOrderQueue.statusCode, 201);
+  assert.equal(serviceOrderQueue.json().sourceType, "service_order");
+  assert.equal(serviceOrderQueue.json().total, 3);
+  assert.ok(serviceOrderQueue.json().items[0].idempotencyKey.includes("service_order:1048"));
+
+  const contractQueue = await app.inject({
+    method: "POST",
+    url: "/contracts/contract-001/communication-queue",
+  });
+  assert.equal(contractQueue.statusCode, 201);
+  assert.equal(contractQueue.json().sourceType, "contract");
+  assert.equal(contractQueue.json().readyToSend, 3);
+  assert.equal(contractQueue.json().preflight[3].status, "pending_external_key");
+
   const movement = await app.inject({
     method: "POST",
     url: "/stock-movements",
