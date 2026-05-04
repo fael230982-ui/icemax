@@ -196,6 +196,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile criou payload offline para `POST /service-orders/:id/parts-reservation`.
 - Fluxo aproxima estoque, despacho e execucao de campo.
 
+## 0.8.36 - Pacote Operacional De Garantia
+
+- Adicionado endpoint `GET /service-orders/:id/warranty-package`.
+- Pacote retorna termo de garantia, exclusoes, aceite do cliente e campos de assinatura.
+- Console web passou a consultar garantia pronta por OS.
+- Teste automatizado cobre fluxo de garantia operacional.
+- Fluxo prepara emissao, envio e auditoria da garantia apos conclusao da OS.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

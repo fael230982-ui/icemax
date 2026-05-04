@@ -199,6 +199,66 @@ export function createPostServicePlan(serviceOrderId: string) {
   };
 }
 
+export function createServiceOrderWarrantyPackage(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const urgent = order.priority === "emergency" || order.priority === "high";
+  const coverageDays = urgent ? 90 : 60;
+  const issuedAt = new Date();
+  const expiresAt = new Date(issuedAt);
+  expiresAt.setDate(expiresAt.getDate() + coverageDays);
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: "warranty_ready",
+    termDraft: {
+      title: `Termo de garantia - OS ${serviceOrderId}`,
+      coverageDays,
+      issuedAt: issuedAt.toISOString(),
+      expiresAt: expiresAt.toISOString(),
+      coverageText: "Garantia sobre a mao de obra executada e pecas fornecidas pela empresa, limitada ao escopo descrito na ordem de servico.",
+      exclusions: [
+        "Mau uso, falta de limpeza ou operacao fora das recomendacoes do fabricante.",
+        "Intervencao de terceiros sem autorizacao da empresa.",
+        "Oscilacao eletrica, infraestrutura inadequada ou problemas civis preexistentes.",
+        "Defeitos em componentes nao substituidos ou nao cobertos pela OS.",
+      ],
+      customerAcknowledgement: "Declaro ter recebido as orientacoes tecnicas, condicoes de garantia e recomendacoes de manutencao preventiva.",
+      signatureFields: ["nome do responsavel", "documento", "data", "assinatura digital"],
+    },
+    operationalChecks: [
+      { key: "service_scope", label: "Escopo executado descrito no relatorio", status: "required" },
+      { key: "customer_signature", label: "Assinatura do cliente coletada", status: "required" },
+      { key: "parts_traceability", label: "Pecas fornecidas rastreadas na OS", status: "recommended" },
+      { key: "photo_evidence", label: "Evidencias fotograficas anexadas", status: "recommended" },
+      { key: "email_delivery", label: "Envio por e-mail preparado", status: "required" },
+    ],
+    customerMessages: {
+      emailSubject: `Termo de garantia da OS ${serviceOrderId}`,
+      emailBody: `Ola, segue o termo de garantia da OS ${serviceOrderId} referente ao equipamento ${order.equipment}. A cobertura e valida por ${coverageDays} dias, conforme condicoes descritas no documento.`,
+      whatsappBody: `Ola! O termo de garantia da OS ${serviceOrderId} esta pronto. A cobertura prevista e de ${coverageDays} dias conforme condicoes do atendimento.`,
+    },
+    audit: {
+      event: "warranty.service_order_package_prepared",
+      entity: "service_order",
+      entityId: serviceOrderId,
+    },
+    nextActions: [
+      "Conferir se o relatorio tecnico final esta completo.",
+      "Anexar assinatura digital do cliente.",
+      "Emitir termo de garantia vinculado a OS.",
+      "Enviar e-mail para a empresa com copia opcional ao cliente.",
+      "Registrar aceite e envio na auditoria operacional.",
+    ],
+  };
+}
+
 function recurrenceForOrder(order: (typeof serviceOrders)[number]) {
   const issue = order.issue.toLowerCase();
 

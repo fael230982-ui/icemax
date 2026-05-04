@@ -163,6 +163,10 @@ export function OperationsConsole() {
     void run("Pos-atendimento", () => icemaxApi.postServicePlan("1048", token || undefined));
   }
 
+  function loadServiceOrderWarrantyPackage() {
+    void run("Garantia da OS", () => icemaxApi.serviceOrderWarrantyPackage("1048", token || undefined));
+  }
+
   function loadContractOpportunity() {
     void run("Oportunidade de contrato", () => icemaxApi.contractOpportunity("1048", token || undefined));
   }
@@ -498,6 +502,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createVisualDiagnosisPackage}>Diagnostico visual IA</button>
         <button type="button" className="secondary" onClick={reviewServiceOrderCompletion}>Revisar conclusao OS</button>
         <button type="button" className="secondary" onClick={loadPostServicePlan}>Pos-atendimento</button>
+        <button type="button" className="secondary" onClick={loadServiceOrderWarrantyPackage}>Garantia OS</button>
         <button type="button" className="secondary" onClick={loadContractOpportunity}>Oportunidade contrato</button>
         <button type="button" className="secondary" onClick={loadContractProposal}>Proposta contrato</button>
         <button type="button" className="secondary" onClick={loadContractActivationPlan}>Ativar contrato</button>

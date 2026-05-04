@@ -35,6 +35,7 @@ import {
   createPurchaseRequest,
   createReleaseReadiness,
   createServiceOrderPartsReservation,
+  createServiceOrderWarrantyPackage,
   createWarrantyTerm,
   getEquipmentTimeline,
   onboardTechnician,
@@ -155,6 +156,17 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return plan;
+  });
+
+  app.get("/service-orders/:id/warranty-package", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const warrantyPackage = createServiceOrderWarrantyPackage(id);
+
+    if (!warrantyPackage) {
+      return reply.code(404).send({ message: "OS nao encontrada para pacote de garantia." });
+    }
+
+    return warrantyPackage;
   });
 
   app.get("/service-orders/:id/contract-opportunity", async (request, reply) => {
