@@ -352,6 +352,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Pacote inclui preflight, idempotencia, opt-in de WhatsApp e ocultacao de margem.
 - Console web ganhou acao para criar lembretes de orcamento.
 
+## 0.8.57 - Lembretes De Orcamento No Mobile
+
+- App mobile passou a exibir secao de lembretes de orcamento.
+- Tecnico visualiza orientacoes de opt-in, auditoria, privacidade e proximo passo.
+- Modo offline ganhou acao para registrar lembrete apresentado em campo.
+- SyncPanel recebeu botao `Lembrete orcamento`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

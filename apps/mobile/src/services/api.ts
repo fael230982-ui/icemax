@@ -305,3 +305,22 @@ export function createQuoteBoardViewedAction(serviceOrderId: string) {
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteReminderPresentedAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-reminder"),
+    label: `Lembrete orcamento OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Lembrete do orcamento ${quoteId} apresentado ou reforcado com o responsavel em campo.`,
+      source: "mobile_offline_quote_reminder",
+      mobileAck: {
+        quoteId,
+        presentedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

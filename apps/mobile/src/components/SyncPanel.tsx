@@ -15,10 +15,11 @@ type SyncPanelProps = {
   onAddQuoteActivation: () => void;
   onAddQuoteTimeline: () => void;
   onAddQuoteBoard: () => void;
+  onAddQuoteReminder: () => void;
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onSync }: SyncPanelProps) {
   return (
     <View style={styles.card}>
       <View>
@@ -58,6 +59,9 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onAddQuoteBoard}>
           <Text style={styles.buttonText}>Board orcamentos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddQuoteReminder}>
+          <Text style={styles.buttonText}>Lembrete orcamento</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.secondary]} onPress={onSync}>
           <Text style={[styles.buttonText, styles.secondaryText]}>Sincronizar</Text>

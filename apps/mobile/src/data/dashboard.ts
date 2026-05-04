@@ -96,6 +96,15 @@ export const quoteApprovalBoard = [
   { title: "Gestor", detail: "Aprovados devem ir para despacho, recusados voltam ao comercial" },
 ];
 
+export const quoteApprovalReminders = [
+  { title: "Cliente", detail: "Lembrete do ORC-2026-001 deve respeitar opt-in de WhatsApp" },
+  { title: "Interno", detail: "ORC-2026-002 aprovado deve acionar despacho e conferencia de pecas" },
+  { title: "Duplicidade", detail: "Evitar reenvio repetido usando controle de idempotencia" },
+  { title: "Auditoria", detail: "Registrar quem orientou o cliente e quando a mensagem foi apresentada" },
+  { title: "Privacidade", detail: "Nao comentar margem, custo interno ou dados sensiveis no atendimento" },
+  { title: "Proximo", detail: "Se cliente aprovar, ativar execucao; se pedir revisao, acionar comercial" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },

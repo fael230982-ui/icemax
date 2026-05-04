@@ -6,7 +6,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalTimeline, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, contracts, executionSteps, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -19,6 +19,7 @@ import {
   createPhotoEvidenceAction,
   createQuoteApprovalPresentedAction,
   createQuoteBoardViewedAction,
+  createQuoteReminderPresentedAction,
   createQuoteTimelineViewedAction,
   createSatisfactionSurveyAction,
   createVisitPreparationAckAction,
@@ -114,6 +115,12 @@ export default function App() {
     setSyncStatus("Consulta do board de orcamentos salva offline.");
   }
 
+  function addQuoteReminderPresented() {
+    const action = createQuoteReminderPresentedAction("1048", "quote-001");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Lembrete do orcamento salvo offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -161,6 +168,7 @@ export default function App() {
             onAddQuoteActivation={addApprovedQuoteActivationAck}
             onAddQuoteTimeline={addQuoteTimelineViewed}
             onAddQuoteBoard={addQuoteBoardViewed}
+            onAddQuoteReminder={addQuoteReminderPresented}
             onSync={syncPending}
           />
         </Section>
@@ -208,6 +216,14 @@ export default function App() {
         <Section title="Board de orcamentos">
           <View style={styles.grid}>
             {quoteApprovalBoard.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
+        </Section>
+
+        <Section title="Lembretes de orcamento">
+          <View style={styles.grid}>
+            {quoteApprovalReminders.map((item) => (
               <InfoCard key={item.title} title={item.title} detail={item.detail} />
             ))}
           </View>
