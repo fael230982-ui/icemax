@@ -516,6 +516,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre documentos e timeline do arquivo de fechamento.
 - Documentado uso do arquivo para historico, garantia, suporte e auditoria.
 
+## 0.8.78 - Central De Pos-Atendimento
+
+- Adicionado endpoint `GET /service-orders/:id/post-service-command-center`.
+- Central conecta garantia, pesquisa de satisfacao, follow-up tecnico e oportunidade de contrato.
+- Painel web ganhou secao de pos-atendimento com tarefas por responsavel.
+- Teste automatizado cobre tarefas, garantia e governanca do pos-atendimento.
+- Documentado o fluxo de suporte, qualidade e comercial apos fechamento da OS.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

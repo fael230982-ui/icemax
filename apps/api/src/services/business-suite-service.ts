@@ -259,6 +259,86 @@ export function createServiceOrderWarrantyPackage(serviceOrderId: string) {
   };
 }
 
+export function createPostServiceCommandCenter(serviceOrderId: string) {
+  const plan = createPostServicePlan(serviceOrderId);
+  const warranty = createServiceOrderWarrantyPackage(serviceOrderId);
+  const opportunity = createContractOpportunityFromServiceOrder(serviceOrderId);
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!plan || !warranty || !order) {
+    return null;
+  }
+
+  const urgent = order.priority === "emergency" || order.priority === "high";
+  const commercialScore = opportunity?.opportunityScore ?? (urgent ? 78 : 52);
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: "post_service_active",
+    generatedAt: new Date().toISOString(),
+    summary: {
+      warrantyDays: warranty.termDraft.coverageDays,
+      followUpDate: plan.followUp.date,
+      satisfactionAfterHours: plan.satisfaction.sendAfterHours,
+      commercialScore,
+      priority: order.priority,
+    },
+    tasks: [
+      {
+        key: "send_final_report",
+        label: "Enviar relatorio final",
+        owner: "operacao",
+        due: new Date().toISOString().slice(0, 10),
+        status: "pending_provider",
+      },
+      {
+        key: "issue_warranty",
+        label: "Emitir termo de garantia",
+        owner: "qualidade",
+        due: new Date().toISOString().slice(0, 10),
+        status: "ready",
+      },
+      {
+        key: "satisfaction_survey",
+        label: "Enviar pesquisa de satisfacao",
+        owner: "sucesso_cliente",
+        due: plan.followUp.date,
+        status: "scheduled",
+      },
+      {
+        key: "technical_followup",
+        label: "Confirmar funcionamento",
+        owner: "pos_atendimento",
+        due: plan.followUp.date,
+        status: urgent ? "priority" : "scheduled",
+      },
+      {
+        key: "contract_offer",
+        label: "Avaliar contrato recorrente",
+        owner: "comercial",
+        due: plan.followUp.date,
+        status: commercialScore >= 70 ? "recommended" : "monitor",
+      },
+    ],
+    warranty,
+    communication: plan.communication,
+    satisfaction: plan.satisfaction,
+    commercial: {
+      opportunityStatus: commercialScore >= 70 ? "recommended" : "monitor",
+      score: commercialScore,
+      nextActions: plan.commercialNextActions,
+    },
+    governance: {
+      auditEvent: "post_service.command_center_viewed",
+      requiresCloseoutArchive: true,
+      requiresCustomerConsentForSurvey: true,
+      hidesInternalMargin: true,
+    },
+  };
+}
+
 export function createServiceOrderManualPackage(serviceOrderId: string) {
   const order = serviceOrders.find((item) => item.id === serviceOrderId);
 

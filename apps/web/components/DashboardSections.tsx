@@ -20,6 +20,7 @@ import { Panel } from "./Panel";
 import { CloseoutArchivePanel } from "./CloseoutArchivePanel";
 import { CompletionEmailQueuePanel } from "./CompletionEmailQueuePanel";
 import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
+import { PostServiceCommandPanel } from "./PostServiceCommandPanel";
 import { OperationsConsole } from "./forms/OperationsConsole";
 import { QuickCreatePanel } from "./forms/QuickCreatePanel";
 
@@ -44,6 +45,10 @@ export function DashboardSections() {
 
       <Panel eyebrow="Historico" title="Arquivo de fechamento da OS" action={<span className="pill">Comprovantes</span>} wide>
         <CloseoutArchivePanel />
+      </Panel>
+
+      <Panel eyebrow="Pos-atendimento" title="Garantia, pesquisa e contrato" action={<span className="pill">Receita recorrente</span>} wide>
+        <PostServiceCommandPanel />
       </Panel>
 
       <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>

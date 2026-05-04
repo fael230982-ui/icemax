@@ -1572,3 +1572,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Central De Pos-Atendimento
+
+- [x] Endpoint de central de pos-atendimento criado.
+- [x] Garantia, pesquisa, follow-up e contrato conectados.
+- [x] Painel web de pos-atendimento criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -546,6 +546,16 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(closeoutArchive.json().documents.length >= 5);
   assert.ok(closeoutArchive.json().timeline.length >= 5);
 
+  const postServiceCommand = await app.inject({
+    method: "GET",
+    url: "/service-orders/1048/post-service-command-center",
+  });
+  assert.equal(postServiceCommand.statusCode, 200);
+  assert.equal(postServiceCommand.json().governance.auditEvent, "post_service.command_center_viewed");
+  assert.equal(postServiceCommand.json().serviceOrderId, "1048");
+  assert.ok(postServiceCommand.json().tasks.length >= 5);
+  assert.ok(postServiceCommand.json().summary.warrantyDays >= 60);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

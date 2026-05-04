@@ -32,6 +32,7 @@ import {
   createContractOpportunityFromServiceOrder,
   createContractProposalFromServiceOrder,
   createPostServicePlan,
+  createPostServiceCommandCenter,
   createPurchaseRequest,
   createReleaseReadiness,
   createServiceOrderManualPackage,
@@ -157,6 +158,17 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return plan;
+  });
+
+  app.get("/service-orders/:id/post-service-command-center", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const commandCenter = createPostServiceCommandCenter(id);
+
+    if (!commandCenter) {
+      return reply.code(404).send({ message: "OS nao encontrada para central de pos-atendimento." });
+    }
+
+    return commandCenter;
   });
 
   app.get("/service-orders/:id/warranty-package", async (request, reply) => {
