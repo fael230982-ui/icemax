@@ -825,3 +825,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Portal Publico Do Cliente
+
+- [x] Rota web `/portal/[tenantSlug]` criada.
+- [x] Formulario publico de abertura opcional de OS criado.
+- [x] Campos de cliente, contato, endereco, equipamento, urgencia e descricao incluidos.
+- [x] Aceite operacional de WhatsApp incluido.
+- [x] Estados de envio, sucesso e erro criados.
+- [x] Orientacoes de triagem e privacidade exibidas.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

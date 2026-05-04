@@ -51,13 +51,19 @@ button:disabled {
 }
 
 input,
-select {
+select,
+textarea {
   min-height: 40px;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0 12px;
   color: var(--ink);
   font: inherit;
+}
+
+textarea {
+  padding-top: 10px;
+  resize: vertical;
 }
 
 .shell {
@@ -849,6 +855,166 @@ dd {
   font-size: 13px;
 }
 
+.portalPage {
+  min-height: 100vh;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 26px;
+  background: #f4f8fb;
+}
+
+.portalHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 340px);
+  gap: 18px;
+  align-items: end;
+  border-radius: 8px;
+  padding: 24px;
+  color: #ffffff;
+  background: #06243a;
+}
+
+.portalHero h1 {
+  margin-bottom: 6px;
+  font-size: 34px;
+}
+
+.portalHero p:not(.eyebrow) {
+  margin-bottom: 0;
+  color: #c9e8f5;
+}
+
+.portalHeroStatus,
+.portalPanel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.portalHeroStatus {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  color: var(--ink);
+}
+
+.portalHeroStatus span,
+.portalHeroStatus small,
+.portalPanelHeader span,
+.portalList,
+.portalPrivacy span,
+.portalSubmit span {
+  color: var(--muted);
+}
+
+.portalHeroStatus strong {
+  font-size: 22px;
+}
+
+.portalLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.portalPanel {
+  padding: 18px;
+}
+
+.portalPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.portalPanelHeader span {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.portalForm {
+  display: grid;
+  gap: 13px;
+}
+
+.portalForm label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.portalFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.portalCheck {
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  font-weight: 600;
+}
+
+.portalCheck input {
+  min-height: 18px;
+  margin: 1px 0 0;
+}
+
+.portalSubmit {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.portalSubmit div,
+.portalSubmit span {
+  display: grid;
+  gap: 4px;
+}
+
+.portalSubmit.success {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+
+.portalSubmit.error {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.portalSide {
+  display: grid;
+  gap: 16px;
+}
+
+.portalList {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.portalPrivacy {
+  display: grid;
+  gap: 5px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
 @media (max-width: 1180px) {
   .content,
   .metrics {
@@ -891,6 +1057,9 @@ dd {
   .aiGrid,
   .contractGrid,
   .flow,
+  .portalHero,
+  .portalLayout,
+  .portalFormGrid,
   .trackingHero,
   .trackingGrid,
   .trackingSteps,

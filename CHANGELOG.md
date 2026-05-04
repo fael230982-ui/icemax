@@ -140,6 +140,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Layout foi criado com regras de privacidade visiveis e responsividade mobile.
 - Build web passou a validar a nova rota dinamica.
 
+## 0.8.28 - Portal Publico Do Cliente
+
+- Adicionada rota web `/portal/[tenantSlug]` para abertura publica e opcional de OS.
+- Formulario whitelabel coleta cliente, contato, endereco, equipamento, urgencia, descricao e aceite de WhatsApp.
+- Tela exibe estados de envio, sucesso e erro sem depender da API durante o build.
+- Documentacao do portal publico foi criada.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
