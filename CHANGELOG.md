@@ -255,6 +255,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Portal separa decisao do cliente entre aprovar, solicitar revisao e recusar.
 - Layout protege dados internos e prepara a integracao futura com token real.
 
+## 0.8.44 - API Publica De Decisao De Orcamento
+
+- Adicionado endpoint `GET /public/quotes/:token`.
+- Adicionado endpoint `PATCH /public/quotes/:token/decision`.
+- Token publico passa a localizar o orcamento sem expor ID interno na tela.
+- Aprovacao publica exige aceite dos termos antes de alterar a decisao.
+- Teste automatizado cobre consulta publica, bloqueio sem aceite e aprovacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

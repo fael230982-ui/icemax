@@ -4,10 +4,12 @@ import { isPrismaEnabled } from "../config";
 import {
   createMockPart,
   createMockQuoteApprovalPackage,
+  createMockPublicQuoteApprovalPackage,
   createMockStockLocation,
   createMockStockMovement,
   createPrismaPart,
   createPrismaQuoteApprovalPackage,
+  createPrismaPublicQuoteApprovalPackage,
   createPrismaStockLocation,
   createPrismaStockMovement,
   listMockChecklists,
@@ -19,9 +21,18 @@ import {
   listPrismaStock,
   listPrismaStockLocations,
   updateMockQuoteDecision,
+  updateMockPublicQuoteDecision,
   updatePrismaQuoteDecision,
+  updatePrismaPublicQuoteDecision,
 } from "../repositories/operations-repository";
-import { createPartSchema, createStockLocationSchema, createStockMovementSchema, parseBody, updateQuoteDecisionSchema } from "../schemas";
+import {
+  createPartSchema,
+  createStockLocationSchema,
+  createStockMovementSchema,
+  parseBody,
+  publicQuoteDecisionSchema,
+  updateQuoteDecisionSchema,
+} from "../schemas";
 
 export async function registerOperationRoutes(app: FastifyInstance) {
   app.get("/quotes", async (request) => {
@@ -56,6 +67,40 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return approvalPackage;
+  });
+
+  app.get("/public/quotes/:token", async (request, reply) => {
+    const { token } = request.params as { token: string };
+    const context = await getAuthContext(request);
+    const approvalPackage = isPrismaEnabled()
+      ? await createPrismaPublicQuoteApprovalPackage(context.tenantId, token)
+      : await createMockPublicQuoteApprovalPackage(context.tenantId, token);
+
+    if (!approvalPackage) {
+      return reply.code(404).send({ message: "Link publico de orcamento invalido ou expirado." });
+    }
+
+    return approvalPackage;
+  });
+
+  app.patch("/public/quotes/:token/decision", async (request, reply) => {
+    const { token } = request.params as { token: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(publicQuoteDecisionSchema, request.body);
+
+    if (input.decision === "approved" && !input.acceptedTerms) {
+      return reply.code(400).send({ message: "Aceite dos termos e obrigatorio para aprovar o orcamento." });
+    }
+
+    const decision = isPrismaEnabled()
+      ? await updatePrismaPublicQuoteDecision(context.tenantId, token, input)
+      : await updateMockPublicQuoteDecision(context.tenantId, token, input);
+
+    if (!decision) {
+      return reply.code(404).send({ message: "Link publico de orcamento invalido ou expirado." });
+    }
+
+    return decision;
   });
 
   app.get("/checklists", async (request) => {

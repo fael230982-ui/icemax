@@ -1066,3 +1066,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De API Publica De Decisao De Orcamento
+
+- [x] Endpoint publico de consulta por token criado.
+- [x] Endpoint publico de decisao por token criado.
+- [x] Aceite dos termos exigido para aprovacao.
+- [x] Teste cobre consulta publica e decisao aprovada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

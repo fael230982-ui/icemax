@@ -175,6 +175,15 @@ export const updateQuoteDecisionSchema = z.object({
   reason: z.string().optional(),
 });
 
+export const publicQuoteDecisionSchema = z.object({
+  decision: z.enum(["approved", "rejected", "revision_requested"]),
+  customerName: z.string().min(2),
+  customerDocument: z.string().optional(),
+  customerEmail: z.string().email().optional(),
+  acceptedTerms: z.boolean().default(false),
+  reason: z.string().optional(),
+});
+
 export const sendNotificationSchema = z.object({
   channel: z.enum(["email", "whatsapp", "push", "internal"]),
   recipient: z.string().min(3),
@@ -430,6 +439,7 @@ export type CreateNotificationTemplateInput = z.output<typeof createNotification
 export type UpdateIntegrationStatusInput = z.output<typeof updateIntegrationStatusSchema>;
 export type LoginInput = z.output<typeof loginSchema>;
 export type UpdateQuoteDecisionInput = z.output<typeof updateQuoteDecisionSchema>;
+export type PublicQuoteDecisionInput = z.output<typeof publicQuoteDecisionSchema>;
 export type SendNotificationInput = z.output<typeof sendNotificationSchema>;
 export type UploadFileInput = z.output<typeof uploadFileSchema>;
 export type CreateQrLabelInput = z.output<typeof createQrLabelSchema>;

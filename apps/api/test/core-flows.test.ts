@@ -194,7 +194,32 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(approvalPackage.json().status, "approval_package_ready");
   assert.match(approvalPackage.json().publicUrl, /\/orcamentos\/quote_quote-001_/);
   assert.equal(approvalPackage.json().governance.decisionEndpoint, "/quotes/quote-001/decision");
+  assert.match(approvalPackage.json().governance.publicDecisionEndpoint, /^\/public\/quotes\/quote_quote-001_/);
   assert.ok(approvalPackage.json().approvalOptions.length >= 2);
+
+  const publicQuote = await app.inject({
+    method: "GET",
+    url: `/public/quotes/${approvalPackage.json().token}`,
+  });
+  assert.equal(publicQuote.statusCode, 200);
+  assert.equal(publicQuote.json().quoteId, "quote-001");
+  assert.equal(publicQuote.json().token, approvalPackage.json().token);
+
+  const missingTermsDecision = await app.inject({
+    method: "PATCH",
+    url: `/public/quotes/${approvalPackage.json().token}/decision`,
+    payload: { decision: "approved", customerName: "Cliente Teste", acceptedTerms: false },
+  });
+  assert.equal(missingTermsDecision.statusCode, 400);
+
+  const publicDecision = await app.inject({
+    method: "PATCH",
+    url: `/public/quotes/${approvalPackage.json().token}/decision`,
+    payload: { decision: "approved", customerName: "Cliente Teste", acceptedTerms: true },
+  });
+  assert.equal(publicDecision.statusCode, 200);
+  assert.equal(publicDecision.json().quoteId, "quote-001");
+  assert.equal(publicDecision.json().status, "approved");
 
   const qr = await app.inject({
     method: "POST",

@@ -1,6 +1,12 @@
 import { getPrisma } from "../database";
 import { checklistTemplates, quotes, stock } from "../mock-data";
-import type { CreatePartInput, CreateStockLocationInput, CreateStockMovementInput, UpdateQuoteDecisionInput } from "../schemas";
+import type {
+  CreatePartInput,
+  CreateStockLocationInput,
+  CreateStockMovementInput,
+  PublicQuoteDecisionInput,
+  UpdateQuoteDecisionInput,
+} from "../schemas";
 
 export async function listMockQuotes() {
   return {
@@ -39,6 +45,21 @@ export async function updateMockQuoteDecision(tenantId: string, quoteId: string,
   };
 }
 
+function quoteIdFromPublicToken(token: string) {
+  if (!token.startsWith("quote_")) {
+    return null;
+  }
+
+  const withoutPrefix = token.slice("quote_".length);
+  const lastSeparator = withoutPrefix.lastIndexOf("_");
+
+  if (lastSeparator <= 0) {
+    return null;
+  }
+
+  return withoutPrefix.slice(0, lastSeparator);
+}
+
 function buildQuoteApprovalPackage(tenantId: string, quote: {
   id: string;
   number?: string;
@@ -48,7 +69,7 @@ function buildQuoteApprovalPackage(tenantId: string, quote: {
   total?: number;
   validUntil?: string | Date | null;
   items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
-}) {
+}, tokenOverride?: string) {
   const issuedAt = new Date();
   const expiresAt = quote.validUntil ? new Date(quote.validUntil) : new Date(issuedAt);
 
@@ -56,7 +77,7 @@ function buildQuoteApprovalPackage(tenantId: string, quote: {
     expiresAt.setDate(expiresAt.getDate() + 7);
   }
 
-  const token = `quote_${quote.id}_${issuedAt.getTime()}`;
+  const token = tokenOverride ?? `quote_${quote.id}_${issuedAt.getTime()}`;
   const publicUrl = `https://app.icemax.local/orcamentos/${token}`;
   const total = Number(quote.total ?? 0);
 
@@ -100,6 +121,7 @@ function buildQuoteApprovalPackage(tenantId: string, quote: {
       hidesInternalMargin: true,
       auditEvent: "quote.approval_package_created",
       decisionEndpoint: `/quotes/${quote.id}/decision`,
+      publicDecisionEndpoint: `/public/quotes/${token}/decision`,
     },
     nextActions: [
       "Enviar link pela fila de comunicacao.",
@@ -118,6 +140,22 @@ export async function createMockQuoteApprovalPackage(tenantId: string, quoteId: 
   }
 
   return buildQuoteApprovalPackage(tenantId, quote);
+}
+
+export async function createMockPublicQuoteApprovalPackage(tenantId: string, token: string) {
+  const quoteId = quoteIdFromPublicToken(token);
+
+  if (!quoteId) {
+    return null;
+  }
+
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalPackage(tenantId, quote, token);
 }
 
 export async function createPrismaQuoteApprovalPackage(tenantId: string, quoteId: string) {
@@ -157,8 +195,108 @@ export async function createPrismaQuoteApprovalPackage(tenantId: string, quoteId
   });
 }
 
+export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
+  const quoteId = quoteIdFromPublicToken(token);
+
+  if (!quoteId) {
+    return null;
+  }
+
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteApprovalPackage(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  }, token);
+}
+
+export async function updateMockPublicQuoteDecision(tenantId: string, token: string, input: PublicQuoteDecisionInput) {
+  const quoteId = quoteIdFromPublicToken(token);
+
+  if (!quoteId || !quotes.some((item) => item.id === quoteId)) {
+    return null;
+  }
+
+  const status = input.decision === "revision_requested" ? "rejected" : input.decision;
+
+  return {
+    id: `public-decision-${Date.now()}`,
+    quoteId,
+    tenantId,
+    status,
+    customerName: input.customerName,
+    customerDocument: input.customerDocument,
+    customerEmail: input.customerEmail,
+    acceptedTerms: input.acceptedTerms,
+    reason: input.reason ?? (input.decision === "revision_requested" ? "Cliente solicitou revisao do orcamento." : undefined),
+    auditEvent: "quote.public_decision_recorded",
+    nextAction: status === "approved" ? "Liberar execucao da OS e reserva de pecas." : "Enviar para revisao comercial.",
+  };
+}
+
 export async function updatePrismaQuoteDecision(tenantId: string, quoteId: string, input: UpdateQuoteDecisionInput) {
   const status = input.decision;
+  return getPrisma().quote.update({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    data: {
+      status,
+      approvedAt: status === "approved" ? new Date() : undefined,
+      rejectedAt: status === "rejected" ? new Date() : undefined,
+    },
+  });
+}
+
+export async function updatePrismaPublicQuoteDecision(tenantId: string, token: string, input: PublicQuoteDecisionInput) {
+  const quoteId = quoteIdFromPublicToken(token);
+
+  if (!quoteId) {
+    return null;
+  }
+
+  const status = input.decision === "revision_requested" ? "rejected" : input.decision;
+
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
   return getPrisma().quote.update({
     where: {
       id: quoteId,
