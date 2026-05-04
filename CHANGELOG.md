@@ -270,6 +270,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Front-end passou a chamar `PATCH /public/quotes/:token/decision`.
 - Estados de sucesso, erro e carregamento foram incluidos na experiencia.
 
+## 0.8.46 - Carregamento Publico De Orcamento
+
+- Pagina `/orcamentos/[token]` passou a tentar buscar dados em `GET /public/quotes/:token`.
+- Fallback local mantem a demonstracao funcional quando a API nao esta online.
+- Total, validade, cliente, OS e itens passam a aceitar retorno real da API.
+- Rota foi marcada como dinamica para uso seguro com tokens publicos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

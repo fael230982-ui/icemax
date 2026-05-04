@@ -1,12 +1,46 @@
 import { QuoteDecisionForm } from "./QuoteDecisionForm";
 
+export const dynamic = "force-dynamic";
+
 type QuotePageProps = {
   params: Promise<{
     token: string;
   }>;
 };
 
-const quote = {
+type QuotePageData = {
+  number: string;
+  serviceOrder: string;
+  customer: string;
+  equipment: string;
+  location: string;
+  issue: string;
+  total: string;
+  expiresAt: string;
+  company: string;
+  email: string;
+  status: string;
+  items: Array<{ description: string; quantity: string; amount: string }>;
+  conditions: string[];
+};
+
+type PublicQuoteResponse = {
+  quoteNumber?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  currentQuoteStatus?: string;
+  expiresAt?: string;
+  financialSummary?: {
+    formattedTotal?: string;
+    items?: Array<{
+      description?: string;
+      quantity?: number;
+      subtotal?: number;
+    }>;
+  };
+};
+
+const fallbackQuote: QuotePageData = {
   number: "ORC-2026-001",
   serviceOrder: "1048",
   customer: "ClimaSul Hotel",
@@ -17,6 +51,7 @@ const quote = {
   expiresAt: "10/05/2026",
   company: "ICEMAX Ar Condicionado",
   email: "adm.rcsolutions@gmail.com",
+  status: "sent",
   items: [
     { description: "Diagnostico tecnico completo", quantity: "1 servico", amount: "R$ 280,00" },
     { description: "Correcao de vazamento e teste de estanqueidade", quantity: "1 servico", amount: "R$ 620,00" },
@@ -30,15 +65,65 @@ const quote = {
   ],
 };
 
+function formatCurrency(value?: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value ?? 0);
+}
+
+function formatDate(value?: string) {
+  if (!value) {
+    return fallbackQuote.expiresAt;
+  }
+
+  return new Intl.DateTimeFormat("pt-BR", { timeZone: "UTC" }).format(new Date(value));
+}
+
 function quoteFromToken(token: string) {
   const match = token.match(/^quote_([^_]+)_/);
   return match?.[1] ?? "quote-001";
+}
+
+async function loadPublicQuote(token: string): Promise<QuotePageData> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333";
+
+  try {
+    const response = await fetch(`${apiBaseUrl}/public/quotes/${token}`, {
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return fallbackQuote;
+    }
+
+    const data = (await response.json()) as PublicQuoteResponse;
+    const items = data.financialSummary?.items?.length
+      ? data.financialSummary.items.map((item) => ({
+          description: item.description ?? "Item do orcamento",
+          quantity: `${item.quantity ?? 1} item`,
+          amount: formatCurrency(item.subtotal),
+        }))
+      : fallbackQuote.items;
+
+    return {
+      ...fallbackQuote,
+      number: data.quoteNumber ?? fallbackQuote.number,
+      serviceOrder: data.serviceOrderId ?? fallbackQuote.serviceOrder,
+      customer: data.customer ?? fallbackQuote.customer,
+      total: data.financialSummary?.formattedTotal ?? fallbackQuote.total,
+      expiresAt: formatDate(data.expiresAt),
+      status: data.currentQuoteStatus ?? fallbackQuote.status,
+      items,
+    };
+  } catch {
+    return fallbackQuote;
+  }
 }
 
 export default async function QuoteApprovalPage({ params }: QuotePageProps) {
   const { token } = await params;
   const quoteId = quoteFromToken(token);
   const isKnownQuote = quoteId === "quote-001";
+  const quote = await loadPublicQuote(token);
 
   return (
     <main className="quotePage">

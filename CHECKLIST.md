@@ -1095,3 +1095,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Carregamento Publico De Orcamento
+
+- [x] Pagina publica passou a buscar dados por token na API.
+- [x] Fallback local mantido para demonstracao sem API online.
+- [x] Total, validade, cliente, OS e itens mapeados do retorno publico.
+- [x] Rota marcada como dinamica.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
