@@ -189,6 +189,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a acionar reserva de pecas da OS.
 - Teste automatizado cobre reserva, movimentacoes e liberacao de despacho.
 
+## 0.8.35 - Pecas Reservadas No Mobile
+
+- App mobile passou a exibir secao de pecas reservadas para a OS.
+- Modo offline ganhou acao de confirmacao de pecas carregadas pelo tecnico.
+- Servico mobile criou payload offline para `POST /service-orders/:id/parts-reservation`.
+- Fluxo aproxima estoque, despacho e execucao de campo.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

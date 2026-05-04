@@ -151,3 +151,23 @@ export function createVisitPreparationAckAction(serviceOrderId: string, technici
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createPartsLoadAckAction(serviceOrderId: string, technicianUserId: string) {
+  return {
+    id: offlineId("parts-load"),
+    label: `Pecas carregadas OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/parts-reservation`,
+    payload: {
+      technicianUserId,
+      sourceLocation: "Almoxarifado",
+      targetLocation: "Veiculo Rafael",
+      requestedSkus: ["R410A", "CAP-45"],
+      mobileAck: {
+        loadedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

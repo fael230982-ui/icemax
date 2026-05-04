@@ -34,6 +34,13 @@ export const visitPreparation = [
   { title: "Cliente", detail: "Enviar aviso de deslocamento quando pacote for liberado" },
 ];
 
+export const reservedParts = [
+  { title: "R410A", detail: "1 un reservada no almoxarifado para carregar no veiculo" },
+  { title: "CAP-45", detail: "1 capacitor 45uF reservado; conferir estoque minimo apos retirada" },
+  { title: "Movimento", detail: "Transferencia planejada: Almoxarifado -> Veiculo Rafael" },
+  { title: "Compra", detail: "Se consumo for confirmado, revisar reposicao automatica" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },
