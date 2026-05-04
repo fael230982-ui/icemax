@@ -1631,3 +1631,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Contas A Receber
+
+- [x] Endpoint de contas a receber criado.
+- [x] Valores abertos, vencidos e criticos incluidos.
+- [x] Bloqueio de automacao por inadimplencia critica incluido.
+- [x] Painel web financeiro criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

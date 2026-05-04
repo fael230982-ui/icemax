@@ -548,6 +548,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre resumo financeiro e governanca.
 - Documentado uso do board financeiro operacional.
 
+## 0.8.82 - Contas A Receber
+
+- Adicionado endpoint `GET /billing/receivables-board`.
+- Board separa valores em aberto, vencidos, em dia e contas criticas.
+- Painel web ganhou secao de contas a receber com filtro de bloqueios.
+- Teste automatizado cobre inadimplencia e bloqueio de automacao.
+- Documentado uso operacional sem cobranca real ate integracao financeira.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

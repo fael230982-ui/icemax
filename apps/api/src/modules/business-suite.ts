@@ -37,6 +37,7 @@ import {
   createPurchaseRequest,
   createReleaseReadiness,
   createRecurringBillingBoard,
+  createReceivablesCollectionBoard,
   createServiceOrderManualPackage,
   createServiceOrderPartsReservation,
   createServiceOrderWarrantyPackage,
@@ -78,6 +79,7 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
   });
 
   app.get("/billing/recurring-board", async () => createRecurringBillingBoard());
+  app.get("/billing/receivables-board", async () => createReceivablesCollectionBoard());
 
   app.post("/technicians/onboarding", async (request, reply) => {
     const context = await getAuthContext(request);

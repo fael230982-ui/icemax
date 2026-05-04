@@ -834,6 +834,58 @@ export function createRecurringBillingBoard() {
   };
 }
 
+export function createReceivablesCollectionBoard() {
+  const asOf = new Date("2026-05-04T00:00:00.000Z");
+  const rows = serviceContracts.map((contract, index) => {
+    const billingPlan = createContractBillingPlan(contract.id);
+    const dueDate = index === 0 ? "2026-04-10" : index === 1 ? "2026-05-10" : "2026-03-10";
+    const dueTime = new Date(`${dueDate}T00:00:00.000Z`).getTime();
+    const daysOverdue = Math.max(0, Math.floor((asOf.getTime() - dueTime) / 86400000));
+    const amount = billingPlan?.monthlyValue ?? 0;
+    const status = daysOverdue > 45 ? "critical_overdue" : daysOverdue > 0 ? "overdue" : "open";
+
+    return {
+      receivableId: `recv-${contract.id}`,
+      contractId: contract.id,
+      customer: contract.customer,
+      plan: contract.plan,
+      amount,
+      dueDate,
+      daysOverdue,
+      status,
+      channel: index === 1 ? "email" : "whatsapp_email",
+      collectionStage: status === "critical_overdue" ? "gestor" : status === "overdue" ? "cobranca_amistosa" : "lembrete_pre_vencimento",
+      nextAction: status === "critical_overdue"
+        ? "Pausar automacao do contrato e acionar gestor antes de nova visita."
+        : status === "overdue"
+          ? "Enviar cobranca amigavel e confirmar previsao de pagamento."
+          : "Enviar lembrete preventivo com dados da mensalidade.",
+      blocksAutomation: status === "critical_overdue",
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    asOf: asOf.toISOString().slice(0, 10),
+    summary: {
+      totalOpen: rows.reduce((sum, row) => sum + row.amount, 0),
+      overdueTotal: rows.filter((row) => row.daysOverdue > 0).reduce((sum, row) => sum + row.amount, 0),
+      criticalAccounts: rows.filter((row) => row.status === "critical_overdue").length,
+      current: rows.filter((row) => row.daysOverdue === 0).reduce((sum, row) => sum + row.amount, 0),
+      oneToThirty: rows.filter((row) => row.daysOverdue > 0 && row.daysOverdue <= 30).reduce((sum, row) => sum + row.amount, 0),
+      thirtyOneToSixty: rows.filter((row) => row.daysOverdue > 30 && row.daysOverdue <= 60).reduce((sum, row) => sum + row.amount, 0),
+      aboveSixty: rows.filter((row) => row.daysOverdue > 60).reduce((sum, row) => sum + row.amount, 0),
+    },
+    governance: {
+      auditEvent: "billing.receivables_collection_board_viewed",
+      mockUntilPaymentProviderConfigured: true,
+      blocksFieldAutomationWhenCritical: true,
+      requiresHumanApprovalForCriticalCollection: true,
+    },
+    rows: rows.sort((a, b) => b.daysOverdue - a.daysOverdue),
+  };
+}
+
 export function createServiceOrderCommunicationPackage(serviceOrderId: string) {
   const order = serviceOrders.find((item) => item.id === serviceOrderId);
 

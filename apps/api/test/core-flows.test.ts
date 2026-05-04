@@ -147,6 +147,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(recurringBilling.json().summary.monthlyRecurringRevenue > 0);
   assert.ok(recurringBilling.json().rows.length >= 3);
 
+  const receivablesBoard = await app.inject({
+    method: "GET",
+    url: "/billing/receivables-board",
+  });
+  assert.equal(receivablesBoard.statusCode, 200);
+  assert.equal(receivablesBoard.json().governance.auditEvent, "billing.receivables_collection_board_viewed");
+  assert.ok(receivablesBoard.json().summary.overdueTotal > 0);
+  assert.ok(receivablesBoard.json().rows.some((row: { blocksAutomation: boolean }) => row.blocksAutomation));
+
   const serviceOrderCommunication = await app.inject({
     method: "GET",
     url: "/service-orders/1048/communication-package",
