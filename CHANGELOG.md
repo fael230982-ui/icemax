@@ -428,6 +428,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre pacote de inicio de execucao.
 - Fluxo bloqueia intervencao sem check-in valido.
 
+## 0.8.67 - Evidencias De Execucao Em Campo
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/execution-evidence`.
+- Pacote estrutura fotos obrigatorias, medicoes tecnicas, pecas usadas e observacoes.
+- Incluido plano de medicoes e baixa de estoque provavel.
+- Painel web ganhou acao `Evidencias campo`.
+- Teste automatizado cobre pacote de evidencias.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

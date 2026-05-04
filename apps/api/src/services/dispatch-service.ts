@@ -608,6 +608,82 @@ export function createMockFieldExecutionStartPackage(input: {
   };
 }
 
+export function createMockFieldExecutionEvidencePackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const executionStart = createMockFieldExecutionStartPackage(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+  const requiredSkus = order ? requiredPartsForIssue(order.issue) : [];
+
+  if (!executionStart || !order) {
+    return null;
+  }
+
+  const evidenceItems = [
+    { key: "photo_before", label: "Foto antes", type: "photo", required: true, status: "pending" },
+    { key: "photo_during", label: "Foto durante", type: "photo", required: true, status: "pending" },
+    { key: "photo_after", label: "Foto depois", type: "photo", required: true, status: "pending" },
+    { key: "measurements", label: "Medicoes tecnicas", type: "measurement", required: true, status: "pending" },
+    { key: "parts_usage", label: "Pecas usadas", type: "stock", required: requiredSkus.length > 0, status: requiredSkus.length ? "pending" : "not_required" },
+    { key: "customer_observation", label: "Observacao do responsavel", type: "text", required: false, status: "optional" },
+  ];
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: input.quoteId ?? executionStart.quoteId,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: executionStart.technician,
+    status: executionStart.canStartExecution ? "evidence_collection_ready" : "evidence_collection_blocked",
+    canCollectEvidence: executionStart.canStartExecution,
+    executionStart,
+    evidenceItems,
+    measurementPlan: [
+      { key: "ambient_temperature", label: "Temperatura ambiente", unit: "C", required: true },
+      { key: "supply_air_temperature", label: "Temperatura de insuflamento", unit: "C", required: true },
+      { key: "electrical_current", label: "Corrente eletrica", unit: "A", required: false },
+      { key: "drain_flow", label: "Fluxo do dreno", unit: "visual", required: order.issue.toLowerCase().includes("dreno") },
+    ],
+    stockUsagePlan: requiredSkus.map((sku) => {
+      const item = stock.find((stockItem) => stockItem.sku === sku);
+
+      return {
+        sku,
+        name: item?.name ?? "Peca provavel",
+        suggestedQuantity: 1,
+        location: item?.location ?? "Nao localizado",
+        requiresConfirmation: true,
+      };
+    }),
+    qualityGate: {
+      blocksCompletionWithoutRequiredPhotos: true,
+      blocksCompletionWithoutMeasurements: true,
+      requiresPartUsageConfirmation: requiredSkus.length > 0,
+      requiresProfessionalReportDraft: true,
+    },
+    audit: {
+      event: "field.execution_evidence_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `field:${order.id}:${executionStart.technician.technicianUserId}:execution-evidence`,
+    },
+    nextActions: executionStart.canStartExecution
+      ? [
+          "Coletar fotos obrigatorias.",
+          "Registrar medicoes tecnicas.",
+          "Confirmar uso de pecas e atualizar estoque.",
+          "Preparar texto tecnico para revisao por IA.",
+        ]
+      : [
+          "Resolver bloqueios de inicio de execucao.",
+          "Nao permitir conclusao da OS.",
+          "Acionar gestor para liberar override se necessario.",
+        ],
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 

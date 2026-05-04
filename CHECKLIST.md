@@ -1398,3 +1398,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Evidencias De Execucao Em Campo
+
+- [x] Endpoint de evidencias de execucao criado.
+- [x] Fotos, medicoes, pecas e observacoes estruturadas.
+- [x] Plano de medicoes tecnicas incluido.
+- [x] Console web atualizado com acao de evidencias.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -162,6 +162,22 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return executionStart;
+  });
+
+  app.get("/dispatch/service-orders/:id/execution-evidence", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string; quoteId?: string };
+    const evidence = createMockFieldExecutionEvidencePackage({
+      serviceOrderId: id,
+      technicianUserId: query.technicianUserId,
+      quoteId: query.quoteId,
+    });
+
+    if (!evidence) {
+      return reply.code(404).send({ message: "OS nao encontrada para evidencias de execucao." });
+    }
+
+    return evidence;
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

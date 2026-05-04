@@ -444,6 +444,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(executionStart.json().audit.event, "field.execution_start_package_prepared");
   assert.ok(executionStart.json().requiredEvidence.length >= 5);
 
+  const executionEvidence = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1049/execution-evidence?technicianUserId=tech-002&quoteId=quote-002",
+  });
+  assert.equal(executionEvidence.statusCode, 200);
+  assert.equal(executionEvidence.json().serviceOrderId, "1049");
+  assert.equal(executionEvidence.json().audit.event, "field.execution_evidence_package_prepared");
+  assert.ok(executionEvidence.json().evidenceItems.length >= 5);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",
