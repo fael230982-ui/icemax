@@ -500,6 +500,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Acoes usam API local quando disponivel e mantem feedback visual quando a API estiver desligada.
 - Documentado o fluxo operacional do board com filtros e acoes.
 
+## 0.8.76 - Fila Gerencial De E-Mail Final
+
+- Adicionado endpoint `GET /dispatch/completion-email-queue`.
+- Fila resume e-mails bloqueados, aguardando provedor e copias opcionais ao cliente.
+- Painel web ganhou secao dedicada para fila de e-mails finais.
+- Adicionado filtro para exibir apenas e-mails bloqueados.
+- Teste automatizado cobre o contrato da fila de e-mail final.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

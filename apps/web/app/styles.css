@@ -457,6 +457,98 @@ h2 {
   color: var(--muted);
 }
 
+.emailQueue {
+  display: grid;
+  gap: 14px;
+}
+
+.emailQueueSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.emailQueueSummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 84px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  background: #fbfdff;
+}
+
+.emailQueueSummary span,
+.emailQueueControls span,
+.emailQueueRow span,
+.emailQueueRow small {
+  color: var(--muted);
+}
+
+.emailQueueSummary strong {
+  font-size: 23px;
+}
+
+.emailQueueSummary .attention {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.emailQueueControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(220px, auto);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.emailQueueControls div {
+  display: grid;
+  gap: 5px;
+}
+
+.emailQueueControls label {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  align-items: center;
+  font-weight: 800;
+}
+
+.emailQueueControls input {
+  min-height: 18px;
+}
+
+.emailQueueRows {
+  display: grid;
+  gap: 10px;
+}
+
+.emailQueueRow {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr 1fr 0.8fr 1.1fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+.emailQueueRow strong,
+.emailQueueRow small,
+.emailQueueRow span {
+  display: block;
+}
+
+.emailQueueRow strong,
+.emailQueueRow small {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
 .formError {
   margin: 0;
   color: var(--danger);
@@ -1521,7 +1613,10 @@ dd {
   .formGrid,
   .finalizationSummary,
   .finalizationControls,
-  .finalizationRow {
+  .finalizationRow,
+  .emailQueueSummary,
+  .emailQueueControls,
+  .emailQueueRow {
     grid-template-columns: 1fr;
   }
 }

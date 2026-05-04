@@ -1542,3 +1542,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Fila Gerencial De E-Mail Final
+
+- [x] Endpoint de fila gerencial criado.
+- [x] Resumo de bloqueios e provedor incluido.
+- [x] Painel web de fila de e-mails finais criado.
+- [x] Filtro de e-mails bloqueados criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -1092,6 +1092,68 @@ export function createMockFieldFinalizationBoard() {
   };
 }
 
+export function createMockCompletionEmailQueueBoard() {
+  const rows = serviceOrders.map((order) => {
+    const technician = technicianLocations.find((item) => item.serviceOrderId === order.id) ?? technicianLocations[1] ?? technicianLocations[0];
+    const quote = quotes.find((item) => item.serviceOrderId === order.id);
+    const email = createMockFieldCompletionEmailPackage({
+      serviceOrderId: order.id,
+      technicianUserId: technician?.technicianUserId,
+      quoteId: quote?.id,
+      emailCopyToCustomer: true,
+    });
+    const blocked = Boolean(email?.blockers.length);
+
+    return {
+      serviceOrderId: order.id,
+      customer: order.customer,
+      equipment: order.equipment,
+      technician: technician?.technician ?? order.technician,
+      technicianUserId: technician?.technicianUserId ?? null,
+      quoteId: quote?.id ?? null,
+      subject: email?.subject ?? `OS ${order.id} concluida`,
+      status: blocked ? "blocked" : "waiting_provider",
+      recipients: email?.recipients ?? {
+        company: tenant.supportEmail,
+        customerCopy: null,
+        copyToCustomer: true,
+      },
+      blockers: email?.blockers ?? ["pacote de e-mail nao preparado"],
+      attachments: email?.attachments ?? [],
+      retry: {
+        attempts: 0,
+        nextAttemptAt: blocked ? null : new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        strategy: "manual_until_email_provider_configured",
+      },
+      nextAction: blocked
+        ? "Resolver assinatura, evidencias ou cadastro de e-mail antes de enviar."
+        : "Configurar provedor de e-mail para disparo real e registrar entrega.",
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    provider: {
+      configured: false,
+      mode: "mock_queue_until_email_provider_key",
+      companyRecipient: tenant.supportEmail,
+    },
+    summary: {
+      total: rows.length,
+      blocked: rows.filter((row) => row.status === "blocked").length,
+      waitingProvider: rows.filter((row) => row.status === "waiting_provider").length,
+      customerCopies: rows.filter((row) => row.recipients.copyToCustomer).length,
+    },
+    governance: {
+      auditEvent: "field.completion_email_queue_viewed",
+      requiresCustomerSignature: true,
+      customerCopyOptional: true,
+      providerKeyRequiredForRealSend: true,
+    },
+    rows,
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 
