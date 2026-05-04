@@ -444,6 +444,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web ganhou acao `Fechamento campo`.
 - Teste automatizado cobre pacote de fechamento tecnico.
 
+## 0.8.69 - Assinatura Do Cliente Em Campo
+
+- Adicionado endpoint `GET /dispatch/service-orders/:id/customer-signature`.
+- Pacote de assinatura herda bloqueios do fechamento tecnico.
+- Incluidos termos, campos de captura, decisao de copia por e-mail e regras de privacidade.
+- Painel web ganhou acao `Assinatura cliente`.
+- Teste automatizado cobre pacote de assinatura do cliente.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

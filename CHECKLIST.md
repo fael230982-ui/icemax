@@ -1429,3 +1429,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Assinatura Do Cliente Em Campo
+
+- [x] Endpoint de pacote de assinatura criado.
+- [x] Bloqueios herdados do fechamento tecnico incluidos.
+- [x] Termos e campos de captura estruturados.
+- [x] Decisao de copia por e-mail ao cliente incluida.
+- [x] Console web atualizado com acao de assinatura.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -134,6 +134,10 @@ export function OperationsConsole() {
     void run("Fechamento tecnico", () => icemaxApi.fieldExecutionCloseout("1049", "tech-002", "quote-002", token || undefined));
   }
 
+  function loadFieldCustomerSignature() {
+    void run("Assinatura do cliente", () => icemaxApi.fieldCustomerSignature("1049", "tech-002", "quote-002", token || undefined));
+  }
+
   function createVisitPreparation() {
     void run("Preparo da visita", () =>
       icemaxApi.createVisitPreparation({
@@ -583,6 +587,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadFieldExecutionStart}>Inicio execucao</button>
         <button type="button" className="secondary" onClick={loadFieldExecutionEvidence}>Evidencias campo</button>
         <button type="button" className="secondary" onClick={loadFieldExecutionCloseout}>Fechamento campo</button>
+        <button type="button" className="secondary" onClick={loadFieldCustomerSignature}>Assinatura cliente</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>

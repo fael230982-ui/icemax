@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -194,6 +194,22 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
     }
 
     return closeout;
+  });
+
+  app.get("/dispatch/service-orders/:id/customer-signature", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const query = request.query as { technicianUserId?: string; quoteId?: string };
+    const signature = createMockFieldCustomerSignaturePackage({
+      serviceOrderId: id,
+      technicianUserId: query.technicianUserId,
+      quoteId: query.quoteId,
+    });
+
+    if (!signature) {
+      return reply.code(404).send({ message: "OS nao encontrada para assinatura do cliente." });
+    }
+
+    return signature;
   });
 
   app.post("/dispatch/visit-preparation", async (request, reply) => {

@@ -767,6 +767,79 @@ export function createMockFieldExecutionCloseoutPackage(input: {
           "Enviar relatorio para revisao final.",
           "Solicitar assinatura do responsavel.",
           "Preparar e-mail de conclusao para empresa e cliente.",
+      ],
+  };
+}
+
+export function createMockFieldCustomerSignaturePackage(input: {
+  serviceOrderId: string;
+  technicianUserId?: string;
+  quoteId?: string;
+}) {
+  const closeout = createMockFieldExecutionCloseoutPackage(input);
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+
+  if (!closeout || !order) {
+    return null;
+  }
+
+  const locked = !closeout.canRequestCustomerSignature;
+
+  return {
+    serviceOrderId: order.id,
+    quoteId: closeout.quoteId,
+    customer: order.customer,
+    equipment: order.equipment,
+    technician: closeout.technician,
+    status: locked ? "customer_signature_locked" : "customer_signature_ready",
+    canCaptureSignature: !locked,
+    closeout,
+    signatureDocument: {
+      title: `Aceite tecnico da OS ${order.id}`,
+      version: "2026.05",
+      language: "pt-BR",
+      terms: [
+        "Declaro que acompanhei ou fui informado sobre o atendimento tecnico realizado.",
+        "Recebi a explicacao do relatorio tecnico, evidencias registradas e eventuais recomendacoes.",
+        "Estou ciente de que garantias e exclusoes dependem do termo emitido pela empresa.",
+        "Autorizo o encerramento operacional desta ordem de servico conforme registros apresentados.",
+      ],
+    },
+    captureFields: [
+      { key: "responsibleName", label: "Nome do responsavel", required: true, type: "text" },
+      { key: "responsibleRole", label: "Cargo ou relacao com o cliente", required: true, type: "text" },
+      { key: "responsibleDocument", label: "Documento", required: false, type: "text" },
+      { key: "signatureImage", label: "Assinatura digital", required: true, type: "signature" },
+      { key: "emailCopyToCustomer", label: "Enviar copia ao cliente", required: false, type: "boolean" },
+    ],
+    emailDecision: {
+      companyRecipientSource: "tenant.operationsCompletionEmail",
+      customerCopyOptional: true,
+      defaultCustomerCopy: true,
+      allowedChannels: ["email", "internal_queue"],
+    },
+    privacy: {
+      requiresConsentTextVisible: true,
+      storesSignatureAsProtectedFile: true,
+      auditRetention: "conforme politica da empresa",
+    },
+    blockers: closeout.blockers,
+    audit: {
+      event: "field.customer_signature_package_prepared",
+      entity: "service_order",
+      entityId: order.id,
+      idempotencyKey: `field:${order.id}:${closeout.technician.technicianUserId}:customer-signature`,
+    },
+    nextActions: locked
+      ? [
+          "Resolver bloqueios do fechamento antes de coletar assinatura.",
+          "Manter assinatura indisponivel no app.",
+          "Registrar justificativa se houver tentativa de override.",
+        ]
+      : [
+          "Apresentar termos ao responsavel.",
+          "Coletar assinatura digital e identificacao.",
+          "Registrar decisao de copia por e-mail ao cliente.",
         ],
   };
 }

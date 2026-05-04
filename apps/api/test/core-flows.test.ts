@@ -463,6 +463,16 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.ok(executionCloseout.json().completionChecklist.length >= 5);
   assert.equal(executionCloseout.json().reportDraft.requiresAiReview, true);
 
+  const customerSignature = await app.inject({
+    method: "GET",
+    url: "/dispatch/service-orders/1049/customer-signature?technicianUserId=tech-002&quoteId=quote-002",
+  });
+  assert.equal(customerSignature.statusCode, 200);
+  assert.equal(customerSignature.json().serviceOrderId, "1049");
+  assert.equal(customerSignature.json().audit.event, "field.customer_signature_package_prepared");
+  assert.ok(customerSignature.json().captureFields.length >= 5);
+  assert.equal(customerSignature.json().emailDecision.customerCopyOptional, true);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",
