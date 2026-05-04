@@ -5,10 +5,11 @@ type SyncPanelProps = {
   pendingActions: OfflineAction[];
   status: string;
   onAddCheckIn: () => void;
+  onAddExecutionPack: () => void;
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, onAddCheckIn, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onSync }: SyncPanelProps) {
   return (
     <View style={styles.card}>
       <View>
@@ -19,10 +20,14 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onSync }: Sync
         <TouchableOpacity style={styles.button} onPress={onAddCheckIn}>
           <Text style={styles.buttonText}>Check-in offline</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onAddExecutionPack}>
+          <Text style={styles.buttonText}>Pacote OS</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.secondary]} onPress={onSync}>
           <Text style={[styles.buttonText, styles.secondaryText]}>Sincronizar</Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.count}>{pendingActions.length} acoes pendentes</Text>
       {pendingActions.map((action) => (
         <Text key={action.id} style={styles.pending}>{action.label}</Text>
       ))}
@@ -75,5 +80,9 @@ const styles = StyleSheet.create({
   pending: {
     color: "#102033",
     fontWeight: "700",
+  },
+  count: {
+    color: "#0B7CEB",
+    fontWeight: "800",
   },
 });

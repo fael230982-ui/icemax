@@ -75,6 +75,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a acionar ativacao de contrato aceito.
 - Teste automatizado cobre entidades criadas na ativacao.
 
+## 0.8.19 - Mobile Pacote Offline De OS
+
+- Aplicativo mobile passou a enfileirar pacote completo de execucao offline.
+- Pacote inclui localizacao, check-in, checklist, fotos, peca usada e assinatura.
+- Painel de sincronizacao mobile passou a exibir quantidade de acoes pendentes.
+- Servico mobile ganhou criadores de acoes offline reutilizaveis.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

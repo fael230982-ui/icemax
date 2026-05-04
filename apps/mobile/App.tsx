@@ -7,7 +7,16 @@ import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
 import { contracts, executionSteps, orders, quality, tools } from "./src/data/dashboard";
-import { createCheckInAction, createLocationAction, OfflineAction, sendOfflineAction } from "./src/services/api";
+import {
+  createCheckInAction,
+  createChecklistAction,
+  createCustomerSignatureAction,
+  createLocationAction,
+  createPartUsageAction,
+  createPhotoEvidenceAction,
+  OfflineAction,
+  sendOfflineAction,
+} from "./src/services/api";
 
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
@@ -18,6 +27,22 @@ export default function App() {
     const location = createLocationAction("tech-001", "1048");
     setPendingActions((current) => [location, action, ...current]);
     setSyncStatus("Acao salva para envio quando houver conexao.");
+  }
+
+  function addExecutionPack() {
+    const serviceOrderId = "1048";
+    const actions = [
+      createLocationAction("tech-001", serviceOrderId),
+      createCheckInAction(serviceOrderId),
+      createChecklistAction(serviceOrderId, "checklist-001", "Limpeza dos filtros concluida."),
+      createPhotoEvidenceAction(serviceOrderId, "before"),
+      createPhotoEvidenceAction(serviceOrderId, "after"),
+      createPartUsageAction(serviceOrderId, "part-001", 1),
+      createCustomerSignatureAction(serviceOrderId, "Cliente Decisor"),
+    ];
+
+    setPendingActions((current) => [...actions, ...current]);
+    setSyncStatus("Pacote completo de execucao salvo offline.");
   }
 
   async function syncPending() {
@@ -53,7 +78,7 @@ export default function App() {
         </Section>
 
         <Section title="Modo offline">
-          <SyncPanel pendingActions={pendingActions} status={syncStatus} onAddCheckIn={addCheckIn} onSync={syncPending} />
+          <SyncPanel pendingActions={pendingActions} status={syncStatus} onAddCheckIn={addCheckIn} onAddExecutionPack={addExecutionPack} onSync={syncPending} />
         </Section>
 
         <Section title="Ferramentas">

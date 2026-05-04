@@ -50,9 +50,13 @@ export type OfflineAction = {
   createdAt: string;
 };
 
+function offlineId(prefix: string) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export function createCheckInAction(serviceOrderId: string) {
   return {
-    id: `offline-${Date.now()}`,
+    id: offlineId("check-in"),
     label: `Check-in OS ${serviceOrderId}`,
     method: "PATCH",
     path: `/service-orders/${serviceOrderId}/status`,
@@ -63,7 +67,7 @@ export function createCheckInAction(serviceOrderId: string) {
 
 export function createLocationAction(technicianUserId: string, serviceOrderId: string) {
   return {
-    id: `location-${Date.now()}`,
+    id: offlineId("location"),
     label: `Localizacao ${serviceOrderId}`,
     method: "POST",
     path: `/technicians/${technicianUserId}/location`,
@@ -72,6 +76,57 @@ export function createLocationAction(technicianUserId: string, serviceOrderId: s
       latitude: -23.55052,
       longitude: -46.633308,
       accuracy: 25,
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createChecklistAction(serviceOrderId: string, checklistItemId: string, value: string) {
+  return {
+    id: offlineId("checklist"),
+    label: `Checklist OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/checklist-answers`,
+    payload: { checklistItemId, value },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createPhotoEvidenceAction(serviceOrderId: string, type: "before" | "during" | "after" | "issue" | "part") {
+  return {
+    id: offlineId("photo"),
+    label: `Foto ${type} OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/photos`,
+    payload: {
+      type,
+      fileUrl: `https://local.icemax.dev/offline/${serviceOrderId}-${type}.jpg`,
+      caption: "Evidencia capturada em modo offline.",
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createPartUsageAction(serviceOrderId: string, partId: string, quantity: number) {
+  return {
+    id: offlineId("part"),
+    label: `Peca OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/parts`,
+    payload: { partId, quantity },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}
+
+export function createCustomerSignatureAction(serviceOrderId: string, customerSignedName: string) {
+  return {
+    id: offlineId("signature"),
+    label: `Assinatura OS ${serviceOrderId}`,
+    method: "PATCH",
+    path: `/service-orders/${serviceOrderId}/status`,
+    payload: {
+      status: "completed",
+      customerSignedName,
     },
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;

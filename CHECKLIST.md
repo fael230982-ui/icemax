@@ -673,3 +673,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Mobile Pacote Offline De OS
+
+- [x] Pacote offline de execucao de OS criado.
+- [x] Acoes de localizacao, check-in, checklist, fotos, peca e assinatura criadas.
+- [x] Painel mobile mostra quantidade de pendencias.
+- [x] Servico mobile recebeu criadores reutilizaveis de acoes offline.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
