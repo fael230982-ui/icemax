@@ -371,6 +371,12 @@ test("business operations suite connects ten management flows", async () => {
   assert.equal(postServicePlan.json().serviceOrderId, "1048");
   assert.ok(postServicePlan.json().communication.channels.includes("email"));
 
+  const contractOpportunity = await app.inject({ method: "GET", url: "/service-orders/1048/contract-opportunity" });
+  assert.equal(contractOpportunity.statusCode, 200);
+  assert.equal(contractOpportunity.json().serviceOrderId, "1048");
+  assert.equal(contractOpportunity.json().recommendedPlan.recurrenceMonths, 3);
+  assert.ok(contractOpportunity.json().opportunityScore >= 80);
+
   const timeline = await app.inject({ method: "GET", url: "/equipment/equipment-001/timeline" });
   assert.equal(timeline.statusCode, 200);
   assert.ok(timeline.json().total >= 1);

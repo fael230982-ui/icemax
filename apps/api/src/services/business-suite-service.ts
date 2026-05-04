@@ -195,3 +195,64 @@ export function createPostServicePlan(serviceOrderId: string) {
     ],
   };
 }
+
+function recurrenceForOrder(order: (typeof serviceOrders)[number]) {
+  const issue = order.issue.toLowerCase();
+
+  if (order.priority === "emergency" || issue.includes("sem refrigeracao") || issue.includes("nao gela")) {
+    return 3;
+  }
+
+  if (issue.includes("vazando") || issue.includes("dreno")) {
+    return 4;
+  }
+
+  return 6;
+}
+
+export function createContractOpportunityFromServiceOrder(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const recurrenceMonths = recurrenceForOrder(order);
+  const visitsPerYear = Math.ceil(12 / recurrenceMonths);
+  const estimatedMonthlyValue = recurrenceMonths === 3 ? 390 : recurrenceMonths === 4 ? 320 : 240;
+
+  return {
+    serviceOrderId,
+    customer: order.customer,
+    equipment: order.equipment,
+    opportunityScore: order.priority === "emergency" ? 92 : order.priority === "high" ? 78 : 64,
+    recommendedPlan: {
+      name: recurrenceMonths === 3 ? "Contrato Essencial Trimestral" : recurrenceMonths === 4 ? "Contrato Preventivo Quadrimestral" : "Contrato Economico Semestral",
+      recurrenceMonths,
+      visitsPerYear,
+      includesPreventive: true,
+      includesCleaning: true,
+      estimatedMonthlyValue,
+      estimatedAnnualValue: estimatedMonthlyValue * 12,
+    },
+    reasoning: [
+      `OS com prioridade ${order.priority}.`,
+      `Problema informado: ${order.issue}.`,
+      `Equipamento coberto sugerido: ${order.equipment}.`,
+      "Contrato reduz urgencias, melhora previsibilidade de agenda e aumenta recorrencia de receita.",
+    ],
+    suggestedScope: [
+      "Manutencao preventiva programada.",
+      "Higienizacao conforme recorrencia contratada.",
+      "Historico completo por equipamento.",
+      "Prioridade de agenda para chamados corretivos.",
+      "Relatorio tecnico por visita.",
+    ],
+    nextSteps: [
+      "Validar quantidade real de equipamentos do cliente.",
+      "Confirmar periodicidade desejada: 3, 4 ou 6 meses.",
+      "Enviar proposta comercial com SLA e condicoes de garantia.",
+      "Converter proposta aprovada em contrato recorrente.",
+    ],
+  };
+}

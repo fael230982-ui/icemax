@@ -125,6 +125,10 @@ export function OperationsConsole() {
     void run("Pos-atendimento", () => icemaxApi.postServicePlan("1048", token || undefined));
   }
 
+  function loadContractOpportunity() {
+    void run("Oportunidade de contrato", () => icemaxApi.contractOpportunity("1048", token || undefined));
+  }
+
   function createPortalOrder() {
     void run("Portal do cliente", () =>
       icemaxApi.createPortalOrder({
@@ -372,6 +376,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={reviewServiceOrderCompletion}>Revisar conclusao OS</button>
         <button type="button" className="secondary" onClick={loadPostServicePlan}>Pos-atendimento</button>
+        <button type="button" className="secondary" onClick={loadContractOpportunity}>Oportunidade contrato</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>

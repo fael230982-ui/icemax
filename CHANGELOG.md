@@ -30,6 +30,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar o plano de pos-atendimento.
 - Teste automatizado cobre o plano pos-OS.
 
+## 0.8.13 - Oportunidade De Contrato
+
+- Adicionado endpoint para converter OS em oportunidade de contrato recorrente.
+- Recomendacao passou a sugerir recorrencia de 3, 4 ou 6 meses conforme risco da OS.
+- Console web passou a consultar oportunidade comercial por OS.
+- Teste automatizado cobre sugestao de contrato trimestral para urgencia.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -571,3 +571,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push inicial pendente.
+
+## Registro De Oportunidade De Contrato
+
+- [x] Endpoint de oportunidade de contrato criado.
+- [x] Sugestao de recorrencia 3, 4 ou 6 meses criada.
+- [x] Escopo e proximos passos comerciais criados.
+- [x] Console web conectado a oportunidade.
+- [x] Teste automatizado criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push inicial pendente.

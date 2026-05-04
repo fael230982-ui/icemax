@@ -17,6 +17,7 @@ import {
   createInvoiceDraft,
   createMaintenanceWindow,
   createPmocPlan,
+  createContractOpportunityFromServiceOrder,
   createPostServicePlan,
   createPurchaseRequest,
   createReleaseReadiness,
@@ -112,5 +113,16 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     }
 
     return plan;
+  });
+
+  app.get("/service-orders/:id/contract-opportunity", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const opportunity = createContractOpportunityFromServiceOrder(id);
+
+    if (!opportunity) {
+      return reply.code(404).send({ message: "OS nao encontrada para oportunidade de contrato." });
+    }
+
+    return opportunity;
   });
 }
