@@ -1,6 +1,13 @@
 import type { FastifyInstance } from "fastify";
 import { serviceOrders, tenant, technicianLocations } from "../mock-data";
-import { customerPortalOrderSchema, customerPortalTriageSchema, parseBody, type CustomerPortalTriageInput } from "../schemas";
+import {
+  customerPortalAttachmentSchema,
+  customerPortalOrderSchema,
+  customerPortalTriageSchema,
+  parseBody,
+  type CustomerPortalAttachmentInput,
+  type CustomerPortalTriageInput,
+} from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
 
 function classifyPortalTriage(input: CustomerPortalTriageInput) {
@@ -177,6 +184,59 @@ function createTrackingSharePackage(serviceOrderId: string) {
   };
 }
 
+function createAttachmentManifest(serviceOrderId: string, input: CustomerPortalAttachmentInput) {
+  const accepted = input.attachments.map((item, index) => {
+    const kind = item.mimeType === "application/pdf" ? "document" : "photo";
+    const diagnosticHint = kind === "photo"
+      ? item.caption ?? "Foto recebida para apoiar triagem visual."
+      : "Documento recebido para conferencia administrativa.";
+
+    return {
+      id: `portal-att-${serviceOrderId}-${index + 1}`,
+      fileName: item.fileName,
+      mimeType: item.mimeType,
+      sizeBytes: item.sizeBytes,
+      kind,
+      caption: item.caption,
+      diagnosticHint,
+      accepted: true,
+    };
+  });
+  const photos = accepted.filter((item) => item.kind === "photo");
+
+  return {
+    serviceOrderId,
+    tenantSlug: input.tenantSlug,
+    status: "attachment_manifest_ready",
+    accepted,
+    summary: {
+      total: accepted.length,
+      photos: photos.length,
+      documents: accepted.length - photos.length,
+      maxFileSizeMb: 10,
+    },
+    aiPreparation: {
+      readyForVisionAnalysis: photos.length > 0,
+      photoHints: photos.map((item) => item.diagnosticHint),
+      recommendedPrompt: photos.length > 0
+        ? "Analise as fotos recebidas junto com a descricao da OS e sugira causas provaveis, riscos e pecas provaveis."
+        : "Sem foto tecnica disponivel para analise visual.",
+    },
+    privacy: {
+      customerEmailStored: Boolean(input.customerEmail),
+      hidesInternalNotes: true,
+      requiresVirusScanBeforeStorage: true,
+      requiresSensitiveDataReview: true,
+    },
+    nextActions: [
+      "Salvar arquivos em storage privado por tenant.",
+      "Vincular anexos a OS no banco real.",
+      "Executar antivirus e validacao de tipo real do arquivo.",
+      "Enviar fotos aceitas para diagnostico por IA quando a chave estiver configurada.",
+    ],
+  };
+}
+
 export async function registerCustomerPortalRoutes(app: FastifyInstance) {
   app.get("/customer-portal/:tenantSlug/config", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
@@ -290,5 +350,26 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     });
 
     return reply.code(201).send(sharePackage);
+  });
+
+  app.post("/customer-portal/service-orders/:id/attachments", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const input = parseBody(customerPortalAttachmentSchema, request.body);
+    const manifest = createAttachmentManifest(id, input);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.attachments_manifest_created",
+      entity: "service_order",
+      entityId: id,
+      metadata: {
+        tenantSlug: input.tenantSlug,
+        total: manifest.summary.total,
+        photos: manifest.summary.photos,
+        documents: manifest.summary.documents,
+      },
+    });
+
+    return reply.code(201).send(manifest);
   });
 }

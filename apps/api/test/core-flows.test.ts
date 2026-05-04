@@ -370,6 +370,33 @@ test("customer portal can request optional service order", async () => {
   assert.ok(trackingLink.json().channels.some((item: { channel: string }) => item.channel === "whatsapp"));
   assert.equal(trackingLink.json().security.hidesFinancialData, true);
 
+  const attachments = await app.inject({
+    method: "POST",
+    url: "/customer-portal/service-orders/1048/attachments",
+    payload: {
+      tenantSlug: "icemax",
+      customerEmail: "cliente.portal@local.dev",
+      attachments: [
+        {
+          fileName: "evaporadora-congelada.jpg",
+          mimeType: "image/jpeg",
+          sizeBytes: 420000,
+          caption: "Foto mostra gelo na evaporadora.",
+        },
+        {
+          fileName: "autorizacao.pdf",
+          mimeType: "application/pdf",
+          sizeBytes: 180000,
+        },
+      ],
+    },
+  });
+  assert.equal(attachments.statusCode, 201);
+  assert.equal(attachments.json().summary.photos, 1);
+  assert.equal(attachments.json().summary.documents, 1);
+  assert.equal(attachments.json().aiPreparation.readyForVisionAnalysis, true);
+  assert.equal(attachments.json().privacy.requiresVirusScanBeforeStorage, true);
+
   await app.close();
 });
 

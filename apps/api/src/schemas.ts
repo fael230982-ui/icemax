@@ -251,6 +251,17 @@ export const customerPortalTriageSchema = z.object({
   hasPhoto: z.boolean().default(false),
 });
 
+export const customerPortalAttachmentSchema = z.object({
+  tenantSlug: z.string().min(2).default("icemax"),
+  customerEmail: z.string().email().optional(),
+  attachments: z.array(z.object({
+    fileName: z.string().min(3).regex(/^[\w.\- ]+$/),
+    mimeType: z.enum(["image/jpeg", "image/png", "image/webp", "application/pdf"]),
+    sizeBytes: z.number().int().positive().max(10 * 1024 * 1024),
+    caption: z.string().optional(),
+  })).min(1).max(8),
+});
+
 export const createWarrantyTermSchema = z.object({
   serviceOrderId: z.string().min(1),
   customerId: z.string().min(1),
@@ -405,6 +416,7 @@ export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSche
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
 export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
 export type CustomerPortalTriageInput = z.output<typeof customerPortalTriageSchema>;
+export type CustomerPortalAttachmentInput = z.output<typeof customerPortalAttachmentSchema>;
 export type CreateWarrantyTermInput = z.output<typeof createWarrantyTermSchema>;
 export type CreatePmocPlanInput = z.output<typeof createPmocPlanSchema>;
 export type CreateInvoiceDraftInput = z.output<typeof createInvoiceDraftSchema>;

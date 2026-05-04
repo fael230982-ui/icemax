@@ -182,6 +182,29 @@ export function OperationsConsole() {
     void run("Link acompanhamento", () => icemaxApi.createCustomerTrackingLink("1048"));
   }
 
+  function createCustomerPortalAttachments() {
+    void run("Anexos portal", () =>
+      icemaxApi.createCustomerPortalAttachments("1048", {
+        tenantSlug: "icemax",
+        customerEmail: "cliente.portal@local.dev",
+        attachments: [
+          {
+            fileName: "evaporadora-congelada.jpg",
+            mimeType: "image/jpeg",
+            sizeBytes: 420000,
+            caption: "Foto mostra gelo na evaporadora e filtro sujo.",
+          },
+          {
+            fileName: "ordem-compra.pdf",
+            mimeType: "application/pdf",
+            sizeBytes: 180000,
+            caption: "Documento de autorizacao do cliente.",
+          },
+        ],
+      }),
+    );
+  }
+
   function runBusinessSuite() {
     void run("Suite operacional", async () => {
       const now = new Date().toISOString();
@@ -446,6 +469,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadCustomerTracking}>Acompanhar OS cliente</button>
         <button type="button" className="secondary" onClick={createCustomerTrackingLink}>Link acompanhamento</button>
+        <button type="button" className="secondary" onClick={createCustomerPortalAttachments}>Anexos portal</button>
         <button type="button" className="secondary" onClick={loadContractCalendar}>Calendario contratos</button>
         <button type="button" className="secondary" onClick={loadContractBillingPlan}>Financeiro contrato</button>
         <button type="button" className="secondary" onClick={loadServiceOrderCommunicationPackage}>Comunicacao OS</button>

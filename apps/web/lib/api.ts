@@ -138,6 +138,8 @@ export const icemaxApi = {
   customerOrderTracking: (serviceOrderId: string) => apiRequest<unknown>(`/customer-portal/service-orders/${serviceOrderId}/tracking`),
   createCustomerTrackingLink: (serviceOrderId: string) =>
     apiRequest<unknown>(`/customer-portal/service-orders/${serviceOrderId}/tracking-link`, { method: "POST" }),
+  createCustomerPortalAttachments: (serviceOrderId: string, body: unknown) =>
+    apiRequest<unknown>(`/customer-portal/service-orders/${serviceOrderId}/attachments`, { method: "POST", body }),
   slaBoard: (token?: string) => apiRequest<ApiListResponse<unknown>>("/sla/board", { token }),
   dayCommandCenter: (token?: string) => apiRequest<unknown>("/operations/day-command-center", { token }),
   createWarrantyTerm: (body: unknown, token?: string) => apiRequest<unknown>("/warranty-terms", { method: "POST", body, token }),

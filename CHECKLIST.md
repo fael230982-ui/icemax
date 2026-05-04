@@ -858,3 +858,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Anexos Publicos De OS
+
+- [x] Endpoint `POST /customer-portal/service-orders/:id/attachments` criado.
+- [x] Manifesto de fotos e documentos criado.
+- [x] Hints para diagnostico visual por IA incluidos.
+- [x] Regras de privacidade, antivirus e revisao de dados sensiveis incluidas.
+- [x] Console web conectado ao pacote mock de anexos.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

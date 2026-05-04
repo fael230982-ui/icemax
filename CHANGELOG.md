@@ -154,6 +154,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Portal web passou a exibir resumo de triagem apos protocolo criado.
 - Teste automatizado cobre prioridade emergencial, revisao por supervisor e checklist de triagem.
 
+## 0.8.30 - Anexos Publicos De OS
+
+- Adicionado endpoint `POST /customer-portal/service-orders/:id/attachments` para manifestos de fotos e documentos.
+- Manifesto separa fotos e documentos, prepara hints para IA visual e registra regras de privacidade.
+- Console web passou a acionar um pacote mock de anexos do portal.
+- Teste automatizado cobre fotos, documentos, preparo para IA e antivirus obrigatorio antes do storage.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
