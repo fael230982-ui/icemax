@@ -1735,3 +1735,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Drill De Rollback Da Virada Para Banco
+
+- [x] Endpoint de rollback drill criado.
+- [x] Etapas de preflight, backup, migration, seed, smoke e rollback incluidas.
+- [x] Comandos destrutivos marcados como bloqueados/dry-run.
+- [x] Console operacional conectado ao drill.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

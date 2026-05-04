@@ -524,6 +524,7 @@ export function OperationsConsole() {
         icemaxApi.databaseEnvironmentChecklist(token || undefined),
         icemaxApi.dataReadinessBoard(token || undefined),
         icemaxApi.tenantIsolationGate(token || undefined),
+        icemaxApi.databaseRollbackDrill(token || undefined),
       ]);
 
       return { checks: results.length, results };

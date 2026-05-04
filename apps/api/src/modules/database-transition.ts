@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import {
   getDatabaseCutoverPlan,
+  getDatabaseRollbackDrill,
   getDatabaseSchemaSummary,
   getDataReadinessBoard,
   getEnvironmentChecklist,
@@ -15,4 +16,5 @@ export async function registerDatabaseTransitionRoutes(app: FastifyInstance) {
   app.get("/database/environment-checklist", async () => getEnvironmentChecklist());
   app.get("/database/data-readiness-board", async () => getDataReadinessBoard());
   app.get("/database/tenant-isolation-gate", async () => getTenantIsolationGate());
+  app.get("/database/rollback-drill", async () => getDatabaseRollbackDrill());
 }

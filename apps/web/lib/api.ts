@@ -252,4 +252,5 @@ export const icemaxApi = {
   databaseEnvironmentChecklist: (token?: string) => apiRequest<unknown>("/database/environment-checklist", { token }),
   dataReadinessBoard: (token?: string) => apiRequest<unknown>("/database/data-readiness-board", { token }),
   tenantIsolationGate: (token?: string) => apiRequest<unknown>("/database/tenant-isolation-gate", { token }),
+  databaseRollbackDrill: (token?: string) => apiRequest<unknown>("/database/rollback-drill", { token }),
 };

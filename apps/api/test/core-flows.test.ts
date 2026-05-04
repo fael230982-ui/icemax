@@ -1166,5 +1166,11 @@ test("database transition exposes cutover schema seed and environment plans", as
   assert.ok(isolation.json().summary.blocked >= 1);
   assert.ok(isolation.json().minimumRules[0].includes("tenantId"));
 
+  const rollback = await app.inject({ method: "GET", url: "/database/rollback-drill" });
+  assert.equal(rollback.statusCode, 200);
+  assert.equal(rollback.json().dryRunOnly, true);
+  assert.ok(rollback.json().blockedDestructiveCommands[0].includes("pg_restore"));
+  assert.ok(rollback.json().goNoGoCriteria[0].includes("Backup"));
+
   await app.close();
 });

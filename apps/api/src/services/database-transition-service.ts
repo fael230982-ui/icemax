@@ -137,6 +137,63 @@ const tenantIsolationGates = [
   },
 ];
 
+const rollbackDrillSteps = [
+  {
+    order: 1,
+    phase: "preflight",
+    title: "Congelar janela de mudanca",
+    owner: "desenvolvimento",
+    command: "npm run validate",
+    evidence: "validacao completa sem falhas",
+    rollbackTrigger: "falha em typecheck, teste, build ou guard de segredos",
+  },
+  {
+    order: 2,
+    phase: "backup",
+    title: "Criar snapshot do banco",
+    owner: "infraestrutura",
+    command: "pg_dump --format=custom --file=icemax-pre-cutover.dump",
+    evidence: "arquivo de dump armazenado fora do servidor principal",
+    rollbackTrigger: "backup ausente, incompleto ou sem teste de restauracao",
+  },
+  {
+    order: 3,
+    phase: "migration",
+    title: "Executar migracoes Prisma",
+    owner: "desenvolvimento",
+    command: "npm run db:migrate",
+    evidence: "migrations aplicadas sem drift",
+    rollbackTrigger: "drift, erro de migration ou perda de constraint",
+  },
+  {
+    order: 4,
+    phase: "seed",
+    title: "Aplicar seed operacional minimo",
+    owner: "produto",
+    command: "npm run db:seed",
+    evidence: "tenant, usuario dono, tecnico, cliente e OS de teste criados",
+    rollbackTrigger: "login administrativo ou tenant padrao indisponivel",
+  },
+  {
+    order: 5,
+    phase: "smoke",
+    title: "Validar fluxos criticos",
+    owner: "homologacao",
+    command: "npm run validate",
+    evidence: "login, dashboard, OS, contratos, estoque e portal respondendo",
+    rollbackTrigger: "qualquer fluxo critico com erro 5xx ou mistura de tenant",
+  },
+  {
+    order: 6,
+    phase: "rollback",
+    title: "Restaurar snapshot se necessario",
+    owner: "infraestrutura",
+    command: "pg_restore --clean --if-exists --dbname=icemax icemax-pre-cutover.dump",
+    evidence: "ambiente retorna ao estado pre-cutover",
+    rollbackTrigger: "decisao do gate de go/no-go",
+  },
+];
+
 export function getDatabaseCutoverPlan() {
   const steps = [
     "Criar PostgreSQL local ou remoto",
@@ -267,5 +324,30 @@ export function getTenantIsolationGate() {
       unblock: item.productionBlockers[0],
     })),
     gates: tenantIsolationGates,
+  };
+}
+
+export function getDatabaseRollbackDrill() {
+  const destructiveCommands = rollbackDrillSteps.filter((item) => item.phase === "rollback").map((item) => item.command);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    currentMode: isPrismaEnabled() ? "prisma" : "mock",
+    targetMode: "prisma",
+    executionPolicy: "manual_approval_required",
+    dryRunOnly: true,
+    summary: {
+      totalSteps: rollbackDrillSteps.length,
+      rollbackTriggers: rollbackDrillSteps.length,
+      destructiveCommandsBlocked: destructiveCommands.length,
+    },
+    goNoGoCriteria: [
+      "Backup restauravel confirmado antes da migration.",
+      "Tenant isolation gate sem dominios bloqueados para o escopo que sera ativado.",
+      "Data readiness board com dominios criticos acima do minimo combinado.",
+      "Smoke test operacional aprovado apos a virada.",
+    ],
+    blockedDestructiveCommands: destructiveCommands,
+    steps: rollbackDrillSteps,
   };
 }

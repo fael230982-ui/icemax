@@ -604,6 +604,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre bloqueio de producao enquanto houver dominio sem isolamento completo.
 - Documentadas regras minimas para tenantId, portal publico, storage privado e jobs.
 
+## 0.8.89 - Drill De Rollback Da Virada Para Banco
+
+- Adicionado endpoint `GET /database/rollback-drill`.
+- Drill organiza preflight, backup, migration, seed, smoke test e rollback.
+- Comandos destrutivos ficam bloqueados como dry-run e exigem aprovacao manual.
+- Console operacional passou a consultar o drill junto dos checks de banco.
+- Teste automatizado cobre politica dry-run, comando de restauracao bloqueado e criterios de go/no-go.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
