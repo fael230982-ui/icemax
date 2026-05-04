@@ -1154,5 +1154,11 @@ test("database transition exposes cutover schema seed and environment plans", as
   assert.equal(env.statusCode, 200);
   assert.ok(env.json().requiredForPrisma.includes("DATABASE_URL"));
 
+  const readiness = await app.inject({ method: "GET", url: "/database/data-readiness-board" });
+  assert.equal(readiness.statusCode, 200);
+  assert.equal(readiness.json().governance.auditEvent, "database.data_readiness_board_viewed");
+  assert.ok(readiness.json().summary.averageReadiness > 50);
+  assert.ok(readiness.json().recommendedSequence.includes("clientes"));
+
   await app.close();
 });

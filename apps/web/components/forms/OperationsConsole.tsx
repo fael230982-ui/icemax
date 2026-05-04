@@ -522,6 +522,7 @@ export function OperationsConsole() {
         icemaxApi.databaseSchemaSummary(token || undefined),
         icemaxApi.databaseSeedPlan(token || undefined),
         icemaxApi.databaseEnvironmentChecklist(token || undefined),
+        icemaxApi.dataReadinessBoard(token || undefined),
       ]);
 
       return { checks: results.length, results };

@@ -588,6 +588,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre deny-by-default, zona financeira e checks de release.
 - Documentado gate de acesso para evolucao segura em producao.
 
+## 0.8.87 - Prontidao De Dados Para Prisma
+
+- Adicionado endpoint `GET /database/data-readiness-board`.
+- Board classifica dominios por prontidao, risco, cobertura de repositorio e bloqueios.
+- Console operacional passou a consultar o board junto da virada para banco.
+- Teste automatizado cobre media de prontidao, governanca e sequencia recomendada.
+- Documentado plano de migracao por dominio antes da virada para producao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

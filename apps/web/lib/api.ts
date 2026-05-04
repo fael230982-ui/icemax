@@ -250,4 +250,5 @@ export const icemaxApi = {
   databaseSchemaSummary: (token?: string) => apiRequest<unknown>("/database/schema-summary", { token }),
   databaseSeedPlan: (token?: string) => apiRequest<unknown>("/database/seed-plan", { token }),
   databaseEnvironmentChecklist: (token?: string) => apiRequest<unknown>("/database/environment-checklist", { token }),
+  dataReadinessBoard: (token?: string) => apiRequest<unknown>("/database/data-readiness-board", { token }),
 };

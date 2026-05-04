@@ -1705,3 +1705,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Prontidao De Dados Para Prisma
+
+- [x] Endpoint de data readiness criado.
+- [x] Dominios classificados por prontidao, risco e bloqueios.
+- [x] Sequencia recomendada de migracao incluida.
+- [x] Console operacional conectado ao novo board.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
