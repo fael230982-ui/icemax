@@ -715,6 +715,140 @@ dd {
   font-weight: 800;
 }
 
+.trackingPage {
+  min-height: 100vh;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 26px;
+  background: #f4f8fb;
+}
+
+.trackingHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 18px;
+  align-items: end;
+  border-radius: 8px;
+  padding: 24px;
+  background: #06243a;
+  color: #ffffff;
+}
+
+.trackingHero h1 {
+  margin-bottom: 6px;
+  font-size: 34px;
+}
+
+.trackingHero p:not(.eyebrow) {
+  margin-bottom: 0;
+  color: #c9e8f5;
+}
+
+.trackingStatus,
+.trackingGrid article,
+.trackingPanel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.trackingStatus {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  color: var(--ink);
+}
+
+.trackingStatus span,
+.trackingGrid span,
+.trackingFooter,
+.trackingPanelHeader span {
+  color: var(--muted);
+}
+
+.trackingStatus strong {
+  font-size: 24px;
+}
+
+.trackingGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.trackingGrid article {
+  display: grid;
+  gap: 8px;
+  min-height: 92px;
+  padding: 16px;
+}
+
+.trackingGrid strong {
+  line-height: 1.25;
+}
+
+.trackingPanel {
+  padding: 18px;
+}
+
+.trackingPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.trackingSteps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.step {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-height: 90px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 13px;
+  color: var(--muted);
+}
+
+.step span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #d8e5ef;
+}
+
+.step.done {
+  color: var(--ink);
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+
+.step.done span {
+  background: var(--success);
+}
+
+.trackingList {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.trackingFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
 @media (max-width: 1180px) {
   .content,
   .metrics {
@@ -757,6 +891,9 @@ dd {
   .aiGrid,
   .contractGrid,
   .flow,
+  .trackingHero,
+  .trackingGrid,
+  .trackingSteps,
   .tableHead,
   .tableRow {
     grid-template-columns: 1fr;

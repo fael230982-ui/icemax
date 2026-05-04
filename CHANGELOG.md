@@ -133,6 +133,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a gerar link de acompanhamento.
 - Teste automatizado cobre token, validade, WhatsApp e privacidade.
 
+## 0.8.27 - Pagina Publica De Acompanhamento
+
+- Adicionada rota web `/acompanhamento/[token]` para o link publico da OS.
+- Pagina exibe status, cliente, equipamento, tecnico, previsao, linha do tempo e orientacoes.
+- Layout foi criado com regras de privacidade visiveis e responsividade mobile.
+- Build web passou a validar a nova rota dinamica.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

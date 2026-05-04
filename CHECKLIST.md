@@ -808,3 +808,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Pagina Publica De Acompanhamento
+
+- [x] Rota web `/acompanhamento/[token]` criada.
+- [x] Token mock interpretado na pagina publica.
+- [x] Resumo da OS, tecnico, previsao e linha do tempo exibidos.
+- [x] Orientacoes do cliente exibidas.
+- [x] Regras de privacidade exibidas.
+- [x] Layout responsivo criado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
