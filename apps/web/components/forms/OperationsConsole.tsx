@@ -94,6 +94,10 @@ export function OperationsConsole() {
     void run("Fila de orcamentos aprovados", () => icemaxApi.quoteExecutionDispatchQueue(token || undefined));
   }
 
+  function loadFieldFinalizationBoard() {
+    void run("Board de finalizacao", () => icemaxApi.fieldFinalizationBoard(token || undefined));
+  }
+
   function createDispatchAssignmentDecision() {
     void run("Aceite do tecnico", () =>
       icemaxApi.createDispatchAssignmentDecision({
@@ -607,6 +611,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
         <button type="button" className="secondary" onClick={loadQuoteExecutionDispatchQueue}>Fila orcamentos aprovados</button>
+        <button type="button" className="secondary" onClick={loadFieldFinalizationBoard}>Board finalizacao</button>
         <button type="button" className="secondary" onClick={createDispatchAssignmentDecision}>Aceite tecnico</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={loadDispatchDepartureCommunication}>Aviso deslocamento</button>

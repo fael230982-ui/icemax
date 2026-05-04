@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
 import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, fieldCompletionEmailQueueSchema, fieldCustomerSignatureRecordSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, queueMockFieldCompletionEmail, recommendMockDispatchAssignments, recordMockFieldCustomerSignature, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchArrivalCheckInPackage, createMockDispatchAssignmentDecision, createMockDispatchDepartureCommunicationPackage, createMockDispatchRouteTrackingSnapshot, createMockFieldCompletionEmailPackage, createMockFieldCustomerSignaturePackage, createMockFieldExecutionCloseoutPackage, createMockFieldExecutionEvidencePackage, createMockFieldExecutionStartPackage, createMockFieldFinalizationBoard, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, queueMockFieldCompletionEmail, recommendMockDispatchAssignments, recordMockFieldCustomerSignature, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -61,6 +61,8 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
   });
 
   app.get("/dispatch/quote-execution-queue", async () => createMockQuoteExecutionDispatchQueue());
+
+  app.get("/dispatch/finalization-board", async () => createMockFieldFinalizationBoard());
 
   app.post("/dispatch/assignment-decision", async (request, reply) => {
     const context = await getAuthContext(request);

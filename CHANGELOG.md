@@ -476,6 +476,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acoes `Registrar assinatura` e `Enfileirar e-mail`.
 - Teste automatizado cobre os comandos transacionais de assinatura e e-mail.
 
+## 0.8.73 - Board De Finalizacao Da OS
+
+- Adicionado endpoint `GET /dispatch/finalization-board`.
+- Board resume OS por fechamento tecnico, assinatura, e-mail final e bloqueios.
+- Painel web ganhou acao `Board finalizacao`.
+- Governanca indica assinatura, evidencias e auditoria de e-mail como obrigatorias.
+- Teste automatizado cobre o board de finalizacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

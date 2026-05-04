@@ -517,6 +517,15 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(queuedCompletionEmail.json().audit.event, "field.completion_email_queued");
   assert.equal(queuedCompletionEmail.json().recipients.copyToCustomer, false);
 
+  const finalizationBoard = await app.inject({
+    method: "GET",
+    url: "/dispatch/finalization-board",
+  });
+  assert.equal(finalizationBoard.statusCode, 200);
+  assert.equal(finalizationBoard.json().governance.auditEvent, "field.finalization_board_viewed");
+  assert.ok(finalizationBoard.json().summary.serviceOrders >= 3);
+  assert.ok(finalizationBoard.json().rows[0].serviceOrderId);
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

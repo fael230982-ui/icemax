@@ -146,6 +146,7 @@ export const icemaxApi = {
   optimizeRoute: (body: unknown, token?: string) => apiRequest<unknown>("/dispatch/routes/optimize", { method: "POST", body, token }),
   dispatchRecommendations: (token?: string) => apiRequest<unknown>("/dispatch/recommendations", { token }),
   quoteExecutionDispatchQueue: (token?: string) => apiRequest<unknown>("/dispatch/quote-execution-queue", { token }),
+  fieldFinalizationBoard: (token?: string) => apiRequest<unknown>("/dispatch/finalization-board", { token }),
   createDispatchAssignmentDecision: (body: unknown, token?: string) =>
     apiRequest<unknown>("/dispatch/assignment-decision", { method: "POST", body, token }),
   dispatchReadiness: (serviceOrderId: string, technicianUserId: string, token?: string) =>

@@ -1025,6 +1025,72 @@ export function queueMockFieldCompletionEmail(serviceOrderId: string, input: Fie
   };
 }
 
+export function createMockFieldFinalizationBoard() {
+  const rows = serviceOrders.map((order) => {
+    const technician = technicianLocations.find((item) => item.serviceOrderId === order.id) ?? technicianLocations[1] ?? technicianLocations[0];
+    const quote = quotes.find((item) => item.serviceOrderId === order.id);
+    const closeout = createMockFieldExecutionCloseoutPackage({
+      serviceOrderId: order.id,
+      technicianUserId: technician?.technicianUserId,
+      quoteId: quote?.id,
+    });
+    const signature = closeout
+      ? createMockFieldCustomerSignaturePackage({
+          serviceOrderId: order.id,
+          technicianUserId: technician?.technicianUserId,
+          quoteId: quote?.id,
+        })
+      : null;
+    const email = signature
+      ? createMockFieldCompletionEmailPackage({
+          serviceOrderId: order.id,
+          technicianUserId: technician?.technicianUserId,
+          quoteId: quote?.id,
+          emailCopyToCustomer: true,
+        })
+      : null;
+    const blockers = [
+      ...(closeout?.blockers.map((item) => item.label) ?? []),
+      ...(email?.blockers ?? []),
+    ];
+
+    return {
+      serviceOrderId: order.id,
+      customer: order.customer,
+      equipment: order.equipment,
+      priority: order.priority,
+      technician: technician?.technician ?? order.technician,
+      quoteId: quote?.id ?? null,
+      status: blockers.length ? "needs_attention" : "ready_to_send",
+      closeoutStatus: closeout?.status ?? "not_prepared",
+      signatureStatus: signature?.status ?? "not_prepared",
+      emailStatus: email?.status ?? "not_prepared",
+      blockers,
+      nextAction: blockers.length
+        ? "Resolver pendencias de fechamento, assinatura ou anexos."
+        : "Enfileirar e-mail final e concluir acompanhamento.",
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: rows.some((row) => row.status === "needs_attention") ? "attention" : "ready",
+    summary: {
+      serviceOrders: rows.length,
+      needsAttention: rows.filter((row) => row.status === "needs_attention").length,
+      readyToSend: rows.filter((row) => row.status === "ready_to_send").length,
+      emailProviderConfigured: false,
+    },
+    governance: {
+      requiresCustomerSignature: true,
+      requiresFieldEvidence: true,
+      requiresEmailAudit: true,
+      auditEvent: "field.finalization_board_viewed",
+    },
+    rows,
+  };
+}
+
 function requiredPartsForIssue(issue: string) {
   const normalized = issue.toLowerCase();
 

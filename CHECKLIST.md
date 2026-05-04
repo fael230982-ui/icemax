@@ -1495,3 +1495,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Finalizacao Da OS
+
+- [x] Endpoint de board de finalizacao criado.
+- [x] Resumo gerencial de assinatura e e-mail incluido.
+- [x] Bloqueios por OS incluidos.
+- [x] Console web atualizado com acao de board.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
