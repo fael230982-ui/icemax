@@ -155,6 +155,8 @@ export const icemaxApi = {
   equipmentTimeline: (equipmentId: string, token?: string) => apiRequest<unknown>(`/equipment/${equipmentId}/timeline`, { token }),
   purchaseSuggestions: (token?: string) => apiRequest<ApiListResponse<unknown>>("/purchase-requests/suggestions", { token }),
   createPurchaseRequest: (body: unknown, token?: string) => apiRequest<unknown>("/purchase-requests", { method: "POST", body, token }),
+  reserveServiceOrderParts: (serviceOrderId: string, body: unknown, token?: string) =>
+    apiRequest<unknown>(`/service-orders/${serviceOrderId}/parts-reservation`, { method: "POST", body, token }),
   createReleaseReadiness: (body: unknown, token?: string) => apiRequest<unknown>("/release-readiness", { method: "POST", body, token }),
   createWhitelabelBrand: (body: unknown, token?: string) => apiRequest<unknown>("/whitelabel/brands", { method: "POST", body, token }),
   createPermissionPolicy: (body: unknown, token?: string) => apiRequest<unknown>("/permissions/policies", { method: "POST", body, token }),

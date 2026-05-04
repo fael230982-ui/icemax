@@ -341,6 +341,14 @@ export const createPurchaseRequestSchema = z.object({
   preferredSupplier: z.string().optional(),
 });
 
+export const reserveServiceOrderPartsSchema = z.object({
+  serviceOrderId: z.string().min(1),
+  technicianUserId: z.string().min(1).default("tech-001"),
+  sourceLocation: z.string().min(2).default("Almoxarifado"),
+  targetLocation: z.string().min(2).default("Veiculo Rafael"),
+  requestedSkus: z.array(z.string().min(2)).default([]),
+});
+
 export const releaseReadinessSchema = z.object({
   version: z.string().min(3),
   checkedBy: z.string().min(2),
@@ -442,6 +450,7 @@ export type CreateMaintenanceWindowInput = z.output<typeof createMaintenanceWind
 export type SatisfactionSurveyInput = z.output<typeof satisfactionSurveySchema>;
 export type EquipmentTimelineInput = z.output<typeof equipmentTimelineSchema>;
 export type CreatePurchaseRequestInput = z.output<typeof createPurchaseRequestSchema>;
+export type ReserveServiceOrderPartsInput = z.output<typeof reserveServiceOrderPartsSchema>;
 export type ReleaseReadinessInput = z.output<typeof releaseReadinessSchema>;
 export type NamedRecordInput = z.output<typeof namedRecordSchema>;
 export type CommunicationPreviewInput = z.output<typeof communicationPreviewSchema>;

@@ -182,6 +182,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Servico mobile criou payload de confirmacao para `POST /dispatch/visit-preparation`.
 - Fluxo aproxima o pacote de despacho do uso real em campo sem depender de conexao constante.
 
+## 0.8.34 - Reserva Operacional De Pecas
+
+- Adicionado endpoint `POST /service-orders/:id/parts-reservation` para reservar pecas provaveis da OS.
+- Reserva retorna itens, movimentacoes planejadas, alertas de estoque minimo, sugestoes de compra e impacto no despacho.
+- Console web passou a acionar reserva de pecas da OS.
+- Teste automatizado cobre reserva, movimentacoes e liberacao de despacho.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -9,6 +9,7 @@ import type {
   CreateWarrantyTermInput,
   OnboardTechnicianInput,
   ReleaseReadinessInput,
+  ReserveServiceOrderPartsInput,
   SatisfactionSurveyInput,
 } from "../schemas";
 
@@ -646,6 +647,99 @@ export function createContractCommunicationPackage(contractId: string) {
       "Enviar aviso interno ao financeiro.",
       "Registrar consentimento de WhatsApp.",
       "Conciliar envio com calendario do contrato.",
+    ],
+  };
+}
+
+function likelySkusForOrder(serviceOrderId: string) {
+  const order = serviceOrders.find((item) => item.id === serviceOrderId);
+  const issue = order?.issue.toLowerCase() ?? "";
+
+  if (issue.includes("dreno") || issue.includes("vazando")) {
+    return ["BD-001"];
+  }
+
+  if (issue.includes("refrigeracao") || issue.includes("gela") || issue.includes("gas")) {
+    return ["R410A", "CAP-45"];
+  }
+
+  return ["CAP-45"];
+}
+
+export function createServiceOrderPartsReservation(input: ReserveServiceOrderPartsInput) {
+  const order = serviceOrders.find((item) => item.id === input.serviceOrderId);
+
+  if (!order) {
+    return null;
+  }
+
+  const requestedSkus = input.requestedSkus.length ? input.requestedSkus : likelySkusForOrder(input.serviceOrderId);
+  const items = requestedSkus.map((sku) => {
+    const item = stock.find((stockItem) => stockItem.sku === sku);
+    const requestedQuantity = sku === "R410A" ? 1 : 1;
+    const availableQuantity = item?.quantity ?? 0;
+    const reservedQuantity = Math.min(requestedQuantity, availableQuantity);
+    const missingQuantity = Math.max(0, requestedQuantity - availableQuantity);
+
+    return {
+      sku,
+      name: item?.name ?? "Peca nao cadastrada",
+      sourceLocation: item?.location ?? input.sourceLocation,
+      targetLocation: input.targetLocation,
+      requestedQuantity,
+      availableQuantity,
+      reservedQuantity,
+      missingQuantity,
+      belowMinimumAfterReservation: item ? availableQuantity - reservedQuantity <= item.minimum : true,
+      status: missingQuantity > 0 ? "missing" : "reserved_mock",
+    };
+  });
+  const missing = items.filter((item) => item.missingQuantity > 0);
+  const belowMinimum = items.filter((item) => item.belowMinimumAfterReservation);
+
+  return {
+    id: `reservation-${input.serviceOrderId}-${Date.now()}`,
+    serviceOrderId: input.serviceOrderId,
+    technicianUserId: input.technicianUserId,
+    customer: order.customer,
+    equipment: order.equipment,
+    status: missing.length ? "needs_purchase_or_transfer" : belowMinimum.length ? "reserved_with_restock_alert" : "reserved",
+    sourceLocation: input.sourceLocation,
+    targetLocation: input.targetLocation,
+    items,
+    summary: {
+      requested: items.length,
+      reserved: items.filter((item) => item.reservedQuantity > 0).length,
+      missing: missing.length,
+      belowMinimum: belowMinimum.length,
+    },
+    stockMovements: items
+      .filter((item) => item.reservedQuantity > 0)
+      .map((item) => ({
+        sku: item.sku,
+        from: item.sourceLocation,
+        to: item.targetLocation,
+        quantity: item.reservedQuantity,
+        reason: `Reserva para OS ${input.serviceOrderId}`,
+        status: "planned_mock",
+      })),
+    purchaseSuggestions: [...missing, ...belowMinimum].map((item) => ({
+      sku: item.sku,
+      name: item.name,
+      suggestedQuantity: Math.max(item.missingQuantity, 2),
+      reason: item.missingQuantity > 0 ? "Peca provavel indisponivel para a OS." : "Estoque ficara abaixo do minimo apos reserva.",
+    })),
+    dispatchImpact: {
+      canDispatch: missing.length === 0,
+      message: missing.length
+        ? "Resolver falta de peca antes de liberar deslocamento."
+        : "Pecas provaveis reservadas para carregamento do tecnico.",
+    },
+    nextActions: [
+      "Confirmar separacao fisica das pecas.",
+      "Transferir itens para estoque do veiculo do tecnico.",
+      "Abrir compra se houver item faltante ou abaixo do minimo.",
+      "Sincronizar reserva com pacote offline do tecnico.",
     ],
   };
 }

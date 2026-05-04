@@ -920,3 +920,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Reserva Operacional De Pecas
+
+- [x] Endpoint `POST /service-orders/:id/parts-reservation` criado.
+- [x] Reserva calcula itens provaveis, faltas e estoque minimo.
+- [x] Movimentacoes planejadas e sugestoes de compra incluidas.
+- [x] Impacto no despacho incluido.
+- [x] Console web conectado a reserva de pecas.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

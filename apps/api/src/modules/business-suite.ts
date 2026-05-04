@@ -13,6 +13,7 @@ import {
   onboardTechnicianSchema,
   parseBody,
   releaseReadinessSchema,
+  reserveServiceOrderPartsSchema,
   satisfactionSurveySchema,
 } from "../schemas";
 import {
@@ -33,6 +34,7 @@ import {
   createPostServicePlan,
   createPurchaseRequest,
   createReleaseReadiness,
+  createServiceOrderPartsReservation,
   createWarrantyTerm,
   getEquipmentTimeline,
   onboardTechnician,
@@ -108,6 +110,32 @@ export async function registerBusinessSuiteRoutes(app: FastifyInstance) {
     const purchase = createPurchaseRequest(input);
     await recordAuditEvent({ tenantId: context.tenantId, userId: context.userId, action: "purchase_request.created", entity: "purchase_request", entityId: purchase.id });
     return reply.code(201).send(purchase);
+  });
+
+  app.post("/service-orders/:id/parts-reservation", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const input = parseBody(reserveServiceOrderPartsSchema, { ...(request.body as object), serviceOrderId: id });
+    const reservation = createServiceOrderPartsReservation(input);
+
+    if (!reservation) {
+      return reply.code(404).send({ message: "OS nao encontrada para reserva de pecas." });
+    }
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: "stock.parts_reserved_for_service_order",
+      entity: "service_order",
+      entityId: id,
+      metadata: {
+        status: reservation.status,
+        reserved: reservation.summary.reserved,
+        missing: reservation.summary.missing,
+      },
+    });
+
+    return reply.code(201).send(reservation);
   });
 
   app.post("/release-readiness", async (request, reply) => {

@@ -105,6 +105,17 @@ export function OperationsConsole() {
     );
   }
 
+  function reserveServiceOrderParts() {
+    void run("Reserva de pecas", () =>
+      icemaxApi.reserveServiceOrderParts("1048", {
+        technicianUserId: "tech-001",
+        sourceLocation: "Almoxarifado",
+        targetLocation: "Veiculo Rafael",
+        requestedSkus: ["R410A", "CAP-45"],
+      }, token || undefined),
+    );
+  }
+
   function loadLocations() {
     void run("Localizacao da equipe", () => icemaxApi.technicianLocations(token || undefined));
   }
@@ -481,6 +492,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
+        <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>
         <button type="button" className="secondary" onClick={improveText}>Revisar texto IA</button>
         <button type="button" className="secondary" onClick={suggestCauses}>Sugerir causas</button>
         <button type="button" className="secondary" onClick={createVisualDiagnosisPackage}>Diagnostico visual IA</button>

@@ -593,6 +593,22 @@ test("business operations suite connects ten management flows", async () => {
   });
   assert.equal(purchase.statusCode, 201);
 
+  const reservation = await app.inject({
+    method: "POST",
+    url: "/service-orders/1048/parts-reservation",
+    payload: {
+      technicianUserId: "tech-001",
+      sourceLocation: "Almoxarifado",
+      targetLocation: "Veiculo Rafael",
+      requestedSkus: ["R410A", "CAP-45"],
+    },
+  });
+  assert.equal(reservation.statusCode, 201);
+  assert.equal(reservation.json().serviceOrderId, "1048");
+  assert.ok(reservation.json().items.length >= 2);
+  assert.equal(reservation.json().dispatchImpact.canDispatch, true);
+  assert.ok(reservation.json().stockMovements.length >= 1);
+
   const release = await app.inject({
     method: "POST",
     url: "/release-readiness",
