@@ -216,6 +216,15 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.equal(quoteQueue.json().readyToSend, 3);
   assert.match(quoteQueue.json().approvalLink.publicUrl, /\/orcamentos\/quote_quote-001_/);
 
+  const quoteHandoff = await app.inject({
+    method: "GET",
+    url: "/quotes/quote-001/decision-handoff",
+  });
+  assert.equal(quoteHandoff.statusCode, 200);
+  assert.equal(quoteHandoff.json().quoteId, "quote-001");
+  assert.equal(quoteHandoff.json().status, "waiting_customer_decision");
+  assert.equal(quoteHandoff.json().governance.auditEvent, "quote.decision_handoff_prepared");
+
   const publicQuote = await app.inject({
     method: "GET",
     url: `/public/quotes/${approvalPackage.json().token}`,

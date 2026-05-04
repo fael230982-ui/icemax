@@ -396,6 +396,138 @@ export async function createPrismaQuoteCommunicationQueue(tenantId: string, quot
   };
 }
 
+function buildQuoteDecisionHandoff(tenantId: string, quote: {
+  id: string;
+  number?: string;
+  serviceOrderId?: string;
+  customer?: string;
+  status?: string;
+  total?: number;
+  validUntil?: string | Date | null;
+  items?: Array<{ description?: string; quantity?: number; unitPrice?: number; kind?: string }>;
+}) {
+  const total = Number(quote.total ?? 0);
+  const approved = quote.status === "approved";
+  const rejected = quote.status === "rejected";
+
+  return {
+    quoteId: quote.id,
+    quoteNumber: quote.number ?? quote.id,
+    serviceOrderId: quote.serviceOrderId,
+    tenantId,
+    customer: quote.customer ?? "Cliente",
+    status: approved ? "execution_handoff_ready" : rejected ? "commercial_review_required" : "waiting_customer_decision",
+    currentQuoteStatus: quote.status ?? "draft",
+    total,
+    decisionSummary: {
+      approved,
+      rejected,
+      waitingDecision: !approved && !rejected,
+      message: approved
+        ? "Orcamento aprovado. Liberar execucao operacional com controle de pecas e comunicacao ao tecnico."
+        : rejected
+          ? "Orcamento recusado ou em revisao. Comercial deve ajustar proposta antes de nova comunicacao."
+          : "Orcamento ainda aguarda decisao do cliente.",
+    },
+    executionPlan: approved
+      ? [
+          "Atualizar OS para aguardando execucao.",
+          "Reservar pecas previstas no orcamento.",
+          "Confirmar disponibilidade de tecnico e janela de atendimento.",
+          "Enviar aviso ao tecnico com itens aprovados.",
+          "Registrar aceite do cliente na auditoria.",
+        ]
+      : [
+          "Bloquear execucao ate nova decisao.",
+          "Registrar motivo da recusa ou revisao.",
+          "Gerar nova versao comercial quando necessario.",
+          "Reenviar link atualizado ao cliente.",
+        ],
+    stockImpact: {
+      requiresReservation: approved,
+      items: quote.items?.map((item) => ({
+        kind: item.kind ?? "service",
+        description: item.description ?? "Item do orcamento",
+        quantity: item.quantity ?? 1,
+        reservationStatus: approved && item.kind === "part" ? "reservation_required" : "no_stock_action",
+      })) ?? [],
+    },
+    communications: {
+      internalSubject: approved ? `Orcamento ${quote.number ?? quote.id} aprovado` : `Revisar orcamento ${quote.number ?? quote.id}`,
+      technicianMessage: approved
+        ? `Orcamento ${quote.number ?? quote.id} aprovado para OS ${quote.serviceOrderId}. Conferir pecas e executar conforme escopo aprovado.`
+        : `Orcamento ${quote.number ?? quote.id} ainda nao esta liberado para execucao.`,
+      customerMessage: approved
+        ? `Recebemos sua aprovacao do orcamento ${quote.number ?? quote.id}. A equipe seguira com a programacao do atendimento.`
+        : `Recebemos sua solicitacao sobre o orcamento ${quote.number ?? quote.id}. Nossa equipe revisara a proposta.`,
+    },
+    governance: {
+      auditEvent: "quote.decision_handoff_prepared",
+      requiresAuditTrail: true,
+      blocksExecutionWithoutApproval: true,
+      preservesOriginalQuote: true,
+    },
+    nextActions: approved
+      ? [
+          "Acionar reserva de pecas da OS.",
+          "Acionar despacho tecnico.",
+          "Notificar cliente sobre proxima etapa.",
+        ]
+      : [
+          "Revisar escopo e valores.",
+          "Registrar motivo comercial.",
+          "Gerar novo pacote de aprovacao se houver ajuste.",
+        ],
+  };
+}
+
+export async function createMockQuoteDecisionHandoff(tenantId: string, quoteId: string) {
+  const quote = quotes.find((item) => item.id === quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteDecisionHandoff(tenantId, quote);
+}
+
+export async function createPrismaQuoteDecisionHandoff(tenantId: string, quoteId: string) {
+  const quote = await getPrisma().quote.findFirst({
+    where: {
+      id: quoteId,
+      tenantId,
+    },
+    include: {
+      items: true,
+      order: {
+        include: {
+          customer: true,
+        },
+      },
+    },
+  });
+
+  if (!quote) {
+    return null;
+  }
+
+  return buildQuoteDecisionHandoff(tenantId, {
+    id: quote.id,
+    number: quote.number,
+    serviceOrderId: quote.serviceOrderId,
+    customer: quote.order.customer.name,
+    status: quote.status,
+    total: Number(quote.total),
+    validUntil: quote.validUntil,
+    items: quote.items.map((item) => ({
+      kind: item.kind,
+      description: item.description,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unitPrice),
+    })),
+  });
+}
+
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 

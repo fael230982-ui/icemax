@@ -6,6 +6,7 @@ import {
   createMockQuoteApprovalPackage,
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
+  createMockQuoteDecisionHandoff,
   createMockPublicQuoteApprovalPackage,
   createMockStockLocation,
   createMockStockMovement,
@@ -13,6 +14,7 @@ import {
   createPrismaQuoteApprovalPackage,
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
+  createPrismaQuoteDecisionHandoff,
   createPrismaPublicQuoteApprovalPackage,
   createPrismaStockLocation,
   createPrismaStockMovement,
@@ -99,6 +101,20 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return reply.code(201).send(queue);
+  });
+
+  app.get("/quotes/:id/decision-handoff", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const handoff = isPrismaEnabled()
+      ? await createPrismaQuoteDecisionHandoff(context.tenantId, id)
+      : await createMockQuoteDecisionHandoff(context.tenantId, id);
+
+    if (!handoff) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para handoff de decisao." });
+    }
+
+    return handoff;
   });
 
   app.get("/public/quotes/:token", async (request, reply) => {

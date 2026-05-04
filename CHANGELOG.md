@@ -285,6 +285,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a consultar pacote e criar fila de comunicacao do orcamento.
 - Teste automatizado cobre pacote, fila e link publico de aprovacao.
 
+## 0.8.48 - Handoff De Decisao De Orcamento
+
+- Adicionado endpoint `GET /quotes/:id/decision-handoff`.
+- Handoff orienta operacao quando o orcamento for aprovado, recusado ou ainda estiver pendente.
+- Retorno inclui plano de execucao, impacto em estoque, comunicacoes e governanca.
+- Console web ganhou acao para consultar handoff de orcamento.
+- Teste automatizado cobre o handoff de decisao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

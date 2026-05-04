@@ -125,6 +125,7 @@ export const icemaxApi = {
   quoteCommunicationPackage: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/communication-package`, { token }),
   createQuoteCommunicationQueue: (quoteId: string, token?: string) =>
     apiRequest<unknown>(`/quotes/${quoteId}/communication-queue`, { method: "POST", token }),
+  quoteDecisionHandoff: (quoteId: string, token?: string) => apiRequest<unknown>(`/quotes/${quoteId}/decision-handoff`, { token }),
   publicQuote: (publicToken: string) => apiRequest<unknown>(`/public/quotes/${publicToken}`),
   publicQuoteDecision: (publicToken: string, body: unknown) =>
     apiRequest<unknown>(`/public/quotes/${publicToken}/decision`, { method: "PATCH", body }),
