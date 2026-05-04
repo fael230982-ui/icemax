@@ -328,9 +328,46 @@ h2 {
   gap: 10px;
 }
 
+.finalizationControls {
+  display: grid;
+  grid-template-columns: 180px minmax(220px, 1fr) 140px;
+  gap: 10px;
+  align-items: end;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.finalizationControls label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.finalizationControls input,
+.finalizationControls select {
+  width: 100%;
+}
+
+.finalizationControls div {
+  display: grid;
+  gap: 5px;
+}
+
+.finalizationControls div span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .finalizationRow {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr 0.95fr 0.8fr 1.25fr;
+  grid-template-columns: 1.05fr 0.75fr 0.85fr 0.7fr 1.05fr 0.95fr;
   gap: 12px;
   align-items: start;
   border: 1px solid #edf2f7;
@@ -389,6 +426,35 @@ h2 {
 .statusPill.ready {
   color: #065f46;
   background: #dcfce7;
+}
+
+.finalizationActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.finalizationActions button {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 10px;
+}
+
+.finalizationActions small {
+  grid-column: 1 / -1;
+}
+
+.finalizationEmpty {
+  display: grid;
+  gap: 5px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: #fbfdff;
+}
+
+.finalizationEmpty span {
+  color: var(--muted);
 }
 
 .formError {
@@ -1454,6 +1520,7 @@ dd {
   .opsHeader,
   .formGrid,
   .finalizationSummary,
+  .finalizationControls,
   .finalizationRow {
     grid-template-columns: 1fr;
   }

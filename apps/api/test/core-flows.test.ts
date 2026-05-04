@@ -525,6 +525,7 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(finalizationBoard.json().governance.auditEvent, "field.finalization_board_viewed");
   assert.ok(finalizationBoard.json().summary.serviceOrders >= 3);
   assert.ok(finalizationBoard.json().rows[0].serviceOrderId);
+  assert.ok(finalizationBoard.json().rows[0].technicianUserId);
 
   const readiness = await app.inject({
     method: "GET",

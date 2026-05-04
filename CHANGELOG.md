@@ -492,6 +492,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - CSS responsivo criado para a experiencia gerencial.
 - Documentado o uso do board visual de finalizacao.
 
+## 0.8.75 - Acoes Rapidas No Board De Finalizacao
+
+- Board web de finalizacao ganhou filtros por status e busca por OS, cliente, equipamento, tecnico ou prioridade.
+- API de finalizacao passou a expor `technicianUserId` para rastreabilidade das acoes.
+- Painel web recebeu comandos rapidos para registrar assinatura e enfileirar e-mail final.
+- Acoes usam API local quando disponivel e mantem feedback visual quando a API estiver desligada.
+- Documentado o fluxo operacional do board com filtros e acoes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

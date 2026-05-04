@@ -1060,6 +1060,7 @@ export function createMockFieldFinalizationBoard() {
       equipment: order.equipment,
       priority: order.priority,
       technician: technician?.technician ?? order.technician,
+      technicianUserId: technician?.technicianUserId ?? null,
       quoteId: quote?.id ?? null,
       status: blockers.length ? "needs_attention" : "ready_to_send",
       closeoutStatus: closeout?.status ?? "not_prepared",
