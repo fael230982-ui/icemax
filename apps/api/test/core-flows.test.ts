@@ -264,6 +264,16 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(quoteBoard.json().lanes.some((lane: { key: string }) => lane.key === "waiting_customer_decision"));
   assert.equal(quoteBoard.json().governance.auditEvent, "quote.approval_board_viewed");
 
+  const quoteReminders = await app.inject({
+    method: "POST",
+    url: "/quotes/approval-reminders",
+  });
+  assert.equal(quoteReminders.statusCode, 201);
+  assert.equal(quoteReminders.json().status, "quote_approval_reminders_ready");
+  assert.ok(quoteReminders.json().total >= 2);
+  assert.ok(quoteReminders.json().reminders.some((item: { channel: string }) => item.channel === "whatsapp_email"));
+  assert.equal(quoteReminders.json().governance.auditEvent, "quote.approval_reminders_prepared");
+
   const publicQuote = await app.inject({
     method: "GET",
     url: `/public/quotes/${approvalPackage.json().token}`,

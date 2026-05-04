@@ -990,6 +990,75 @@ export async function createPrismaQuoteApprovalBoard(tenantId: string) {
   })));
 }
 
+type QuoteApprovalBoard = ReturnType<typeof buildQuoteApprovalBoard>;
+
+function buildQuoteApprovalReminders(tenantId: string, board: QuoteApprovalBoard) {
+  const rows = board.lanes.flatMap((lane) => lane.rows);
+  const reminders = rows
+    .filter((row) => row.lane === "waiting_customer_decision" || row.lane === "approved_ready_to_execute")
+    .map((row, index) => {
+      const waitingCustomer = row.lane === "waiting_customer_decision";
+      const internal = row.lane === "approved_ready_to_execute";
+
+      return {
+        id: `quote-reminder-${row.quoteId}-${index + 1}`,
+        quoteId: row.quoteId,
+        quoteNumber: row.quoteNumber,
+        serviceOrderId: row.serviceOrderId,
+        customer: row.customer,
+        channel: waitingCustomer ? "whatsapp_email" : "internal_dispatch",
+        template: waitingCustomer ? "orcamento_lembrete_decisao" : "orcamento_aprovado_despacho",
+        recipient: waitingCustomer ? "cliente@local.dev" : "operacao@icemax.local",
+        priority: row.riskLevel === "critical" ? "urgent" : internal ? "high" : "normal",
+        subject: waitingCustomer
+          ? `Lembrete do orcamento ${row.quoteNumber}`
+          : `Orcamento ${row.quoteNumber} aprovado para execucao`,
+        body: waitingCustomer
+          ? `Ola! O orcamento ${row.quoteNumber} segue disponivel para aprovacao. A aprovacao libera a programacao da OS ${row.serviceOrderId}.`
+          : `Orcamento ${row.quoteNumber} aprovado. Conferir estoque, prontidao e despacho da OS ${row.serviceOrderId}.`,
+        copyToCustomer: waitingCustomer,
+        status: "queued_mock",
+        idempotencyKey: `quote:${row.quoteId}:approval-reminder:${row.lane}`,
+        scheduledFor: new Date("2026-05-04T12:10:00.000Z").toISOString(),
+        preflight: [
+          { key: "customer_opt_in", status: waitingCustomer ? "required" : "not_applicable" },
+          { key: "margin_hidden", status: "ok" },
+          { key: "provider_key", status: waitingCustomer ? "pending_external_key" : "internal_notification" },
+        ],
+      };
+    });
+
+  return {
+    tenantId,
+    status: "quote_approval_reminders_ready",
+    source: "quote_approval_board",
+    total: reminders.length,
+    readyToSend: reminders.filter((item) => item.status === "queued_mock").length,
+    blocked: reminders.filter((item) => item.preflight.some((check) => check.status === "blocked")).length,
+    reminders,
+    governance: {
+      auditEvent: "quote.approval_reminders_prepared",
+      requiresCustomerOptInForWhatsapp: true,
+      hidesInternalMargin: true,
+      idempotencyScope: "quote.approval-reminders",
+    },
+    nextActions: [
+      "Enviar lembretes ao cliente somente por canal autorizado.",
+      "Acionar despacho interno para orcamentos aprovados.",
+      "Registrar entrega, abertura e decisao na auditoria.",
+      "Evitar lembrete duplicado usando chave de idempotencia.",
+    ],
+  };
+}
+
+export async function createMockQuoteApprovalReminders(tenantId: string) {
+  return buildQuoteApprovalReminders(tenantId, await createMockQuoteApprovalBoard(tenantId));
+}
+
+export async function createPrismaQuoteApprovalReminders(tenantId: string) {
+  return buildQuoteApprovalReminders(tenantId, await createPrismaQuoteApprovalBoard(tenantId));
+}
+
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 

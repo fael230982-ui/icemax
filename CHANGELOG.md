@@ -344,6 +344,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Modo offline ganhou acao para registrar consulta do board pelo tecnico.
 - SyncPanel recebeu botao `Board orcamentos`.
 
+## 0.8.56 - Lembretes De Aprovacao De Orcamento
+
+- Adicionado endpoint `POST /quotes/approval-reminders`.
+- Lembretes sao gerados a partir do board de orcamentos.
+- Retorno prepara mensagens para cliente pendente e aviso interno para orcamento aprovado.
+- Pacote inclui preflight, idempotencia, opt-in de WhatsApp e ocultacao de margem.
+- Console web ganhou acao para criar lembretes de orcamento.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

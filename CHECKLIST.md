@@ -1238,3 +1238,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Lembretes De Aprovacao De Orcamento
+
+- [x] Endpoint de lembretes de aprovacao criado.
+- [x] Mensagens de cliente pendente e despacho interno incluidas.
+- [x] Preflight, idempotencia e opt-in de WhatsApp incluidos.
+- [x] Console web atualizado com acao de lembretes.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

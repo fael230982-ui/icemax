@@ -228,6 +228,10 @@ export function OperationsConsole() {
     void run("Board de orcamentos", () => icemaxApi.quoteApprovalBoard(token || undefined));
   }
 
+  function createQuoteApprovalReminders() {
+    void run("Lembretes de orcamento", () => icemaxApi.createQuoteApprovalReminders(token || undefined));
+  }
+
   function loadQuoteCommunicationPackage() {
     void run("Comunicacao de orcamento", () => icemaxApi.quoteCommunicationPackage("quote-001", token || undefined));
   }
@@ -544,6 +548,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadCustomerTracking}>Acompanhar OS cliente</button>
         <button type="button" className="secondary" onClick={loadQuoteApprovalBoard}>Board orcamentos</button>
+        <button type="button" className="secondary" onClick={createQuoteApprovalReminders}>Lembretes orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteApprovalPackage}>Aprovar orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteCommunicationPackage}>Comunicar orcamento</button>
         <button type="button" className="secondary" onClick={createQuoteCommunicationQueue}>Fila do orcamento</button>

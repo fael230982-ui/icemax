@@ -6,6 +6,7 @@ import {
   createMockQuoteApprovalPackage,
   createMockQuoteApprovalActivation,
   createMockQuoteApprovalBoard,
+  createMockQuoteApprovalReminders,
   createMockQuoteApprovalTimeline,
   createMockQuoteCommunicationPackage,
   createMockQuoteCommunicationQueue,
@@ -17,6 +18,7 @@ import {
   createPrismaQuoteApprovalPackage,
   createPrismaQuoteApprovalActivation,
   createPrismaQuoteApprovalBoard,
+  createPrismaQuoteApprovalReminders,
   createPrismaQuoteApprovalTimeline,
   createPrismaQuoteCommunicationPackage,
   createPrismaQuoteCommunicationQueue,
@@ -63,6 +65,15 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     return isPrismaEnabled()
       ? createPrismaQuoteApprovalBoard(context.tenantId)
       : createMockQuoteApprovalBoard(context.tenantId);
+  });
+
+  app.post("/quotes/approval-reminders", async (request, reply) => {
+    const context = await getAuthContext(request);
+    const reminders = isPrismaEnabled()
+      ? await createPrismaQuoteApprovalReminders(context.tenantId)
+      : await createMockQuoteApprovalReminders(context.tenantId);
+
+    return reply.code(201).send(reminders);
   });
 
   app.patch("/quotes/:id/decision", async (request) => {
