@@ -268,3 +268,22 @@ export function createApprovedQuoteActivationAckAction(serviceOrderId: string, q
     createdAt: new Date().toISOString(),
   } satisfies OfflineAction;
 }
+
+export function createQuoteTimelineViewedAction(serviceOrderId: string, quoteId: string) {
+  return {
+    id: offlineId("quote-timeline"),
+    label: `Timeline orcamento OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Linha do tempo do orcamento ${quoteId} consultada pelo tecnico em campo.`,
+      source: "mobile_offline_quote_timeline",
+      mobileAck: {
+        quoteId,
+        viewedAt: new Date().toISOString(),
+        offline: true,
+      },
+    },
+    createdAt: new Date().toISOString(),
+  } satisfies OfflineAction;
+}

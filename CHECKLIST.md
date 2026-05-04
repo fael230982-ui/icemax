@@ -1182,3 +1182,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Timeline De Orcamento No Mobile
+
+- [x] Secao mobile de timeline do orcamento criada.
+- [x] Cards de criacao, comunicacao, abertura, aprovacao e liberacao incluidos.
+- [x] Acao offline de timeline consultada criada.
+- [x] SyncPanel atualizado com botao de timeline.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

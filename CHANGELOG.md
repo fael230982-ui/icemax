@@ -316,6 +316,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para consultar a timeline do orcamento aprovado.
 - Teste automatizado cobre eventos e auditoria da linha do tempo.
 
+## 0.8.52 - Timeline De Orcamento No Mobile
+
+- App mobile passou a exibir secao de timeline do orcamento aprovado.
+- Timeline resume criacao, comunicacao, abertura, aprovacao e liberacao operacional.
+- Modo offline ganhou acao para registrar consulta da timeline pelo tecnico.
+- SyncPanel recebeu botao `Timeline orcamento`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

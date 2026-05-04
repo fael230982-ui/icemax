@@ -78,6 +78,15 @@ export const approvedQuoteActivation = [
   { title: "Auditoria", detail: "Registrar aceite e ativacao do orcamento na sincronizacao" },
 ];
 
+export const quoteApprovalTimeline = [
+  { title: "Criado", detail: "ORC-2026-002 gerado e vinculado a OS 1049" },
+  { title: "Comunicado", detail: "Link publico, e-mail, WhatsApp e aviso interno preparados" },
+  { title: "Aberto", detail: "Cliente acessou o portal publico do orcamento" },
+  { title: "Aprovado", detail: "Aceite registrado com termos comerciais e escopo aprovado" },
+  { title: "Liberado", detail: "Execucao operacional pronta para despacho e acompanhamento" },
+  { title: "Proximo", detail: "Tecnico deve conferir pecas, rota e janela antes da saida" },
+];
+
 export const executionSteps = [
   { title: "Check-in", detail: "Registrar chegada com localizacao" },
   { title: "Checklist", detail: "Responder itens obrigatorios" },
