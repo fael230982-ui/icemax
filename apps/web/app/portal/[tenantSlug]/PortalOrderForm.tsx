@@ -11,6 +11,11 @@ type SubmitState = {
   status: "idle" | "sending" | "success" | "error";
   message: string;
   protocol?: string;
+  triage?: {
+    suggestedPriority?: string;
+    serviceType?: string;
+    dispatchGuidance?: { recommendedSlaMinutes?: number };
+  };
 };
 
 export function PortalOrderForm({ tenantSlug }: PortalOrderFormProps) {
@@ -40,13 +45,14 @@ export function PortalOrderForm({ tenantSlug }: PortalOrderFormProps) {
         problemDescription: String(form.get("problemDescription")),
         urgency: String(form.get("urgency")),
         allowWhatsapp: form.get("allowWhatsapp") === "on",
-      }) as { id?: string };
+      }) as { id?: string; triage?: SubmitState["triage"] };
 
       event.currentTarget.reset();
       setState({
         status: "success",
         message: "Solicitacao registrada. A empresa recebeu os dados e fara a triagem operacional.",
         protocol: response.id,
+        triage: response.triage,
       });
     } catch {
       setState({
@@ -117,6 +123,11 @@ export function PortalOrderForm({ tenantSlug }: PortalOrderFormProps) {
         <div>
           <strong>{state.protocol ? `Protocolo ${state.protocol}` : "Status da solicitacao"}</strong>
           <span>{state.message}</span>
+          {state.triage ? (
+            <small>
+              Prioridade sugerida: {state.triage.suggestedPriority} | Tipo: {state.triage.serviceType} | SLA: {state.triage.dispatchGuidance?.recommendedSlaMinutes} min
+            </small>
+          ) : null}
         </div>
         <button type="submit" disabled={state.status === "sending"}>
           {state.status === "sending" ? "Enviando" : "Abrir OS"}

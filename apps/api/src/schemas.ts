@@ -240,6 +240,17 @@ export const customerPortalOrderSchema = z.object({
   allowWhatsapp: z.boolean().default(true),
 });
 
+export const customerPortalTriageSchema = z.object({
+  tenantSlug: z.string().min(2).default("icemax"),
+  equipmentType: z.string().min(2),
+  problemDescription: z.string().min(5),
+  urgency: z.enum(["normal", "high", "emergency"]).default("normal"),
+  hasLeak: z.boolean().default(false),
+  hasElectricalRisk: z.boolean().default(false),
+  hasCriticalEnvironment: z.boolean().default(false),
+  hasPhoto: z.boolean().default(false),
+});
+
 export const createWarrantyTermSchema = z.object({
   serviceOrderId: z.string().min(1),
   customerId: z.string().min(1),
@@ -393,6 +404,7 @@ export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
 export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
+export type CustomerPortalTriageInput = z.output<typeof customerPortalTriageSchema>;
 export type CreateWarrantyTermInput = z.output<typeof createWarrantyTermSchema>;
 export type CreatePmocPlanInput = z.output<typeof createPmocPlanSchema>;
 export type CreateInvoiceDraftInput = z.output<typeof createInvoiceDraftSchema>;

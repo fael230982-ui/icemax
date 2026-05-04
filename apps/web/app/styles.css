@@ -904,7 +904,8 @@ dd {
 .portalPanelHeader span,
 .portalList,
 .portalPrivacy span,
-.portalSubmit span {
+.portalSubmit span,
+.portalSubmit small {
   color: var(--muted);
 }
 
@@ -979,7 +980,8 @@ dd {
 }
 
 .portalSubmit div,
-.portalSubmit span {
+.portalSubmit span,
+.portalSubmit small {
   display: grid;
   gap: 4px;
 }

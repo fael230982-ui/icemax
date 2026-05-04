@@ -1,7 +1,61 @@
 import type { FastifyInstance } from "fastify";
 import { serviceOrders, tenant, technicianLocations } from "../mock-data";
-import { customerPortalOrderSchema, parseBody } from "../schemas";
+import { customerPortalOrderSchema, customerPortalTriageSchema, parseBody, type CustomerPortalTriageInput } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
+
+function classifyPortalTriage(input: CustomerPortalTriageInput) {
+  const description = input.problemDescription.toLowerCase();
+  const emergencyTerms = ["faisca", "queimado", "fumaca", "curto", "hospital", "clinica", "servidor", "camara fria", "vazamento grande"];
+  const highTerms = ["vazamento", "nao gela", "congelando", "gelo", "barulho", "alarme", "erro", "dreno"];
+  const emergencySignals = [
+    input.urgency === "emergency",
+    input.hasElectricalRisk,
+    input.hasCriticalEnvironment,
+    emergencyTerms.some((term) => description.includes(term)),
+  ].filter(Boolean).length;
+  const highSignals = [
+    input.urgency === "high",
+    input.hasLeak,
+    highTerms.some((term) => description.includes(term)),
+  ].filter(Boolean).length;
+  const suggestedPriority = emergencySignals > 0 ? "emergency" : highSignals > 0 ? "high" : "normal";
+  const score = Math.min(100, emergencySignals * 45 + highSignals * 22 + (input.hasPhoto ? 6 : 0) + 28);
+  const serviceType = description.includes("higien") || description.includes("limpeza")
+    ? "cleaning"
+    : description.includes("prevent")
+      ? "preventive"
+      : "corrective";
+
+  return {
+    status: "triage_ready",
+    tenantSlug: input.tenantSlug,
+    serviceType,
+    suggestedPriority,
+    score,
+    requiredChecklist: [
+      "Confirmar endereco, acesso ao equipamento e responsavel no local.",
+      "Registrar tipo, local e identificacao do equipamento.",
+      input.hasPhoto ? "Anexar fotos recebidas na OS." : "Solicitar foto do equipamento e do sintoma antes do despacho.",
+      suggestedPriority === "emergency" ? "Acionar responsavel operacional antes de encaixar rota." : "Validar melhor janela de atendimento com o cliente.",
+      input.hasElectricalRisk ? "Orientar o cliente a desligar o equipamento ate avaliacao tecnica." : "Confirmar se o equipamento pode permanecer ligado ate a visita.",
+    ],
+    customerGuidance: [
+      "Liberar acesso ao ambiente e ao quadro eletrico relacionado ao equipamento.",
+      "Evitar novas tentativas de reparo por terceiros antes da chegada do tecnico.",
+      input.hasLeak ? "Proteger a area abaixo do vazamento e retirar itens sensiveis." : "Manter o local identificado para agilizar a vistoria.",
+    ],
+    dispatchGuidance: {
+      routeMode: suggestedPriority === "emergency" ? "prioritize_nearest_available" : "fit_best_window",
+      requiresSupervisorReview: suggestedPriority === "emergency" || input.hasElectricalRisk,
+      recommendedSlaMinutes: suggestedPriority === "emergency" ? 90 : suggestedPriority === "high" ? 240 : 1440,
+    },
+    communication: {
+      whatsappTemplate: "portal_triage_received",
+      emailTemplate: "portal_triage_summary",
+      message: `Solicitacao recebida com prioridade sugerida ${suggestedPriority}. A empresa fara a triagem antes do despacho.`,
+    },
+  };
+}
 
 function buildCustomerTracking(serviceOrderId: string) {
   const order = serviceOrders.find((item) => item.id === serviceOrderId);
@@ -140,6 +194,16 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
 
   app.post("/customer-portal/service-orders", async (request, reply) => {
     const input = parseBody(customerPortalOrderSchema, request.body);
+    const triage = classifyPortalTriage({
+      tenantSlug: input.tenantSlug,
+      equipmentType: input.equipmentType,
+      problemDescription: input.problemDescription,
+      urgency: input.urgency,
+      hasLeak: /vaz|gote|agua|dreno/i.test(input.problemDescription),
+      hasElectricalRisk: /faisca|curto|queim|fumaca|disjuntor/i.test(input.problemDescription),
+      hasCriticalEnvironment: /clinica|hospital|servidor|laboratorio|camara fria/i.test(input.problemDescription),
+      hasPhoto: false,
+    });
     const order = {
       id: `portal-os-${Date.now()}`,
       tenantId: tenant.id,
@@ -155,6 +219,7 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
       priority: input.urgency,
       status: "open",
       allowWhatsapp: input.allowWhatsapp,
+      triage,
       createdAt: new Date().toISOString(),
     };
 
@@ -167,10 +232,31 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
         tenantSlug: input.tenantSlug,
         urgency: input.urgency,
         allowWhatsapp: input.allowWhatsapp,
+        suggestedPriority: triage.suggestedPriority,
+        serviceType: triage.serviceType,
       },
     });
 
     return reply.code(201).send(order);
+  });
+
+  app.post("/customer-portal/triage", async (request, reply) => {
+    const input = parseBody(customerPortalTriageSchema, request.body);
+    const triage = classifyPortalTriage(input);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.triage_prepared",
+      entity: "customer_portal",
+      entityId: input.tenantSlug,
+      metadata: {
+        suggestedPriority: triage.suggestedPriority,
+        serviceType: triage.serviceType,
+        requiresSupervisorReview: triage.dispatchGuidance.requiresSupervisorReview,
+      },
+    });
+
+    return reply.code(201).send(triage);
   });
 
   app.get("/customer-portal/service-orders/:id/tracking", async (request, reply) => {

@@ -147,6 +147,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Tela exibe estados de envio, sucesso e erro sem depender da API durante o build.
 - Documentacao do portal publico foi criada.
 
+## 0.8.29 - Triagem Publica De OS
+
+- Adicionado endpoint `POST /customer-portal/triage` para classificar solicitacoes publicas.
+- Abertura publica de OS passou a retornar pacote de triagem com prioridade sugerida, checklist, orientacoes e SLA.
+- Portal web passou a exibir resumo de triagem apos protocolo criado.
+- Teste automatizado cobre prioridade emergencial, revisao por supervisor e checklist de triagem.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

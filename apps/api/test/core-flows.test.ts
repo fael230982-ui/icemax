@@ -328,6 +328,26 @@ test("customer portal can request optional service order", async () => {
   });
   assert.equal(order.statusCode, 201);
   assert.equal(order.json().openedBy, "customer_portal");
+  assert.equal(order.json().triage.status, "triage_ready");
+  assert.equal(order.json().triage.suggestedPriority, "high");
+
+  const triage = await app.inject({
+    method: "POST",
+    url: "/customer-portal/triage",
+    payload: {
+      tenantSlug: "icemax",
+      equipmentType: "Split",
+      problemDescription: "Saiu fumaca e disjuntor caiu em sala de servidor",
+      urgency: "normal",
+      hasElectricalRisk: true,
+      hasCriticalEnvironment: true,
+      hasPhoto: true,
+    },
+  });
+  assert.equal(triage.statusCode, 201);
+  assert.equal(triage.json().suggestedPriority, "emergency");
+  assert.equal(triage.json().dispatchGuidance.requiresSupervisorReview, true);
+  assert.ok(triage.json().requiredChecklist.length >= 5);
 
   const tracking = await app.inject({
     method: "GET",

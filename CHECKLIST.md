@@ -842,3 +842,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Triagem Publica De OS
+
+- [x] Endpoint `POST /customer-portal/triage` criado.
+- [x] Abertura publica de OS retorna triagem operacional.
+- [x] Classificacao considera urgencia, vazamento, risco eletrico e ambiente critico.
+- [x] Checklist e orientacoes para cliente/despacho incluidos.
+- [x] Portal web exibe resumo de triagem apos abertura.
+- [x] Teste automatizado criado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
