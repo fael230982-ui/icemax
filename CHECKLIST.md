@@ -1109,3 +1109,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Comunicacao De Orcamento
+
+- [x] Endpoint de pacote de comunicacao do orcamento criado.
+- [x] Endpoint de fila de comunicacao do orcamento criado.
+- [x] Mensagens de e-mail, WhatsApp e aviso interno preparadas.
+- [x] Console web atualizado com acoes de comunicacao do orcamento.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

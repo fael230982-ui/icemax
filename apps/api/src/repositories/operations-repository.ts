@@ -142,6 +142,158 @@ export async function createMockQuoteApprovalPackage(tenantId: string, quoteId: 
   return buildQuoteApprovalPackage(tenantId, quote);
 }
 
+type QuoteApprovalPackage = ReturnType<typeof buildQuoteApprovalPackage>;
+
+function buildQuoteCommunicationPackage(tenantId: string, approvalPackage: QuoteApprovalPackage) {
+  return {
+    quoteId: approvalPackage.quoteId,
+    quoteNumber: approvalPackage.quoteNumber,
+    serviceOrderId: approvalPackage.serviceOrderId,
+    tenantId,
+    customer: approvalPackage.customer,
+    status: "quote_communication_ready",
+    trigger: "quote_approval_requested",
+    recipients: {
+      companyEmail: "adm.rcsolutions@gmail.com",
+      customerEmailCopy: "cliente@local.dev",
+      whatsapp: "+5500000000000",
+      internal: "comercial@icemax.local",
+    },
+    messages: [
+      {
+        channel: "email",
+        template: "orcamento_aprovacao_email",
+        subject: approvalPackage.customerMessages.emailSubject,
+        body: approvalPackage.customerMessages.emailBody,
+        copyToCustomer: true,
+      },
+      {
+        channel: "whatsapp",
+        template: "orcamento_aprovacao_whatsapp",
+        body: approvalPackage.customerMessages.whatsappBody,
+        copyToCustomer: true,
+      },
+      {
+        channel: "internal",
+        template: "orcamento_handoff_comercial",
+        subject: `Orcamento ${approvalPackage.quoteNumber} enviado para aprovacao`,
+        body: `Acompanhar abertura do link ${approvalPackage.publicUrl} e acionar operacao quando houver decisao do cliente.`,
+        copyToCustomer: false,
+      },
+    ],
+    approvalLink: {
+      token: approvalPackage.token,
+      publicUrl: approvalPackage.publicUrl,
+      expiresAt: approvalPackage.expiresAt,
+      publicDecisionEndpoint: approvalPackage.governance.publicDecisionEndpoint,
+    },
+    preflight: [
+      { key: "approval_link", status: "ok", result: approvalPackage.publicUrl },
+      { key: "customer_identification", status: "required_on_decision", result: "nome do responsavel obrigatorio no portal" },
+      { key: "email_provider", status: "pending_external_key", result: "envio real depende de provedor configurado" },
+      { key: "whatsapp_provider", status: "pending_external_key", result: "envio real depende de Meta WhatsApp configurado" },
+    ],
+    governance: {
+      lgpdBasis: "execucao de contrato e comunicacao comercial solicitada",
+      auditEvent: "communication.quote_package_prepared",
+      requireWhatsappOptIn: true,
+      hidesInternalMargin: true,
+      idempotencyScope: `quote:${approvalPackage.quoteId}:approval`,
+    },
+    nextActions: [
+      "Enviar link de aprovacao por e-mail.",
+      "Enviar mensagem curta por WhatsApp quando houver consentimento.",
+      "Monitorar abertura e decisao do cliente.",
+      "Ao aprovar, liberar execucao e reserva de pecas.",
+      "Ao recusar ou pedir revisao, devolver ao comercial.",
+    ],
+  };
+}
+
+export async function createMockQuoteCommunicationPackage(tenantId: string, quoteId: string) {
+  const approvalPackage = await createMockQuoteApprovalPackage(tenantId, quoteId);
+
+  if (!approvalPackage) {
+    return null;
+  }
+
+  return buildQuoteCommunicationPackage(tenantId, approvalPackage);
+}
+
+function queueItemsFromQuoteMessages(params: {
+  quoteId: string;
+  trigger: string;
+  recipients: Record<string, string>;
+  messages: Array<{ channel: string; template: string; subject?: string; body: string; copyToCustomer: boolean }>;
+}) {
+  return params.messages.map((message, index) => {
+    const recipient = message.channel === "email"
+      ? params.recipients.companyEmail
+      : message.channel === "whatsapp"
+        ? params.recipients.whatsapp
+        : params.recipients.internal;
+
+    return {
+      id: `queue-quote-${params.quoteId}-${message.channel}-${index + 1}`,
+      sourceType: "quote",
+      sourceId: params.quoteId,
+      trigger: params.trigger,
+      channel: message.channel,
+      provider: message.channel === "whatsapp" ? "whatsapp_business_pending" : message.channel === "email" ? "email_provider_pending" : "internal_notification",
+      recipient,
+      template: message.template,
+      subject: message.subject,
+      body: message.body,
+      copyToCustomer: message.copyToCustomer,
+      status: "queued_mock",
+      priority: message.channel === "internal" ? "normal" : "high",
+      attempts: 0,
+      maxAttempts: 3,
+      idempotencyKey: `quote:${params.quoteId}:${message.channel}:${message.template}`,
+      scheduledFor: new Date().toISOString(),
+    };
+  });
+}
+
+export async function createMockQuoteCommunicationQueue(tenantId: string, quoteId: string) {
+  const communicationPackage = await createMockQuoteCommunicationPackage(tenantId, quoteId);
+
+  if (!communicationPackage) {
+    return null;
+  }
+
+  const items = queueItemsFromQuoteMessages({
+    quoteId,
+    trigger: communicationPackage.trigger,
+    recipients: communicationPackage.recipients,
+    messages: communicationPackage.messages,
+  });
+
+  return {
+    sourceType: "quote",
+    sourceId: quoteId,
+    tenantId,
+    status: "queued_mock",
+    total: items.length,
+    readyToSend: items.filter((item) => item.status === "queued_mock").length,
+    blocked: 0,
+    approvalLink: communicationPackage.approvalLink,
+    preflight: communicationPackage.preflight,
+    items,
+    audit: {
+      event: "communication.quote_queue_created",
+      entity: "quote",
+      entityId: quoteId,
+    },
+    nextActions: [
+      "Persistir itens da fila no banco real.",
+      "Processar e-mail quando provedor estiver configurado.",
+      "Processar WhatsApp somente com consentimento valido.",
+      "Registrar entrega, falha e abertura do link na auditoria.",
+    ],
+  };
+}
+
 export async function createMockPublicQuoteApprovalPackage(tenantId: string, token: string) {
   const quoteId = quoteIdFromPublicToken(token);
 
@@ -193,6 +345,55 @@ export async function createPrismaQuoteApprovalPackage(tenantId: string, quoteId
       unitPrice: Number(item.unitPrice),
     })),
   });
+}
+
+export async function createPrismaQuoteCommunicationPackage(tenantId: string, quoteId: string) {
+  const approvalPackage = await createPrismaQuoteApprovalPackage(tenantId, quoteId);
+
+  if (!approvalPackage) {
+    return null;
+  }
+
+  return buildQuoteCommunicationPackage(tenantId, approvalPackage);
+}
+
+export async function createPrismaQuoteCommunicationQueue(tenantId: string, quoteId: string) {
+  const communicationPackage = await createPrismaQuoteCommunicationPackage(tenantId, quoteId);
+
+  if (!communicationPackage) {
+    return null;
+  }
+
+  const items = queueItemsFromQuoteMessages({
+    quoteId,
+    trigger: communicationPackage.trigger,
+    recipients: communicationPackage.recipients,
+    messages: communicationPackage.messages,
+  });
+
+  return {
+    sourceType: "quote",
+    sourceId: quoteId,
+    tenantId,
+    status: "queued_mock",
+    total: items.length,
+    readyToSend: items.length,
+    blocked: 0,
+    approvalLink: communicationPackage.approvalLink,
+    preflight: communicationPackage.preflight,
+    items,
+    audit: {
+      event: "communication.quote_queue_created",
+      entity: "quote",
+      entityId: quoteId,
+    },
+    nextActions: [
+      "Persistir itens da fila no banco real.",
+      "Processar e-mail quando provedor estiver configurado.",
+      "Processar WhatsApp somente com consentimento valido.",
+      "Registrar entrega, falha e abertura do link na auditoria.",
+    ],
+  };
 }
 
 export async function createPrismaPublicQuoteApprovalPackage(tenantId: string, token: string) {

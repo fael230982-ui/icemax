@@ -277,6 +277,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Total, validade, cliente, OS e itens passam a aceitar retorno real da API.
 - Rota foi marcada como dinamica para uso seguro com tokens publicos.
 
+## 0.8.47 - Comunicacao De Orcamento
+
+- Adicionado endpoint `GET /quotes/:id/communication-package`.
+- Adicionado endpoint `POST /quotes/:id/communication-queue`.
+- Pacote prepara e-mail, WhatsApp e aviso interno para aprovacao de orcamento.
+- Console web passou a consultar pacote e criar fila de comunicacao do orcamento.
+- Teste automatizado cobre pacote, fila e link publico de aprovacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

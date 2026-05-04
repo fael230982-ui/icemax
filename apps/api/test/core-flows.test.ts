@@ -197,6 +197,25 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.match(approvalPackage.json().governance.publicDecisionEndpoint, /^\/public\/quotes\/quote_quote-001_/);
   assert.ok(approvalPackage.json().approvalOptions.length >= 2);
 
+  const quoteCommunication = await app.inject({
+    method: "GET",
+    url: "/quotes/quote-001/communication-package",
+  });
+  assert.equal(quoteCommunication.statusCode, 200);
+  assert.equal(quoteCommunication.json().quoteId, "quote-001");
+  assert.equal(quoteCommunication.json().status, "quote_communication_ready");
+  assert.ok(quoteCommunication.json().messages.some((item: { channel: string }) => item.channel === "whatsapp"));
+  assert.equal(quoteCommunication.json().governance.auditEvent, "communication.quote_package_prepared");
+
+  const quoteQueue = await app.inject({
+    method: "POST",
+    url: "/quotes/quote-001/communication-queue",
+  });
+  assert.equal(quoteQueue.statusCode, 201);
+  assert.equal(quoteQueue.json().sourceType, "quote");
+  assert.equal(quoteQueue.json().readyToSend, 3);
+  assert.match(quoteQueue.json().approvalLink.publicUrl, /\/orcamentos\/quote_quote-001_/);
+
   const publicQuote = await app.inject({
     method: "GET",
     url: `/public/quotes/${approvalPackage.json().token}`,

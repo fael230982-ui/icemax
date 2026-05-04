@@ -4,11 +4,15 @@ import { isPrismaEnabled } from "../config";
 import {
   createMockPart,
   createMockQuoteApprovalPackage,
+  createMockQuoteCommunicationPackage,
+  createMockQuoteCommunicationQueue,
   createMockPublicQuoteApprovalPackage,
   createMockStockLocation,
   createMockStockMovement,
   createPrismaPart,
   createPrismaQuoteApprovalPackage,
+  createPrismaQuoteCommunicationPackage,
+  createPrismaQuoteCommunicationQueue,
   createPrismaPublicQuoteApprovalPackage,
   createPrismaStockLocation,
   createPrismaStockMovement,
@@ -67,6 +71,34 @@ export async function registerOperationRoutes(app: FastifyInstance) {
     }
 
     return approvalPackage;
+  });
+
+  app.get("/quotes/:id/communication-package", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const communicationPackage = isPrismaEnabled()
+      ? await createPrismaQuoteCommunicationPackage(context.tenantId, id)
+      : await createMockQuoteCommunicationPackage(context.tenantId, id);
+
+    if (!communicationPackage) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para pacote de comunicacao." });
+    }
+
+    return communicationPackage;
+  });
+
+  app.post("/quotes/:id/communication-queue", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const context = await getAuthContext(request);
+    const queue = isPrismaEnabled()
+      ? await createPrismaQuoteCommunicationQueue(context.tenantId, id)
+      : await createMockQuoteCommunicationQueue(context.tenantId, id);
+
+    if (!queue) {
+      return reply.code(404).send({ message: "Orcamento nao encontrado para fila de comunicacao." });
+    }
+
+    return reply.code(201).send(queue);
   });
 
   app.get("/public/quotes/:token", async (request, reply) => {
