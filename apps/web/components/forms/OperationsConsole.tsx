@@ -94,6 +94,18 @@ export function OperationsConsole() {
     void run("Fila de orcamentos aprovados", () => icemaxApi.quoteExecutionDispatchQueue(token || undefined));
   }
 
+  function createDispatchAssignmentDecision() {
+    void run("Aceite do tecnico", () =>
+      icemaxApi.createDispatchAssignmentDecision({
+        quoteId: "quote-002",
+        serviceOrderId: "1049",
+        technicianUserId: "tech-002",
+        decision: "accepted",
+        reason: "Tecnico confirmou janela e rota pelo painel.",
+      }, token || undefined),
+    );
+  }
+
   function loadDispatchReadiness() {
     void run("Prontidao da OS", () => icemaxApi.dispatchReadiness("1048", "tech-001", token || undefined));
   }
@@ -539,6 +551,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={optimizeRoute}>Otimizar rota</button>
         <button type="button" className="secondary" onClick={loadDispatchRecommendations}>Despacho inteligente</button>
         <button type="button" className="secondary" onClick={loadQuoteExecutionDispatchQueue}>Fila orcamentos aprovados</button>
+        <button type="button" className="secondary" onClick={createDispatchAssignmentDecision}>Aceite tecnico</button>
         <button type="button" className="secondary" onClick={loadDispatchReadiness}>Prontidao da OS</button>
         <button type="button" className="secondary" onClick={createVisitPreparation}>Preparo da visita</button>
         <button type="button" className="secondary" onClick={reserveServiceOrderParts}>Reservar pecas</button>

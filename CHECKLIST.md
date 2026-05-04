@@ -1324,3 +1324,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Registro De Aceite E Reatribuicao De Tecnico
+
+- [x] Endpoint de decisao de atribuicao criado.
+- [x] Aceite, recusa e pedido de apoio mapeados.
+- [x] Plano de reatribuicao para recusa incluido.
+- [x] Console web atualizado com acao de aceite tecnico.
+- [x] Teste automatizado atualizado.
+- [x] CHANGELOG atualizado.
+- [x] PDFs adiados para ganhar tempo por decisao do Rafael.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

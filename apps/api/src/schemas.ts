@@ -232,6 +232,16 @@ export const dispatchVisitPreparationSchema = z.object({
   includeCustomerPortalEvidence: z.boolean().default(true),
 });
 
+export const dispatchAssignmentDecisionSchema = z.object({
+  quoteId: z.string().min(1),
+  serviceOrderId: z.string().min(1),
+  technicianUserId: z.string().min(1),
+  decision: z.enum(["accepted", "rejected", "needs_support"]),
+  reason: z.string().max(500).optional(),
+  currentLatitude: z.number().min(-90).max(90).optional(),
+  currentLongitude: z.number().min(-180).max(180).optional(),
+});
+
 export const improveTechnicalTextSchema = z.object({
   text: z.string().min(3),
   tone: z.enum(["professional", "objective", "customer_friendly"]).default("professional"),
@@ -446,6 +456,7 @@ export type CreateQrLabelInput = z.output<typeof createQrLabelSchema>;
 export type TechnicianLocationInput = z.output<typeof technicianLocationSchema>;
 export type OptimizeRouteInput = z.output<typeof optimizeRouteSchema>;
 export type DispatchVisitPreparationInput = z.output<typeof dispatchVisitPreparationSchema>;
+export type DispatchAssignmentDecisionInput = z.output<typeof dispatchAssignmentDecisionSchema>;
 export type ImproveTechnicalTextInput = z.output<typeof improveTechnicalTextSchema>;
 export type SuggestIssueCausesInput = z.output<typeof suggestIssueCausesSchema>;
 export type VisualDiagnosisPackageInput = z.output<typeof visualDiagnosisPackageSchema>;

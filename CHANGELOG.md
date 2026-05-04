@@ -388,6 +388,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - SyncPanel recebeu botao `Fila despacho`.
 - Documentado fluxo mobile em `docs/92-fila-despacho-mobile.md`.
 
+## 0.8.62 - Aceite E Reatribuicao De Tecnico
+
+- Adicionado endpoint `POST /dispatch/assignment-decision`.
+- Tecnico pode aceitar, recusar ou pedir apoio para uma atribuicao de OS.
+- Resposta inclui impacto no despacho, auditoria e plano de reatribuicao quando houver recusa.
+- Painel web ganhou acao `Aceite tecnico`.
+- Teste automatizado cobre aceite da atribuicao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

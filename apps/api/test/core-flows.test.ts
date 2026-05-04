@@ -393,6 +393,21 @@ test("dispatch location and route optimization endpoints respond", async () => {
   assert.equal(quoteQueue.json().governance.auditEvent, "dispatch.quote_execution_queue_viewed");
   assert.ok(["ready_for_dispatch", "needs_preparation"].includes(quoteQueue.json().data[0].status));
 
+  const assignmentDecision = await app.inject({
+    method: "POST",
+    url: "/dispatch/assignment-decision",
+    payload: {
+      quoteId: "quote-002",
+      serviceOrderId: "1049",
+      technicianUserId: quoteQueue.json().data[0].recommendedTechnician.technicianUserId,
+      decision: "accepted",
+      reason: "Tecnico confirmou janela e rota.",
+    },
+  });
+  assert.equal(assignmentDecision.statusCode, 201);
+  assert.equal(assignmentDecision.json().status, "assignment_confirmed");
+  assert.equal(assignmentDecision.json().audit.event, "dispatch.assignment_decision_recorded");
+
   const readiness = await app.inject({
     method: "GET",
     url: "/dispatch/service-orders/1048/readiness?technicianUserId=tech-001",

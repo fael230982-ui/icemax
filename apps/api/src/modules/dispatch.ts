@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { getAuthContext } from "../auth";
-import { dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
+import { dispatchAssignmentDecisionSchema, dispatchVisitPreparationSchema, optimizeRouteSchema, parseBody, technicianLocationSchema } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
-import { createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
+import { createMockDispatchAssignmentDecision, createMockQuoteExecutionDispatchQueue, createMockVisitPreparationPackage, getMockServiceOrderDispatchReadiness, listMockTechnicianLocations, optimizeMockRoute, recommendMockDispatchAssignments, recordMockTechnicianLocation } from "../services/dispatch-service";
 
 export async function registerDispatchRoutes(app: FastifyInstance) {
   app.get("/technicians/locations", async () => listMockTechnicianLocations());
@@ -61,6 +61,32 @@ export async function registerDispatchRoutes(app: FastifyInstance) {
   });
 
   app.get("/dispatch/quote-execution-queue", async () => createMockQuoteExecutionDispatchQueue());
+
+  app.post("/dispatch/assignment-decision", async (request, reply) => {
+    const context = await getAuthContext(request);
+    const input = parseBody(dispatchAssignmentDecisionSchema, request.body);
+    const decision = createMockDispatchAssignmentDecision(input);
+
+    if (!decision) {
+      return reply.code(404).send({ message: "Atribuicao nao encontrada para decisao do tecnico." });
+    }
+
+    await recordAuditEvent({
+      tenantId: context.tenantId,
+      userId: context.userId,
+      action: decision.audit.event,
+      entity: decision.audit.entity,
+      entityId: decision.audit.entityId,
+      metadata: {
+        quoteId: input.quoteId,
+        technicianUserId: input.technicianUserId,
+        decision: input.decision,
+        requiresManagerReview: decision.dispatchImpact.requiresManagerReview,
+      },
+    });
+
+    return reply.code(201).send(decision);
+  });
 
   app.get("/dispatch/service-orders/:id/readiness", async (request, reply) => {
     const { id } = request.params as { id: string };

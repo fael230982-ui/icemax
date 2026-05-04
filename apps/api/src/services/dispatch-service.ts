@@ -1,5 +1,5 @@
 import { quotes, serviceOrders, serviceOrderStops, stock, technicianLocations } from "../mock-data";
-import type { DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
+import type { DispatchAssignmentDecisionInput, DispatchVisitPreparationInput, OptimizeRouteInput, TechnicianLocationInput } from "../schemas";
 import { createVisualDiagnosisPackage } from "./ai-assistant-service";
 
 const priorityWeight: Record<string, number> = {
@@ -237,6 +237,72 @@ export function createMockQuoteExecutionDispatchQueue() {
       blocksUnapprovedQuotes: true,
     },
     data,
+  };
+}
+
+export function createMockDispatchAssignmentDecision(input: DispatchAssignmentDecisionInput) {
+  const queue = createMockQuoteExecutionDispatchQueue();
+  const assignment = queue.data.find((item) => item.quoteId === input.quoteId && item.serviceOrderId === input.serviceOrderId);
+  const recommendations = recommendMockDispatchAssignments({ serviceOrderIds: [input.serviceOrderId] });
+  const recommendation = recommendations.data[0];
+  const selectedTechnician = technicianLocations.find((item) => item.technicianUserId === input.technicianUserId);
+  const alternatives = recommendation?.alternatives.filter((item) => item.technicianUserId !== input.technicianUserId) ?? [];
+  const accepted = input.decision === "accepted";
+  const needsSupport = input.decision === "needs_support";
+  const rejected = input.decision === "rejected";
+  const replacement = rejected ? alternatives[0] : null;
+
+  if (!assignment) {
+    return null;
+  }
+
+  return {
+    quoteId: input.quoteId,
+    serviceOrderId: input.serviceOrderId,
+    technicianUserId: input.technicianUserId,
+    technician: selectedTechnician?.technician ?? input.technicianUserId,
+    decision: input.decision,
+    status: accepted ? "assignment_confirmed" : needsSupport ? "assignment_needs_manager_support" : "assignment_reassignment_required",
+    accepted,
+    reason: input.reason ?? null,
+    assignment,
+    dispatchImpact: {
+      keepAssignedTechnician: accepted || needsSupport,
+      canStartRoute: accepted && assignment.canDispatch,
+      requiresManagerReview: needsSupport || rejected || !assignment.canDispatch,
+      requiresCustomerNotice: accepted,
+    },
+    reassignment: replacement
+      ? {
+          recommendedTechnician: replacement,
+          reason: "Tecnico recusou ou ficou indisponivel; usar melhor alternativa por score e tempo estimado.",
+          routeEndpoint: `/dispatch/routes/optimize`,
+          readinessEndpoint: `/dispatch/service-orders/${input.serviceOrderId}/readiness?technicianUserId=${replacement.technicianUserId}`,
+        }
+      : null,
+    audit: {
+      event: "dispatch.assignment_decision_recorded",
+      entity: "service_order",
+      entityId: input.serviceOrderId,
+      idempotencyKey: `dispatch:${input.serviceOrderId}:${input.technicianUserId}:${input.decision}`,
+    },
+    nextActions: accepted
+      ? [
+          "Registrar aceite do tecnico.",
+          "Enviar aviso de deslocamento ao cliente.",
+          "Iniciar acompanhamento de rota e check-in.",
+        ]
+      : needsSupport
+        ? [
+            "Gestor deve revisar motivo informado pelo tecnico.",
+            "Manter OS aguardando suporte sem perder a atribuicao.",
+            "Atualizar cliente se houver impacto na janela.",
+          ]
+        : [
+            "Acionar tecnico alternativo recomendado.",
+            "Recalcular rota e prontidao.",
+            "Registrar motivo da recusa para auditoria operacional.",
+          ],
   };
 }
 
