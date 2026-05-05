@@ -2253,6 +2253,101 @@ export function getMobileOfflineAssistedRetryWhitelabelScaleDecisionPackage() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding() {
+  const scaleDecision = getMobileOfflineAssistedRetryWhitelabelScaleDecisionPackage();
+  const preOnboardingSections = [
+    {
+      key: "commercial_screening",
+      label: "Triagem comercial",
+      status: "blocked",
+      owner: "commercial",
+      requiredEvidence: [
+        "Segmento e volume de OS estimado.",
+        "Modelo de contrato e recorrencia pretendida.",
+        "Riscos de suporte e expectativa de SLA.",
+      ],
+    },
+    {
+      key: "brand_and_domain",
+      label: "Marca, dominio e identidade",
+      status: "blocked",
+      owner: "platform",
+      requiredEvidence: [
+        "Nome comercial e logo autorizados.",
+        "Dominio ou subdominio aprovado.",
+        "Cores, termos legais e dados de contato.",
+      ],
+    },
+    {
+      key: "provider_accounts",
+      label: "Contas de provedores por tenant",
+      status: "blocked",
+      owner: "platform",
+      requiredEvidence: [
+        "E-mail transacional.",
+        "WhatsApp/Meta quando aplicavel.",
+        "Mapas, IA e limites de custo aprovados.",
+      ],
+    },
+    {
+      key: "data_isolation",
+      label: "Isolamento de dados",
+      status: "blocked",
+      owner: "engineering",
+      requiredEvidence: [
+        "Tenant ID dedicado.",
+        "Usuarios, tecnicos, clientes e estoque separados.",
+        "Auditoria e politica LGPD revisadas.",
+      ],
+    },
+    {
+      key: "operational_training",
+      label: "Treinamento operacional",
+      status: "blocked",
+      owner: "operations",
+      requiredEvidence: [
+        "Treinamento administrativo.",
+        "Treinamento de tecnicos e terceirizados.",
+        "Simulacao de OS completa antes de cliente real.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_second_tenant_pre_onboarding_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      sourceDecision: scaleDecision.status,
+      firstTenant: scaleDecision.summary.firstTenant,
+      candidateTenantAllowed: false,
+      sections: preOnboardingSections.length,
+      blockedSections: preOnboardingSections.filter((item) => item.status === "blocked").length,
+      scaleAllowed: scaleDecision.summary.scaleAllowed,
+    },
+    preOnboardingSections,
+    intakePolicy: {
+      contractBeforeScaleDecisionAllowed: false,
+      collectPublicSecretsAllowed: false,
+      sharedProviderAccountsAllowed: false,
+      sharedCustomerDataAllowed: false,
+      ownerApprovalRequired: true,
+    },
+    blockedActions: [
+      "collect_second_tenant_credentials",
+      "create_partner_production_workspace",
+      "send_partner_contract_for_signature",
+      "import_partner_customer_base",
+    ],
+    nextActions: [
+      "Manter segundo tenant apenas como candidato ate decisao D30.",
+      "Preparar formulario de triagem sem coletar credenciais.",
+      "Usar o pacote de decisao de escala como gate obrigatorio.",
+      "Registrar aceite do dono antes de iniciar onboarding real.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

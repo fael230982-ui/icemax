@@ -2662,3 +2662,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pre-Onboarding Do Segundo Tenant Whitelabel
+
+- [x] Endpoint de pre-onboarding do segundo tenant criado.
+- [x] Triagem, marca, provedores, isolamento e treinamento definidos.
+- [x] Coleta de credenciais e importacao de clientes bloqueadas.
+- [x] Segundo tenant permanece apenas como candidato.
+- [x] Console web ganhou consulta de pre-onboarding.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

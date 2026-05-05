@@ -1086,6 +1086,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de escala whitelabel.
 - Teste automatizado cobre bloqueio de contrato do segundo tenant.
 
+## 0.8.149 - Pre-Onboarding Do Segundo Tenant Whitelabel
+
+- Criado endpoint de pre-onboarding bloqueado para candidato a segundo tenant.
+- Secoes cobrem triagem comercial, marca, provedores, isolamento de dados e treinamento.
+- Politica impede coleta de credenciais, importacao de clientes e contrato antes da decisao D30.
+- Console web ganhou consulta de pre-onboarding de tenant.
+- Teste automatizado cobre bloqueio de credenciais e isolamento de dados.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -299,6 +299,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-continuous-improvement", { token }),
   mobileOfflineAssistedRetryWhitelabelScaleDecision: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-scale-decision", { token }),
+  mobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-second-tenant-pre-onboarding", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>
