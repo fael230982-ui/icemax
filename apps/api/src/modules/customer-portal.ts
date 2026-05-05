@@ -1,7 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { isPrismaEnabled } from "../config";
 import { serviceContracts, serviceOrders, tenant, technicianLocations } from "../mock-data";
-import { issueMockPublicAccessToken, issuePrismaPublicAccessToken } from "../repositories/public-access-token-repository";
+import {
+  issueMockPublicAccessToken,
+  issuePrismaPublicAccessToken,
+  validateMockPublicAccessToken,
+  validatePrismaPublicAccessToken,
+} from "../repositories/public-access-token-repository";
 import {
   customerPortalAttachmentSchema,
   customerPortalOrderSchema,
@@ -560,6 +565,33 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
       tenantSlug,
       ...getPublicAccessTokenSecurityPolicy(),
     };
+  });
+
+  app.get("/public/customer-portal/tokens/:token/validate", async (request, reply) => {
+    const { token: publicAccessValue } = request.params as { token: string };
+    const { scope } = request.query as { scope?: "service_order_tracking" | "billing_summary" };
+
+    if (scope !== "service_order_tracking" && scope !== "billing_summary") {
+      return reply.code(400).send({ message: "Escopo de token publico invalido." });
+    }
+
+    const validation = isPrismaEnabled()
+      ? await validatePrismaPublicAccessToken(tenant.id, publicAccessValue, scope)
+      : await validateMockPublicAccessToken(tenant.id, publicAccessValue, scope);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.public_token_validated",
+      entity: validation.valid ? validation.entityType ?? "public_access_token" : "public_access_token",
+      entityId: validation.valid ? validation.entityId ?? "unknown" : "unknown",
+      metadata: {
+        scope,
+        valid: validation.valid,
+        reason: validation.reason,
+      },
+    });
+
+    return validation.valid ? validation : reply.code(404).send(validation);
   });
 
   app.get("/customer-portal/:tenantSlug/external-sharing-policy", async (request) => {

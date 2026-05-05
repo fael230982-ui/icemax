@@ -743,6 +743,14 @@ test("customer portal can request optional service order", async () => {
   assert.equal(billingAccess.json().security.scope, "billing_summary");
   assert.ok(billingAccess.json().restrictions.some((item: string) => item.includes("margem interna")));
 
+  const billingTokenValidation = await app.inject({
+    method: "GET",
+    url: `/public/customer-portal/tokens/${billingAccess.json().token}/validate?scope=billing_summary`,
+  });
+  assert.equal(billingTokenValidation.statusCode, 200);
+  assert.equal(billingTokenValidation.json().valid, true);
+  assert.equal(billingTokenValidation.json().entityType, "customer_portal");
+
   const order = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders",
@@ -805,6 +813,21 @@ test("customer portal can request optional service order", async () => {
   assert.equal(trackingLink.json().security.rawTokenPersisted, false);
   assert.equal(trackingLink.json().security.hashPersistedInProduction, true);
   assert.equal(trackingLink.json().security.scope, "service_order_tracking");
+
+  const trackingTokenValidation = await app.inject({
+    method: "GET",
+    url: `/public/customer-portal/tokens/${trackingLink.json().token}/validate?scope=service_order_tracking`,
+  });
+  assert.equal(trackingTokenValidation.statusCode, 200);
+  assert.equal(trackingTokenValidation.json().valid, true);
+  assert.equal(trackingTokenValidation.json().entityId, "1048");
+
+  const wrongScopeValidation = await app.inject({
+    method: "GET",
+    url: `/public/customer-portal/tokens/${trackingLink.json().token}/validate?scope=billing_summary`,
+  });
+  assert.equal(wrongScopeValidation.statusCode, 404);
+  assert.equal(wrongScopeValidation.json().valid, false);
 
   const attachments = await app.inject({
     method: "POST",

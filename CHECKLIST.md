@@ -1856,3 +1856,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Validacao De Link Publico
+
+- [x] Endpoint de validacao de token publico criado.
+- [x] Validacao por escopo adicionada.
+- [x] Auditoria de tentativa de abertura adicionada.
+- [x] Teste automatizado cobre token valido e escopo incorreto.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

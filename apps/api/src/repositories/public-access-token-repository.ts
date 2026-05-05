@@ -5,6 +5,7 @@ import {
   createPublicAccessTokenHashPreview,
   createPublicAccessTokenValue,
   hashPublicAccessToken,
+  parsePublicAccessTokenValue,
   type PublicAccessTokenScope,
 } from "../services/public-access-token-service";
 
@@ -122,5 +123,25 @@ export async function validatePrismaPublicAccessToken(tenantId: string, token: s
     entityId: record.entityId,
     customerId: record.customerId,
     expiresAt: record.expiresAt.toISOString(),
+  };
+}
+
+export async function validateMockPublicAccessToken(tenantId: string, rawPublicAccessValue: string, scope: PublicAccessTokenScope) {
+  const parsed = parsePublicAccessTokenValue(rawPublicAccessValue);
+
+  if (!parsed || parsed.scope !== scope) {
+    return { valid: false, reason: "not_found_or_scope_mismatch", tenantId };
+  }
+
+  return {
+    valid: true,
+    reason: "active_mock",
+    tenantId,
+    entityType: parsed.entityType,
+    entityId: parsed.entityId,
+    scope: parsed.scope,
+    rawTokenPersisted: false,
+    hashPreview: createPublicAccessTokenHashPreview(rawPublicAccessValue),
+    expiresAt: "mock_expiration_checked_on_creation_package",
   };
 }

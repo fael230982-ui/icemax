@@ -13,6 +13,22 @@ export function createPublicAccessTokenValue(input: CreateTokenInput) {
   return `${input.prefix}_${input.entityId}_${entropy}`;
 }
 
+export function parsePublicAccessTokenValue(rawPublicAccessValue: string) {
+  const match = rawPublicAccessValue.match(/^(track|billing)_([^_]+)_/);
+
+  if (!match) {
+    return null;
+  }
+
+  const prefix = match[1] as CreateTokenInput["prefix"];
+  return {
+    prefix,
+    entityId: match[2],
+    scope: prefix === "track" ? "service_order_tracking" : "billing_summary",
+    entityType: prefix === "track" ? "service_order" : "customer_portal",
+  } as const;
+}
+
 export function hashPublicAccessToken(token: string) {
   return createHash("sha256")
     .update(`${config.publicAccessTokenPepper}:${token}`)

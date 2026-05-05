@@ -668,6 +668,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Portal do cliente ganhou endpoint de politica de token publico.
 - Teste automatizado cobre hash preview, escopo, expiracao e garantia de que token cru nao e persistido.
 
+## 0.8.97 - Validacao De Link Publico
+
+- Adicionado endpoint `GET /public/customer-portal/tokens/:token/validate`.
+- Validacao confere escopo esperado, entidade, tenant e status ativo em mock ou Prisma.
+- Aberturas de token publico passaram a registrar auditoria com resultado e motivo.
+- Teste automatizado cobre token valido de contrato, token valido de acompanhamento e bloqueio por escopo incorreto.
+- Documentado fluxo de validacao de link publico antes de exibir dados do cliente.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
