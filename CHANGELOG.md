@@ -780,6 +780,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Itens pendentes exibem prioridade e tentativa atual.
 - Documentada governanca da fila offline do tecnico.
 
+## 0.8.111 - Mobile Sincronizacao Prioritaria
+
+- Criado ordenador de fila offline por prioridade e data.
+- Sincronizacao mobile envia acoes criticas antes das altas e normais.
+- Lista de pendencias passou a refletir a mesma ordem de envio.
+- Empate de prioridade usa a acao mais antiga primeiro.
+- Documentada sincronizacao prioritaria do app tecnico.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -80,6 +80,25 @@ export function summarizeOfflineQueue(actions: OfflineAction[]) {
   };
 }
 
+export function sortOfflineQueueForSync(actions: OfflineAction[]) {
+  const priorityWeight = {
+    critical: 0,
+    high: 1,
+    normal: 2,
+  };
+
+  return [...actions].sort((left, right) => {
+    const leftPriority = priorityWeight[left.priority ?? "normal"];
+    const rightPriority = priorityWeight[right.priority ?? "normal"];
+
+    if (leftPriority !== rightPriority) {
+      return leftPriority - rightPriority;
+    }
+
+    return left.createdAt.localeCompare(right.createdAt);
+  });
+}
+
 export function createCheckInAction(serviceOrderId: string) {
   return {
     id: offlineId("check-in"),

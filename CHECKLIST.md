@@ -2065,3 +2065,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Sincronizacao Prioritaria
+
+- [x] Ordenador de fila offline criado.
+- [x] Sincronizacao envia criticas primeiro.
+- [x] Empate usa item mais antigo primeiro.
+- [x] Painel mobile exibe a mesma ordem de envio.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

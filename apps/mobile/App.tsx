@@ -31,6 +31,7 @@ import {
   createWarrantyPresentedAction,
   OfflineAction,
   sendOfflineAction,
+  sortOfflineQueueForSync,
 } from "./src/services/api";
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
@@ -166,7 +167,7 @@ export default function App() {
     }
 
     try {
-      for (const action of pendingActions) {
+      for (const action of sortOfflineQueueForSync(pendingActions)) {
         const actionWithRetry = { ...action, retryCount: (action.retryCount ?? 0) + 1 };
         await sendOfflineAction(actionWithRetry);
       }

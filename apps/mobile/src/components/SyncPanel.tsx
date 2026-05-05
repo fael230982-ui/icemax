@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { summarizeOfflineQueue, type OfflineAction } from "../services/api";
+import { sortOfflineQueueForSync, summarizeOfflineQueue, type OfflineAction } from "../services/api";
 
 type SyncPanelProps = {
   pendingActions: OfflineAction[];
@@ -26,6 +26,7 @@ type SyncPanelProps = {
 
 export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onSync }: SyncPanelProps) {
   const summary = summarizeOfflineQueue(pendingActions);
+  const sortedActions = sortOfflineQueueForSync(pendingActions);
 
   return (
     <View style={styles.card}>
@@ -95,7 +96,7 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
         <Text style={styles.meta}>Altas: {summary.byPriority.high ?? 0}</Text>
         <Text style={styles.meta}>Reenvio: {summary.retrying}</Text>
       </View>
-      {pendingActions.map((action) => (
+      {sortedActions.map((action) => (
         <Text key={action.id} style={styles.pending}>
           {action.label} - {action.priority ?? "normal"} - tentativa {action.retryCount ?? 0}
         </Text>
