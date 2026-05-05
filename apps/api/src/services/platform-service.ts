@@ -192,6 +192,68 @@ export function getMobileOfflineAssistedRetryProductionGate() {
   };
 }
 
+export function getMobileOfflineAssistedRetryAuditContract() {
+  const events = [
+    {
+      event: "mobile_offline_action_blocked",
+      trigger: "App remove item da fila automatica ao exceder tentativas.",
+      requiredFields: ["tenantId", "offlineActionId", "serviceOrderId", "technicianUserId", "retryCount", "blockedReason"],
+      retention: "5 anos",
+    },
+    {
+      event: "mobile_offline_escalation_reviewed",
+      trigger: "Gestor revisa pendencia bloqueada.",
+      requiredFields: ["tenantId", "offlineActionId", "decision", "reviewedBy", "note", "recordedAt"],
+      retention: "5 anos",
+    },
+    {
+      event: "mobile_offline_assisted_retry_prepared",
+      trigger: "Painel prepara pacote de reenvio assistido.",
+      requiredFields: ["tenantId", "offlineActionId", "approvedBy", "idempotencyKey", "checks", "reason"],
+      retention: "5 anos",
+    },
+    {
+      event: "mobile_offline_assisted_retry_dry_run",
+      trigger: "Painel simula reenvio sem envio real.",
+      requiredFields: ["tenantId", "offlineActionId", "executedBy", "idempotencyKey", "steps", "result"],
+      retention: "2 anos",
+    },
+    {
+      event: "mobile_offline_assisted_retry_executed",
+      trigger: "Execucao real futura do reenvio assistido.",
+      requiredFields: ["tenantId", "offlineActionId", "executedBy", "approvalId", "idempotencyKey", "result", "rollbackReference"],
+      retention: "5 anos",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    contract: "mobile_offline_assisted_retry_audit",
+    persistenceRequiredBeforeRealExecution: true,
+    storageTarget: isPrismaEnabled() ? "prisma_audit_log" : "mock_contract_only",
+    events,
+    immutableFields: ["tenantId", "offlineActionId", "idempotencyKey", "recordedAt"],
+    privacyControls: {
+      hidePayloadRawByDefault: true,
+      storePayloadHash: true,
+      redactCustomerSignatureImage: true,
+      redactPhotoBinary: true,
+    },
+    summary: {
+      totalEvents: events.length,
+      productionCriticalEvents: events.filter((item) => item.event.includes("executed") || item.event.includes("reviewed")).length,
+      minimumRetention: "2 anos",
+      maximumRetention: "5 anos",
+    },
+    nextActions: [
+      "Mapear contrato no modelo persistente de audit log.",
+      "Gravar hash do payload original sem expor foto, assinatura ou dado sensivel em claro.",
+      "Vincular cada evento ao tenant e ao usuario responsavel.",
+      "Bloquear execucao real se qualquer campo obrigatorio nao puder ser persistido.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

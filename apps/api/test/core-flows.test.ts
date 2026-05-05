@@ -1257,6 +1257,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(productionGate.json().summary.requiredBeforeEnable.includes("database"));
   assert.ok(productionGate.json().checks.some((item: { key: string }) => item.key === "rollback"));
 
+  const auditContract = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/audit-contract",
+  });
+  assert.equal(auditContract.statusCode, 200);
+  assert.equal(auditContract.json().persistenceRequiredBeforeRealExecution, true);
+  assert.equal(auditContract.json().privacyControls.storePayloadHash, true);
+  assert.ok(auditContract.json().events.some((item: { event: string }) =>
+    item.event === "mobile_offline_assisted_retry_executed"));
+  assert.ok(auditContract.json().immutableFields.includes("idempotencyKey"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

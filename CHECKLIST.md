@@ -2262,3 +2262,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Contrato De Auditoria Do Reenvio Assistido Offline
+
+- [x] Endpoint de contrato de auditoria criado.
+- [x] Eventos de bloqueio, revisao, preparo, dry-run e execucao futura mapeados.
+- [x] Campos obrigatorios e imutaveis definidos.
+- [x] Controles de privacidade incluidos.
+- [x] Console web ganhou consulta de auditoria.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

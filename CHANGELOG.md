@@ -885,6 +885,15 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta do gate de producao do reenvio offline.
 - Teste automatizado cobre bloqueio da execucao real e exigencia de banco.
 
+## 0.8.124 - Contrato De Auditoria Do Reenvio Assistido Offline
+
+- Criado endpoint de contrato de auditoria do reenvio assistido offline.
+- Contrato lista eventos de bloqueio, revisao, preparo, dry-run e execucao real futura.
+- Campos imutaveis e obrigatorios foram definidos para auditoria persistente.
+- Controles de privacidade bloqueiam payload bruto, fotos e assinaturas em claro.
+- Console web ganhou consulta de auditoria do reenvio offline.
+- Teste automatizado cobre hash de payload e evento futuro de execucao real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
