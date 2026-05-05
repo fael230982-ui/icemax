@@ -2742,3 +2742,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Aceite De Go-Live Do Parceiro Whitelabel
+
+- [x] Endpoint de aceite de go-live do parceiro criado.
+- [x] Checks de contrato, custos, SLA, seguranca, simulacao e aceite final definidos.
+- [x] Uso real por cliente e portal publico permanecem bloqueados.
+- [x] Aceite final do dono registrado como obrigatorio.
+- [x] Console web ganhou consulta de aceite de parceiro.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

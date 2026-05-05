@@ -1126,6 +1126,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de LGPD whitelabel.
 - Teste automatizado cobre isolamento de tenant e bloqueio de importacao antes do DPA.
 
+## 0.8.154 - Aceite De Go-Live Do Parceiro Whitelabel
+
+- Criado endpoint de aceite de go-live do parceiro whitelabel.
+- Checks consolidam contrato, custos, SLA, seguranca, simulacao e aceite final do dono.
+- Politica bloqueia uso real por cliente, portal publico e mensagens antes do aceite.
+- Console web ganhou consulta de aceite de parceiro.
+- Teste automatizado cobre bloqueio de go-live e aceite final obrigatorio.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

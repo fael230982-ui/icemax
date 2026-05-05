@@ -2701,6 +2701,88 @@ export function getMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelPartnerGoLiveAcceptance() {
+  const privacyGate = getMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate();
+  const acceptanceChecks = [
+    {
+      key: "contract_signed",
+      label: "Contrato operacional assinado",
+      status: "blocked",
+      requiredBy: "RAFAEL DA SILVA BEZEERA",
+      evidence: "Contrato e anexos revisados juridicamente e assinados.",
+    },
+    {
+      key: "cost_caps_approved",
+      label: "Tetos de custos aprovados",
+      status: "blocked",
+      requiredBy: "finance",
+      evidence: "Matriz de custos aprovada por tenant e por provedor.",
+    },
+    {
+      key: "support_ready",
+      label: "Suporte e SLA prontos",
+      status: "blocked",
+      requiredBy: "operations",
+      evidence: "Responsavel, canal, SLA e runbooks simulados.",
+    },
+    {
+      key: "security_privacy_ready",
+      label: "Seguranca e LGPD aprovadas",
+      status: "blocked",
+      requiredBy: "platform",
+      evidence: "DPA, retencao, isolamento e incidente aprovados.",
+    },
+    {
+      key: "pilot_simulation_done",
+      label: "Simulacao de piloto concluida",
+      status: "blocked",
+      requiredBy: "operations",
+      evidence: "OS completa simulada com app, web, relatorio, assinatura e comunicacao.",
+    },
+    {
+      key: "owner_final_acceptance",
+      label: "Aceite final do dono",
+      status: "blocked",
+      requiredBy: "RAFAEL DA SILVA BEZEERA",
+      evidence: "Decisao formal liberando ou mantendo bloqueio do parceiro.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_partner_go_live_acceptance_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      sourcePartnerProductionAllowed: privacyGate.summary.partnerProductionAllowed,
+      checks: acceptanceChecks.length,
+      blockedChecks: acceptanceChecks.filter((item) => item.status === "blocked").length,
+      partnerGoLiveAllowed: false,
+      realCustomerUseAllowed: false,
+      publicOfferAllowed: false,
+    },
+    acceptanceChecks,
+    acceptancePolicy: {
+      allChecksRequired: true,
+      ownerFinalAcceptanceRequired: true,
+      pilotBeforeProductionRequired: true,
+      rollbackPlanRequired: true,
+      customerCommunicationApprovedRequired: true,
+    },
+    blockedActions: [
+      "enable_partner_real_customer_use",
+      "publish_partner_portal",
+      "send_partner_whatsapp_messages",
+      "issue_partner_invoice_without_acceptance",
+    ],
+    nextActions: [
+      "Consolidar contrato, custos, SLA e LGPD em um pacote de aceite.",
+      "Executar simulacao completa de OS do parceiro antes de cliente real.",
+      "Preparar termo de aceite final para assinatura do dono.",
+      "Manter go-live real bloqueado ate todos os checks ficarem prontos.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
