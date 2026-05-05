@@ -2094,3 +2094,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Sincronizacao Parcial
+
+- [x] Resultado estruturado de sincronizacao criado.
+- [x] Fila remove apenas acoes enviadas com sucesso.
+- [x] Falha parcial preserva pendencias restantes.
+- [x] Contador de tentativa sobe no item bloqueado.
+- [x] Status mobile informa envio parcial e bloqueio.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -41,6 +41,14 @@ export async function sendOfflineAction(action: OfflineAction, token?: string) {
   return response.json() as Promise<unknown>;
 }
 
+export type OfflineSyncResult = {
+  ok: boolean;
+  synced: number;
+  remaining: OfflineAction[];
+  failedLabel?: string;
+  errorMessage?: string;
+};
+
 export type OfflineAction = {
   id: string;
   label: string;
@@ -97,6 +105,43 @@ export function sortOfflineQueueForSync(actions: OfflineAction[]) {
 
     return left.createdAt.localeCompare(right.createdAt);
   });
+}
+
+export async function syncOfflineQueuePartially(
+  actions: OfflineAction[],
+  sender: (action: OfflineAction) => Promise<unknown> = sendOfflineAction,
+): Promise<OfflineSyncResult> {
+  const syncedIds = new Set<string>();
+  const orderedActions = sortOfflineQueueForSync(actions);
+
+  for (const action of orderedActions) {
+    const actionWithRetry = { ...action, retryCount: (action.retryCount ?? 0) + 1 };
+
+    try {
+      await sender(actionWithRetry);
+      syncedIds.add(action.id);
+    } catch (error) {
+      return {
+        ok: false,
+        synced: syncedIds.size,
+        remaining: actions
+          .filter((pendingAction) => !syncedIds.has(pendingAction.id))
+          .map((pendingAction) => (
+            pendingAction.id === action.id
+              ? { ...pendingAction, retryCount: (pendingAction.retryCount ?? 0) + 1 }
+              : pendingAction
+          )),
+        failedLabel: action.label,
+        errorMessage: error instanceof Error ? error.message : "Falha ao sincronizar.",
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    synced: orderedActions.length,
+    remaining: [],
+  };
 }
 
 export function createCheckInAction(serviceOrderId: string) {

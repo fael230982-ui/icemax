@@ -30,8 +30,7 @@ import {
   createVisitPreparationAckAction,
   createWarrantyPresentedAction,
   OfflineAction,
-  sendOfflineAction,
-  sortOfflineQueueForSync,
+  syncOfflineQueuePartially,
 } from "./src/services/api";
 import { clearOfflineQueue, loadOfflineQueue, saveOfflineQueue } from "./src/services/offline-storage";
 import { visitPreparation } from "./src/data/dashboard";
@@ -184,21 +183,19 @@ export default function App() {
       return;
     }
 
-    try {
-      for (const action of sortOfflineQueueForSync(pendingActions)) {
-        const actionWithRetry = { ...action, retryCount: (action.retryCount ?? 0) + 1 };
-        await sendOfflineAction(actionWithRetry);
-      }
+    const result = await syncOfflineQueuePartially(pendingActions);
+
+    if (result.ok) {
       setPendingActions([]);
       await clearOfflineQueue();
-      setSyncStatus("Fila enviada para a API.");
-    } catch (error) {
-      setPendingActions((current) => current.map((action) => ({
-        ...action,
-        retryCount: (action.retryCount ?? 0) + 1,
-      })));
-      setSyncStatus(error instanceof Error ? error.message : "Falha ao sincronizar.");
+      setSyncStatus(`${result.synced} acoes enviadas para a API.`);
+      return;
     }
+
+    setPendingActions(result.remaining);
+    setSyncStatus(
+      `${result.synced} acoes enviadas. ${result.remaining.length} pendentes. Falha em ${result.failedLabel}: ${result.errorMessage}`,
+    );
   }
 
   return (

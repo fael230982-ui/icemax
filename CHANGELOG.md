@@ -796,6 +796,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Mudancas da fila passam a ser persistidas no aparelho.
 - Fila local e limpa apos sincronizacao bem-sucedida.
 
+## 0.8.113 - Mobile Sincronizacao Parcial
+
+- Criado resultado estruturado para sincronizacao da fila offline.
+- App remove da fila local somente acoes ja aceitas pela API.
+- Falha parcial preserva a acao bloqueada e itens ainda nao enviados.
+- Contador de tentativa passa a subir apenas no item que falhou.
+- Status mobile informa itens enviados, pendentes e acao bloqueadora.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
