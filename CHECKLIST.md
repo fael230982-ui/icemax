@@ -1824,3 +1824,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Schema De Token Publico Seguro
+
+- [x] Modelo Prisma PublicAccessToken criado.
+- [x] Relacao com tenant adicionada.
+- [x] Seed idempotente inclui token publico somente com hash.
+- [x] Schema summary inclui dominio portal_cliente.
+- [x] Smoke test Prisma verifica tokens publicos.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

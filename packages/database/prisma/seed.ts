@@ -343,6 +343,39 @@ async function main() {
     },
   });
 
+  await prisma.publicAccessToken.upsert({
+    where: {
+      tenantId_tokenHash: {
+        tenantId: tenant.id,
+        tokenHash: "dev-public-token-hash-not-secret",
+      },
+    },
+    update: {
+      scope: "service_order_tracking",
+      entityType: "service_order",
+      entityId: order.id,
+      customerId: customer.id,
+      customerEmail: customer.email,
+      expiresAt: new Date("2026-12-31T23:59:59.000Z"),
+      revokedAt: null,
+    },
+    create: {
+      tenantId: tenant.id,
+      tokenHash: "dev-public-token-hash-not-secret",
+      scope: "service_order_tracking",
+      entityType: "service_order",
+      entityId: order.id,
+      customerId: customer.id,
+      customerEmail: customer.email,
+      expiresAt: new Date("2026-12-31T23:59:59.000Z"),
+      metadata: {
+        environment: "development",
+        rawTokenStored: false,
+        purpose: "smoke test de token publico com hash",
+      },
+    },
+  });
+
   await prisma.integrationSetting.createMany({
     data: [
       { tenantId: tenant.id, provider: "openai", status: "not_configured" },

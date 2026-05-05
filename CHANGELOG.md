@@ -652,6 +652,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console operacional passou a consultar o smoke test junto dos checks de virada para banco.
 - Teste automatizado cobre comportamento seguro em modo mock.
 
+## 0.8.95 - Schema De Token Publico Seguro
+
+- Adicionado modelo Prisma `PublicAccessToken` com `tokenHash`, escopo, entidade, expiracao, revogacao e auditoria de acesso.
+- Tenant passou a relacionar tokens publicos para portal, acompanhamento, financeiro e orcamentos.
+- Seed idempotente cria token publico de desenvolvimento apenas com hash nao secreto.
+- Schema summary passou a incluir dominio `portal_cliente`.
+- Smoke test Prisma passou a verificar tokens publicos por tenant.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

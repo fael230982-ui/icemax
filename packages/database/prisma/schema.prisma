@@ -88,6 +88,7 @@ model Tenant {
   integrations IntegrationSetting[]
   auditLogs  AuditLog[]
   aiRequests AiRequest[]
+  publicAccessTokens PublicAccessToken[]
 }
 
 model User {
@@ -675,6 +676,32 @@ model AuditLog {
 
   @@index([tenantId, entityType, entityId])
   @@index([tenantId, createdAt])
+}
+
+model PublicAccessToken {
+  id             String    @id @default(uuid())
+  tenantId       String
+  tokenHash      String
+  scope          String
+  entityType     String
+  entityId       String
+  customerId     String?
+  customerEmail  String?
+  customerPhone  String?
+  expiresAt      DateTime
+  revokedAt      DateTime?
+  lastAccessedAt DateTime?
+  metadata       Json?
+  createdByUserId String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, tokenHash])
+  @@index([tenantId, scope, entityType, entityId])
+  @@index([tenantId, expiresAt])
+  @@index([tenantId, customerId])
 }
 
 model TechnicianLocation {

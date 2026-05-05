@@ -8,6 +8,7 @@ const schemaDomains = [
   { domain: "contratos", models: ["ServiceContract", "ServiceContractVisit"] },
   { domain: "estoque", models: ["Part", "StockLocation", "StockBalance", "StockMovement", "StockReservation"] },
   { domain: "qualidade", models: ["ChecklistTemplate", "ChecklistItem", "ServiceOrderChecklistAnswer"] },
+  { domain: "portal_cliente", models: ["PublicAccessToken"] },
   { domain: "comunicacao", models: ["Notification", "NotificationTemplate", "WhatsappEvent"] },
   { domain: "documentos", models: ["Manual", "FloorPlan", "EquipmentQrLabel", "Quote"] },
 ];
@@ -55,11 +56,11 @@ const migrationReadiness = [
   },
   {
     domain: "portal_cliente",
-    readiness: 58,
-    repositoryCoverage: "public_mock",
+    readiness: 64,
+    repositoryCoverage: "schema_ready",
     risk: "high",
-    blockers: ["identidade do cliente", "token com hash", "revogacao e expiracao reais"],
-    nextAction: "Implementar tokens persistidos antes de expor dados financeiros reais.",
+    blockers: ["identidade do cliente", "repositorio de token publico", "rate limit por link"],
+    nextAction: "Conectar PublicAccessToken aos links de portal, acompanhamento e orcamento.",
   },
   {
     domain: "comunicacao",
@@ -117,10 +118,10 @@ const tenantIsolationGates = [
   },
   {
     domain: "portal_cliente",
-    status: "blocked",
+    status: "partial",
     requiredControls: ["token publico com hash", "escopo por cliente", "expiracao e revogacao"],
-    evidence: ["politica de acesso documentada", "resumo financeiro mockado"],
-    productionBlockers: ["persistencia de token seguro", "rate limit por link", "log de acesso do cliente"],
+    evidence: ["modelo PublicAccessToken no schema", "politica de acesso documentada", "resumo financeiro mockado"],
+    productionBlockers: ["repositorio de emissao e validacao", "rate limit por link", "log de acesso do cliente"],
   },
   {
     domain: "comunicacao",
@@ -241,6 +242,7 @@ export function getSeedPlan() {
       "estoque inicial",
       "checklists",
       "manual",
+      "token publico com hash para smoke test",
       "integracoes pendentes",
     ],
     devLogin: {
@@ -258,6 +260,7 @@ export function getSeedPlan() {
       "stock-location-icemax-warehouse",
       "checklist-icemax-preventiva-split",
       "manual-icemax-carrier-60k",
+      "dev-public-token-hash-not-secret",
     ],
   };
 }
@@ -380,6 +383,7 @@ export async function getPrismaSmokeTest() {
     { key: "checklistTemplate", label: "Checklists" },
     { key: "manual", label: "Manuais" },
     { key: "integrationSetting", label: "Integracoes" },
+    { key: "publicAccessToken", label: "Tokens publicos" },
   ];
 
   if (!isPrismaEnabled()) {
@@ -407,6 +411,7 @@ export async function getPrismaSmokeTest() {
       checklistTemplates,
       manuals,
       integrationSettings,
+      publicAccessTokens,
     ] = await Promise.all([
       prisma.tenant.count({ where: { id: config.defaultTenantId } }),
       prisma.user.count({ where: { tenantId: config.defaultTenantId } }),
@@ -419,6 +424,7 @@ export async function getPrismaSmokeTest() {
       prisma.checklistTemplate.count({ where: { tenantId: config.defaultTenantId } }),
       prisma.manual.count({ where: { tenantId: config.defaultTenantId } }),
       prisma.integrationSetting.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.publicAccessToken.count({ where: { tenantId: config.defaultTenantId } }),
     ]);
     const counts = {
       tenant: tenants,
@@ -432,6 +438,7 @@ export async function getPrismaSmokeTest() {
       checklistTemplate: checklistTemplates,
       manual: manuals,
       integrationSetting: integrationSettings,
+      publicAccessToken: publicAccessTokens,
     };
     const rows = checks.map((check) => ({
       ...check,
