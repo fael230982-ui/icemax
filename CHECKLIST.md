@@ -1929,3 +1929,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Inventario De Links No Console
+
+- [x] Cliente web conectado ao endpoint de tokens publicos.
+- [x] Acao adicionada ao console operacional.
+- [x] Listagem inicial usa `status=all`.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

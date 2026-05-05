@@ -303,6 +303,14 @@ export function OperationsConsole() {
     void run("Acompanhamento cliente", () => icemaxApi.customerOrderTracking("1048"));
   }
 
+  function loadPublicTokenInventory() {
+    void run("Inventario de links publicos", () =>
+      icemaxApi.customerPortalPublicTokens(token || undefined, {
+        status: "all",
+      }),
+    );
+  }
+
   function loadQuoteApprovalPackage() {
     void run("Aprovacao de orcamento", () => icemaxApi.quoteApprovalPackage("quote-001", token || undefined));
   }
@@ -653,6 +661,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={activateAcceptedContract}>Contrato aceito</button>
         <button type="button" className="secondary" onClick={createPortalOrder}>OS pelo cliente</button>
         <button type="button" className="secondary" onClick={loadCustomerTracking}>Acompanhar OS cliente</button>
+        <button type="button" className="secondary" onClick={loadPublicTokenInventory}>Inventario links publicos</button>
         <button type="button" className="secondary" onClick={loadQuoteApprovalBoard}>Board orcamentos</button>
         <button type="button" className="secondary" onClick={createQuoteApprovalReminders}>Lembretes orcamento</button>
         <button type="button" className="secondary" onClick={loadQuoteApprovalPackage}>Aprovar orcamento</button>

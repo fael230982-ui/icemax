@@ -708,6 +708,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Validacao mock agora respeita tokens revogados quando eles foram emitidos pela API.
 - Teste automatizado cobre listagem, resumo ativo/revogado e garantia de que token cru nao aparece.
 
+## 0.8.102 - Inventario De Links No Console
+
+- Cliente web passou a consultar `GET /customer-portal/public-tokens`.
+- Console operacional ganhou acao para visualizar inventario de links publicos.
+- Operacao passa a enxergar links ativos, revogados e expirados pelo painel.
+- A listagem preserva a regra de nunca mostrar token cru.
+- Documentada a conexao do inventario de links ao console web.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
