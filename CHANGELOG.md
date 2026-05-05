@@ -1070,6 +1070,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de health score.
 - Teste automatizado cobre ICEMAX como primeiro tenant e escala bloqueada.
 
+## 0.8.147 - Melhoria Continua Whitelabel
+
+- Criado endpoint de plano de melhoria continua whitelabel.
+- Plano transforma health score em trilhas de qualidade de campo, confiabilidade offline, custos e governanca.
+- Retrospectiva diaria, semanal e D30 passa a orientar correcoes antes de liberar novos tenants.
+- Console web ganhou consulta de melhoria continua.
+- Teste automatizado cobre governanca de escala e acoes corretivas obrigatorias.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

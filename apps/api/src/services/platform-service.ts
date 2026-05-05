@@ -2058,6 +2058,106 @@ export function getMobileOfflineAssistedRetryWhitelabelTenantHealthScore() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelContinuousImprovementPlan() {
+  const health = getMobileOfflineAssistedRetryWhitelabelTenantHealthScore();
+  const improvementTracks = [
+    {
+      key: "field_execution_quality",
+      label: "Qualidade da execucao em campo",
+      owner: "operations",
+      priority: "high",
+      sourceIndicators: ["field_team_adoption", "customer_communication"],
+      actions: [
+        "Revisar checklists com base nas primeiras OS reais.",
+        "Padronizar fotos obrigatorias por tipo de equipamento.",
+        "Ajustar texto de relatorio e garantia conforme feedback dos clientes.",
+      ],
+    },
+    {
+      key: "offline_reliability",
+      label: "Confiabilidade offline",
+      owner: "platform",
+      priority: "high",
+      sourceIndicators: ["offline_retry_stability", "support_and_incidents"],
+      actions: [
+        "Classificar falhas por origem: rede, assinatura, anexo, provedor ou permissao.",
+        "Criar rotina de revisao diaria da fila offline durante hypercare.",
+        "Manter reenvio assistido com evidencia ate estabilidade comprovada.",
+      ],
+    },
+    {
+      key: "provider_economics",
+      label: "Economia de provedores",
+      owner: "finance",
+      priority: "high",
+      sourceIndicators: ["provider_cost_control"],
+      actions: [
+        "Comparar custo simulado com consumo real por OS.",
+        "Definir teto mensal por tenant para mapas, e-mail, WhatsApp e IA.",
+        "Bloquear recursos pagos quando nao houver conta configurada e aprovada.",
+      ],
+    },
+    {
+      key: "tenant_scale_governance",
+      label: "Governanca para escala whitelabel",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      priority: "critical",
+      sourceIndicators: ["owner_business_review"],
+      actions: [
+        "Fechar ata executiva D30 antes de segundo tenant.",
+        "Registrar ajustes obrigatorios para o pacote padrao whitelabel.",
+        "Definir se a proxima empresa entra em piloto assistido ou permanece bloqueada.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_continuous_improvement_plan_ready",
+    realExecutionAllowed: false,
+    summary: {
+      firstTenant: health.summary.firstTenant,
+      sourceHealthScore: health.summary.averageScore,
+      scaleAllowed: false,
+      tracks: improvementTracks.length,
+      criticalTracks: improvementTracks.filter((item) => item.priority === "critical").length,
+      highPriorityTracks: improvementTracks.filter((item) => item.priority === "high").length,
+    },
+    improvementTracks,
+    retrospectiveCadence: [
+      {
+        key: "daily_hypercare_review",
+        cadence: "Diaria",
+        requiredUntil: "Fim do hypercare",
+        output: "Lista de incidentes, causa raiz e acao corretiva.",
+      },
+      {
+        key: "weekly_business_review",
+        cadence: "Semanal",
+        requiredUntil: "D30",
+        output: "Ajustes de processo, treinamento, relatorio e comunicacao.",
+      },
+      {
+        key: "scale_readiness_review",
+        cadence: "D30",
+        requiredUntil: "Antes do segundo tenant",
+        output: "Decisao executiva: escalar, prorrogar hypercare ou bloquear.",
+      },
+    ],
+    blockedActions: [
+      "close_hypercare_without_retrospective",
+      "repeat_failed_process_for_next_tenant",
+      "approve_scale_without_corrective_actions",
+      "publish_whitelabel_offer_without_operational_review",
+    ],
+    nextActions: [
+      "Usar os indicadores do health score como entrada da retrospectiva.",
+      "Transformar incidentes em acoes corretivas com dono e prazo.",
+      "Revisar o pacote whitelabel padrao antes de qualquer nova empresa.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

@@ -2630,3 +2630,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Melhoria Continua Whitelabel
+
+- [x] Endpoint de melhoria continua whitelabel criado.
+- [x] Trilhas de qualidade, confiabilidade offline, custos e governanca definidas.
+- [x] Retrospectiva diaria, semanal e D30 registrada.
+- [x] Escala sem acoes corretivas permanece bloqueada.
+- [x] Console web ganhou consulta de melhoria continua.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
