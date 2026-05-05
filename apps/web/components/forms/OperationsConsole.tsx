@@ -767,6 +767,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryWhitelabelScaleDecision() {
+    void run("Decisao de escala whitelabel", () =>
+      icemaxApi.mobileOfflineAssistedRetryWhitelabelScaleDecision(token || undefined),
+    );
+  }
+
   function reviewMobileOfflineEscalation(recordId: string, decision: string) {
     void run("Revisar pendencia offline", () =>
       icemaxApi.reviewMobileOfflineEscalation(recordId, {
@@ -1024,6 +1030,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelPostGoLivePlan}>Pos-go-live whitelabel</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelTenantHealthScore}>Health tenant whitelabel</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelContinuousImprovement}>Melhoria whitelabel</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelScaleDecision}>Escala whitelabel</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runMobileOfflineRetryHomologation}>Homologar reenvio offline</button>

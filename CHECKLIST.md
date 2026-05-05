@@ -2646,3 +2646,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pacote De Decisao De Escala Whitelabel
+
+- [x] Endpoint de decisao de escala whitelabel criado.
+- [x] Gates de health score, acoes corretivas, custos, suporte e aprovacao executiva definidos.
+- [x] Opcoes de escalar, prorrogar hypercare e bloquear oferta registradas.
+- [x] Segundo tenant permanece bloqueado.
+- [x] Console web ganhou consulta de escala whitelabel.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

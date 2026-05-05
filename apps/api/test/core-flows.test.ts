@@ -1512,6 +1512,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "tenant_scale_governance"));
   assert.ok(retryWhitelabelContinuousImprovement.json().blockedActions.includes("approve_scale_without_corrective_actions"));
 
+  const retryWhitelabelScaleDecision = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-scale-decision",
+  });
+  assert.equal(retryWhitelabelScaleDecision.statusCode, 200);
+  assert.equal(retryWhitelabelScaleDecision.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelScaleDecision.json().summary.firstTenant, "ICEMAX");
+  assert.equal(retryWhitelabelScaleDecision.json().summary.nextTenantAllowed, false);
+  assert.ok(retryWhitelabelScaleDecision.json().summary.blockedGates >= 4);
+  assert.ok(retryWhitelabelScaleDecision.json().decisionOptions.some((item: { key: string; allowedNow: boolean }) =>
+    item.key === "extend_hypercare" && item.allowedNow));
+  assert.ok(retryWhitelabelScaleDecision.json().blockedActions.includes("sign_second_tenant_contract"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

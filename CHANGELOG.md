@@ -1078,6 +1078,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de melhoria continua.
 - Teste automatizado cobre governanca de escala e acoes corretivas obrigatorias.
 
+## 0.8.148 - Pacote De Decisao De Escala Whitelabel
+
+- Criado endpoint de pacote de decisao para liberar ou bloquear escala whitelabel.
+- Gates avaliam health score, acoes corretivas, custos reais, suporte e aprovacao executiva.
+- Decisao mantem segundo tenant bloqueado ate evidencias D30 e assinatura do dono.
+- Console web ganhou consulta de escala whitelabel.
+- Teste automatizado cobre bloqueio de contrato do segundo tenant.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

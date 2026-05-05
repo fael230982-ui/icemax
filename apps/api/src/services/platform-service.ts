@@ -2158,6 +2158,101 @@ export function getMobileOfflineAssistedRetryWhitelabelContinuousImprovementPlan
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelScaleDecisionPackage() {
+  const health = getMobileOfflineAssistedRetryWhitelabelTenantHealthScore();
+  const improvement = getMobileOfflineAssistedRetryWhitelabelContinuousImprovementPlan();
+  const gates = [
+    {
+      key: "tenant_health_score",
+      label: "Health score minimo",
+      status: health.summary.averageScore >= health.summary.minimumScaleScore ? "ready" : "blocked",
+      current: health.summary.averageScore,
+      required: health.summary.minimumScaleScore,
+      evidenceRequired: "Relatorio consolidado dos primeiros 30 dias.",
+    },
+    {
+      key: "corrective_actions_closed",
+      label: "Acoes corretivas fechadas",
+      status: "blocked",
+      current: 0,
+      required: improvement.summary.tracks,
+      evidenceRequired: "Cada trilha deve ter dono, prazo, resultado e aceite.",
+    },
+    {
+      key: "provider_costs_approved",
+      label: "Custos reais aprovados",
+      status: "blocked",
+      current: 0,
+      required: 1,
+      evidenceRequired: "Comparativo de custo por OS e teto mensal por tenant.",
+    },
+    {
+      key: "support_model_signed_off",
+      label: "Modelo de suporte aprovado",
+      status: "blocked",
+      current: 0,
+      required: 1,
+      evidenceRequired: "SLA, plantao, incidentes e rollback aprovados.",
+    },
+    {
+      key: "owner_scale_signoff",
+      label: "Aprovacao executiva para escala",
+      status: "blocked",
+      current: 0,
+      required: 1,
+      evidenceRequired: "Aprovacao formal de RAFAEL DA SILVA BEZEERA.",
+    },
+  ];
+  const blockedGates = gates.filter((gate) => gate.status === "blocked").length;
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_scale_decision_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      firstTenant: health.summary.firstTenant,
+      sourceHealthScore: health.summary.averageScore,
+      gates: gates.length,
+      blockedGates,
+      scaleAllowed: blockedGates === 0,
+      nextTenantAllowed: false,
+    },
+    gates,
+    decisionOptions: [
+      {
+        key: "scale",
+        allowedNow: false,
+        meaning: "Liberar segundo tenant com operacao acompanhada.",
+        requiredEvidence: ["Todos os gates prontos", "Custos aprovados", "Aprovacao executiva"],
+      },
+      {
+        key: "extend_hypercare",
+        allowedNow: true,
+        meaning: "Prorrogar ICEMAX em acompanhamento ate corrigir pendencias.",
+        requiredEvidence: ["Plano de melhoria atualizado", "Nova data de revisao"],
+      },
+      {
+        key: "block_whitelabel_offer",
+        allowedNow: true,
+        meaning: "Bloquear oferta whitelabel comercial ate estabilidade comprovada.",
+        requiredEvidence: ["Riscos abertos", "Impacto comercial", "Plano de mitigacao"],
+      },
+    ],
+    blockedActions: [
+      "sign_second_tenant_contract",
+      "enable_partner_branding",
+      "activate_partner_provider_accounts",
+      "announce_whitelabel_public_release",
+    ],
+    nextActions: [
+      "Consolidar evidencias D30 do primeiro tenant.",
+      "Fechar acoes corretivas da melhoria continua.",
+      "Reavaliar gates antes de qualquer contrato com segunda empresa.",
+      "Registrar decisao final assinada pelo dono.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
