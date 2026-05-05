@@ -636,6 +636,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre governanca, manifesto de evidencias e bloqueio de dados sensiveis em link publico.
 - Documentadas regras de compartilhamento externo para relatorios, fotos, assinaturas e dados financeiros.
 
+## 0.8.93 - Seed Prisma Idempotente
+
+- Seed Prisma passou a usar `upsert` com IDs deterministicos nos dados base de homologacao.
+- Plano `GET /database/seed-plan` agora informa estrategia idempotente e IDs principais.
+- Evitada duplicacao de cliente, endereco, equipamento, OS, contrato, peca, estoque, checklist e manual em execucoes repetidas.
+- Teste automatizado cobre flag de idempotencia e ID deterministico de OS.
+- Documentado uso seguro do seed para homologacao repetivel.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

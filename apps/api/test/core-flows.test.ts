@@ -1173,6 +1173,8 @@ test("database transition exposes cutover schema seed and environment plans", as
   const seed = await app.inject({ method: "GET", url: "/database/seed-plan" });
   assert.equal(seed.statusCode, 200);
   assert.equal(seed.json().devLogin.email, "adm.rcsolutions@gmail.com");
+  assert.equal(seed.json().idempotent, true);
+  assert.ok(seed.json().deterministicIds.includes("order-icemax-dev-001"));
 
   const env = await app.inject({ method: "GET", url: "/database/environment-checklist" });
   assert.equal(env.statusCode, 200);

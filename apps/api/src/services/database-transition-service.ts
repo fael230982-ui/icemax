@@ -227,6 +227,8 @@ export function getDatabaseSchemaSummary() {
 export function getSeedPlan() {
   return {
     command: "npm run db:seed",
+    idempotent: true,
+    strategy: "upsert com IDs deterministicos para dados base de homologacao",
     creates: [
       "tenant ICEMAX",
       "usuario dono",
@@ -244,6 +246,18 @@ export function getSeedPlan() {
       email: "adm.rcsolutions@gmail.com",
       passwordPolicy: "senha local apenas para desenvolvimento",
     },
+    deterministicIds: [
+      "tenant-icemax",
+      "customer-icemax-climasul",
+      "address-icemax-climasul-matriz",
+      "equipment-icemax-carrier-60k",
+      "order-icemax-dev-001",
+      "contract-icemax-trimestral",
+      "part-icemax-cap-45",
+      "stock-location-icemax-warehouse",
+      "checklist-icemax-preventiva-split",
+      "manual-icemax-carrier-60k",
+    ],
   };
 }
 

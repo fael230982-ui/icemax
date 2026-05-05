@@ -43,8 +43,15 @@ async function main() {
     },
   });
 
-  const customer = await prisma.customer.create({
-    data: {
+  const customer = await prisma.customer.upsert({
+    where: { id: "customer-icemax-climasul" },
+    update: {
+      name: "ClimaSul Hotel",
+      email: "cliente@climasul.local",
+      phone: "+5500000000000",
+    },
+    create: {
+      id: "customer-icemax-climasul",
       tenantId: tenant.id,
       name: "ClimaSul Hotel",
       email: "cliente@climasul.local",
@@ -52,8 +59,19 @@ async function main() {
     },
   });
 
-  const address = await prisma.customerAddress.create({
-    data: {
+  const address = await prisma.customerAddress.upsert({
+    where: { id: "address-icemax-climasul-matriz" },
+    update: {
+      label: "Matriz",
+      street: "Av. Central",
+      number: "1180",
+      district: "Centro",
+      city: "Curitiba",
+      state: "PR",
+      zipCode: "80000-000",
+    },
+    create: {
+      id: "address-icemax-climasul-matriz",
       tenantId: tenant.id,
       customerId: customer.id,
       label: "Matriz",
@@ -66,8 +84,20 @@ async function main() {
     },
   });
 
-  const equipment = await prisma.equipment.create({
-    data: {
+  const equipment = await prisma.equipment.upsert({
+    where: { id: "equipment-icemax-carrier-60k" },
+    update: {
+      customerId: customer.id,
+      addressId: address.id,
+      type: "split_piso_teto",
+      brand: "Carrier",
+      model: "Piso Teto 60.000",
+      serialNumber: "DEV-ICM-0001",
+      capacityBtu: 60000,
+      installationLocation: "Recepcao",
+    },
+    create: {
+      id: "equipment-icemax-carrier-60k",
       tenantId: tenant.id,
       customerId: customer.id,
       addressId: address.id,
@@ -80,8 +110,23 @@ async function main() {
     },
   });
 
-  const order = await prisma.serviceOrder.create({
-    data: {
+  const order = await prisma.serviceOrder.upsert({
+    where: { id: "order-icemax-dev-001" },
+    update: {
+      customerId: customer.id,
+      equipmentId: equipment.id,
+      addressId: address.id,
+      assignedTechnicianId: technician.id,
+      openedByUserId: admin.id,
+      title: "Equipamento sem refrigeracao",
+      description: "Cliente relata baixa eficiencia de refrigeracao.",
+      priority: "emergency",
+      status: "scheduled",
+      scheduledStart: new Date("2026-05-12T11:00:00.000Z"),
+      scheduledEnd: new Date("2026-05-12T13:00:00.000Z"),
+    },
+    create: {
+      id: "order-icemax-dev-001",
       tenantId: tenant.id,
       customerId: customer.id,
       equipmentId: equipment.id,
@@ -97,8 +142,19 @@ async function main() {
     },
   });
 
-  const contract = await prisma.serviceContract.create({
-    data: {
+  const contract = await prisma.serviceContract.upsert({
+    where: { id: "contract-icemax-trimestral" },
+    update: {
+      customerId: customer.id,
+      addressId: address.id,
+      name: "Contrato preventivo trimestral",
+      recurrenceMonths: 3,
+      startDate: new Date("2026-05-12T00:00:00.000Z"),
+      includesPreventive: true,
+      includesCleaning: true,
+    },
+    create: {
+      id: "contract-icemax-trimestral",
       tenantId: tenant.id,
       customerId: customer.id,
       addressId: address.id,
@@ -107,25 +163,53 @@ async function main() {
       startDate: new Date("2026-05-12T00:00:00.000Z"),
       includesPreventive: true,
       includesCleaning: true,
-      equipment: {
-        create: {
-          tenantId: tenant.id,
-          equipmentId: equipment.id,
-        },
-      },
-      visits: {
-        create: {
-          tenantId: tenant.id,
-          serviceOrderId: order.id,
-          expectedDate: new Date("2026-05-12T00:00:00.000Z"),
-          status: "scheduled",
-        },
-      },
     },
   });
 
-  const capacitor = await prisma.part.create({
-    data: {
+  await prisma.serviceContractEquipment.upsert({
+    where: {
+      contractId_equipmentId: {
+        contractId: contract.id,
+        equipmentId: equipment.id,
+      },
+    },
+    update: {},
+    create: {
+      tenantId: tenant.id,
+      contractId: contract.id,
+      equipmentId: equipment.id,
+    },
+  });
+
+  await prisma.serviceContractVisit.upsert({
+    where: { id: "visit-icemax-trimestral-001" },
+    update: {
+      serviceOrderId: order.id,
+      expectedDate: new Date("2026-05-12T00:00:00.000Z"),
+      status: "scheduled",
+    },
+    create: {
+      id: "visit-icemax-trimestral-001",
+      tenantId: tenant.id,
+      contractId: contract.id,
+      serviceOrderId: order.id,
+      expectedDate: new Date("2026-05-12T00:00:00.000Z"),
+      status: "scheduled",
+    },
+  });
+
+  const capacitor = await prisma.part.upsert({
+    where: { id: "part-icemax-cap-45" },
+    update: {
+      sku: "CAP-45",
+      name: "Capacitor 45uF",
+      unit: "un",
+      costPrice: 32,
+      salePrice: 85,
+      minimumStock: 6,
+    },
+    create: {
+      id: "part-icemax-cap-45",
       tenantId: tenant.id,
       sku: "CAP-45",
       name: "Capacitor 45uF",
@@ -136,16 +220,32 @@ async function main() {
     },
   });
 
-  const warehouse = await prisma.stockLocation.create({
-    data: {
+  const warehouse = await prisma.stockLocation.upsert({
+    where: { id: "stock-location-icemax-warehouse" },
+    update: {
+      name: "Almoxarifado principal",
+      type: "warehouse",
+      active: true,
+    },
+    create: {
+      id: "stock-location-icemax-warehouse",
       tenantId: tenant.id,
       name: "Almoxarifado principal",
       type: "warehouse",
     },
   });
 
-  await prisma.stockItem.create({
-    data: {
+  await prisma.stockItem.upsert({
+    where: {
+      partId_locationId: {
+        partId: capacitor.id,
+        locationId: warehouse.id,
+      },
+    },
+    update: {
+      quantity: 4,
+    },
+    create: {
       tenantId: tenant.id,
       partId: capacitor.id,
       locationId: warehouse.id,
@@ -153,24 +253,86 @@ async function main() {
     },
   });
 
-  const checklist = await prisma.checklistTemplate.create({
-    data: {
+  const checklist = await prisma.checklistTemplate.upsert({
+    where: { id: "checklist-icemax-preventiva-split" },
+    update: {
+      name: "Preventiva split",
+      serviceType: "preventive",
+      active: true,
+    },
+    create: {
+      id: "checklist-icemax-preventiva-split",
       tenantId: tenant.id,
       name: "Preventiva split",
       serviceType: "preventive",
-      items: {
-        create: [
-          { tenantId: tenant.id, label: "Limpeza dos filtros", required: true, sortOrder: 1 },
-          { tenantId: tenant.id, label: "Verificacao do dreno", required: true, sortOrder: 2 },
-          { tenantId: tenant.id, label: "Medicao de temperatura", required: true, inputType: "number", sortOrder: 3 },
-          { tenantId: tenant.id, label: "Fotos antes e depois", required: true, inputType: "photo", sortOrder: 4 },
-        ],
-      },
     },
   });
 
-  await prisma.manual.create({
-    data: {
+  await Promise.all([
+    prisma.checklistItem.upsert({
+      where: { id: "checklist-item-icemax-filtros" },
+      update: { label: "Limpeza dos filtros", required: true, inputType: "checkbox", sortOrder: 1 },
+      create: {
+        id: "checklist-item-icemax-filtros",
+        tenantId: tenant.id,
+        templateId: checklist.id,
+        label: "Limpeza dos filtros",
+        required: true,
+        sortOrder: 1,
+      },
+    }),
+    prisma.checklistItem.upsert({
+      where: { id: "checklist-item-icemax-dreno" },
+      update: { label: "Verificacao do dreno", required: true, inputType: "checkbox", sortOrder: 2 },
+      create: {
+        id: "checklist-item-icemax-dreno",
+        tenantId: tenant.id,
+        templateId: checklist.id,
+        label: "Verificacao do dreno",
+        required: true,
+        sortOrder: 2,
+      },
+    }),
+    prisma.checklistItem.upsert({
+      where: { id: "checklist-item-icemax-temperatura" },
+      update: { label: "Medicao de temperatura", required: true, inputType: "number", sortOrder: 3 },
+      create: {
+        id: "checklist-item-icemax-temperatura",
+        tenantId: tenant.id,
+        templateId: checklist.id,
+        label: "Medicao de temperatura",
+        required: true,
+        inputType: "number",
+        sortOrder: 3,
+      },
+    }),
+    prisma.checklistItem.upsert({
+      where: { id: "checklist-item-icemax-fotos" },
+      update: { label: "Fotos antes e depois", required: true, inputType: "photo", sortOrder: 4 },
+      create: {
+        id: "checklist-item-icemax-fotos",
+        tenantId: tenant.id,
+        templateId: checklist.id,
+        label: "Fotos antes e depois",
+        required: true,
+        inputType: "photo",
+        sortOrder: 4,
+      },
+    }),
+  ]);
+
+  await prisma.manual.upsert({
+    where: { id: "manual-icemax-carrier-60k" },
+    update: {
+      title: "Manual Carrier Piso Teto 60k",
+      brand: "Carrier",
+      model: "Piso Teto 60.000",
+      equipmentType: "split_piso_teto",
+      capacityBtu: 60000,
+      fileUrl: "https://example.com/manual-carrier-piso-teto-60k.pdf",
+    },
+    create: {
+      id: "manual-icemax-carrier-60k",
       tenantId: tenant.id,
       title: "Manual Carrier Piso Teto 60k",
       brand: "Carrier",

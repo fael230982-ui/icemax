@@ -1795,3 +1795,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [x] Push para GitHub realizado.
+
+## Seed Prisma Idempotente
+
+- [x] Seed Prisma ajustado para upsert.
+- [x] IDs deterministicos adicionados aos dados base.
+- [x] Plano de seed passou a informar idempotencia.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
