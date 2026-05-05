@@ -23,6 +23,7 @@ import {
   getMobileOfflineAssistedRetryWhitelabelRolloutPlan,
   getMobileOfflineAssistedRetryWhitelabelOnboardingChecklist,
   getMobileOfflineAssistedRetryWhitelabelOperationalHandoff,
+  getMobileOfflineAssistedRetryWhitelabelGoLiveReadinessBoard,
   getPlatformDiagnostics,
   getPlatformReadiness,
   getMobileOfflineEscalationBoard,
@@ -61,6 +62,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/mobile-offline-escalations/whitelabel-rollout-plan", async () => getMobileOfflineAssistedRetryWhitelabelRolloutPlan());
   app.get("/platform/mobile-offline-escalations/whitelabel-onboarding-checklist", async () => getMobileOfflineAssistedRetryWhitelabelOnboardingChecklist());
   app.get("/platform/mobile-offline-escalations/whitelabel-operational-handoff", async () => getMobileOfflineAssistedRetryWhitelabelOperationalHandoff());
+  app.get("/platform/mobile-offline-escalations/whitelabel-go-live-readiness", async () => getMobileOfflineAssistedRetryWhitelabelGoLiveReadinessBoard());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

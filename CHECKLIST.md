@@ -2583,3 +2583,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Prontidao De Go-Live Whitelabel
+
+- [x] Endpoint de prontidao de go-live criado.
+- [x] Onboarding, suporte, treinamento, incidentes, evidencias e signoff avaliados.
+- [x] Go-live comercial, envio real e chamadas de producao bloqueados.
+- [x] Console web ganhou consulta de prontidao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

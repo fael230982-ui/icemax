@@ -1465,6 +1465,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(retryWhitelabelOperationalHandoff.json().handoffPolicy.ownerSignoffRequired, true);
   assert.ok(retryWhitelabelOperationalHandoff.json().blockedActions.includes("go_live_without_onboarding_evidence"));
 
+  const retryWhitelabelGoLiveReadiness = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-go-live-readiness",
+  });
+  assert.equal(retryWhitelabelGoLiveReadiness.statusCode, 200);
+  assert.equal(retryWhitelabelGoLiveReadiness.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelGoLiveReadiness.json().summary.goLiveAllowed, false);
+  assert.equal(retryWhitelabelGoLiveReadiness.json().decision.result, "do_not_go_live");
+  assert.ok(retryWhitelabelGoLiveReadiness.json().decision.blockedActions.includes("commercial_go_live"));
+  assert.ok(retryWhitelabelGoLiveReadiness.json().summary.criticalBlocks >= 4);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

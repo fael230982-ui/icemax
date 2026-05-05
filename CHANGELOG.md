@@ -1046,6 +1046,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de handoff operacional.
 - Teste automatizado cobre go-live bloqueado e resposta a incidentes.
 
+## 0.8.144 - Board De Prontidao De Go-Live Whitelabel
+
+- Criado endpoint de board de prontidao de go-live whitelabel.
+- Board avalia onboarding, suporte, treinamento, incidente, evidencias e signoff.
+- Decisao padrao bloqueia go-live comercial, envio real e chamadas de producao.
+- Console web ganhou consulta de prontidao de go-live.
+- Teste automatizado cobre bloqueio comercial e blocos criticos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

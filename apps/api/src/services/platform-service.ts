@@ -1802,6 +1802,86 @@ export function getMobileOfflineAssistedRetryWhitelabelOperationalHandoff() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelGoLiveReadinessBoard() {
+  const handoff = getMobileOfflineAssistedRetryWhitelabelOperationalHandoff();
+  const checks = [
+    {
+      key: "onboarding_complete",
+      area: "tenant_setup",
+      severity: "critical",
+      status: "blocked",
+      detail: "Checklist de onboarding ainda precisa estar completo e evidenciado.",
+    },
+    {
+      key: "support_ready",
+      area: "support",
+      severity: "critical",
+      status: "blocked",
+      detail: "Modelo de suporte, responsaveis e escalonamento ainda precisam estar definidos.",
+    },
+    {
+      key: "training_done",
+      area: "training",
+      severity: "high",
+      status: "blocked",
+      detail: "Administradores, tecnicos e terceiros ainda precisam de treinamento validado.",
+    },
+    {
+      key: "incident_response_ready",
+      area: "reliability",
+      severity: "critical",
+      status: "blocked",
+      detail: "Plano de incidente e rollback ainda precisa estar aprovado.",
+    },
+    {
+      key: "provider_evidence_ready",
+      area: "integrations",
+      severity: "critical",
+      status: "blocked",
+      detail: "Evidencias de provedores e smoke tests ainda precisam estar aprovados.",
+    },
+    {
+      key: "owner_signoff_ready",
+      area: "governance",
+      severity: "critical",
+      status: "blocked",
+      detail: "Signoff final do titular ainda precisa ser registrado por tenant.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_go_live_readiness_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      checks: checks.length,
+      blocked: checks.filter((check) => check.status === "blocked").length,
+      criticalBlocks: checks.filter((check) => check.severity === "critical").length,
+      firstTenant: handoff.summary.firstTenant,
+      goLiveAllowed: false,
+    },
+    checks,
+    decision: {
+      result: "do_not_go_live",
+      reason: "Tenant ainda nao possui onboarding, suporte, treinamento, incidente, evidencias e signoff suficientes.",
+      allowedActions: ["finish_onboarding", "train_team", "prepare_support", "collect_evidence"],
+      blockedActions: ["commercial_go_live", "real_customer_send", "provider_production_calls", "partner_tenant_release"],
+    },
+    guardrails: [
+      "Nao liberar tenant comercial sem suporte definido.",
+      "Nao iniciar atendimento real sem plano de incidente.",
+      "Nao usar dados reais em treinamento antes da homologacao.",
+      "Nao ativar chamadas de producao enquanto o board estiver bloqueado.",
+    ],
+    nextActions: [
+      "Fechar treinamento ICEMAX.",
+      "Definir suporte e matriz de incidentes.",
+      "Aprovar evidencias internas de onboarding.",
+      "Reexecutar board antes de qualquer go-live.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
