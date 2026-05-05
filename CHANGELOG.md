@@ -860,6 +860,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao `Simular` por pendencia bloqueada.
 - Teste automatizado cobre dry-run concluido e envio real bloqueado.
 
+## 0.8.121 - Timeline Da Pendencia Offline
+
+- Criado endpoint de timeline da pendencia offline bloqueada.
+- Timeline consolida bloqueio, revisao, pacote de reenvio, dry-run e execucao real bloqueada.
+- Console web ganhou acao `Timeline` por pendencia bloqueada.
+- Resumo informa eventos concluidos, bloqueados e proxima acao.
+- Teste automatizado cobre evento de dry-run e bloqueio de execucao real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -653,6 +653,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineEscalationTimeline(recordId: string) {
+    void run("Timeline pendencia offline", () =>
+      icemaxApi.mobileOfflineEscalationTimeline(recordId, token || undefined),
+    );
+  }
+
   function runHomologationCheck() {
     void run("Homologacao", async () => {
       const results = await Promise.all([
@@ -954,6 +960,9 @@ export function OperationsConsole() {
                       </button>
                       <button type="button" className="secondary" onClick={() => runMobileOfflineAssistedRetryDryRun(item.id)}>
                         Simular
+                      </button>
+                      <button type="button" className="secondary" onClick={() => loadMobileOfflineEscalationTimeline(item.id)}>
+                        Timeline
                       </button>
                     </td>
                   </tr>

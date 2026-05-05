@@ -1275,6 +1275,14 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(assistedRetryDryRun.json().realSendBlocked, true);
   assert.equal(assistedRetryDryRun.json().result.sent, false);
 
+  const offlineTimeline = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/offline-blocked-001/timeline",
+  });
+  assert.equal(offlineTimeline.statusCode, 200);
+  assert.equal(offlineTimeline.json().summary.blocked, 1);
+  assert.ok(offlineTimeline.json().events.some((item: { key: string }) => item.key === "dry_run"));
+
   const gate = await app.inject({ method: "GET", url: "/platform/pre-release-gate" });
   assert.equal(gate.statusCode, 200);
   assert.equal(gate.json().status, "blocked");

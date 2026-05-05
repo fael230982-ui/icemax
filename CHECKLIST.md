@@ -2215,3 +2215,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Timeline Da Pendencia Offline
+
+- [x] Endpoint de timeline criado.
+- [x] Eventos de bloqueio, revisao, pacote e dry-run incluidos.
+- [x] Execucao real aparece como bloqueada.
+- [x] Console web ganhou acao de timeline.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

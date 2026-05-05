@@ -404,6 +404,58 @@ export function executeMobileOfflineAssistedRetryDryRun(recordId: string, body: 
   };
 }
 
+export function getMobileOfflineEscalationTimeline(recordId: string) {
+  const events = [
+    {
+      key: "blocked",
+      label: "Acao offline bloqueada",
+      status: "completed",
+      actor: "app_tecnico",
+      detail: "Limite de 5 tentativas atingido e item removido do envio automatico.",
+    },
+    {
+      key: "manager_review",
+      label: "Revisao gerencial",
+      status: "completed",
+      actor: "supervisor",
+      detail: "Gestor classificou a pendencia e definiu se pode seguir para reenvio assistido.",
+    },
+    {
+      key: "assisted_retry_package",
+      label: "Pacote de reenvio",
+      status: "completed",
+      actor: "console_web",
+      detail: "Checks, idempotencia e politica sem reenvio automatico foram preparados.",
+    },
+    {
+      key: "dry_run",
+      label: "Simulacao de reenvio",
+      status: "completed",
+      actor: "console_web",
+      detail: "Fluxo foi simulado com envio real bloqueado.",
+    },
+    {
+      key: "production_execution",
+      label: "Execucao real",
+      status: "blocked",
+      actor: "api",
+      detail: "Depende de banco real, auditoria persistente e permissao de supervisor.",
+    },
+  ];
+
+  return {
+    recordId,
+    generatedAt: new Date().toISOString(),
+    currentStatus: "awaiting_production_execution",
+    events,
+    summary: {
+      completed: events.filter((event) => event.status === "completed").length,
+      blocked: events.filter((event) => event.status === "blocked").length,
+      nextRequiredAction: "Ativar execucao real somente apos persistencia de auditoria e checagem de permissao.",
+    },
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();
