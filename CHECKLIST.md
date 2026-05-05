@@ -2079,3 +2079,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Persistencia Da Fila Offline
+
+- [x] AsyncStorage instalado no app mobile.
+- [x] Servico de storage offline criado.
+- [x] App restaura fila ao abrir.
+- [x] Mudancas da fila sao persistidas no aparelho.
+- [x] Fila local limpa apos sincronizacao concluida.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

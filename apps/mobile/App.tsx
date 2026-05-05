@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ContractCard } from "./src/components/ContractCard";
 import { InfoCard } from "./src/components/InfoCard";
@@ -33,6 +33,7 @@ import {
   sendOfflineAction,
   sortOfflineQueueForSync,
 } from "./src/services/api";
+import { clearOfflineQueue, loadOfflineQueue, saveOfflineQueue } from "./src/services/offline-storage";
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
 import { warrantyPackage } from "./src/data/dashboard";
@@ -43,6 +44,23 @@ import { quoteApproval } from "./src/data/dashboard";
 export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
   const [syncStatus, setSyncStatus] = useState("Sem pendencias.");
+  const [queueLoaded, setQueueLoaded] = useState(false);
+
+  useEffect(() => {
+    void loadOfflineQueue()
+      .then((storedActions) => {
+        setPendingActions(storedActions);
+        setSyncStatus(storedActions.length ? "Fila offline restaurada do aparelho." : "Sem pendencias.");
+      })
+      .catch(() => setSyncStatus("Nao foi possivel restaurar a fila offline."))
+      .finally(() => setQueueLoaded(true));
+  }, []);
+
+  useEffect(() => {
+    if (queueLoaded) {
+      void saveOfflineQueue(pendingActions);
+    }
+  }, [pendingActions, queueLoaded]);
 
   function addCheckIn() {
     const action = createCheckInAction("1048");
@@ -172,6 +190,7 @@ export default function App() {
         await sendOfflineAction(actionWithRetry);
       }
       setPendingActions([]);
+      await clearOfflineQueue();
       setSyncStatus("Fila enviada para a API.");
     } catch (error) {
       setPendingActions((current) => current.map((action) => ({

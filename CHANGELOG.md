@@ -788,6 +788,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Empate de prioridade usa a acao mais antiga primeiro.
 - Documentada sincronizacao prioritaria do app tecnico.
 
+## 0.8.112 - Mobile Persistencia Da Fila Offline
+
+- Adicionado AsyncStorage ao aplicativo mobile.
+- Criado servico local para carregar, salvar e limpar fila offline.
+- App restaura pendencias offline ao abrir.
+- Mudancas da fila passam a ser persistidas no aparelho.
+- Fila local e limpa apos sincronizacao bem-sucedida.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
