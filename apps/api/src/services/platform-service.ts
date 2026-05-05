@@ -379,6 +379,93 @@ export function getMobileOfflineAssistedRetryExecutiveSummary() {
   };
 }
 
+function getMobileOfflineActionNextStep(owner: string) {
+  if (owner === "supervisor") {
+    return "Conferir status da OS, assinatura, SLA e idempotencia antes do dry-run.";
+  }
+
+  if (owner === "qualidade") {
+    return "Validar evidencia, fotos e consistencia do relatorio antes do dry-run.";
+  }
+
+  if (owner === "estoque") {
+    return "Conferir saldo, reserva e almoxarifado antes do dry-run.";
+  }
+
+  return "Conferir pendencia operacional e registrar decisao antes do dry-run.";
+}
+
+export function getMobileOfflineAssistedRetryActionPlan() {
+  const board = getMobileOfflineEscalationBoard();
+  const executiveSummary = getMobileOfflineAssistedRetryExecutiveSummary();
+  const actions = board.data
+    .slice()
+    .sort((a, b) => b.severityScore - a.severityScore)
+    .map((item) => {
+      const dueInHours = item.priority === "critical" ? 2 : item.priority === "high" ? 6 : 12;
+
+      return {
+        id: `action-${item.id}`,
+        recordId: item.id,
+        serviceOrderId: item.serviceOrderId,
+        customer: item.customer,
+        owner: item.owner,
+        recommendedOwner: item.owner,
+        priority: item.priority,
+        severityScore: item.severityScore,
+        slaStatus: item.slaStatus,
+        type: item.actionLabel,
+        decision: item.priority === "critical" ? "review_and_dry_run_today" : "collect_evidence_and_schedule_dry_run",
+        allowedNow: ["review", "prepare_assisted_retry", "dry_run"],
+        blockedNow: ["real_execution"],
+        dueInHours,
+        nextStep: getMobileOfflineActionNextStep(item.owner),
+      };
+    });
+  const lanes = actions.reduce<Record<string, { owner: string; total: number; critical: number; high: number }>>((acc, item) => {
+    const lane = acc[item.recommendedOwner] ?? {
+      owner: item.recommendedOwner,
+      total: 0,
+      critical: 0,
+      high: 0,
+    };
+
+    lane.total += 1;
+    lane.critical += item.priority === "critical" ? 1 : 0;
+    lane.high += item.priority === "high" ? 1 : 0;
+    acc[item.recommendedOwner] = lane;
+    return acc;
+  }, {});
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "action_plan_ready",
+    realExecutionAllowed: false,
+    automaticRetryAllowed: false,
+    summary: {
+      totalActions: actions.length,
+      critical: board.summary.critical,
+      high: board.summary.high,
+      dueInTwoHours: actions.filter((item) => item.dueInHours <= 2).length,
+      realExecutionBlocked: true,
+      topBlockers: executiveSummary.blockers,
+    },
+    lanes: Object.values(lanes),
+    actions,
+    governance: {
+      dryRunOnly: true,
+      requiresManagerReview: true,
+      source: "mobile_offline_assisted_retry_executive_summary",
+    },
+    nextActions: [
+      "Tratar acoes criticas primeiro e registrar revisao.",
+      "Preparar reenvio assistido somente depois da conferencia operacional.",
+      "Executar dry-run para validar payload e idempotencia sem envio real.",
+      "Manter execucao real bloqueada ate banco real, auditoria persistente e permissao sensivel.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

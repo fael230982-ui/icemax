@@ -918,6 +918,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de resumo do reenvio offline.
 - Teste automatizado cobre total de pendencias, gate bloqueado e envio real desativado.
 
+## 0.8.128 - Plano De Acao Do Reenvio Offline
+
+- Criado endpoint de plano de acao do reenvio offline.
+- Plano prioriza pendencias por risco e SLA.
+- Acoes separam revisao, preparo, dry-run e execucao real bloqueada.
+- Console web ganhou consulta do plano de acao.
+- Teste automatizado cobre bloqueio do envio real e acoes priorizadas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

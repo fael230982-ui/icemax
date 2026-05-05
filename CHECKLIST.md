@@ -2324,3 +2324,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano De Acao Do Reenvio Offline
+
+- [x] Endpoint de plano de acao criado.
+- [x] Pendencias priorizadas por risco e SLA.
+- [x] Responsaveis operacionais mapeados.
+- [x] Execucao real permanece bloqueada.
+- [x] Console web ganhou consulta do plano.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
