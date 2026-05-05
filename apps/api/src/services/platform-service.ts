@@ -310,6 +310,64 @@ export function reviewMobileOfflineEscalation(recordId: string, body: unknown) {
   };
 }
 
+export function prepareMobileOfflineAssistedRetry(recordId: string, body: unknown) {
+  const payload = body && typeof body === "object" ? body as Record<string, unknown> : {};
+  const approvedBy = typeof payload.approvedBy === "string" ? payload.approvedBy : "supervisor";
+  const reason = typeof payload.reason === "string" ? payload.reason : "Reenvio assistido solicitado pelo painel.";
+  const checks = [
+    {
+      key: "manager_review",
+      label: "Revisao gerencial registrada",
+      status: "pass",
+      detail: "Pendencia precisa ter decisao de liberacao assistida antes do reenvio.",
+    },
+    {
+      key: "service_order_state",
+      label: "Estado da OS conferido",
+      status: "manual",
+      detail: "Confirmar que a OS ainda aceita a acao bloqueada.",
+    },
+    {
+      key: "duplicate_guard",
+      label: "Protecao contra duplicidade",
+      status: "pass",
+      detail: "Reenvio deve usar o ID offline original como chave de idempotencia.",
+    },
+    {
+      key: "evidence_integrity",
+      label: "Integridade da evidencia",
+      status: "manual",
+      detail: "Validar assinatura, foto, peca ou anotacao antes de reenviar.",
+    },
+  ];
+  const manualChecks = checks.filter((check) => check.status === "manual").length;
+
+  return {
+    id: `assisted-retry-${recordId}`,
+    recordId,
+    approvedBy,
+    reason,
+    status: manualChecks ? "manual_confirmation_required" : "ready",
+    idempotencyKey: `mobile-offline-retry:${recordId}`,
+    checks,
+    payloadPolicy: {
+      reuseOriginalOfflineId: true,
+      resetRetryCount: true,
+      automaticRetry: false,
+      auditRequired: true,
+    },
+    audit: {
+      event: "mobile_offline_assisted_retry_prepared",
+      recordedAt: new Date().toISOString(),
+    },
+    nextActions: [
+      "Confirmar manualmente os checks pendentes.",
+      "Executar reenvio assistido somente apos validar duplicidade e estado da OS.",
+      "Registrar resultado do reenvio na auditoria operacional.",
+    ],
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();

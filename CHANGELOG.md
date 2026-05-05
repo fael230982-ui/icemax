@@ -844,6 +844,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web exibe risco e SLA por linha da fila offline.
 - Teste automatizado cobre score alto e status critico.
 
+## 0.8.119 - Reenvio Assistido Da Fila Offline
+
+- Criado endpoint para preparar reenvio assistido de pendencia offline.
+- Pacote de reenvio inclui chave de idempotencia e checks obrigatorios.
+- Politica impede reenvio automatico e exige auditoria.
+- Console web ganhou acao `Preparar` por pendencia bloqueada.
+- Teste automatizado cobre pacote e protecao contra duplicidade.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

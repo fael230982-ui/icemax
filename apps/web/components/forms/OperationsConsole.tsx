@@ -635,6 +635,15 @@ export function OperationsConsole() {
     );
   }
 
+  function prepareMobileOfflineAssistedRetry(recordId: string) {
+    void run("Preparar reenvio assistido", () =>
+      icemaxApi.prepareMobileOfflineAssistedRetry(recordId, {
+        approvedBy: "RAFAEL DA SILVA BEZEERA",
+        reason: "Pendencia revisada pelo painel antes do reenvio assistido.",
+      }, token || undefined),
+    );
+  }
+
   function runHomologationCheck() {
     void run("Homologacao", async () => {
       const results = await Promise.all([
@@ -930,6 +939,9 @@ export function OperationsConsole() {
                       </button>
                       <button type="button" className="secondary" onClick={() => reviewMobileOfflineEscalation(item.id, "keep_blocked")}>
                         Manter
+                      </button>
+                      <button type="button" className="secondary" onClick={() => prepareMobileOfflineAssistedRetry(item.id)}>
+                        Preparar
                       </button>
                     </td>
                   </tr>
