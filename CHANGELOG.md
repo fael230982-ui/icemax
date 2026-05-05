@@ -958,6 +958,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de homologacao final offline.
 - Teste automatizado cobre homologacao bloqueada e envio real desativado.
 
+## 0.8.133 - Plano De Liberacao Controlada Do Reenvio Offline
+
+- Criado endpoint de plano de liberacao controlada do reenvio offline.
+- Plano separa fases de mock, persistencia real, homologacao por tenant e execucao real controlada.
+- Rollback e governanca exigem retorno ao dry-run e aprovacao humana.
+- Console web ganhou consulta da liberacao offline.
+- Teste automatizado cobre fase atual, bloqueio real e loop automatico bloqueado.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

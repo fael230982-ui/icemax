@@ -769,6 +769,86 @@ export function getMobileOfflineAssistedRetryFinalHomologationMatrix() {
   };
 }
 
+export function getMobileOfflineAssistedRetryControlledReleasePlan() {
+  const homologation = getMobileOfflineAssistedRetryFinalHomologationMatrix();
+  const phases = [
+    {
+      phase: "phase_0_mock_control",
+      label: "Controle em mock",
+      status: "current",
+      entryCriteria: ["Fluxos mockados validados", "Testes automatizados verdes", "Envio real bloqueado"],
+      exitCriteria: ["Banco real configurado", "Auditoria persistente criada", "Permissoes sensiveis revisadas"],
+      allowedActions: ["review", "prepare_assisted_retry", "dry_run"],
+      blockedActions: ["real_execution", "automatic_retry_loop"],
+    },
+    {
+      phase: "phase_1_real_persistence",
+      label: "Persistencia real sem envio externo",
+      status: "blocked",
+      entryCriteria: ["DATABASE_URL configurado", "Prisma migrado", "Auditoria persistente ativa"],
+      exitCriteria: ["Evidencias gravadas em banco real", "Rollback validado", "Tenant isolado"],
+      allowedActions: ["review", "prepare_assisted_retry", "dry_run", "persist_evidence"],
+      blockedActions: ["real_execution"],
+    },
+    {
+      phase: "phase_2_homologation_tenant",
+      label: "Homologacao por tenant",
+      status: "blocked",
+      entryCriteria: ["Tenant de homologacao criado", "Owner/admin aprovados", "Gate sem bloqueios criticos"],
+      exitCriteria: ["Dry-run real auditado", "Permissoes confirmadas", "Monitoramento ativo"],
+      allowedActions: ["tenant_scoped_dry_run", "evidence_review"],
+      blockedActions: ["broad_release", "automatic_retry_loop"],
+    },
+    {
+      phase: "phase_3_controlled_real_execution",
+      label: "Execucao real controlada",
+      status: "blocked",
+      entryCriteria: ["Homologacao aprovada", "Auditoria persistente", "Rollback testado", "Aprovacao owner/admin/audit"],
+      exitCriteria: ["Primeira execucao real sem duplicidade", "Evidencias completas", "Monitoramento sem alerta critico"],
+      allowedActions: ["single_real_retry_with_human_approval"],
+      blockedActions: ["batch_real_execution", "automatic_retry_loop"],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "release_plan_ready",
+    realExecutionAllowed: false,
+    currentPhase: "phase_0_mock_control",
+    summary: {
+      phases: phases.length,
+      blockedPhases: phases.filter((item) => item.status === "blocked").length,
+      homologationStatus: homologation.status,
+      homologationBlockedChecks: homologation.summary.blocked,
+      realExecutionBlocked: true,
+    },
+    phases,
+    rollback: {
+      strategy: "disable_real_execution_and_return_to_dry_run_only",
+      requiredBeforePhase3: true,
+      checkpoints: [
+        "Snapshot de evidencias antes da execucao real.",
+        "Chave de idempotencia validada antes de retry real.",
+        "Feature flag de execucao real desligavel por tenant.",
+        "Auditoria imutavel disponivel para revisao.",
+      ],
+    },
+    governance: {
+      ownerApprovalRequired: true,
+      adminApprovalRequired: true,
+      auditApprovalRequired: true,
+      tenantScopedReleaseOnly: true,
+      defaultDecision: "keep_blocked",
+    },
+    nextActions: [
+      "Concluir banco real e migracoes antes de sair da fase mock.",
+      "Persistir evidencias reais sem envio externo na fase 1.",
+      "Homologar por tenant antes de qualquer execucao real.",
+      "Liberar somente uma execucao real manual e monitorada na fase 3.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

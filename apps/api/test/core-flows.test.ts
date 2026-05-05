@@ -1333,6 +1333,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryFinalHomologation.json().approvals.every((item: { decision: string }) =>
     item.decision === "pending"));
 
+  const retryControlledRelease = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/controlled-release",
+  });
+  assert.equal(retryControlledRelease.statusCode, 200);
+  assert.equal(retryControlledRelease.json().realExecutionAllowed, false);
+  assert.equal(retryControlledRelease.json().currentPhase, "phase_0_mock_control");
+  assert.equal(retryControlledRelease.json().governance.defaultDecision, "keep_blocked");
+  assert.ok(retryControlledRelease.json().phases.some((item: { blockedActions: string[] }) =>
+    item.blockedActions.includes("automatic_retry_loop")));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

@@ -2406,3 +2406,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano De Liberacao Controlada Do Reenvio Offline
+
+- [x] Endpoint de plano de liberacao controlada criado.
+- [x] Fases de mock, persistencia real, homologacao e execucao controlada definidas.
+- [x] Criterios de entrada e saida por fase registrados.
+- [x] Rollback e governanca de aprovacao humana incluidos.
+- [x] Execucao real e loop automatico permanecem bloqueados.
+- [x] Console web ganhou consulta da liberacao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
