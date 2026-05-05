@@ -610,6 +610,82 @@ export function getMobileOfflineAssistedRetryDryRunBatch() {
   };
 }
 
+export function getMobileOfflineAssistedRetryEvidencePackage() {
+  const dryRunBatch = getMobileOfflineAssistedRetryDryRunBatch();
+  const auditContract = getMobileOfflineAssistedRetryAuditContract();
+  const evidenceItems = dryRunBatch.candidates.map((candidate) => ({
+    recordId: candidate.recordId,
+    serviceOrderId: candidate.serviceOrderId,
+    customer: candidate.customer,
+    idempotencyKey: candidate.idempotencyKey,
+    requiredEvidence: [
+      {
+        key: "manager_review",
+        label: "Revisao gerencial",
+        status: "required",
+        detail: "Registrar decisao e responsavel antes do preparo do reenvio assistido.",
+      },
+      {
+        key: "payload_hash",
+        label: "Hash do payload",
+        status: "required",
+        detail: "Guardar hash do payload do dry-run sem expor dados sensiveis.",
+      },
+      {
+        key: "dry_run_result",
+        label: "Resultado do dry-run",
+        status: "required",
+        detail: "Registrar sucesso, falha, codigo interno e mensagem normalizada.",
+      },
+      {
+        key: "idempotency_trace",
+        label: "Trilha de idempotencia",
+        status: "required",
+        detail: "Comprovar que a chave de idempotencia bloqueia duplicidade.",
+      },
+    ],
+    retention: {
+      minimumDays: 365,
+      piiPolicy: "store_hashes_and_references_not_raw_payload",
+      exportAllowed: false,
+    },
+  }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "evidence_package_ready",
+    realExecutionAllowed: false,
+    summary: {
+      candidates: evidenceItems.length,
+      requiredEvidencePerCandidate: evidenceItems[0]?.requiredEvidence.length ?? 0,
+      auditEventsRequired: auditContract.summary.totalEvents,
+      persistenceRequiredBeforeRealExecution: auditContract.persistenceRequiredBeforeRealExecution,
+      realExecutionBlocked: true,
+    },
+    evidenceItems,
+    auditEvents: auditContract.events.map((item) => item.event),
+    controls: {
+      storeRawPayload: false,
+      storePayloadHash: true,
+      requireActor: true,
+      requireTenantId: true,
+      requireTimestamp: true,
+      immutableAfterApproval: true,
+    },
+    blockers: [
+      "Banco real ainda nao configurado para persistir evidencias.",
+      "Auditoria persistente ainda e requisito antes da execucao real.",
+      "Permissao sensivel de envio real ainda deve ficar bloqueada por padrao.",
+    ],
+    nextActions: [
+      "Persistir pacote de evidencias em banco real antes de homologacao final.",
+      "Validar que cada dry-run gera hash, ator, tenant e timestamp.",
+      "Conferir retencao minima e politica de dados sensiveis.",
+      "Manter envio real bloqueado enquanto evidencias nao forem persistidas.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

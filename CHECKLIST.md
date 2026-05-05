@@ -2373,3 +2373,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pacote De Evidencias Do Reenvio Offline
+
+- [x] Endpoint de pacote de evidencias criado.
+- [x] Evidencias obrigatorias por candidato definidas.
+- [x] Politica de payload bruto bloqueado registrada.
+- [x] Hash, ator, tenant e timestamp exigidos.
+- [x] Execucao real permanece bloqueada.
+- [x] Console web ganhou consulta de evidencias.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

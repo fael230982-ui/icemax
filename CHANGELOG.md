@@ -942,6 +942,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta do lote de dry-run.
 - Teste automatizado cobre candidatos dry-run only e execucao real bloqueada.
 
+## 0.8.131 - Pacote De Evidencias Do Reenvio Offline
+
+- Criado endpoint de pacote de evidencias do reenvio offline.
+- Evidencias obrigatorias incluem revisao, hash do payload, resultado do dry-run e trilha de idempotencia.
+- Politica evita armazenamento de payload bruto e exige hash.
+- Console web ganhou consulta de evidencias do reenvio offline.
+- Teste automatizado cobre controles de evidencia e bloqueio do envio real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

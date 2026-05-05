@@ -263,6 +263,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/daily-command", { token }),
   mobileOfflineAssistedRetryDryRunBatch: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/dry-run-batch", { token }),
+  mobileOfflineAssistedRetryEvidencePackage: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/evidence-package", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>
