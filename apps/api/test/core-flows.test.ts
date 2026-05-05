@@ -1562,6 +1562,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.includes("matriz de custos")));
   assert.ok(retryWhitelabelOperationalContractPack.json().blockedActions.includes("sign_contract_before_scale_decision"));
 
+  const retryWhitelabelSupportSlaGate = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-support-sla-gate",
+  });
+  assert.equal(retryWhitelabelSupportSlaGate.statusCode, 200);
+  assert.equal(retryWhitelabelSupportSlaGate.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelSupportSlaGate.json().summary.supportReady, false);
+  assert.equal(retryWhitelabelSupportSlaGate.json().supportPolicy.supportWithoutContractAllowed, false);
+  assert.ok(retryWhitelabelSupportSlaGate.json().requiredRunbooks.some((item: string) =>
+    item.includes("sincronizacao offline")));
+  assert.ok(retryWhitelabelSupportSlaGate.json().blockedActions.includes("go_live_without_support_owner"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

@@ -2531,6 +2531,85 @@ export function getMobileOfflineAssistedRetryWhitelabelOperationalContractPack()
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelSupportSlaGate() {
+  const contractPack = getMobileOfflineAssistedRetryWhitelabelOperationalContractPack();
+  const slaLevels = [
+    {
+      key: "critical_outage",
+      label: "Indisponibilidade critica",
+      status: "blocked",
+      responseTime: "30 minutos",
+      resolutionTarget: "4 horas ou rollback operacional",
+      examples: ["Tecnicos sem acesso ao app", "OS nao sincroniza", "Relatorios nao sao emitidos"],
+    },
+    {
+      key: "field_blocker",
+      label: "Bloqueio de atendimento em campo",
+      status: "blocked",
+      responseTime: "1 hora",
+      resolutionTarget: "Mesmo dia util",
+      examples: ["Assinatura falha", "Foto obrigatoria nao salva", "Rota critica indisponivel"],
+    },
+    {
+      key: "administrative_issue",
+      label: "Problema administrativo",
+      status: "draft",
+      responseTime: "4 horas uteis",
+      resolutionTarget: "2 dias uteis",
+      examples: ["Cadastro incorreto", "Relatorio com ajuste textual", "Permissao de usuario"],
+    },
+    {
+      key: "improvement_request",
+      label: "Melhoria ou ajuste de processo",
+      status: "draft",
+      responseTime: "2 dias uteis",
+      resolutionTarget: "Backlog priorizado",
+      examples: ["Novo modelo de checklist", "Novo campo em relatorio", "Nova regra de estoque"],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_support_sla_gate_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      sourceContractSignatureAllowed: contractPack.summary.contractSignatureAllowed,
+      slaLevels: slaLevels.length,
+      blockedLevels: slaLevels.filter((item) => item.status === "blocked").length,
+      supportReady: false,
+      partnerGoLiveAllowed: false,
+    },
+    slaLevels,
+    supportPolicy: {
+      onCallOwnerRequired: true,
+      incidentChannelRequired: true,
+      rollbackRunbookRequired: true,
+      supportWithoutContractAllowed: false,
+      partnerDirectEngineerAccessAllowed: false,
+      dailyIncidentReviewDuringHypercare: true,
+    },
+    requiredRunbooks: [
+      "Falha de sincronizacao offline.",
+      "Erro em relatorio, assinatura ou envio de e-mail.",
+      "Mapa/rota indisponivel.",
+      "IA indisponivel ou resposta inadequada.",
+      "Rollback de tenant em atendimento critico.",
+    ],
+    blockedActions: [
+      "go_live_without_support_owner",
+      "promise_sla_without_runbook",
+      "allow_partner_direct_engineering_escalation",
+      "close_incident_without_root_cause",
+    ],
+    nextActions: [
+      "Definir responsavel de suporte por tenant.",
+      "Criar canal oficial de incidente e escala.",
+      "Conectar runbooks ao pacote contratual.",
+      "Validar SLA em simulacao antes de cliente real.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

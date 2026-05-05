@@ -2710,3 +2710,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Suporte E SLA Whitelabel
+
+- [x] Endpoint de gate de suporte e SLA criado.
+- [x] Niveis critico, campo, administrativo e melhoria definidos.
+- [x] Runbooks obrigatorios registrados.
+- [x] Go-live sem responsavel de suporte permanece bloqueado.
+- [x] Console web ganhou consulta de SLA whitelabel.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -1110,6 +1110,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de contrato whitelabel.
 - Teste automatizado cobre assinatura bloqueada e proibicao de credenciais no contrato.
 
+## 0.8.152 - Gate De Suporte E SLA Whitelabel
+
+- Criado endpoint de gate de suporte e SLA whitelabel.
+- Gate define niveis critico, bloqueio em campo, administrativo e melhoria.
+- Politica exige responsavel de plantao, canal de incidente e runbook de rollback.
+- Console web ganhou consulta de SLA whitelabel.
+- Teste automatizado cobre suporte bloqueado sem contrato e runbook.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
