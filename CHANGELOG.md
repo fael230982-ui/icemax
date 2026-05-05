@@ -772,6 +772,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre score e niveis de prontidao.
 - Documentada interpretacao do score de prontidao.
 
+## 0.8.110 - Mobile Governanca Da Fila Offline
+
+- Acoes offline passaram a aceitar prioridade e contador de tentativa.
+- App mobile incrementa tentativas quando a sincronizacao falha.
+- Painel de sincronizacao mostra total, criticas, altas e reenvios.
+- Itens pendentes exibem prioridade e tentativa atual.
+- Documentada governanca da fila offline do tecnico.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

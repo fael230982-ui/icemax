@@ -167,11 +167,16 @@ export default function App() {
 
     try {
       for (const action of pendingActions) {
-        await sendOfflineAction(action);
+        const actionWithRetry = { ...action, retryCount: (action.retryCount ?? 0) + 1 };
+        await sendOfflineAction(actionWithRetry);
       }
       setPendingActions([]);
       setSyncStatus("Fila enviada para a API.");
     } catch (error) {
+      setPendingActions((current) => current.map((action) => ({
+        ...action,
+        retryCount: (action.retryCount ?? 0) + 1,
+      })));
       setSyncStatus(error instanceof Error ? error.message : "Falha ao sincronizar.");
     }
   }

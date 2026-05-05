@@ -2050,3 +2050,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Governanca Da Fila Offline
+
+- [x] Prioridade adicionada nas acoes offline.
+- [x] Contador de tentativa adicionado.
+- [x] Resumo de fila offline criado.
+- [x] Painel mobile exibe criticas, altas e reenvios.
+- [x] Falha de sincronizacao incrementa tentativas.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

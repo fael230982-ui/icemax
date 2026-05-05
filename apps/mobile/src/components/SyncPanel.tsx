@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import type { OfflineAction } from "../services/api";
+import { summarizeOfflineQueue, type OfflineAction } from "../services/api";
 
 type SyncPanelProps = {
   pendingActions: OfflineAction[];
@@ -25,6 +25,8 @@ type SyncPanelProps = {
 };
 
 export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onSync }: SyncPanelProps) {
+  const summary = summarizeOfflineQueue(pendingActions);
+
   return (
     <View style={styles.card}>
       <View>
@@ -87,9 +89,16 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
           <Text style={[styles.buttonText, styles.secondaryText]}>Sincronizar</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.count}>{pendingActions.length} acoes pendentes</Text>
+      <View style={styles.summary}>
+        <Text style={styles.count}>{summary.total} acoes pendentes</Text>
+        <Text style={styles.meta}>Criticas: {summary.byPriority.critical ?? 0}</Text>
+        <Text style={styles.meta}>Altas: {summary.byPriority.high ?? 0}</Text>
+        <Text style={styles.meta}>Reenvio: {summary.retrying}</Text>
+      </View>
       {pendingActions.map((action) => (
-        <Text key={action.id} style={styles.pending}>{action.label}</Text>
+        <Text key={action.id} style={styles.pending}>
+          {action.label} - {action.priority ?? "normal"} - tentativa {action.retryCount ?? 0}
+        </Text>
       ))}
     </View>
   );
@@ -118,6 +127,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 10,
   },
+  summary: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
   button: {
     minHeight: 40,
     justifyContent: "center",
@@ -144,5 +158,9 @@ const styles = StyleSheet.create({
   count: {
     color: "#0B7CEB",
     fontWeight: "800",
+  },
+  meta: {
+    color: "#5D6B7A",
+    fontWeight: "700",
   },
 });

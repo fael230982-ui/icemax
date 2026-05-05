@@ -48,10 +48,36 @@ export type OfflineAction = {
   path: string;
   payload: Record<string, unknown>;
   createdAt: string;
+  priority?: "normal" | "high" | "critical";
+  retryCount?: number;
 };
 
 function offlineId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+export function summarizeOfflineQueue(actions: OfflineAction[]) {
+  const byPriority = actions.reduce<Record<string, number>>((summary, action) => {
+    const priority = action.priority ?? "normal";
+    summary[priority] = (summary[priority] ?? 0) + 1;
+    return summary;
+  }, {});
+  const retrying = actions.filter((action) => (action.retryCount ?? 0) > 0).length;
+  const oldest = actions.reduce<string | null>((current, action) => {
+    if (!current || action.createdAt < current) {
+      return action.createdAt;
+    }
+
+    return current;
+  }, null);
+
+  return {
+    total: actions.length,
+    byPriority,
+    retrying,
+    oldest,
+    hasCritical: Boolean(byPriority.critical),
+  };
 }
 
 export function createCheckInAction(serviceOrderId: string) {
@@ -62,6 +88,8 @@ export function createCheckInAction(serviceOrderId: string) {
     path: `/service-orders/${serviceOrderId}/status`,
     payload: { status: "in_progress" },
     createdAt: new Date().toISOString(),
+    priority: "high",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
@@ -78,6 +106,8 @@ export function createLocationAction(technicianUserId: string, serviceOrderId: s
       accuracy: 25,
     },
     createdAt: new Date().toISOString(),
+    priority: "normal",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
@@ -89,6 +119,8 @@ export function createChecklistAction(serviceOrderId: string, checklistItemId: s
     path: `/service-orders/${serviceOrderId}/checklist-answers`,
     payload: { checklistItemId, value },
     createdAt: new Date().toISOString(),
+    priority: "high",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
@@ -104,6 +136,8 @@ export function createPhotoEvidenceAction(serviceOrderId: string, type: "before"
       caption: "Evidencia capturada em modo offline.",
     },
     createdAt: new Date().toISOString(),
+    priority: type === "after" || type === "issue" ? "critical" : "high",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
@@ -115,6 +149,8 @@ export function createPartUsageAction(serviceOrderId: string, partId: string, qu
     path: `/service-orders/${serviceOrderId}/parts`,
     payload: { partId, quantity },
     createdAt: new Date().toISOString(),
+    priority: "high",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
@@ -129,6 +165,8 @@ export function createCustomerSignatureAction(serviceOrderId: string, customerSi
       customerSignedName,
     },
     createdAt: new Date().toISOString(),
+    priority: "critical",
+    retryCount: 0,
   } satisfies OfflineAction;
 }
 
