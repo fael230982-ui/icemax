@@ -809,6 +809,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryWhitelabelEndOfDayClosure() {
+    void run("Encerramento do dia whitelabel", () =>
+      icemaxApi.mobileOfflineAssistedRetryWhitelabelEndOfDayClosure(token || undefined),
+    );
+  }
+
   function reviewMobileOfflineEscalation(recordId: string, decision: string) {
     void run("Revisar pendencia offline", () =>
       icemaxApi.reviewMobileOfflineEscalation(recordId, {
@@ -1073,6 +1079,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelSupportSlaGate}>SLA whitelabel</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate}>LGPD whitelabel</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelPartnerGoLiveAcceptance}>Aceite parceiro</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelEndOfDayClosure}>Encerrar dia whitelabel</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runMobileOfflineRetryHomologation}>Homologar reenvio offline</button>

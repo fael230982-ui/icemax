@@ -1134,6 +1134,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de aceite de parceiro.
 - Teste automatizado cobre bloqueio de go-live e aceite final obrigatorio.
 
+## 0.8.155 - Encerramento Do Dia Whitelabel
+
+- Criado endpoint de fechamento executivo do dia whitelabel.
+- Pacote consolida entregas, bloqueios, foco de amanha e politica de parada.
+- Encerramento recomenda validacao, commit e push final sem segredos.
+- Console web ganhou consulta de encerramento whitelabel.
+- Teste automatizado cobre percentual do dia, push recomendado e bloqueio de ativacao prematura.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

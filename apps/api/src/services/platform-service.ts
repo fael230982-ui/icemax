@@ -2783,6 +2783,124 @@ export function getMobileOfflineAssistedRetryWhitelabelPartnerGoLiveAcceptance()
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelEndOfDayClosure() {
+  const acceptance = getMobileOfflineAssistedRetryWhitelabelPartnerGoLiveAcceptance();
+  const deliveredToday = [
+    {
+      key: "tenant_cost_matrix",
+      label: "Matriz de custos por tenant",
+      status: "completed",
+      impact: "Separou custos de mapas, e-mail, WhatsApp, IA e armazenamento por empresa.",
+    },
+    {
+      key: "operational_contract_pack",
+      label: "Pacote contratual operacional",
+      status: "completed",
+      impact: "Criou base para contrato whitelabel com escopo, anexos e bloqueios.",
+    },
+    {
+      key: "support_sla_gate",
+      label: "Gate de suporte e SLA",
+      status: "completed",
+      impact: "Definiu niveis de atendimento, responsaveis e runbooks obrigatorios.",
+    },
+    {
+      key: "security_privacy_gate",
+      label: "Gate de seguranca e LGPD",
+      status: "completed",
+      impact: "Travou dados reais ate existir DPA, isolamento, retencao e resposta a incidente.",
+    },
+    {
+      key: "partner_go_live_acceptance",
+      label: "Aceite de go-live do parceiro",
+      status: "completed",
+      impact: "Centralizou aceite final antes de qualquer cliente real de parceiro.",
+    },
+    {
+      key: "day_closure",
+      label: "Encerramento do dia",
+      status: "completed",
+      impact: "Consolidou entrega, validacao, commit, push recomendado e foco de amanha.",
+    },
+  ];
+  const tomorrowPlan = [
+    {
+      key: "production_readiness_followup",
+      label: "Aprofundar prontidao de producao",
+      priority: "high",
+      expectedOutcome: "Reduzir bloqueios tecnicos sem liberar uso real antes dos provedores.",
+    },
+    {
+      key: "mobile_field_experience",
+      label: "Evoluir experiencia mobile do tecnico",
+      priority: "high",
+      expectedOutcome: "Melhorar operacao offline, evidencia, assinatura, checklist e leitura em campo.",
+    },
+    {
+      key: "web_command_center_polish",
+      label: "Polir console web gerencial",
+      priority: "medium",
+      expectedOutcome: "Deixar consultas criticas mais rapidas para gestao diaria e homologacao.",
+    },
+    {
+      key: "database_transition",
+      label: "Avancar transicao para banco persistente",
+      priority: "high",
+      expectedOutcome: "Preparar caminho de dados reais mantendo isolamento por tenant.",
+    },
+    {
+      key: "provider_accounts_decision",
+      label: "Preparar decisoes de contas externas",
+      priority: "medium",
+      expectedOutcome: "Mapear quando Google Maps, Meta, e-mail e OpenAI entram sem expor segredo.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_end_of_day_closure_ready",
+    realExecutionAllowed: false,
+    summary: {
+      projectPercent: 86,
+      deliveredBlocks: deliveredToday.length,
+      sourcePartnerGoLiveAllowed: acceptance.summary.partnerGoLiveAllowed,
+      partnerRealCustomerUseAllowed: false,
+      githubPushRecommended: true,
+      tomorrowFocus: tomorrowPlan.length,
+      stopForTodayRecommended: true,
+    },
+    deliveredToday,
+    stillBlocked: [
+      "partner_real_customer_use",
+      "public_partner_offer",
+      "production_provider_calls",
+      "second_tenant_activation",
+      "real_customer_data_import_before_dpa",
+    ],
+    closurePolicy: {
+      validationRequired: true,
+      commitRequired: true,
+      githubPushRecommended: true,
+      noSecretsAllowed: true,
+      ownerReviewRequiredBeforeProduction: true,
+    },
+    tomorrowPlan,
+    blockedActions: [
+      "start_new_large_scope_today",
+      "activate_partner_without_acceptance",
+      "push_without_validation",
+      "publish_secrets_or_credentials",
+    ],
+    nextActions: [
+      "Executar npm run validate.",
+      "Atualizar checklist do bloco de encerramento.",
+      "Criar commit local do lote.",
+      "Enviar para o GitHub se a validacao passar.",
+      "Retomar amanha pelo plano de prontidao de producao e experiencia mobile.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

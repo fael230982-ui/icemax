@@ -2758,3 +2758,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Encerramento Do Dia Whitelabel
+
+- [x] Endpoint de encerramento do dia criado.
+- [x] Entregas do dia consolidadas.
+- [x] Bloqueios de uso real, segundo tenant e provedores mantidos.
+- [x] Plano de retomada de amanha definido.
+- [x] Console web ganhou consulta de encerramento whitelabel.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
