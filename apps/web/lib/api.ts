@@ -283,6 +283,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/provider-evidence-board", { token }),
   mobileOfflineAssistedRetryTenantActivationDecision: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/tenant-activation-decision", { token }),
+  mobileOfflineAssistedRetryWhitelabelRolloutPlan: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-rollout-plan", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>

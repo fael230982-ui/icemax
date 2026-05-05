@@ -1518,6 +1518,98 @@ export function getMobileOfflineAssistedRetryTenantActivationDecisionPackage() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelRolloutPlan() {
+  const tenantDecision = getMobileOfflineAssistedRetryTenantActivationDecisionPackage();
+  const rolloutWaves = [
+    {
+      key: "wave_0_icemax_internal",
+      tenantScope: "ICEMAX",
+      status: "blocked",
+      objective: "Validar operacao interna, branding, OS, evidencias e provedores em staging.",
+      entryCriteria: [
+        "Pacote de decisao por tenant sem blocos criticos.",
+        "Identidade visual ICEMAX revisada.",
+        "Ambiente de staging isolado.",
+        "Evidencias internas sem segredos.",
+      ],
+      exitCriteria: "ICEMAX aprovada em homologacao interna sem ativar tenant comercial.",
+    },
+    {
+      key: "wave_1_icemax_controlled",
+      tenantScope: "ICEMAX",
+      status: "blocked",
+      objective: "Executar piloto controlado com equipe interna e dados supervisionados.",
+      entryCriteria: [
+        "Wave 0 aprovada.",
+        "Teto mensal de provedores aprovado.",
+        "Alertas e rollback ativos.",
+        "Aprovacao humana do titular registrada.",
+      ],
+      exitCriteria: "Piloto ICEMAX finalizado sem incidente critico e com custo dentro do teto.",
+    },
+    {
+      key: "wave_2_first_whitelabel",
+      tenantScope: "first_partner_tenant",
+      status: "blocked",
+      objective: "Preparar primeira empresa whitelabel sem misturar dados, custos ou evidencias.",
+      entryCriteria: [
+        "Template ICEMAX validado.",
+        "Branding do parceiro separado.",
+        "Variaveis e limites por tenant isolados.",
+        "Contrato e responsabilidades operacionais definidos.",
+      ],
+      exitCriteria: "Primeiro tenant parceiro homologado com isolamento comprovado.",
+    },
+    {
+      key: "wave_3_scaled_whitelabel",
+      tenantScope: "multi_tenant",
+      status: "blocked",
+      objective: "Escalar operacao whitelabel com governanca repetivel.",
+      entryCriteria: [
+        "Primeiro tenant parceiro aprovado.",
+        "Checklist de onboarding repetivel.",
+        "Monitoramento por tenant ativo.",
+        "Relatorio de custo por tenant disponivel.",
+      ],
+      exitCriteria: "Expansao controlada liberada somente por aprovacao formal.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_rollout_plan_ready",
+    realExecutionAllowed: false,
+    summary: {
+      waves: rolloutWaves.length,
+      blockedWaves: rolloutWaves.filter((wave) => wave.status === "blocked").length,
+      firstTenant: "ICEMAX",
+      futureWhitelabelSupported: true,
+      tenantDecision: tenantDecision.decision.result,
+      commercialReleaseAllowed: false,
+    },
+    rolloutWaves,
+    isolationPolicy: {
+      tenantDataIsolationRequired: true,
+      providerBudgetByTenantRequired: true,
+      evidenceByTenantRequired: true,
+      brandingByTenantRequired: true,
+      secretsSharedBetweenTenantsAllowed: false,
+    },
+    blockedActions: [
+      "release_partner_tenant_before_icemax",
+      "share_provider_credentials_between_tenants",
+      "mix_customer_data_between_tenants",
+      "activate_commercial_whitelabel_without_owner_signoff",
+    ],
+    nextActions: [
+      "Finalizar template operacional da ICEMAX antes do primeiro parceiro.",
+      "Preparar checklist de onboarding whitelabel por tenant.",
+      "Definir politica de custos e alertas por tenant.",
+      "Reavaliar rollout apos pacote de decisao sair de do_not_activate.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

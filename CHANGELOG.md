@@ -1022,6 +1022,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de decisao por tenant.
 - Teste automatizado cobre bloqueio comercial, signoff do titular e blocos criticos.
 
+## 0.8.141 - Plano De Rollout Whitelabel Por Tenant
+
+- Criado endpoint de rollout whitelabel por tenant.
+- Plano organiza ICEMAX interna, piloto controlado, primeiro parceiro e escala multi-tenant.
+- Politica de isolamento separa dados, branding, custos, evidencias e segredos por tenant.
+- Console web ganhou consulta de rollout whitelabel.
+- Teste automatizado cobre ICEMAX como primeiro tenant e bloqueio de compartilhamento de segredos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

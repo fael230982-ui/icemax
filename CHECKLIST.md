@@ -2535,3 +2535,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano De Rollout Whitelabel Por Tenant
+
+- [x] Endpoint de rollout whitelabel criado.
+- [x] ICEMAX definida como tenant inicial de referencia.
+- [x] Ondas de piloto, primeiro parceiro e escala multi-tenant registradas.
+- [x] Politica de isolamento por dados, custos, branding, evidencias e segredos definida.
+- [x] Console web ganhou consulta de rollout.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

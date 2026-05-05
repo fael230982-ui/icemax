@@ -1428,6 +1428,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.role === "owner"));
   assert.ok(retryTenantActivationDecision.json().summary.criticalBlocks >= 3);
 
+  const retryWhitelabelRolloutPlan = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-rollout-plan",
+  });
+  assert.equal(retryWhitelabelRolloutPlan.statusCode, 200);
+  assert.equal(retryWhitelabelRolloutPlan.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelRolloutPlan.json().summary.firstTenant, "ICEMAX");
+  assert.equal(retryWhitelabelRolloutPlan.json().summary.commercialReleaseAllowed, false);
+  assert.ok(retryWhitelabelRolloutPlan.json().rolloutWaves.some((item: { key: string }) =>
+    item.key === "wave_2_first_whitelabel"));
+  assert.equal(retryWhitelabelRolloutPlan.json().isolationPolicy.secretsSharedBetweenTenantsAllowed, false);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",
