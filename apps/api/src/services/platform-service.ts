@@ -254,6 +254,76 @@ export function getMobileOfflineAssistedRetryAuditContract() {
   };
 }
 
+export function getMobileOfflineAssistedRetryReadiness(recordId: string) {
+  const board = getMobileOfflineEscalationBoard();
+  const escalation = board.data.find((item) => item.id === recordId) ?? board.data[0];
+  const productionGate = getMobileOfflineAssistedRetryProductionGate();
+  const permissions = getMobileOfflineAssistedRetryPermissions();
+  const auditContract = getMobileOfflineAssistedRetryAuditContract();
+  const timeline = getMobileOfflineEscalationTimeline(recordId);
+  const checks = [
+    {
+      key: "risk_reviewed",
+      label: "Risco classificado",
+      status: escalation.severityScore >= 85 ? "attention" : "pass",
+      detail: `Score atual ${escalation.severityScore} e SLA ${escalation.slaStatus}.`,
+    },
+    {
+      key: "permissions",
+      label: "Permissoes mapeadas",
+      status: permissions.productionExecutionAllowed ? "pass" : "block",
+      detail: "Execucao real exige owner/admin e confirmacao dupla.",
+    },
+    {
+      key: "audit_contract",
+      label: "Contrato de auditoria",
+      status: auditContract.persistenceRequiredBeforeRealExecution ? "block" : "pass",
+      detail: "Persistencia de auditoria e obrigatoria antes do envio real.",
+    },
+    {
+      key: "production_gate",
+      label: "Gate de producao",
+      status: productionGate.realExecutionAllowed ? "pass" : "block",
+      detail: "Gate atual mantem reenvio real desativado.",
+    },
+    {
+      key: "timeline",
+      label: "Timeline operacional",
+      status: timeline.summary.blocked > 0 ? "block" : "pass",
+      detail: timeline.summary.nextRequiredAction,
+    },
+  ];
+  const blockers = checks.filter((check) => check.status === "block");
+  const attention = checks.filter((check) => check.status === "attention");
+
+  return {
+    recordId,
+    generatedAt: new Date().toISOString(),
+    status: blockers.length ? "not_ready_for_real_execution" : "ready_for_controlled_execution",
+    realExecutionAllowed: false,
+    dryRunAllowed: productionGate.dryRunAllowed,
+    escalation: {
+      serviceOrderId: escalation.serviceOrderId,
+      customer: escalation.customer,
+      actionLabel: escalation.actionLabel,
+      priority: escalation.priority,
+      severityScore: escalation.severityScore,
+      slaStatus: escalation.slaStatus,
+      owner: escalation.owner,
+    },
+    checks,
+    summary: {
+      passed: checks.filter((check) => check.status === "pass").length,
+      attention: attention.length,
+      blocked: blockers.length,
+      requiredBeforeRealExecution: blockers.map((check) => check.key),
+    },
+    recommendation: blockers.length
+      ? "Manter somente revisao, preparo e dry-run ate banco real, auditoria persistente e permissao sensivel estarem ativos."
+      : "Liberar apenas em homologacao controlada antes de qualquer tenant real.",
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

@@ -2278,3 +2278,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Prontidao Do Reenvio Real Offline
+
+- [x] Endpoint de prontidao por pendencia criado.
+- [x] Risco, permissoes, auditoria, gate e timeline consolidados.
+- [x] Execucao real permanece bloqueada.
+- [x] Dry-run permanece permitido.
+- [x] Console web ganhou acao de prontidao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

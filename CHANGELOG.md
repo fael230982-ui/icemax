@@ -894,6 +894,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de auditoria do reenvio offline.
 - Teste automatizado cobre hash de payload e evento futuro de execucao real.
 
+## 0.8.125 - Prontidao Do Reenvio Real Offline
+
+- Criado endpoint de prontidao por pendencia offline bloqueada.
+- Relatorio consolida risco, permissoes, auditoria, gate e timeline.
+- Execucao real permanece bloqueada e dry-run continua permitido.
+- Console web ganhou acao `Prontidao` por pendencia offline.
+- Teste automatizado cobre bloqueio da execucao real e prerequisitos pendentes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

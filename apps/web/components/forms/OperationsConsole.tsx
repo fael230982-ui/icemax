@@ -671,6 +671,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryReadiness(recordId: string) {
+    void run("Prontidao do reenvio offline", () =>
+      icemaxApi.mobileOfflineAssistedRetryReadiness(recordId, token || undefined),
+    );
+  }
+
   function loadMobileOfflineEscalationTimeline(recordId: string) {
     void run("Timeline pendencia offline", () =>
       icemaxApi.mobileOfflineEscalationTimeline(recordId, token || undefined),
@@ -981,6 +987,9 @@ export function OperationsConsole() {
                       </button>
                       <button type="button" className="secondary" onClick={() => runMobileOfflineAssistedRetryDryRun(item.id)}>
                         Simular
+                      </button>
+                      <button type="button" className="secondary" onClick={() => loadMobileOfflineAssistedRetryReadiness(item.id)}>
+                        Prontidao
                       </button>
                       <button type="button" className="secondary" onClick={() => loadMobileOfflineEscalationTimeline(item.id)}>
                         Timeline
