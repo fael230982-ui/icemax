@@ -2614,3 +2614,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Health Score Do Tenant Whitelabel
+
+- [x] Endpoint de health score whitelabel criado.
+- [x] Indicadores de estabilidade, adocao, comunicacao, custos, suporte e revisao executiva definidos.
+- [x] ICEMAX permanece como primeiro tenant de referencia.
+- [x] Hypercare e escala bloqueada registrados na decisao.
+- [x] Console web ganhou consulta de health score.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

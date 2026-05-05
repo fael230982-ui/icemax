@@ -1965,6 +1965,99 @@ export function getMobileOfflineAssistedRetryWhitelabelPostGoLivePlan() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelTenantHealthScore() {
+  const postGoLive = getMobileOfflineAssistedRetryWhitelabelPostGoLivePlan();
+  const indicators = [
+    {
+      key: "offline_retry_stability",
+      label: "Estabilidade do reenvio offline",
+      status: "blocked",
+      score: 62,
+      target: "95% de reenvios sem intervencao manual por 30 dias",
+      evidence: "Fila offline ainda deve ser acompanhada diariamente no hypercare.",
+    },
+    {
+      key: "field_team_adoption",
+      label: "Aderencia da equipe tecnica",
+      status: "attention",
+      score: 76,
+      target: "90% das OS com checklist, fotos, assinatura e relatorio completo",
+      evidence: "Uso assistido recomendado nas primeiras rotas reais.",
+    },
+    {
+      key: "customer_communication",
+      label: "Comunicacao com cliente",
+      status: "attention",
+      score: 74,
+      target: "Envio de relatorio, copia opcional ao cliente e garantia sem retrabalho",
+      evidence: "Modelos precisam ser revisados apos primeiros atendimentos reais.",
+    },
+    {
+      key: "provider_cost_control",
+      label: "Controle de custos de provedores",
+      status: "blocked",
+      score: 58,
+      target: "Custos de mapas, e-mail, WhatsApp e IA dentro do teto aprovado",
+      evidence: "Sem contas reais conectadas, custos permanecem simulados.",
+    },
+    {
+      key: "support_and_incidents",
+      label: "Suporte e incidentes",
+      status: "blocked",
+      score: 61,
+      target: "Nenhum incidente critico aberto e SLA de suporte definido",
+      evidence: "Matriz de suporte e resposta ainda deve ser homologada.",
+    },
+    {
+      key: "owner_business_review",
+      label: "Revisao executiva do dono",
+      status: "blocked",
+      score: 55,
+      target: "Aprovacao formal de RAFAEL DA SILVA BEZEERA para escalar",
+      evidence: "Decisao D30 continua obrigatoria antes de liberar outro tenant.",
+    },
+  ];
+  const averageScore = Math.round(indicators.reduce((total, item) => total + item.score, 0) / indicators.length);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_tenant_health_score_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      firstTenant: "ICEMAX",
+      averageScore,
+      minimumScaleScore: 90,
+      blockedIndicators: indicators.filter((item) => item.status === "blocked").length,
+      attentionIndicators: indicators.filter((item) => item.status === "attention").length,
+      sourceMilestones: postGoLive.summary.milestones,
+      hypercareRequired: postGoLive.summary.hypercareRequired,
+      scaleAllowed: false,
+    },
+    indicators,
+    decision: {
+      result: "keep_hypercare",
+      reason: "Escala whitelabel depende de 30 dias acompanhados, custos reais controlados e aprovacao executiva.",
+      requiredBeforeScale: [
+        "Fechar revisao D1 sem incidente critico.",
+        "Fechar revisao da Semana 1 com adocao da equipe validada.",
+        "Fechar revisao D30 com custos reais e impacto no cliente.",
+        "Registrar aprovacao formal do dono antes do segundo tenant.",
+      ],
+    },
+    blockedActions: [
+      "second_tenant_activation",
+      "public_whitelabel_offer",
+      "disable_daily_health_review",
+      "scale_without_owner_business_review",
+    ],
+    nextActions: [
+      "Usar este health score nas reunioes D1, Semana 1 e D30.",
+      "Atualizar indicadores com dados reais quando provedores e operacao estiverem conectados.",
+      "Manter segundo tenant bloqueado ate atingir score minimo e aprovacao executiva.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

@@ -1488,6 +1488,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "day_30_scale_decision"));
   assert.ok(retryWhitelabelPostGoLivePlan.json().blockedActions.includes("release_second_tenant_without_first_tenant_review"));
 
+  const retryWhitelabelTenantHealthScore = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-tenant-health-score",
+  });
+  assert.equal(retryWhitelabelTenantHealthScore.statusCode, 200);
+  assert.equal(retryWhitelabelTenantHealthScore.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelTenantHealthScore.json().summary.firstTenant, "ICEMAX");
+  assert.equal(retryWhitelabelTenantHealthScore.json().summary.scaleAllowed, false);
+  assert.ok(retryWhitelabelTenantHealthScore.json().summary.averageScore < 90);
+  assert.equal(retryWhitelabelTenantHealthScore.json().decision.result, "keep_hypercare");
+  assert.ok(retryWhitelabelTenantHealthScore.json().blockedActions.includes("second_tenant_activation"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

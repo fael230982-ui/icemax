@@ -1062,6 +1062,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de pos-go-live.
 - Teste automatizado cobre hypercare obrigatorio e escala bloqueada ate revisao do primeiro tenant.
 
+## 0.8.146 - Health Score Do Tenant Whitelabel
+
+- Criado endpoint de health score dos primeiros 30 dias do tenant whitelabel.
+- Indicadores avaliam reenvio offline, adocao da equipe, comunicacao, custos, suporte e revisao executiva.
+- Decisao padrao mantem hypercare e bloqueia segundo tenant ate score minimo e aprovacao do dono.
+- Console web ganhou consulta de health score.
+- Teste automatizado cobre ICEMAX como primeiro tenant e escala bloqueada.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
