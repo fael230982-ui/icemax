@@ -1550,6 +1550,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "ai"));
   assert.ok(retryWhitelabelTenantCostMatrix.json().blockedActions.includes("use_icemax_provider_keys_for_partner"));
 
+  const retryWhitelabelOperationalContractPack = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-operational-contract-pack",
+  });
+  assert.equal(retryWhitelabelOperationalContractPack.statusCode, 200);
+  assert.equal(retryWhitelabelOperationalContractPack.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelOperationalContractPack.json().summary.contractSignatureAllowed, false);
+  assert.equal(retryWhitelabelOperationalContractPack.json().contractPolicy.customerCredentialsInContractAllowed, false);
+  assert.ok(retryWhitelabelOperationalContractPack.json().attachments.some((item: string) =>
+    item.includes("matriz de custos")));
+  assert.ok(retryWhitelabelOperationalContractPack.json().blockedActions.includes("sign_contract_before_scale_decision"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

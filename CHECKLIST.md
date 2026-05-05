@@ -2694,3 +2694,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pacote Contratual Operacional Whitelabel
+
+- [x] Endpoint de pacote contratual operacional criado.
+- [x] Clausulas de escopo, isolamento, custos, suporte, LGPD e liberacao definidas.
+- [x] Anexos contratuais operacionais registrados.
+- [x] Assinatura comercial permanece bloqueada.
+- [x] Console web ganhou consulta de contrato whitelabel.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

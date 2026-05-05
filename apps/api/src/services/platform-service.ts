@@ -2429,6 +2429,108 @@ export function getMobileOfflineAssistedRetryWhitelabelTenantCostMatrix() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelOperationalContractPack() {
+  const costMatrix = getMobileOfflineAssistedRetryWhitelabelTenantCostMatrix();
+  const clauses = [
+    {
+      key: "scope_and_modules",
+      label: "Escopo e modulos contratados",
+      status: "draft",
+      required: [
+        "Definir OS, agenda, rotas, estoque, contratos, relatorios, QR e portal.",
+        "Listar recursos bloqueados ate provedores reais serem aprovados.",
+      ],
+    },
+    {
+      key: "tenant_isolation",
+      label: "Isolamento do tenant",
+      status: "draft",
+      required: [
+        "Dados, usuarios, clientes, tecnicos e estoque separados por empresa.",
+        "Proibicao de uso cruzado de base de clientes.",
+      ],
+    },
+    {
+      key: "provider_costs",
+      label: "Custos de provedores",
+      status: "draft",
+      required: [
+        "Teto mensal por centro de custo.",
+        "Responsabilidade de pagamento e aprovacao para excedentes.",
+      ],
+    },
+    {
+      key: "support_and_sla",
+      label: "Suporte e SLA",
+      status: "draft",
+      required: [
+        "Canais de suporte, horario, prioridade e tempo de resposta.",
+        "Processo de incidente critico e rollback operacional.",
+      ],
+    },
+    {
+      key: "data_protection",
+      label: "Protecao de dados e LGPD",
+      status: "draft",
+      required: [
+        "Responsabilidades do controlador e operador.",
+        "Retencao, descarte e atendimento a solicitacoes LGPD.",
+      ],
+    },
+    {
+      key: "commercial_release",
+      label: "Liberacao comercial",
+      status: "blocked",
+      required: [
+        "Aprovacao formal do dono.",
+        "Pacote de decisao de escala liberado.",
+        "Custos e suporte aprovados.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_operational_contract_pack_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      clauses: clauses.length,
+      blockedClauses: clauses.filter((item) => item.status === "blocked").length,
+      draftClauses: clauses.filter((item) => item.status === "draft").length,
+      sourceTotalMonthlyCapBRL: costMatrix.summary.totalMonthlyCapBRL,
+      contractSignatureAllowed: false,
+      commercialReleaseAllowed: false,
+    },
+    clauses,
+    attachments: [
+      "Anexo A - escopo funcional por modulo.",
+      "Anexo B - matriz de custos por tenant.",
+      "Anexo C - suporte, SLA e incidentes.",
+      "Anexo D - protecao de dados, retencao e LGPD.",
+      "Anexo E - aceite de go-live e criterios de rollback.",
+    ],
+    contractPolicy: {
+      legalReviewRequired: true,
+      ownerSignatureRequired: true,
+      customerCredentialsInContractAllowed: false,
+      publicRepositoryDisclosureAllowed: false,
+      productionActivationBeforePaymentAllowed: false,
+    },
+    blockedActions: [
+      "send_contract_without_cost_attachment",
+      "sign_contract_before_scale_decision",
+      "activate_partner_before_legal_review",
+      "include_customer_credentials_in_contract",
+    ],
+    nextActions: [
+      "Revisar pacote contratual com advogado antes de uso real.",
+      "Conectar matriz de custos ao anexo comercial.",
+      "Definir SLA padrao e excecoes por tenant.",
+      "Manter assinatura bloqueada ate decisao de escala aprovada.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

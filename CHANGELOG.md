@@ -1102,6 +1102,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de custos por tenant.
 - Teste automatizado cobre bloqueio de chaves da ICEMAX para parceiro.
 
+## 0.8.151 - Pacote Contratual Operacional Whitelabel
+
+- Criado endpoint de pacote contratual operacional whitelabel.
+- Pacote organiza escopo, isolamento, custos, suporte, LGPD e liberacao comercial.
+- Anexos cobrem modulos, matriz de custos, SLA, dados e aceite de go-live.
+- Console web ganhou consulta de contrato whitelabel.
+- Teste automatizado cobre assinatura bloqueada e proibicao de credenciais no contrato.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
