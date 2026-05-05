@@ -6,7 +6,9 @@ import {
   issuePrismaPublicAccessToken,
   listMockPublicAccessTokens,
   listPrismaPublicAccessTokens,
+  revokeMockPublicAccessTokenById,
   revokeMockPublicAccessToken,
+  revokePrismaPublicAccessTokenById,
   revokePrismaPublicAccessToken,
   validateMockPublicAccessToken,
   validatePrismaPublicAccessToken,
@@ -655,6 +657,27 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
       entityId: revocation.revoked ? revocation.entityId ?? "unknown" : "unknown",
       metadata: {
         scope,
+        revoked: revocation.revoked,
+        reason: revocation.reason,
+      },
+    });
+
+    return revocation.revoked ? revocation : reply.code(404).send(revocation);
+  });
+
+  app.post("/customer-portal/public-token-records/:id/revoke", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const revocation = isPrismaEnabled()
+      ? await revokePrismaPublicAccessTokenById(tenant.id, id)
+      : await revokeMockPublicAccessTokenById(tenant.id, id);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.public_token_record_revoked",
+      entity: revocation.revoked ? revocation.entityType ?? "public_access_token" : "public_access_token",
+      entityId: revocation.revoked ? revocation.entityId ?? id : id,
+      metadata: {
+        id,
         revoked: revocation.revoked,
         reason: revocation.reason,
       },

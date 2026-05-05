@@ -871,6 +871,29 @@ test("customer portal can request optional service order", async () => {
   assert.equal(trackingTokenList.json().total, 1);
   assert.equal(trackingTokenList.json().data[0].status, "revoked");
 
+  const activeBillingTokenList = await app.inject({
+    method: "GET",
+    url: "/customer-portal/public-tokens?entityType=customer_portal&entityId=icemax&status=active",
+  });
+  assert.equal(activeBillingTokenList.statusCode, 200);
+  assert.equal(activeBillingTokenList.json().total, 1);
+
+  const billingTokenRecordRevocation = await app.inject({
+    method: "POST",
+    url: `/customer-portal/public-token-records/${activeBillingTokenList.json().data[0].id}/revoke`,
+  });
+  assert.equal(billingTokenRecordRevocation.statusCode, 200);
+  assert.equal(billingTokenRecordRevocation.json().revoked, true);
+  assert.equal(billingTokenRecordRevocation.json().scope, "billing_summary");
+  assert.equal(billingTokenRecordRevocation.json().rawTokenPersisted, false);
+
+  const revokedBillingTokenValidation = await app.inject({
+    method: "GET",
+    url: `/public/customer-portal/tokens/${billingAccess.json().token}/validate?scope=billing_summary`,
+  });
+  assert.equal(revokedBillingTokenValidation.statusCode, 404);
+  assert.equal(revokedBillingTokenValidation.json().reason, "revoked");
+
   const attachments = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders/1048/attachments",

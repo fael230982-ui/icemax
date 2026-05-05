@@ -267,6 +267,74 @@ export async function revokePrismaPublicAccessToken(tenantId: string, rawPublicA
   };
 }
 
+export async function revokeMockPublicAccessTokenById(tenantId: string, id: string) {
+  const record = mockPublicAccessTokens.find((item) => item.tenantId === tenantId && item.id === id);
+
+  if (!record) {
+    return { revoked: false, reason: "not_found", tenantId, id };
+  }
+
+  const alreadyRevoked = Boolean(record.revokedAt);
+  record.revokedAt ??= new Date().toISOString();
+
+  return {
+    revoked: true,
+    reason: alreadyRevoked ? "already_revoked_mock" : "revoked_mock",
+    tenantId,
+    id: record.id,
+    entityType: record.entityType,
+    entityId: record.entityId,
+    scope: record.scope,
+    revokedAt: record.revokedAt,
+    tokenHashPreview: record.tokenHashPreview,
+    rawTokenPersisted: false,
+  };
+}
+
+export async function revokePrismaPublicAccessTokenById(tenantId: string, id: string) {
+  const record = await getPrisma().publicAccessToken.findFirst({
+    where: { tenantId, id },
+  });
+
+  if (!record) {
+    return { revoked: false, reason: "not_found", tenantId, id };
+  }
+
+  if (record.revokedAt) {
+    return {
+      revoked: true,
+      reason: "already_revoked",
+      tenantId,
+      id: record.id,
+      entityType: record.entityType,
+      entityId: record.entityId,
+      scope: record.scope,
+      revokedAt: record.revokedAt.toISOString(),
+      tokenHashPreview: `${record.tokenHash.slice(0, 12)}...`,
+      rawTokenPersisted: false,
+    };
+  }
+
+  const revokedAt = new Date();
+  await getPrisma().publicAccessToken.update({
+    where: { id: record.id },
+    data: { revokedAt },
+  });
+
+  return {
+    revoked: true,
+    reason: "revoked",
+    tenantId,
+    id: record.id,
+    entityType: record.entityType,
+    entityId: record.entityId,
+    scope: record.scope,
+    revokedAt: revokedAt.toISOString(),
+    tokenHashPreview: `${record.tokenHash.slice(0, 12)}...`,
+    rawTokenPersisted: false,
+  };
+}
+
 function publicTokenStatus(expiresAt: string | Date, revokedAt?: string | Date | null) {
   if (revokedAt) {
     return "revoked";

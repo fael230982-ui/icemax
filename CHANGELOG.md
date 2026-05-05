@@ -716,6 +716,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - A listagem preserva a regra de nunca mostrar token cru.
 - Documentada a conexao do inventario de links ao console web.
 
+## 0.8.103 - Revogacao De Link Por Registro
+
+- Adicionado endpoint `POST /customer-portal/public-token-records/:id/revoke`.
+- Operacao pode revogar link pelo ID listado no inventario sem conhecer token cru.
+- Mock e Prisma passam a suportar revogacao administrativa por registro.
+- Auditoria diferencia revogacao por token e revogacao por registro.
+- Teste automatizado cobre revogacao de link financeiro ativo pelo ID do inventario.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
