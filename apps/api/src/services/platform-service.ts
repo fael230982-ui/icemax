@@ -1610,6 +1610,109 @@ export function getMobileOfflineAssistedRetryWhitelabelRolloutPlan() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelOnboardingChecklist() {
+  const rollout = getMobileOfflineAssistedRetryWhitelabelRolloutPlan();
+  const checklist = [
+    {
+      area: "identity_branding",
+      owner: "operations",
+      status: "blocked",
+      items: [
+        "Cadastrar nome comercial, slug e dominio do tenant.",
+        "Validar logo, cores, assinatura de e-mail e termos visuais.",
+        "Confirmar textos legais e rodape por empresa.",
+      ],
+    },
+    {
+      area: "tenant_data",
+      owner: "platform",
+      status: "blocked",
+      items: [
+        "Criar tenant isolado sem dados compartilhados.",
+        "Definir seed inicial de usuarios, clientes, equipes e permissssoes.",
+        "Configurar politica de retencao e auditoria por tenant.",
+      ],
+    },
+    {
+      area: "users_permissions",
+      owner: "platform",
+      status: "blocked",
+      items: [
+        "Cadastrar proprietario, administradores, tecnicos e terceiros.",
+        "Validar matriz de permissoes por perfil.",
+        "Revisar acesso a relatorios, estoque, contratos e auditoria.",
+      ],
+    },
+    {
+      area: "provider_budget",
+      owner: "finance",
+      status: "blocked",
+      items: [
+        "Definir teto mensal por provedor e por tenant.",
+        "Ativar alertas de custo, quota e consumo.",
+        "Registrar aprovacao sem incluir segredos ou dados de cartao.",
+      ],
+    },
+    {
+      area: "secure_integrations",
+      owner: "platform",
+      status: "blocked",
+      items: [
+        "Configurar segredos somente no ambiente seguro.",
+        "Separar chaves, remetentes, mapas, IA e WhatsApp por tenant quando aplicavel.",
+        "Executar smoke test com dados ficticios e destinatarios internos.",
+      ],
+    },
+    {
+      area: "business_operations",
+      owner: "operations",
+      status: "blocked",
+      items: [
+        "Configurar checklists, garantias, relatorios e modelos de OS.",
+        "Validar contratos recorrentes, estoque, pecas e rotas.",
+        "Treinar equipe interna antes do primeiro atendimento real.",
+      ],
+    },
+    {
+      area: "release_governance",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      status: "blocked",
+      items: [
+        "Executar npm run validate antes da liberacao.",
+        "Revisar evidencias sem segredos visiveis.",
+        "Registrar signoff final por tenant.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_onboarding_checklist_ready",
+    realExecutionAllowed: false,
+    summary: {
+      sections: checklist.length,
+      blockedSections: checklist.filter((section) => section.status === "blocked").length,
+      totalItems: checklist.reduce((total, section) => total + section.items.length, 0),
+      firstTenant: rollout.summary.firstTenant,
+      commercialReleaseAllowed: false,
+    },
+    checklist,
+    onboardingPolicy: {
+      repeatablePerTenant: true,
+      tenantIsolationRequired: true,
+      ownerSignoffRequired: true,
+      secretsInRepositoryAllowed: false,
+      customerDataInSmokeTestsAllowed: false,
+    },
+    nextActions: [
+      "Usar ICEMAX como primeiro preenchimento do checklist.",
+      "Converter itens aprovados em evidencias internas por tenant.",
+      "Criar templates de branding e permissoes reutilizaveis.",
+      "Manter qualquer parceiro whitelabel bloqueado ate ICEMAX estar homologada.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

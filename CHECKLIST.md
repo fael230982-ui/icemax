@@ -2551,3 +2551,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Checklist De Onboarding Whitelabel Por Tenant
+
+- [x] Endpoint de checklist de onboarding criado.
+- [x] Identidade, dados, usuarios, provedores, integracoes, operacao e governanca mapeados.
+- [x] Politica de isolamento e bloqueio de segredos registrada.
+- [x] ICEMAX definida como primeiro preenchimento.
+- [x] Console web ganhou consulta de onboarding.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

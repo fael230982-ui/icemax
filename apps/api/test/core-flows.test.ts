@@ -1440,6 +1440,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "wave_2_first_whitelabel"));
   assert.equal(retryWhitelabelRolloutPlan.json().isolationPolicy.secretsSharedBetweenTenantsAllowed, false);
 
+  const retryWhitelabelOnboardingChecklist = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-onboarding-checklist",
+  });
+  assert.equal(retryWhitelabelOnboardingChecklist.statusCode, 200);
+  assert.equal(retryWhitelabelOnboardingChecklist.json().realExecutionAllowed, false);
+  assert.ok(retryWhitelabelOnboardingChecklist.json().summary.totalItems >= 20);
+  assert.equal(retryWhitelabelOnboardingChecklist.json().onboardingPolicy.secretsInRepositoryAllowed, false);
+  assert.ok(retryWhitelabelOnboardingChecklist.json().checklist.some((item: { area: string }) =>
+    item.area === "identity_branding"));
+  assert.ok(retryWhitelabelOnboardingChecklist.json().nextActions.some((item: string) =>
+    item.includes("ICEMAX")));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

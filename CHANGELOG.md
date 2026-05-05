@@ -1030,6 +1030,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de rollout whitelabel.
 - Teste automatizado cobre ICEMAX como primeiro tenant e bloqueio de compartilhamento de segredos.
 
+## 0.8.142 - Checklist De Onboarding Whitelabel Por Tenant
+
+- Criado endpoint de checklist de onboarding whitelabel.
+- Checklist cobre identidade, dados, usuarios, provedores, integracoes, operacao e governanca.
+- Politica impede segredos no repositorio e dados reais em smoke tests.
+- Console web ganhou consulta de onboarding whitelabel.
+- Teste automatizado cobre ICEMAX como primeiro preenchimento e bloqueio de segredos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
