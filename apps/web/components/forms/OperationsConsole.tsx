@@ -3,6 +3,23 @@
 import { FormEvent, useState } from "react";
 import { icemaxApi } from "../../lib/api";
 
+type PublicTokenInventoryItem = {
+  id: string;
+  scope: string;
+  entityType: string;
+  entityId: string;
+  status: string;
+  tokenHashPreview?: string;
+  expiresAt?: string;
+  revokedAt?: string;
+};
+
+type PublicTokenInventoryResponse = {
+  data?: PublicTokenInventoryItem[];
+  summary?: Record<string, number>;
+  total?: number;
+};
+
 function encodeTextFile(content: string) {
   return btoa(unescape(encodeURIComponent(content)));
 }
@@ -11,6 +28,7 @@ export function OperationsConsole() {
   const [token, setToken] = useState("");
   const [publicTokenRecordId, setPublicTokenRecordId] = useState("");
   const [publicTokenRevocationReason, setPublicTokenRevocationReason] = useState("Link revogado por solicitacao operacional.");
+  const [publicTokenInventory, setPublicTokenInventory] = useState<PublicTokenInventoryResponse | null>(null);
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
 
@@ -307,10 +325,20 @@ export function OperationsConsole() {
 
   function loadPublicTokenInventory() {
     void run("Inventario de links publicos", () =>
-      icemaxApi.customerPortalPublicTokens(token || undefined, {
-        status: "all",
+      icemaxApi.customerPortalPublicTokens(token || undefined, { status: "all" }).then((response) => {
+        setPublicTokenInventory(response as PublicTokenInventoryResponse);
+        return response;
       }),
     );
+  }
+
+  function revokePublicTokenRecordById(recordId: string, reason: string) {
+    void run("Revogar link publico", async () => {
+      const response = await icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, { reason }, token || undefined);
+      const inventory = await icemaxApi.customerPortalPublicTokens(token || undefined, { status: "all" });
+      setPublicTokenInventory(inventory as PublicTokenInventoryResponse);
+      return { revocation: response, inventory };
+    });
   }
 
   function revokePublicTokenRecord(event: FormEvent<HTMLFormElement>) {
@@ -329,7 +357,10 @@ export function OperationsConsole() {
     }
 
     void run("Revogar link publico", () =>
-      icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, { reason }, token || undefined),
+      icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, { reason }, token || undefined).then((response) => {
+        setPublicTokenRecordId("");
+        return response;
+      }),
     );
   }
 
@@ -726,6 +757,45 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runDatabaseTransitionCheck}>Virada banco</button>
       </div>
+
+      {publicTokenInventory?.data?.length ? (
+        <div className="opsPanel">
+          <strong>Links publicos</strong>
+          <div className="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Escopo</th>
+                  <th>Entidade</th>
+                  <th>Status</th>
+                  <th>Hash</th>
+                  <th>Acao</th>
+                </tr>
+              </thead>
+              <tbody>
+                {publicTokenInventory.data.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.scope}</td>
+                    <td>{item.entityType}:{item.entityId}</td>
+                    <td>{item.status}</td>
+                    <td>{item.tokenHashPreview ?? "protegido"}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="secondary"
+                        disabled={item.status === "revoked"}
+                        onClick={() => revokePublicTokenRecordById(item.id, `Revogacao pelo inventario visual: ${item.scope} ${item.entityId}.`)}
+                      >
+                        Revogar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : null}
 
       {result ? <pre className="apiResult">{result}</pre> : null}
     </div>

@@ -740,6 +740,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Auditoria registra o motivo junto da revogacao.
 - Teste automatizado cobre motivo em revogacao de link financeiro.
 
+## 0.8.106 - Inventario Visual De Links
+
+- Console web passou a renderizar tabela de links publicos apos consulta ao inventario.
+- Tabela mostra escopo, entidade, status e preview seguro do hash.
+- Cada linha ativa pode ser revogada diretamente sem expor token cru.
+- Inventario e recarregado apos revogacao pela tabela.
+- Estilos responsivos adicionados para leitura operacional.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -1988,3 +1988,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Inventario Visual De Links
+
+- [x] Tabela visual de links publicos adicionada.
+- [x] Tabela exibe escopo, entidade, status e hash seguro.
+- [x] Revogacao por linha adicionada.
+- [x] Acao desabilita links ja revogados.
+- [x] Inventario recarrega apos revogacao.
+- [x] Estilos responsivos adicionados.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
