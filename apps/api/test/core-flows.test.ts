@@ -1355,6 +1355,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryProductionReadiness.json().topRisks.some((item: { severity: string }) =>
     item.severity === "critical"));
 
+  const retryInfrastructureBacklog = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/infrastructure-backlog",
+  });
+  assert.equal(retryInfrastructureBacklog.statusCode, 200);
+  assert.equal(retryInfrastructureBacklog.json().realExecutionAllowed, false);
+  assert.ok(retryInfrastructureBacklog.json().summary.critical >= 3);
+  assert.ok(retryInfrastructureBacklog.json().backlog.some((item: { key: string }) =>
+    item.key === "database"));
+  assert.ok(retryInfrastructureBacklog.json().guardrails.some((item: string) =>
+    item.includes("Nao registrar segredos")));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

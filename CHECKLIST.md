@@ -2439,3 +2439,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Backlog De Infraestrutura Do Reenvio Offline
+
+- [x] Endpoint de backlog de infraestrutura criado.
+- [x] Pendencias por area, prioridade e dono registradas.
+- [x] Banco real, auditoria e permissoes marcados como criticos.
+- [x] Guardrail contra segredos registrado.
+- [x] Console web ganhou consulta de infraestrutura.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

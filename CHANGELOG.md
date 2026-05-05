@@ -974,6 +974,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de prontidao de producao offline.
 - Teste automatizado cobre score insuficiente, risco critico e bloqueio de execucao real.
 
+## 0.8.135 - Backlog De Infraestrutura Do Reenvio Offline
+
+- Criado endpoint de backlog de infraestrutura do reenvio offline.
+- Backlog organiza pendencias por area, prioridade, dono, configuracoes e bloqueios.
+- Banco real, auditoria persistente e permissoes sensiveis ficam como criticos.
+- Console web ganhou consulta de infraestrutura pendente.
+- Teste automatizado cobre guardrail contra segredos e bloqueio do envio real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

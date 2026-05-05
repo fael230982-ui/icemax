@@ -947,6 +947,108 @@ export function getMobileOfflineAssistedRetryProductionReadinessBoard() {
   };
 }
 
+export function getMobileOfflineAssistedRetryInfrastructureBacklog() {
+  const readiness = getMobileOfflineAssistedRetryProductionReadinessBoard();
+  const backlog = [
+    {
+      key: "database",
+      area: "infra",
+      priority: "critical",
+      title: "Banco real e migracoes",
+      requiredConfig: ["DATABASE_URL", "Prisma migrate", "backup policy"],
+      owner: "platform",
+      status: "pending",
+      blocks: ["phase_1_real_persistence", "persistent_audit", "real_execution"],
+    },
+    {
+      key: "audit_storage",
+      area: "security",
+      priority: "critical",
+      title: "Auditoria persistente e imutavel",
+      requiredConfig: ["audit table", "payload hash", "actor tenant timestamp", "retention policy"],
+      owner: "platform",
+      status: "pending",
+      blocks: ["evidence_persistence", "final_homologation", "real_execution"],
+    },
+    {
+      key: "auth_permissions",
+      area: "security",
+      priority: "critical",
+      title: "Autenticacao e permissoes sensiveis",
+      requiredConfig: ["JWT_SECRET", "owner role", "admin role", "audit role", "tenant isolation"],
+      owner: "platform",
+      status: "pending",
+      blocks: ["tenant_release", "real_execution"],
+    },
+    {
+      key: "email_provider",
+      area: "integration",
+      priority: "high",
+      title: "Provedor de e-mail transacional",
+      requiredConfig: ["SMTP or API provider", "sender domain", "delivery logs"],
+      owner: "operations",
+      status: "pending",
+      blocks: ["completion_email_real_send", "customer_copy"],
+    },
+    {
+      key: "maps_provider",
+      area: "integration",
+      priority: "high",
+      title: "Mapas, rotas e geocodificacao",
+      requiredConfig: ["maps API key", "route matrix", "geocoding quota"],
+      owner: "operations",
+      status: "pending",
+      blocks: ["route_optimization_real", "technician_tracking"],
+    },
+    {
+      key: "ai_provider",
+      area: "integration",
+      priority: "high",
+      title: "IA para texto e diagnostico visual",
+      requiredConfig: ["OPENAI_API_KEY", "usage limits", "prompt logging policy"],
+      owner: "platform",
+      status: "pending",
+      blocks: ["real_ai_text_review", "visual_diagnosis"],
+    },
+    {
+      key: "hosting_domain",
+      area: "deploy",
+      priority: "high",
+      title: "Hospedagem, dominio e SSL",
+      requiredConfig: ["hosting account", "domain", "SSL", "environment variables"],
+      owner: "platform",
+      status: "pending",
+      blocks: ["public_access", "tenant_portal"],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "infrastructure_backlog_ready",
+    realExecutionAllowed: false,
+    summary: {
+      totalItems: backlog.length,
+      critical: backlog.filter((item) => item.priority === "critical").length,
+      high: backlog.filter((item) => item.priority === "high").length,
+      readinessScore: readiness.readinessScore,
+      productionDecision: readiness.releaseDecision.decision,
+    },
+    backlog,
+    guardrails: [
+      "Nao registrar segredos em documentos, commits ou logs.",
+      "Configurar variaveis reais somente no provedor de hospedagem.",
+      "Manter execucao real bloqueada ate banco, auditoria e permissoes estarem aprovados.",
+      "Validar custos e limites antes de ativar provedores externos.",
+    ],
+    nextActions: [
+      "Priorizar banco real, auditoria e permissoes sensiveis.",
+      "Definir provedores de e-mail, mapas e IA antes da homologacao externa.",
+      "Preparar ambiente de staging com variaveis reais fora do repositorio.",
+      "Reexecutar readiness e homologacao final apos infraestrutura configurada.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
