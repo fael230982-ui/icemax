@@ -1914,3 +1914,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Inventario De Tokens Publicos
+
+- [x] Endpoint de listagem criado.
+- [x] Filtros por escopo, entidade e status adicionados.
+- [x] Mock mantem indice sem token cru.
+- [x] Validacao mock respeita token revogado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

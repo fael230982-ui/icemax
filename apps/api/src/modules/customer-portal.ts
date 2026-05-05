@@ -4,6 +4,8 @@ import { serviceContracts, serviceOrders, tenant, technicianLocations } from "..
 import {
   issueMockPublicAccessToken,
   issuePrismaPublicAccessToken,
+  listMockPublicAccessTokens,
+  listPrismaPublicAccessTokens,
   revokeMockPublicAccessToken,
   revokePrismaPublicAccessToken,
   validateMockPublicAccessToken,
@@ -566,6 +568,44 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     return {
       tenantSlug,
       ...getPublicAccessTokenSecurityPolicy(),
+    };
+  });
+
+  app.get("/customer-portal/public-tokens", async (request) => {
+    const query = request.query as {
+      scope?: "service_order_tracking" | "billing_summary";
+      entityType?: "service_order" | "customer_portal";
+      entityId?: string;
+      status?: "active" | "revoked" | "expired" | "all";
+    };
+    const filters = {
+      scope: query.scope,
+      entityType: query.entityType,
+      entityId: query.entityId,
+      status: query.status ?? "all",
+    };
+    const tokens = isPrismaEnabled()
+      ? await listPrismaPublicAccessTokens(tenant.id, filters)
+      : await listMockPublicAccessTokens(tenant.id, filters);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.public_tokens_listed",
+      entity: "public_access_token",
+      entityId: tenant.id,
+      metadata: {
+        filters,
+        total: tokens.total,
+      },
+    });
+
+    return {
+      ...tokens,
+      governance: {
+        rawTokenPersisted: false,
+        maxItems: 100,
+        auditEvent: "customer_portal.public_tokens_listed",
+      },
     };
   });
 

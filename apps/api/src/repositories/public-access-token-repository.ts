@@ -24,6 +24,27 @@ type IssuePublicAccessTokenInput = {
   metadata?: Record<string, unknown>;
 };
 
+type PublicAccessTokenFilters = {
+  scope?: PublicAccessTokenScope;
+  entityType?: "service_order" | "customer_portal";
+  entityId?: string;
+  status?: "active" | "revoked" | "expired" | "all";
+};
+
+type MockPublicAccessTokenRecord = {
+  id: string;
+  tenantId: string;
+  tokenHashPreview: string;
+  scope: PublicAccessTokenScope;
+  entityType: "service_order" | "customer_portal";
+  entityId: string;
+  expiresAt: string;
+  revokedAt?: string;
+  createdAt: string;
+  lastAccessedAt?: string;
+  metadata?: Record<string, unknown>;
+};
+
 export type PublicAccessTokenPackage = {
   token: string;
   tokenHashPreview: string;
@@ -36,6 +57,8 @@ export type PublicAccessTokenPackage = {
   rawTokenPersisted: false;
   hashPersistedInProduction: true;
 };
+
+const mockPublicAccessTokens: MockPublicAccessTokenRecord[] = [];
 
 function createTokenDates(expiresInDays: number) {
   const issuedAt = new Date();
@@ -63,7 +86,23 @@ function buildTokenPackage(input: IssuePublicAccessTokenInput, persistence: Publ
 }
 
 export async function issueMockPublicAccessToken(input: IssuePublicAccessTokenInput) {
-  return buildTokenPackage(input, "mock_hash_preview");
+  const tokenPackage = buildTokenPackage(input, "mock_hash_preview");
+  mockPublicAccessTokens.unshift({
+    id: `mock-public-token-${Date.now()}-${mockPublicAccessTokens.length + 1}`,
+    tenantId: input.tenantId,
+    tokenHashPreview: tokenPackage.tokenHashPreview,
+    scope: input.scope,
+    entityType: input.entityType,
+    entityId: input.entityId,
+    expiresAt: tokenPackage.expiresAt,
+    createdAt: tokenPackage.issuedAt,
+    metadata: {
+      ...(input.metadata ?? {}),
+      rawTokenStored: false,
+    },
+  });
+
+  return tokenPackage;
 }
 
 export async function issuePrismaPublicAccessToken(input: IssuePublicAccessTokenInput) {
@@ -128,9 +167,23 @@ export async function validatePrismaPublicAccessToken(tenantId: string, token: s
 
 export async function validateMockPublicAccessToken(tenantId: string, rawPublicAccessValue: string, scope: PublicAccessTokenScope) {
   const parsed = parsePublicAccessTokenValue(rawPublicAccessValue);
+  const tokenHashPreview = createPublicAccessTokenHashPreview(rawPublicAccessValue);
+  const record = mockPublicAccessTokens.find((item) => item.tenantId === tenantId && item.tokenHashPreview === tokenHashPreview);
 
   if (!parsed || parsed.scope !== scope) {
     return { valid: false, reason: "not_found_or_scope_mismatch", tenantId };
+  }
+
+  if (record?.revokedAt) {
+    return { valid: false, reason: "revoked", tenantId, entityType: parsed.entityType, entityId: parsed.entityId };
+  }
+
+  if (record && new Date(record.expiresAt) <= new Date()) {
+    return { valid: false, reason: "expired", tenantId, entityType: parsed.entityType, entityId: parsed.entityId };
+  }
+
+  if (record) {
+    record.lastAccessedAt = new Date().toISOString();
   }
 
   return {
@@ -141,27 +194,36 @@ export async function validateMockPublicAccessToken(tenantId: string, rawPublicA
     entityId: parsed.entityId,
     scope: parsed.scope,
     rawTokenPersisted: false,
-    hashPreview: createPublicAccessTokenHashPreview(rawPublicAccessValue),
-    expiresAt: "mock_expiration_checked_on_creation_package",
+    hashPreview: tokenHashPreview,
+    expiresAt: record?.expiresAt ?? "mock_expiration_checked_on_creation_package",
   };
 }
 
 export async function revokeMockPublicAccessToken(tenantId: string, rawPublicAccessValue: string, scope: PublicAccessTokenScope) {
   const parsed = parsePublicAccessTokenValue(rawPublicAccessValue);
+  const tokenHashPreview = createPublicAccessTokenHashPreview(rawPublicAccessValue);
+  const record = mockPublicAccessTokens.find((item) => item.tenantId === tenantId && item.tokenHashPreview === tokenHashPreview);
 
   if (!parsed || parsed.scope !== scope) {
     return { revoked: false, reason: "not_found_or_scope_mismatch", tenantId };
   }
 
+  const alreadyRevoked = Boolean(record?.revokedAt);
+  const revokedAt = record?.revokedAt ?? new Date().toISOString();
+
+  if (record) {
+    record.revokedAt = revokedAt;
+  }
+
   return {
     revoked: true,
-    reason: "revoked_mock",
+    reason: alreadyRevoked ? "already_revoked_mock" : "revoked_mock",
     tenantId,
     entityType: parsed.entityType,
     entityId: parsed.entityId,
     scope: parsed.scope,
-    revokedAt: new Date().toISOString(),
-    hashPreview: createPublicAccessTokenHashPreview(rawPublicAccessValue),
+    revokedAt,
+    hashPreview: tokenHashPreview,
     rawTokenPersisted: false,
   };
 }
@@ -202,5 +264,111 @@ export async function revokePrismaPublicAccessToken(tenantId: string, rawPublicA
     entityId: record.entityId,
     scope: record.scope,
     revokedAt: revokedAt.toISOString(),
+  };
+}
+
+function publicTokenStatus(expiresAt: string | Date, revokedAt?: string | Date | null) {
+  if (revokedAt) {
+    return "revoked";
+  }
+
+  return new Date(expiresAt) <= new Date() ? "expired" : "active";
+}
+
+function matchesPublicTokenFilters(
+  record: { scope: string; entityType: string; entityId: string; expiresAt: string | Date; revokedAt?: string | Date | null },
+  filters: PublicAccessTokenFilters,
+) {
+  const status = publicTokenStatus(record.expiresAt, record.revokedAt);
+
+  if (filters.scope && record.scope !== filters.scope) {
+    return false;
+  }
+
+  if (filters.entityType && record.entityType !== filters.entityType) {
+    return false;
+  }
+
+  if (filters.entityId && record.entityId !== filters.entityId) {
+    return false;
+  }
+
+  if (filters.status && filters.status !== "all" && status !== filters.status) {
+    return false;
+  }
+
+  return true;
+}
+
+export async function listMockPublicAccessTokens(tenantId: string, filters: PublicAccessTokenFilters = {}) {
+  const data = mockPublicAccessTokens
+    .filter((item) => item.tenantId === tenantId)
+    .filter((item) => matchesPublicTokenFilters(item, filters))
+    .map((item) => ({
+      id: item.id,
+      tenantId: item.tenantId,
+      tokenHashPreview: item.tokenHashPreview,
+      scope: item.scope,
+      entityType: item.entityType,
+      entityId: item.entityId,
+      status: publicTokenStatus(item.expiresAt, item.revokedAt),
+      expiresAt: item.expiresAt,
+      revokedAt: item.revokedAt,
+      lastAccessedAt: item.lastAccessedAt,
+      createdAt: item.createdAt,
+      rawTokenPersisted: false,
+      metadata: item.metadata,
+    }));
+
+  return {
+    data,
+    total: data.length,
+    summary: {
+      active: data.filter((item) => item.status === "active").length,
+      revoked: data.filter((item) => item.status === "revoked").length,
+      expired: data.filter((item) => item.status === "expired").length,
+    },
+  };
+}
+
+export async function listPrismaPublicAccessTokens(tenantId: string, filters: PublicAccessTokenFilters = {}) {
+  const data = await getPrisma().publicAccessToken.findMany({
+    where: {
+      tenantId,
+      scope: filters.scope,
+      entityType: filters.entityType,
+      entityId: filters.entityId,
+    },
+    orderBy: { createdAt: "desc" },
+    take: 100,
+  });
+  const filtered = data.filter((item) => matchesPublicTokenFilters(item, filters));
+  const normalized = filtered.map((item) => ({
+    id: item.id,
+    tenantId: item.tenantId,
+    tokenHashPreview: `${item.tokenHash.slice(0, 12)}...`,
+    scope: item.scope,
+    entityType: item.entityType,
+    entityId: item.entityId,
+    customerId: item.customerId,
+    customerEmail: item.customerEmail,
+    customerPhone: item.customerPhone,
+    status: publicTokenStatus(item.expiresAt, item.revokedAt),
+    expiresAt: item.expiresAt.toISOString(),
+    revokedAt: item.revokedAt?.toISOString(),
+    lastAccessedAt: item.lastAccessedAt?.toISOString(),
+    createdAt: item.createdAt.toISOString(),
+    rawTokenPersisted: false,
+    metadata: item.metadata,
+  }));
+
+  return {
+    data: normalized,
+    total: normalized.length,
+    summary: {
+      active: normalized.filter((item) => item.status === "active").length,
+      revoked: normalized.filter((item) => item.status === "revoked").length,
+      expired: normalized.filter((item) => item.status === "expired").length,
+    },
   };
 }

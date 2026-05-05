@@ -700,6 +700,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Em mock, a revogacao retorna pacote auditavel sem persistir token cru.
 - Teste automatizado cobre revogacao valida e tentativa com escopo incorreto.
 
+## 0.8.101 - Inventario De Tokens Publicos
+
+- Adicionado endpoint `GET /customer-portal/public-tokens`.
+- Listagem permite filtrar por escopo, tipo de entidade, entidade e status.
+- Mock passou a manter indice seguro de tokens emitidos sem armazenar token cru.
+- Validacao mock agora respeita tokens revogados quando eles foram emitidos pela API.
+- Teste automatizado cobre listagem, resumo ativo/revogado e garantia de que token cru nao aparece.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

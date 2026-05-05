@@ -844,6 +844,33 @@ test("customer portal can request optional service order", async () => {
   assert.equal(wrongScopeRevocation.statusCode, 404);
   assert.equal(wrongScopeRevocation.json().revoked, false);
 
+  const revokedTrackingValidation = await app.inject({
+    method: "GET",
+    url: `/public/customer-portal/tokens/${trackingLink.json().token}/validate?scope=service_order_tracking`,
+  });
+  assert.equal(revokedTrackingValidation.statusCode, 404);
+  assert.equal(revokedTrackingValidation.json().valid, false);
+  assert.equal(revokedTrackingValidation.json().reason, "revoked");
+
+  const publicTokenList = await app.inject({
+    method: "GET",
+    url: "/customer-portal/public-tokens?status=all",
+  });
+  assert.equal(publicTokenList.statusCode, 200);
+  assert.equal(publicTokenList.json().governance.rawTokenPersisted, false);
+  assert.ok(publicTokenList.json().total >= 2);
+  assert.ok(publicTokenList.json().summary.active >= 1);
+  assert.ok(publicTokenList.json().summary.revoked >= 1);
+  assert.ok(publicTokenList.json().data.every((item: { token?: string; tokenHashPreview?: string }) => !item.token && item.tokenHashPreview));
+
+  const trackingTokenList = await app.inject({
+    method: "GET",
+    url: "/customer-portal/public-tokens?entityType=service_order&entityId=1048&status=revoked",
+  });
+  assert.equal(trackingTokenList.statusCode, 200);
+  assert.equal(trackingTokenList.json().total, 1);
+  assert.equal(trackingTokenList.json().data[0].status, "revoked");
+
   const attachments = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders/1048/attachments",
