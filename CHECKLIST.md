@@ -2169,3 +2169,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Risco E SLA Da Fila Offline
+
+- [x] Score de risco por pendencia criado.
+- [x] Status SLA por pendencia criado.
+- [x] Resumo do maior risco criado.
+- [x] Painel web exibe risco e SLA.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

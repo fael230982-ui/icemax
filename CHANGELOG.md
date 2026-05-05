@@ -836,6 +836,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Fluxo de reenvio assistido ficou separado do envio automatico.
 - Teste automatizado cobre liberacao gerencial para reenvio assistido.
 
+## 0.8.118 - Risco E SLA Da Fila Offline
+
+- Pendencias offline bloqueadas passaram a receber score de risco.
+- Board classifica itens como `critical_now`, `attention` ou `monitor`.
+- Resumo gerencial informa maior score encontrado.
+- Painel web exibe risco e SLA por linha da fila offline.
+- Teste automatizado cobre score alto e status critico.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -209,6 +209,7 @@ export function getMobileOfflineEscalationBoard() {
       likelyCause: "OS pode ter sido encerrada no painel antes da sincronizacao do app.",
       recommendedAction: "Conferir status da OS, validar assinatura com o cliente e liberar reenvio assistido.",
       owner: "supervisor",
+      impact: "Fechamento da OS e envio de e-mail ao cliente podem ficar travados.",
     },
     {
       id: "offline-blocked-002",
@@ -224,6 +225,7 @@ export function getMobileOfflineEscalationBoard() {
       likelyCause: "Arquivo local pendente de conversao ou URL temporaria invalida.",
       recommendedAction: "Solicitar nova captura da evidencia ou reenviar arquivo pelo painel.",
       owner: "qualidade",
+      impact: "Arquivo de fechamento pode ficar incompleto.",
     },
     {
       id: "offline-blocked-003",
@@ -239,8 +241,19 @@ export function getMobileOfflineEscalationBoard() {
       likelyCause: "Saldo pode ter sido consumido por outra OS ou local de estoque incorreto.",
       recommendedAction: "Conferir saldo do almoxarifado e ajustar reserva antes de sincronizar.",
       owner: "estoque",
+      impact: "Saldo de peca e custo da OS podem ficar divergentes.",
     },
-  ];
+  ].map((item) => {
+    const priorityWeight = item.priority === "critical" ? 70 : item.priority === "high" ? 45 : 25;
+    const ageWeight = Math.min(item.ageHours * 3, 30);
+    const severityScore = Math.min(priorityWeight + ageWeight, 100);
+
+    return {
+      ...item,
+      severityScore,
+      slaStatus: severityScore >= 85 ? "critical_now" : severityScore >= 65 ? "attention" : "monitor",
+    };
+  });
   const critical = items.filter((item) => item.priority === "critical").length;
   const high = items.filter((item) => item.priority === "high").length;
 
@@ -256,6 +269,7 @@ export function getMobileOfflineEscalationBoard() {
       critical,
       high,
       oldestAgeHours: Math.max(...items.map((item) => item.ageHours)),
+      highestSeverityScore: Math.max(...items.map((item) => item.severityScore)),
       owners: Array.from(new Set(items.map((item) => item.owner))),
     },
     data: items,

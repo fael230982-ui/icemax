@@ -1232,7 +1232,9 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(mobileOffline.statusCode, 200);
   assert.equal(mobileOffline.json().policy.maxRetryCount, 5);
   assert.ok(mobileOffline.json().summary.critical >= 1);
+  assert.ok(mobileOffline.json().summary.highestSeverityScore >= 80);
   assert.ok(mobileOffline.json().data.every((item: { retryCount: number }) => item.retryCount >= 5));
+  assert.ok(mobileOffline.json().data.some((item: { slaStatus: string }) => item.slaStatus === "critical_now"));
 
   const mobileOfflineReview = await app.inject({
     method: "POST",

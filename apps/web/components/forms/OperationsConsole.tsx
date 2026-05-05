@@ -28,6 +28,8 @@ type MobileOfflineEscalationItem = {
   actionLabel: string;
   priority: string;
   retryCount: number;
+  severityScore: number;
+  slaStatus: string;
   blockedReason: string;
   recommendedAction: string;
   owner: string;
@@ -39,6 +41,7 @@ type MobileOfflineEscalationResponse = {
     critical: number;
     high: number;
     oldestAgeHours: number;
+    highestSeverityScore: number;
   };
   data?: MobileOfflineEscalationItem[];
 };
@@ -896,6 +899,7 @@ export function OperationsConsole() {
               <span>Criticas: {mobileOfflineEscalations.summary.critical}</span>
               <span>Altas: {mobileOfflineEscalations.summary.high}</span>
               <span>Mais antiga: {mobileOfflineEscalations.summary.oldestAgeHours}h</span>
+              <span>Maior risco: {mobileOfflineEscalations.summary.highestSeverityScore}</span>
             </div>
           ) : null}
           <div className="tableWrap">
@@ -904,6 +908,7 @@ export function OperationsConsole() {
                 <tr>
                   <th>OS</th>
                   <th>Tecnico</th>
+                  <th>Risco</th>
                   <th>Acao</th>
                   <th>Motivo</th>
                   <th>Recomendacao</th>
@@ -915,6 +920,7 @@ export function OperationsConsole() {
                   <tr key={item.id}>
                     <td>{item.serviceOrderId}<br />{item.customer}</td>
                     <td>{item.technicianName}<br />{item.owner}</td>
+                    <td>{item.severityScore}<br />{item.slaStatus}</td>
                     <td>{item.actionLabel}<br />{item.priority} - tentativa {item.retryCount}</td>
                     <td>{item.blockedReason}</td>
                     <td>{item.recommendedAction}</td>
