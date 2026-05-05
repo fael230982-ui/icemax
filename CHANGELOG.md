@@ -1054,6 +1054,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de prontidao de go-live.
 - Teste automatizado cobre bloqueio comercial e blocos criticos.
 
+## 0.8.145 - Plano Pos-Go-Live Whitelabel
+
+- Criado endpoint de plano pos-go-live whitelabel.
+- Plano organiza hypercare D0, estabilidade D1, revisao da Semana 1 e decisao D30.
+- Politica exige revisao diaria de incidentes, custos, fila offline e impacto no cliente.
+- Console web ganhou consulta de pos-go-live.
+- Teste automatizado cobre hypercare obrigatorio e escala bloqueada ate revisao do primeiro tenant.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

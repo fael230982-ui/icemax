@@ -1476,6 +1476,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryWhitelabelGoLiveReadiness.json().decision.blockedActions.includes("commercial_go_live"));
   assert.ok(retryWhitelabelGoLiveReadiness.json().summary.criticalBlocks >= 4);
 
+  const retryWhitelabelPostGoLivePlan = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-post-go-live-plan",
+  });
+  assert.equal(retryWhitelabelPostGoLivePlan.statusCode, 200);
+  assert.equal(retryWhitelabelPostGoLivePlan.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelPostGoLivePlan.json().summary.hypercareRequired, true);
+  assert.equal(retryWhitelabelPostGoLivePlan.json().summary.scaleAllowed, false);
+  assert.ok(retryWhitelabelPostGoLivePlan.json().milestones.some((item: { key: string }) =>
+    item.key === "day_30_scale_decision"));
+  assert.ok(retryWhitelabelPostGoLivePlan.json().blockedActions.includes("release_second_tenant_without_first_tenant_review"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

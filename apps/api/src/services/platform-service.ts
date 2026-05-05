@@ -1882,6 +1882,89 @@ export function getMobileOfflineAssistedRetryWhitelabelGoLiveReadinessBoard() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelPostGoLivePlan() {
+  const readiness = getMobileOfflineAssistedRetryWhitelabelGoLiveReadinessBoard();
+  const milestones = [
+    {
+      key: "day_0_hypercare",
+      window: "D0",
+      status: "blocked",
+      owner: "operations",
+      checks: [
+        "Acompanhar primeiras OS em tempo real.",
+        "Monitorar pendencias offline, assinatura, e-mails e relatorios.",
+        "Validar suporte ativo e responsavel de plantao.",
+      ],
+    },
+    {
+      key: "day_1_stability",
+      window: "D1",
+      status: "blocked",
+      owner: "platform",
+      checks: [
+        "Revisar logs, auditoria e incidentes.",
+        "Conferir consumo de provedores e alertas.",
+        "Validar rollback manual para OS critica.",
+      ],
+    },
+    {
+      key: "week_1_business_review",
+      window: "Semana 1",
+      status: "blocked",
+      owner: "operations",
+      checks: [
+        "Revisar agenda, rotas, estoque e contratos.",
+        "Coletar feedback dos tecnicos e administradores.",
+        "Ajustar modelos de relatorio, garantia e checklist.",
+      ],
+    },
+    {
+      key: "day_30_scale_decision",
+      window: "D30",
+      status: "blocked",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      checks: [
+        "Comparar custos reais com teto aprovado.",
+        "Revisar incidentes, retrabalho e suporte.",
+        "Decidir se tenant pode sair de hypercare ou se escala deve continuar bloqueada.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_post_go_live_plan_ready",
+    realExecutionAllowed: false,
+    summary: {
+      milestones: milestones.length,
+      blockedMilestones: milestones.filter((item) => item.status === "blocked").length,
+      sourceDecision: readiness.decision.result,
+      hypercareRequired: true,
+      scaleAllowed: false,
+    },
+    milestones,
+    monitoringPolicy: {
+      dailyIncidentReviewRequired: true,
+      providerCostReviewRequired: true,
+      offlineQueueReviewRequired: true,
+      customerImpactReviewRequired: true,
+      ownerScaleDecisionRequired: true,
+    },
+    blockedActions: [
+      "scale_tenant_without_30_day_review",
+      "disable_hypercare_before_stability",
+      "ignore_provider_cost_alerts",
+      "release_second_tenant_without_first_tenant_review",
+    ],
+    nextActions: [
+      "Preparar roteiro de hypercare ICEMAX.",
+      "Definir indicadores dos primeiros 30 dias.",
+      "Criar modelo de revisao D1, Semana 1 e D30.",
+      "Manter escala whitelabel bloqueada ate revisao do primeiro tenant.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

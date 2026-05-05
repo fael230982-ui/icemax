@@ -2598,3 +2598,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano Pos-Go-Live Whitelabel
+
+- [x] Endpoint de plano pos-go-live criado.
+- [x] Hypercare D0, D1, Semana 1 e D30 definidos.
+- [x] Revisao de incidentes, custos, fila offline e impacto no cliente registrada.
+- [x] Escala para novos tenants permanece bloqueada.
+- [x] Console web ganhou consulta de pos-go-live.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

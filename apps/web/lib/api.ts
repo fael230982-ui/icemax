@@ -291,6 +291,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-operational-handoff", { token }),
   mobileOfflineAssistedRetryWhitelabelGoLiveReadiness: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-go-live-readiness", { token }),
+  mobileOfflineAssistedRetryWhitelabelPostGoLivePlan: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-post-go-live-plan", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>
