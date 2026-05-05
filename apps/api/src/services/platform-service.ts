@@ -1713,6 +1713,95 @@ export function getMobileOfflineAssistedRetryWhitelabelOnboardingChecklist() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelOperationalHandoff() {
+  const onboarding = getMobileOfflineAssistedRetryWhitelabelOnboardingChecklist();
+  const handoffSections = [
+    {
+      key: "support_model",
+      owner: "operations",
+      status: "blocked",
+      responsibilities: [
+        "Definir horario de suporte por tenant.",
+        "Definir responsavel por incidentes de OS, agenda, estoque e contratos.",
+        "Registrar canal interno de escalonamento sem dados sensiveis.",
+      ],
+    },
+    {
+      key: "tenant_admin_training",
+      owner: "operations",
+      status: "blocked",
+      responsibilities: [
+        "Treinar administrador do tenant em usuarios, permissoes e relatorios.",
+        "Treinar equipe tecnica em app, modo offline, assinatura e evidencias.",
+        "Validar entendimento de garantias, pecas e contratos recorrentes.",
+      ],
+    },
+    {
+      key: "operational_routines",
+      owner: "tenant_admin",
+      status: "blocked",
+      responsibilities: [
+        "Definir rotina diaria de agenda e pendencias offline.",
+        "Definir rotina semanal de estoque, pecas e contratos.",
+        "Definir rotina mensal de custos, indicadores e revisao de provedores.",
+      ],
+    },
+    {
+      key: "incident_response",
+      owner: "platform",
+      status: "blocked",
+      responsibilities: [
+        "Classificar incidentes por severidade.",
+        "Manter rollback e plano manual para OS critica.",
+        "Bloquear reenvio real se houver falha de auditoria ou segredo exposto.",
+      ],
+    },
+    {
+      key: "go_live_packet",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      status: "blocked",
+      responsibilities: [
+        "Conferir checklist de onboarding completo.",
+        "Conferir validacao tecnica e evidencias aprovadas.",
+        "Registrar signoff final antes de liberar tenant comercial.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_operational_handoff_ready",
+    realExecutionAllowed: false,
+    summary: {
+      sections: handoffSections.length,
+      blockedSections: handoffSections.filter((section) => section.status === "blocked").length,
+      onboardingItems: onboarding.summary.totalItems,
+      firstTenant: onboarding.summary.firstTenant,
+      goLiveAllowed: false,
+    },
+    handoffSections,
+    handoffPolicy: {
+      supportOwnerRequired: true,
+      tenantAdminTrainingRequired: true,
+      incidentRollbackRequired: true,
+      ownerSignoffRequired: true,
+      productionReleaseBlocked: true,
+    },
+    blockedActions: [
+      "start_commercial_support_without_owner",
+      "train_with_real_customer_data",
+      "go_live_without_incident_response",
+      "go_live_without_onboarding_evidence",
+    ],
+    nextActions: [
+      "Preparar roteiro de treinamento ICEMAX.",
+      "Definir matriz de suporte e incidentes por tenant.",
+      "Criar pacote de go-live somente apos homologacao.",
+      "Revisar handoff a cada novo tenant whitelabel.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

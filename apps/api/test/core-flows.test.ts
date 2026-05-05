@@ -1453,6 +1453,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryWhitelabelOnboardingChecklist.json().nextActions.some((item: string) =>
     item.includes("ICEMAX")));
 
+  const retryWhitelabelOperationalHandoff = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-operational-handoff",
+  });
+  assert.equal(retryWhitelabelOperationalHandoff.statusCode, 200);
+  assert.equal(retryWhitelabelOperationalHandoff.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelOperationalHandoff.json().summary.goLiveAllowed, false);
+  assert.ok(retryWhitelabelOperationalHandoff.json().handoffSections.some((item: { key: string }) =>
+    item.key === "incident_response"));
+  assert.equal(retryWhitelabelOperationalHandoff.json().handoffPolicy.ownerSignoffRequired, true);
+  assert.ok(retryWhitelabelOperationalHandoff.json().blockedActions.includes("go_live_without_onboarding_evidence"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

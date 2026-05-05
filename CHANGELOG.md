@@ -1038,6 +1038,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de onboarding whitelabel.
 - Teste automatizado cobre ICEMAX como primeiro preenchimento e bloqueio de segredos.
 
+## 0.8.143 - Handoff Operacional Whitelabel
+
+- Criado endpoint de handoff operacional whitelabel.
+- Handoff cobre suporte, treinamento, rotinas, incidentes e pacote de go-live.
+- Politica exige treinamento, rollback, suporte definido e signoff do titular.
+- Console web ganhou consulta de handoff operacional.
+- Teste automatizado cobre go-live bloqueado e resposta a incidentes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

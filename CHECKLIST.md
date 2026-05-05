@@ -2567,3 +2567,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Handoff Operacional Whitelabel
+
+- [x] Endpoint de handoff operacional criado.
+- [x] Suporte, treinamento, rotinas, incidentes e go-live mapeados.
+- [x] Politica de treinamento, rollback e signoff registrada.
+- [x] Go-live comercial permanece bloqueado.
+- [x] Console web ganhou consulta de handoff.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
