@@ -198,7 +198,9 @@ export default function App() {
 
     setPendingActions(result.remaining);
     setSyncStatus(
-      `${result.synced} acoes enviadas. ${result.remaining.length} pendentes. Falha em ${result.failedLabel}: ${result.errorMessage}`,
+      result.failedLabel
+        ? `${result.synced} acoes enviadas. ${result.remaining.length} pendentes. Falha em ${result.failedLabel}: ${result.errorMessage}`
+        : `${result.synced} acoes enviadas. ${result.remaining.length} pendentes. ${result.blocked ?? 0} bloqueadas para revisao.`,
     );
   }
 

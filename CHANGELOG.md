@@ -812,6 +812,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - App informa pendencias restauradas e itens descartados por idade.
 - Janela critica de recuperacao ficou maior que a de eventos normais.
 
+## 0.8.115 - Mobile Bloqueio Da Fila Offline
+
+- Criado limite de 5 tentativas para acoes offline.
+- Acoes bloqueadas deixam de entrar no envio automatico.
+- Sincronizacao continua processando pendencias validas mesmo com itens bloqueados.
+- Painel mobile mostra total de bloqueadas e marca itens para revisao.
+- Status de sincronizacao informa bloqueios pendentes para gestor ou suporte.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

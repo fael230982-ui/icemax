@@ -2123,3 +2123,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Bloqueio Da Fila Offline
+
+- [x] Limite de tentativas criado.
+- [x] Acoes bloqueadas ficam fora do envio automatico.
+- [x] Sincronizacao continua processando acoes validas.
+- [x] Painel mobile mostra bloqueadas.
+- [x] Itens bloqueados sao marcados para revisao.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

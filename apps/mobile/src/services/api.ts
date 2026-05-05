@@ -45,6 +45,7 @@ export type OfflineSyncResult = {
   ok: boolean;
   synced: number;
   remaining: OfflineAction[];
+  blocked?: number;
   failedLabel?: string;
   errorMessage?: string;
 };
@@ -60,8 +61,14 @@ export type OfflineAction = {
   retryCount?: number;
 };
 
+export const maxOfflineRetryCount = 5;
+
 function offlineId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+export function isOfflineActionBlocked(action: OfflineAction) {
+  return (action.retryCount ?? 0) >= maxOfflineRetryCount;
 }
 
 export function summarizeOfflineQueue(actions: OfflineAction[]) {
@@ -71,6 +78,7 @@ export function summarizeOfflineQueue(actions: OfflineAction[]) {
     return summary;
   }, {});
   const retrying = actions.filter((action) => (action.retryCount ?? 0) > 0).length;
+  const blocked = actions.filter(isOfflineActionBlocked).length;
   const oldest = actions.reduce<string | null>((current, action) => {
     if (!current || action.createdAt < current) {
       return action.createdAt;
@@ -83,6 +91,7 @@ export function summarizeOfflineQueue(actions: OfflineAction[]) {
     total: actions.length,
     byPriority,
     retrying,
+    blocked,
     oldest,
     hasCritical: Boolean(byPriority.critical),
   };
@@ -112,7 +121,19 @@ export async function syncOfflineQueuePartially(
   sender: (action: OfflineAction) => Promise<unknown> = sendOfflineAction,
 ): Promise<OfflineSyncResult> {
   const syncedIds = new Set<string>();
-  const orderedActions = sortOfflineQueueForSync(actions);
+  const blockedActions = actions.filter(isOfflineActionBlocked);
+  const blockedIds = new Set(blockedActions.map((action) => action.id));
+  const orderedActions = sortOfflineQueueForSync(actions.filter((action) => !blockedIds.has(action.id)));
+
+  if (!orderedActions.length && blockedActions.length) {
+    return {
+      ok: false,
+      synced: 0,
+      remaining: actions,
+      blocked: blockedActions.length,
+      errorMessage: "Limite de tentativas atingido. Revise a pendencia antes de reenviar.",
+    };
+  }
 
   for (const action of orderedActions) {
     const actionWithRetry = { ...action, retryCount: (action.retryCount ?? 0) + 1 };
@@ -124,6 +145,7 @@ export async function syncOfflineQueuePartially(
       return {
         ok: false,
         synced: syncedIds.size,
+        blocked: blockedActions.length,
         remaining: actions
           .filter((pendingAction) => !syncedIds.has(pendingAction.id))
           .map((pendingAction) => (
@@ -138,9 +160,13 @@ export async function syncOfflineQueuePartially(
   }
 
   return {
-    ok: true,
+    ok: blockedActions.length === 0,
     synced: orderedActions.length,
-    remaining: [],
+    remaining: blockedActions,
+    blocked: blockedActions.length,
+    errorMessage: blockedActions.length
+      ? "Acoes bloqueadas por excesso de tentativas continuam pendentes."
+      : undefined,
   };
 }
 
