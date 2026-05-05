@@ -541,6 +541,75 @@ export function getMobileOfflineAssistedRetryDailyCommand() {
   };
 }
 
+export function getMobileOfflineAssistedRetryDryRunBatch() {
+  const dailyCommand = getMobileOfflineAssistedRetryDailyCommand();
+  const actionPlan = getMobileOfflineAssistedRetryActionPlan();
+  const batchLimit = 3;
+  const candidates = actionPlan.actions
+    .filter((item) => item.allowedNow.includes("dry_run"))
+    .slice(0, batchLimit)
+    .map((item, index) => ({
+      sequence: index + 1,
+      recordId: item.recordId,
+      serviceOrderId: item.serviceOrderId,
+      customer: item.customer,
+      owner: item.recommendedOwner,
+      priority: item.priority,
+      severityScore: item.severityScore,
+      idempotencyKey: `mobile-offline-retry:${item.recordId}`,
+      preChecks: [
+        "manager_review_recorded",
+        "assisted_retry_prepared",
+        "payload_hash_generated",
+        "real_execution_disabled",
+      ],
+      dryRunOnly: true,
+    }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "dry_run_batch_ready",
+    realExecutionAllowed: false,
+    automaticExecutionAllowed: false,
+    summary: {
+      batchLimit,
+      selectedForDryRun: candidates.length,
+      remainingAfterBatch: Math.max(actionPlan.actions.length - candidates.length, 0),
+      dailyQueue: dailyCommand.summary.todayQueue,
+      realExecutionBlocked: true,
+    },
+    candidates,
+    controls: {
+      requiresHumanStart: true,
+      stopOnFirstFailure: true,
+      maxParallelDryRuns: 1,
+      idempotencyRequired: true,
+      persistAuditBeforeRealExecution: true,
+    },
+    blockedActions: [
+      {
+        key: "real_batch_execution",
+        reason: "Lote real permanece bloqueado ate gate de producao, banco real e auditoria persistente.",
+      },
+      {
+        key: "automatic_retry_loop",
+        reason: "Loop automatico nao e permitido para pendencias offline criticas.",
+      },
+    ],
+    auditTrail: [
+      "mobile_offline_dry_run_batch_planned",
+      "mobile_offline_assisted_retry_prepared",
+      "mobile_offline_assisted_retry_dry_run",
+    ],
+    nextActions: [
+      "Revisar candidatos selecionados antes de iniciar o primeiro dry-run.",
+      "Executar um dry-run por vez e parar no primeiro erro.",
+      "Registrar evidencia de payload e idempotencia para cada candidato.",
+      "Nao converter dry-run em execucao real ate o gate de producao estar aprovado.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

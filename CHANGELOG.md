@@ -934,6 +934,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta do comando diario.
 - Teste automatizado cobre fila diaria, decisoes e bloqueio de producao.
 
+## 0.8.130 - Lote Dry-Run Do Reenvio Offline
+
+- Criado endpoint de lote controlado de dry-run do reenvio offline.
+- Lote seleciona candidatos priorizados com limite por rodada.
+- Pre-checks, idempotencia, auditoria e bloqueios ficam explicitos por candidato.
+- Console web ganhou consulta do lote de dry-run.
+- Teste automatizado cobre candidatos dry-run only e execucao real bloqueada.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

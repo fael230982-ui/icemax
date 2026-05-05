@@ -1300,6 +1300,16 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryDailyCommand.json().decisions.some((item: { key: string; status: string }) =>
     item.key === "dry_run" && item.status === "allowed"));
 
+  const retryDryRunBatch = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/dry-run-batch",
+  });
+  assert.equal(retryDryRunBatch.statusCode, 200);
+  assert.equal(retryDryRunBatch.json().realExecutionAllowed, false);
+  assert.equal(retryDryRunBatch.json().automaticExecutionAllowed, false);
+  assert.ok(retryDryRunBatch.json().summary.selectedForDryRun >= 1);
+  assert.ok(retryDryRunBatch.json().candidates.every((item: { dryRunOnly: boolean }) => item.dryRunOnly));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

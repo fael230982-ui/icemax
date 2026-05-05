@@ -2357,3 +2357,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Lote Dry-Run Do Reenvio Offline
+
+- [x] Endpoint de lote dry-run criado.
+- [x] Candidatos priorizados com limite por rodada.
+- [x] Pre-checks e idempotencia expostos por candidato.
+- [x] Execucao real e loop automatico permanecem bloqueados.
+- [x] Console web ganhou consulta do lote.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
