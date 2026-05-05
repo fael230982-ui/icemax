@@ -1322,6 +1322,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryEvidencePackage.json().evidenceItems.every((item: { requiredEvidence: unknown[] }) =>
     item.requiredEvidence.length >= 4));
 
+  const retryFinalHomologation = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/final-homologation",
+  });
+  assert.equal(retryFinalHomologation.statusCode, 200);
+  assert.equal(retryFinalHomologation.json().realExecutionAllowed, false);
+  assert.equal(retryFinalHomologation.json().status, "homologation_blocked");
+  assert.equal(retryFinalHomologation.json().summary.realExecutionBlocked, true);
+  assert.ok(retryFinalHomologation.json().approvals.every((item: { decision: string }) =>
+    item.decision === "pending"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

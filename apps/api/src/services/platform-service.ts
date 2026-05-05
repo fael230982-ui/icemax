@@ -686,6 +686,89 @@ export function getMobileOfflineAssistedRetryEvidencePackage() {
   };
 }
 
+export function getMobileOfflineAssistedRetryFinalHomologationMatrix() {
+  const evidencePackage = getMobileOfflineAssistedRetryEvidencePackage();
+  const productionGate = getMobileOfflineAssistedRetryProductionGate();
+  const permissions = getMobileOfflineAssistedRetryPermissions();
+  const dryRunBatch = getMobileOfflineAssistedRetryDryRunBatch();
+  const checks = [
+    {
+      key: "dry_run_batch",
+      label: "Lote dry-run planejado",
+      status: dryRunBatch.summary.selectedForDryRun > 0 ? "pass" : "block",
+      detail: `${dryRunBatch.summary.selectedForDryRun} candidato(s) selecionado(s) para dry-run controlado.`,
+    },
+    {
+      key: "evidence_package",
+      label: "Pacote de evidencias",
+      status: evidencePackage.summary.candidates > 0 ? "attention" : "block",
+      detail: "Evidencias estao definidas, mas ainda dependem de persistencia real.",
+    },
+    {
+      key: "production_gate",
+      label: "Gate de producao",
+      status: productionGate.status === "blocked" ? "block" : "pass",
+      detail: "Execucao real segue bloqueada ate requisitos de producao.",
+    },
+    {
+      key: "sensitive_permission",
+      label: "Permissao sensivel",
+      status: permissions.defaultDecision === "deny" ? "pass" : "block",
+      detail: "Permissao padrao deve negar execucao real para evitar reenvio acidental.",
+    },
+    {
+      key: "audit_persistence",
+      label: "Auditoria persistente",
+      status: evidencePackage.summary.persistenceRequiredBeforeRealExecution ? "block" : "pass",
+      detail: "Persistencia de auditoria ainda e requisito antes da producao.",
+    },
+  ];
+  const blocked = checks.filter((item) => item.status === "block");
+  const attention = checks.filter((item) => item.status === "attention");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: blocked.length ? "homologation_blocked" : "homologation_ready",
+    realExecutionAllowed: false,
+    summary: {
+      totalChecks: checks.length,
+      passed: checks.filter((item) => item.status === "pass").length,
+      attention: attention.length,
+      blocked: blocked.length,
+      selectedForDryRun: dryRunBatch.summary.selectedForDryRun,
+      realExecutionBlocked: true,
+    },
+    checks,
+    approvals: [
+      {
+        role: "owner",
+        required: true,
+        decision: "pending",
+        reason: "Aprovar mudanca de dry-run controlado para homologacao final.",
+      },
+      {
+        role: "admin",
+        required: true,
+        decision: "pending",
+        reason: "Validar permissao sensivel e segregacao por tenant.",
+      },
+      {
+        role: "audit",
+        required: true,
+        decision: "pending",
+        reason: "Confirmar trilha persistente e politica de retencao.",
+      },
+    ],
+    blockers: blocked.map((item) => item.key),
+    nextActions: [
+      "Executar dry-runs controlados e registrar evidencias completas.",
+      "Persistir auditoria em banco real antes de liberar qualquer execucao real.",
+      "Conferir permissoes owner/admin por tenant.",
+      "Revalidar gate de producao apos integracoes reais estarem configuradas.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

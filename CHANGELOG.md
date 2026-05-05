@@ -950,6 +950,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de evidencias do reenvio offline.
 - Teste automatizado cobre controles de evidencia e bloqueio do envio real.
 
+## 0.8.132 - Matriz De Homologacao Final Do Reenvio Offline
+
+- Criado endpoint de matriz de homologacao final do reenvio offline.
+- Matriz consolida lote dry-run, evidencias, gate, permissoes e auditoria.
+- Aprovacoes pendentes de owner, admin e auditoria ficam explicitas.
+- Console web ganhou consulta de homologacao final offline.
+- Teste automatizado cobre homologacao bloqueada e envio real desativado.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
