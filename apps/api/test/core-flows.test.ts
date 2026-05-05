@@ -1247,6 +1247,16 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "execute_real" && item.status === "blocked_until_production_gate"));
   assert.equal(retryPermissions.json().separationOfDuties.outsourcedTechnicianCannotReleaseQueue, true);
 
+  const productionGate = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/production-gate",
+  });
+  assert.equal(productionGate.statusCode, 200);
+  assert.equal(productionGate.json().realExecutionAllowed, false);
+  assert.equal(productionGate.json().dryRunAllowed, true);
+  assert.ok(productionGate.json().summary.requiredBeforeEnable.includes("database"));
+  assert.ok(productionGate.json().checks.some((item: { key: string }) => item.key === "rollback"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

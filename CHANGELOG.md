@@ -877,6 +877,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de permissoes do reenvio offline.
 - Teste automatizado cobre decisao padrao deny e bloqueio da execucao real.
 
+## 0.8.123 - Gate De Producao Do Reenvio Assistido Offline
+
+- Criado endpoint de gate para execucao real do reenvio assistido offline.
+- Gate bloqueia envio real e mantem dry-run permitido.
+- Checks cobrem banco real, auditoria, permissao, idempotencia, integridade e rollback.
+- Console web ganhou consulta do gate de producao do reenvio offline.
+- Teste automatizado cobre bloqueio da execucao real e exigencia de banco.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

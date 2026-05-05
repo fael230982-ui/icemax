@@ -2246,3 +2246,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Producao Do Reenvio Assistido Offline
+
+- [x] Endpoint de gate de producao criado.
+- [x] Execucao real permanece bloqueada.
+- [x] Dry-run permanece permitido.
+- [x] Checks de banco, auditoria, permissao, idempotencia, payload e rollback incluidos.
+- [x] Console web ganhou consulta do gate.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

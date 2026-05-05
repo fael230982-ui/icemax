@@ -128,6 +128,70 @@ export function getMobileOfflineAssistedRetryPermissions() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProductionGate() {
+  const checks = [
+    {
+      key: "database",
+      label: "Banco real",
+      status: isPrismaEnabled() && Boolean(process.env.DATABASE_URL) ? "pass" : "block",
+      detail: "Reenvio real precisa ler e atualizar fila offline, OS, evidencias e auditoria no banco.",
+    },
+    {
+      key: "persistent_audit",
+      label: "Auditoria persistente",
+      status: isPrismaEnabled() ? "manual" : "block",
+      detail: "Cada revisao, preparo, dry-run e execucao real deve gerar evento persistido.",
+    },
+    {
+      key: "permission_policy",
+      label: "Permissao sensivel",
+      status: "manual",
+      detail: "Execucao real deve aceitar somente owner/admin e exigir confirmacao dupla.",
+    },
+    {
+      key: "idempotency",
+      label: "Idempotencia",
+      status: "pass",
+      detail: "Chave baseada no ID offline original evita duplicidade de assinatura, foto, peca e fechamento.",
+    },
+    {
+      key: "payload_integrity",
+      label: "Integridade do payload",
+      status: "manual",
+      detail: "Antes do envio real, validar estado da OS, evidencias locais e consistencia do estoque.",
+    },
+    {
+      key: "rollback",
+      label: "Plano de reversao",
+      status: "manual",
+      detail: "Definir como desfazer uma execucao real parcial sem perder trilha de auditoria.",
+    },
+  ];
+  const blocked = checks.filter((check) => check.status === "block");
+  const manual = checks.filter((check) => check.status === "manual");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    gate: "mobile_offline_assisted_retry_real_execution",
+    status: blocked.length ? "blocked" : "manual_approval_required",
+    realExecutionAllowed: false,
+    dryRunAllowed: true,
+    checks,
+    summary: {
+      passed: checks.filter((check) => check.status === "pass").length,
+      blocked: blocked.length,
+      manual: manual.length,
+      requiredBeforeEnable: blocked.concat(manual).map((check) => check.key),
+    },
+    rolloutPlan: [
+      "Manter reenvio real desativado no ambiente atual.",
+      "Ativar primeiro em homologacao com dados controlados e logs persistidos.",
+      "Liberar por tenant somente apos checklist de auditoria, permissao e rollback.",
+      "Monitorar duplicidade, falhas por payload e reversoes nos primeiros ciclos.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
