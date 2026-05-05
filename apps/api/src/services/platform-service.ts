@@ -849,6 +849,104 @@ export function getMobileOfflineAssistedRetryControlledReleasePlan() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProductionReadinessBoard() {
+  const controlledRelease = getMobileOfflineAssistedRetryControlledReleasePlan();
+  const finalHomologation = getMobileOfflineAssistedRetryFinalHomologationMatrix();
+  const productionGate = getMobileOfflineAssistedRetryProductionGate();
+  const evidencePackage = getMobileOfflineAssistedRetryEvidencePackage();
+  const readinessItems = [
+    {
+      key: "mock_flows",
+      label: "Fluxos controlados",
+      status: "ready",
+      weight: 20,
+      detail: "API, console, dry-run, evidencias e homologacao controlada estao conectados.",
+    },
+    {
+      key: "automated_validation",
+      label: "Validacao automatizada",
+      status: "ready",
+      weight: 15,
+      detail: "Typecheck, testes e build cobrem o fluxo controlado.",
+    },
+    {
+      key: "real_database",
+      label: "Banco real",
+      status: "blocked",
+      weight: 20,
+      detail: "Persistencia real ainda precisa ser configurada antes da producao.",
+    },
+    {
+      key: "persistent_audit",
+      label: "Auditoria persistente",
+      status: evidencePackage.summary.persistenceRequiredBeforeRealExecution ? "blocked" : "ready",
+      weight: 15,
+      detail: "Evidencias e eventos precisam ser gravados de forma persistente e auditavel.",
+    },
+    {
+      key: "tenant_permissions",
+      label: "Permissoes por tenant",
+      status: "attention",
+      weight: 10,
+      detail: "Permissoes sensiveis estao negadas por padrao, mas precisam de revisao em ambiente real.",
+    },
+    {
+      key: "production_gate",
+      label: "Gate de producao",
+      status: productionGate.status === "blocked" ? "blocked" : "ready",
+      weight: 20,
+      detail: "Gate ainda bloqueia execucao real ate os requisitos criticos serem atendidos.",
+    },
+  ];
+  const readinessScore = readinessItems
+    .filter((item) => item.status === "ready")
+    .reduce((total, item) => total + item.weight, 0);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "production_readiness_blocked",
+    realExecutionAllowed: false,
+    readinessScore,
+    summary: {
+      readyItems: readinessItems.filter((item) => item.status === "ready").length,
+      attentionItems: readinessItems.filter((item) => item.status === "attention").length,
+      blockedItems: readinessItems.filter((item) => item.status === "blocked").length,
+      currentPhase: controlledRelease.currentPhase,
+      homologationStatus: finalHomologation.status,
+      realExecutionBlocked: true,
+    },
+    readinessItems,
+    topRisks: [
+      {
+        key: "real_database_missing",
+        severity: "critical",
+        mitigation: "Configurar banco real, migracoes e smoke test antes de persistir evidencias reais.",
+      },
+      {
+        key: "audit_persistence_missing",
+        severity: "critical",
+        mitigation: "Persistir eventos e hashes antes de qualquer execucao real.",
+      },
+      {
+        key: "tenant_permission_review",
+        severity: "high",
+        mitigation: "Validar owner/admin/audit por tenant antes da primeira liberacao controlada.",
+      },
+    ],
+    releaseDecision: {
+      decision: "keep_blocked",
+      reason: "Prontidao operacional controlada esta avancada, mas producao real depende de banco, auditoria e permissoes reais.",
+      minimumScoreForRealExecution: 95,
+    },
+    nextActions: [
+      "Executar transicao para banco real com smoke test.",
+      "Persistir evidencias e eventos de auditoria em banco real.",
+      "Validar permissoes sensiveis por tenant.",
+      "Reexecutar homologacao final antes de qualquer retry real.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

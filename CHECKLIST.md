@@ -2423,3 +2423,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Prontidao De Producao Do Reenvio Offline
+
+- [x] Endpoint de board de prontidao criado.
+- [x] Score de prontidao calculado.
+- [x] Riscos criticos e mitigacoes listados.
+- [x] Decisao de manter bloqueado registrada.
+- [x] Console web ganhou consulta de prontidao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

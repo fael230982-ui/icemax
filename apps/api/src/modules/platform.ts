@@ -11,6 +11,7 @@ import {
   getMobileOfflineAssistedRetryFinalHomologationMatrix,
   getMobileOfflineAssistedRetryPermissions,
   getMobileOfflineAssistedRetryProductionGate,
+  getMobileOfflineAssistedRetryProductionReadinessBoard,
   getMobileOfflineAssistedRetryReadiness,
   getMobileOfflineAssistedRetryControlledReleasePlan,
   getPlatformDiagnostics,
@@ -41,6 +42,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/mobile-offline-escalations/evidence-package", async () => getMobileOfflineAssistedRetryEvidencePackage());
   app.get("/platform/mobile-offline-escalations/final-homologation", async () => getMobileOfflineAssistedRetryFinalHomologationMatrix());
   app.get("/platform/mobile-offline-escalations/controlled-release", async () => getMobileOfflineAssistedRetryControlledReleasePlan());
+  app.get("/platform/mobile-offline-escalations/production-readiness", async () => getMobileOfflineAssistedRetryProductionReadinessBoard());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

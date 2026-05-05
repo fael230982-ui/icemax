@@ -966,6 +966,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta da liberacao offline.
 - Teste automatizado cobre fase atual, bloqueio real e loop automatico bloqueado.
 
+## 0.8.134 - Board De Prontidao De Producao Do Reenvio Offline
+
+- Criado endpoint de board de prontidao de producao do reenvio offline.
+- Board calcula score de prontidao, riscos criticos e decisao de liberacao.
+- Decisao padrao mantem execucao real bloqueada ate banco, auditoria e permissoes reais.
+- Console web ganhou consulta de prontidao de producao offline.
+- Teste automatizado cobre score insuficiente, risco critico e bloqueio de execucao real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
