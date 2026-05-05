@@ -29,6 +29,8 @@ export function OperationsConsole() {
   const [publicTokenRecordId, setPublicTokenRecordId] = useState("");
   const [publicTokenRevocationReason, setPublicTokenRevocationReason] = useState("Link revogado por solicitacao operacional.");
   const [publicTokenInventory, setPublicTokenInventory] = useState<PublicTokenInventoryResponse | null>(null);
+  const [publicTokenStatusFilter, setPublicTokenStatusFilter] = useState("all");
+  const [publicTokenScopeFilter, setPublicTokenScopeFilter] = useState("");
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
 
@@ -325,7 +327,10 @@ export function OperationsConsole() {
 
   function loadPublicTokenInventory() {
     void run("Inventario de links publicos", () =>
-      icemaxApi.customerPortalPublicTokens(token || undefined, { status: "all" }).then((response) => {
+      icemaxApi.customerPortalPublicTokens(token || undefined, {
+        status: publicTokenStatusFilter,
+        scope: publicTokenScopeFilter || undefined,
+      }).then((response) => {
         setPublicTokenInventory(response as PublicTokenInventoryResponse);
         return response;
       }),
@@ -333,9 +338,16 @@ export function OperationsConsole() {
   }
 
   function revokePublicTokenRecordById(recordId: string, reason: string) {
+    if (!window.confirm("Confirma revogar este link publico?")) {
+      return;
+    }
+
     void run("Revogar link publico", async () => {
       const response = await icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, { reason }, token || undefined);
-      const inventory = await icemaxApi.customerPortalPublicTokens(token || undefined, { status: "all" });
+      const inventory = await icemaxApi.customerPortalPublicTokens(token || undefined, {
+        status: publicTokenStatusFilter,
+        scope: publicTokenScopeFilter || undefined,
+      });
       setPublicTokenInventory(inventory as PublicTokenInventoryResponse);
       return { revocation: response, inventory };
     });
@@ -353,6 +365,10 @@ export function OperationsConsole() {
 
     if (reason.length < 3) {
       setStatus("Informe um motivo para a revogacao.");
+      return;
+    }
+
+    if (!window.confirm("Confirma revogar este link publico?")) {
       return;
     }
 
@@ -760,7 +776,31 @@ export function OperationsConsole() {
 
       {publicTokenInventory?.data?.length ? (
         <div className="opsPanel">
-          <strong>Links publicos</strong>
+          <div className="opsPanelHeader">
+            <strong>Links publicos</strong>
+            <div className="opsPanelFilters">
+              <select value={publicTokenStatusFilter} onChange={(event) => setPublicTokenStatusFilter(event.target.value)}>
+                <option value="all">Todos</option>
+                <option value="active">Ativos</option>
+                <option value="revoked">Revogados</option>
+                <option value="expired">Expirados</option>
+              </select>
+              <select value={publicTokenScopeFilter} onChange={(event) => setPublicTokenScopeFilter(event.target.value)}>
+                <option value="">Todos escopos</option>
+                <option value="service_order_tracking">Acompanhamento OS</option>
+                <option value="billing_summary">Financeiro portal</option>
+              </select>
+              <button type="button" className="secondary" onClick={loadPublicTokenInventory}>Aplicar filtros</button>
+            </div>
+          </div>
+          {publicTokenInventory.summary ? (
+            <div className="summaryPills">
+              <span>Ativos: {publicTokenInventory.summary.active ?? 0}</span>
+              <span>Revogados: {publicTokenInventory.summary.revoked ?? 0}</span>
+              <span>Expirados: {publicTokenInventory.summary.expired ?? 0}</span>
+              <span>Total: {publicTokenInventory.total ?? publicTokenInventory.data.length}</span>
+            </div>
+          ) : null}
           <div className="tableWrap">
             <table>
               <thead>

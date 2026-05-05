@@ -748,6 +748,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Inventario e recarregado apos revogacao pela tabela.
 - Estilos responsivos adicionados para leitura operacional.
 
+## 0.8.107 - Filtros E Confirmacao De Links Publicos
+
+- Inventario visual ganhou filtros por status e escopo.
+- Painel passou a exibir resumo de ativos, revogados, expirados e total.
+- Revogacao manual e por linha agora exige confirmacao do operador.
+- Recarregamento apos revogacao preserva filtros selecionados.
+- Documentado fluxo operacional com filtros e confirmacao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -269,6 +269,32 @@ h2 {
   background: #ffffff;
 }
 
+.opsPanelHeader,
+.opsPanelFilters,
+.summaryPills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.opsPanelHeader {
+  justify-content: space-between;
+}
+
+.opsPanelFilters select {
+  min-width: 170px;
+}
+
+.summaryPills span {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--muted);
+  background: #f8fafc;
+  font-size: 12px;
+}
+
 .tableWrap {
   overflow-x: auto;
 }

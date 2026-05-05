@@ -2004,3 +2004,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Filtros E Confirmacao De Links Publicos
+
+- [x] Filtro visual por status adicionado.
+- [x] Filtro visual por escopo adicionado.
+- [x] Resumo de status exibido no painel.
+- [x] Confirmacao antes de revogacao adicionada.
+- [x] Recarregamento preserva filtros atuais.
+- [x] Estilos do painel atualizados.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
