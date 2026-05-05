@@ -4,6 +4,7 @@ import {
   getModuleCatalog,
   getPlatformDiagnostics,
   getPlatformReadiness,
+  getMobileOfflineEscalationBoard,
   getPreReleaseGate,
   getProductionReadinessPlan,
   getRoleMatrix,
@@ -14,6 +15,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/modules", async () => getModuleCatalog());
   app.get("/platform/roles", async () => getRoleMatrix());
   app.get("/platform/diagnostics", async () => getPlatformDiagnostics());
+  app.get("/platform/mobile-offline-escalations", async () => getMobileOfflineEscalationBoard());
   app.get("/platform/pre-release-gate", async () => getPreReleaseGate());
   app.get("/platform/production-readiness", async () => getProductionReadinessPlan());
   app.get("/platform/end-of-day-snapshot", async () => getEndOfDaySnapshot());

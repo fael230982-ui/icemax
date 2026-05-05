@@ -193,6 +193,80 @@ export function getProductionReadinessPlan() {
   };
 }
 
+export function getMobileOfflineEscalationBoard() {
+  const items = [
+    {
+      id: "offline-blocked-001",
+      technicianUserId: "tech-001",
+      technicianName: "Rafael Martins",
+      serviceOrderId: "1048",
+      customer: "ClimaSul Hotel",
+      actionLabel: "Assinatura OS 1048",
+      priority: "critical",
+      retryCount: 5,
+      ageHours: 6,
+      blockedReason: "Limite de tentativas atingido no envio de assinatura.",
+      likelyCause: "OS pode ter sido encerrada no painel antes da sincronizacao do app.",
+      recommendedAction: "Conferir status da OS, validar assinatura com o cliente e liberar reenvio assistido.",
+      owner: "supervisor",
+    },
+    {
+      id: "offline-blocked-002",
+      technicianUserId: "tech-002",
+      technicianName: "Tecnico Terceiro",
+      serviceOrderId: "1049",
+      customer: "Condominio Central",
+      actionLabel: "Foto after OS 1049",
+      priority: "critical",
+      retryCount: 5,
+      ageHours: 3,
+      blockedReason: "Upload de evidencia recusado pela API.",
+      likelyCause: "Arquivo local pendente de conversao ou URL temporaria invalida.",
+      recommendedAction: "Solicitar nova captura da evidencia ou reenviar arquivo pelo painel.",
+      owner: "qualidade",
+    },
+    {
+      id: "offline-blocked-003",
+      technicianUserId: "tech-001",
+      technicianName: "Rafael Martins",
+      serviceOrderId: "1050",
+      customer: "Industria Norte",
+      actionLabel: "Peca OS 1050",
+      priority: "high",
+      retryCount: 5,
+      ageHours: 12,
+      blockedReason: "Movimento de estoque nao foi aceito.",
+      likelyCause: "Saldo pode ter sido consumido por outra OS ou local de estoque incorreto.",
+      recommendedAction: "Conferir saldo do almoxarifado e ajustar reserva antes de sincronizar.",
+      owner: "estoque",
+    },
+  ];
+  const critical = items.filter((item) => item.priority === "critical").length;
+  const high = items.filter((item) => item.priority === "high").length;
+
+  return {
+    generatedAt: new Date().toISOString(),
+    policy: {
+      maxRetryCount: 5,
+      blockedActionsRequireReview: true,
+      automaticRetryAllowed: false,
+    },
+    summary: {
+      total: items.length,
+      critical,
+      high,
+      oldestAgeHours: Math.max(...items.map((item) => item.ageHours)),
+      owners: Array.from(new Set(items.map((item) => item.owner))),
+    },
+    data: items,
+    nextActions: [
+      "Supervisor revisa eventos criticos antes de liberar reenvio.",
+      "Estoque confere movimentos recusados antes de ajustar saldo.",
+      "Qualidade valida evidencias bloqueadas antes de fechar OS.",
+    ],
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();

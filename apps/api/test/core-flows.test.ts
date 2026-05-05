@@ -1228,6 +1228,12 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(diagnostics.statusCode, 200);
   assert.equal(diagnostics.json().validation.zod, true);
 
+  const mobileOffline = await app.inject({ method: "GET", url: "/platform/mobile-offline-escalations" });
+  assert.equal(mobileOffline.statusCode, 200);
+  assert.equal(mobileOffline.json().policy.maxRetryCount, 5);
+  assert.ok(mobileOffline.json().summary.critical >= 1);
+  assert.ok(mobileOffline.json().data.every((item: { retryCount: number }) => item.retryCount >= 5));
+
   const gate = await app.inject({ method: "GET", url: "/platform/pre-release-gate" });
   assert.equal(gate.statusCode, 200);
   assert.equal(gate.json().status, "blocked");

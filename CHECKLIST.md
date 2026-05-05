@@ -2138,3 +2138,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board Gerencial Da Fila Offline
+
+- [x] Endpoint de pendencias offline bloqueadas criado.
+- [x] Politica de 5 tentativas exposta no board.
+- [x] Console web conectado ao board.
+- [x] Tabela gerencial de OS, tecnico, motivo e recomendacao criada.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

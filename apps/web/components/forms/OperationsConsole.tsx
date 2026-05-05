@@ -20,6 +20,29 @@ type PublicTokenInventoryResponse = {
   total?: number;
 };
 
+type MobileOfflineEscalationItem = {
+  id: string;
+  technicianName: string;
+  serviceOrderId: string;
+  customer: string;
+  actionLabel: string;
+  priority: string;
+  retryCount: number;
+  blockedReason: string;
+  recommendedAction: string;
+  owner: string;
+};
+
+type MobileOfflineEscalationResponse = {
+  summary?: {
+    total: number;
+    critical: number;
+    high: number;
+    oldestAgeHours: number;
+  };
+  data?: MobileOfflineEscalationItem[];
+};
+
 function encodeTextFile(content: string) {
   return btoa(unescape(encodeURIComponent(content)));
 }
@@ -29,6 +52,7 @@ export function OperationsConsole() {
   const [publicTokenRecordId, setPublicTokenRecordId] = useState("");
   const [publicTokenRevocationReason, setPublicTokenRevocationReason] = useState("Link revogado por solicitacao operacional.");
   const [publicTokenInventory, setPublicTokenInventory] = useState<PublicTokenInventoryResponse | null>(null);
+  const [mobileOfflineEscalations, setMobileOfflineEscalations] = useState<MobileOfflineEscalationResponse | null>(null);
   const [publicTokenStatusFilter, setPublicTokenStatusFilter] = useState("all");
   const [publicTokenScopeFilter, setPublicTokenScopeFilter] = useState("");
   const [status, setStatus] = useState("Pronto para operar com a API local.");
@@ -577,6 +601,7 @@ export function OperationsConsole() {
         icemaxApi.platformModules(token || undefined),
         icemaxApi.platformRoles(token || undefined),
         icemaxApi.platformDiagnostics(token || undefined),
+        icemaxApi.mobileOfflineEscalations(token || undefined),
         icemaxApi.preReleaseGate(token || undefined),
         icemaxApi.productionReadiness(token || undefined),
         icemaxApi.endOfDaySnapshot(token || undefined),
@@ -584,6 +609,15 @@ export function OperationsConsole() {
 
       return { checks: results.length, results };
     });
+  }
+
+  function loadMobileOfflineEscalations() {
+    void run("Pendencias offline bloqueadas", () =>
+      icemaxApi.mobileOfflineEscalations(token || undefined).then((response) => {
+        setMobileOfflineEscalations(response as MobileOfflineEscalationResponse);
+        return response;
+      }),
+    );
   }
 
   function runHomologationCheck() {
@@ -770,6 +804,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineEscalations}>Pendencias offline</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runDatabaseTransitionCheck}>Virada banco</button>
@@ -830,6 +865,46 @@ export function OperationsConsole() {
                         Revogar
                       </button>
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : null}
+
+      {mobileOfflineEscalations?.data?.length ? (
+        <div className="opsPanel">
+          <div className="opsPanelHeader">
+            <strong>Pendencias offline bloqueadas</strong>
+          </div>
+          {mobileOfflineEscalations.summary ? (
+            <div className="summaryPills">
+              <span>Total: {mobileOfflineEscalations.summary.total}</span>
+              <span>Criticas: {mobileOfflineEscalations.summary.critical}</span>
+              <span>Altas: {mobileOfflineEscalations.summary.high}</span>
+              <span>Mais antiga: {mobileOfflineEscalations.summary.oldestAgeHours}h</span>
+            </div>
+          ) : null}
+          <div className="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>OS</th>
+                  <th>Tecnico</th>
+                  <th>Acao</th>
+                  <th>Motivo</th>
+                  <th>Recomendacao</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mobileOfflineEscalations.data.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.serviceOrderId}<br />{item.customer}</td>
+                    <td>{item.technicianName}<br />{item.owner}</td>
+                    <td>{item.actionLabel}<br />{item.priority} - tentativa {item.retryCount}</td>
+                    <td>{item.blockedReason}</td>
+                    <td>{item.recommendedAction}</td>
                   </tr>
                 ))}
               </tbody>

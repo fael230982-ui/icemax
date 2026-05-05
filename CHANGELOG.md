@@ -820,6 +820,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel mobile mostra total de bloqueadas e marca itens para revisao.
 - Status de sincronizacao informa bloqueios pendentes para gestor ou suporte.
 
+## 0.8.116 - Board Gerencial Da Fila Offline
+
+- Criado endpoint de pendencias offline bloqueadas.
+- Board informa politica de tentativa, resumo e itens por tecnico, OS e cliente.
+- Console web ganhou acao para consultar pendencias offline.
+- Painel web exibe tabela gerencial com motivo e recomendacao.
+- Teste automatizado cobre politica de 5 tentativas e itens bloqueados.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
