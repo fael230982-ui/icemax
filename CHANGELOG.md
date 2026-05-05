@@ -1006,6 +1006,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de homologacao de provedores.
 - Teste automatizado cobre gate bloqueado, fases e politica contra segredos.
 
+## 0.8.139 - Board De Evidencias De Provedores Do Reenvio Offline
+
+- Criado endpoint de board de evidencias de homologacao de provedores.
+- Board transforma fases do runbook em itens verificaveis por responsavel, ambiente e status.
+- Regras rejeitam evidencias com segredos, cliente real ou falta de validacao.
+- Console web ganhou consulta de evidencias de provedores.
+- Teste automatizado cobre bloqueio, itens privados e rejeicao de segredo visivel.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

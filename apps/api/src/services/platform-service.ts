@@ -1388,6 +1388,59 @@ export function getMobileOfflineAssistedRetryProviderHomologationRunbook() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProviderEvidenceBoard() {
+  const runbook = getMobileOfflineAssistedRetryProviderHomologationRunbook();
+  const evidenceItems = runbook.phases.flatMap((phase) =>
+    phase.requiredEvidence.map((evidence, index) => ({
+      id: `${phase.key}-evidence-${index + 1}`,
+      phase: phase.key,
+      phaseTitle: phase.title,
+      owner: phase.owner,
+      description: evidence,
+      status: phase.status === "pending" ? "pending_capture" : "blocked",
+      requiresSecretReview: evidence.toLowerCase().includes("variaveis reais")
+        || evidence.toLowerCase().includes("credenciais")
+        || evidence.toLowerCase().includes("segredo"),
+      allowedStorage: "internal_evidence_vault_only",
+      publicRepositoryAllowed: false,
+    })));
+  const blockedItems = evidenceItems.filter((item) => item.status === "blocked");
+  const sensitiveItems = evidenceItems.filter((item) => item.requiresSecretReview);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "provider_evidence_board_ready",
+    realExecutionAllowed: false,
+    summary: {
+      evidenceItems: evidenceItems.length,
+      blockedItems: blockedItems.length,
+      pendingCapture: evidenceItems.filter((item) => item.status === "pending_capture").length,
+      sensitiveItems: sensitiveItems.length,
+      phases: runbook.summary.phases,
+      gateDecision: runbook.summary.gateDecision,
+    },
+    evidenceItems,
+    acceptanceRules: [
+      "Evidencia nao pode conter chaves, tokens, senhas, URLs privadas ou dados sensiveis.",
+      "Prints devem ocultar qualquer segredo antes de armazenamento interno.",
+      "Evidencias de e-mail, WhatsApp e notificacao devem usar destinatarios internos.",
+      "Cada item precisa de responsavel, data, ambiente e resultado esperado antes da aprovacao.",
+    ],
+    rejectionRules: [
+      "Rejeitar evidencia com segredo visivel.",
+      "Rejeitar teste feito com cliente real antes da homologacao externa aprovada.",
+      "Rejeitar evidencia sem comando de validacao ou sem log de resultado.",
+      "Rejeitar aprovacao de producao enquanto o gate estiver em keep_blocked.",
+    ],
+    nextActions: [
+      "Capturar evidencias da fase de selecao sem incluir credenciais.",
+      "Preparar local seguro para armazenar evidencias internas.",
+      "Definir responsavel por revisar itens sensiveis.",
+      "Manter push para GitHub sem anexos sensiveis.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

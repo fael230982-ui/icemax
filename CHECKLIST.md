@@ -2503,3 +2503,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Evidencias De Provedores Do Reenvio Offline
+
+- [x] Endpoint de board de evidencias criado.
+- [x] Evidencias derivadas das fases do runbook.
+- [x] Regras de aceite e rejeicao registradas.
+- [x] Publicacao de evidencias sensiveis no repositorio bloqueada.
+- [x] Console web ganhou consulta de evidencias.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

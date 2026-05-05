@@ -1403,6 +1403,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "phase_2_controlled_provider_smoke"));
   assert.ok(retryProviderHomologationRunbook.json().evidencePolicy.mustAvoidSecrets);
 
+  const retryProviderEvidenceBoard = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/provider-evidence-board",
+  });
+  assert.equal(retryProviderEvidenceBoard.statusCode, 200);
+  assert.equal(retryProviderEvidenceBoard.json().realExecutionAllowed, false);
+  assert.equal(retryProviderEvidenceBoard.json().summary.gateDecision, "keep_blocked");
+  assert.ok(retryProviderEvidenceBoard.json().summary.evidenceItems >= 20);
+  assert.ok(retryProviderEvidenceBoard.json().evidenceItems.some((item: { publicRepositoryAllowed: boolean }) =>
+    item.publicRepositoryAllowed === false));
+  assert.ok(retryProviderEvidenceBoard.json().rejectionRules.some((item: string) =>
+    item.includes("segredo visivel")));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",
