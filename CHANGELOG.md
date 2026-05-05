@@ -660,6 +660,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Schema summary passou a incluir dominio `portal_cliente`.
 - Smoke test Prisma passou a verificar tokens publicos por tenant.
 
+## 0.8.96 - Servico De Token Publico
+
+- Adicionado servico de emissao de tokens publicos opacos com entropia forte.
+- Links de acompanhamento da OS e resumo de contrato passaram a expor apenas token cru no momento de criacao.
+- Repositorio Prisma persiste somente hash SHA-256 com pepper de servidor, escopo, entidade, expiracao e metadados seguros.
+- Portal do cliente ganhou endpoint de politica de token publico.
+- Teste automatizado cobre hash preview, escopo, expiracao e garantia de que token cru nao e persistido.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

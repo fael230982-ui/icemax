@@ -1840,3 +1840,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Servico De Token Publico
+
+- [x] Servico de token opaco criado.
+- [x] Hash com pepper de servidor implementado.
+- [x] Repositorio Prisma persiste somente hash do token.
+- [x] Links de acompanhamento e portal financeiro usam pacote seguro.
+- [x] Endpoint de politica de token publico criado.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

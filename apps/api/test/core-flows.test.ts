@@ -711,6 +711,15 @@ test("customer portal can request optional service order", async () => {
   assert.ok(accessPolicy.json().zones.some((zone: { key: string }) => zone.key === "billing_summary"));
   assert.ok(accessPolicy.json().releaseChecks.length >= 4);
 
+  const tokenPolicy = await app.inject({
+    method: "GET",
+    url: "/customer-portal/icemax/public-token-policy",
+  });
+  assert.equal(tokenPolicy.statusCode, 200);
+  assert.equal(tokenPolicy.json().rawTokenPersisted, false);
+  assert.equal(tokenPolicy.json().hashPersistedInProduction, true);
+  assert.equal(tokenPolicy.json().customerIdentityRequiredForFinancialData, true);
+
   const sharingPolicy = await app.inject({
     method: "GET",
     url: "/customer-portal/icemax/external-sharing-policy",
@@ -726,8 +735,12 @@ test("customer portal can request optional service order", async () => {
   });
   assert.equal(billingAccess.statusCode, 201);
   assert.match(billingAccess.json().token, /^billing_icemax_/);
+  assert.match(billingAccess.json().tokenHashPreview, /^[a-f0-9]{12}\.\.\.$/);
   assert.equal(billingAccess.json().expiresInDays, 3);
   assert.equal(billingAccess.json().security.requiresCustomerIdentityInProduction, true);
+  assert.equal(billingAccess.json().security.rawTokenPersisted, false);
+  assert.equal(billingAccess.json().security.hashPersistedInProduction, true);
+  assert.equal(billingAccess.json().security.scope, "billing_summary");
   assert.ok(billingAccess.json().restrictions.some((item: string) => item.includes("margem interna")));
 
   const order = await app.inject({
@@ -785,9 +798,13 @@ test("customer portal can request optional service order", async () => {
   assert.equal(trackingLink.statusCode, 201);
   assert.equal(trackingLink.json().serviceOrderId, "1048");
   assert.match(trackingLink.json().token, /^track_1048_/);
+  assert.match(trackingLink.json().tokenHashPreview, /^[a-f0-9]{12}\.\.\.$/);
   assert.equal(trackingLink.json().expiresInDays, 7);
   assert.ok(trackingLink.json().channels.some((item: { channel: string }) => item.channel === "whatsapp"));
   assert.equal(trackingLink.json().security.hidesFinancialData, true);
+  assert.equal(trackingLink.json().security.rawTokenPersisted, false);
+  assert.equal(trackingLink.json().security.hashPersistedInProduction, true);
+  assert.equal(trackingLink.json().security.scope, "service_order_tracking");
 
   const attachments = await app.inject({
     method: "POST",

@@ -1,5 +1,7 @@
 import type { FastifyInstance } from "fastify";
+import { isPrismaEnabled } from "../config";
 import { serviceContracts, serviceOrders, tenant, technicianLocations } from "../mock-data";
+import { issueMockPublicAccessToken, issuePrismaPublicAccessToken } from "../repositories/public-access-token-repository";
 import {
   customerPortalAttachmentSchema,
   customerPortalOrderSchema,
@@ -10,6 +12,7 @@ import {
 } from "../schemas";
 import { recordAuditEvent } from "../services/audit-service";
 import { createContractBillingPlan } from "../services/business-suite-service";
+import { getPublicAccessTokenSecurityPolicy } from "../services/public-access-token-service";
 
 function classifyPortalTriage(input: CustomerPortalTriageInput) {
   const description = input.problemDescription.toLowerCase();
@@ -126,50 +129,79 @@ function buildCustomerTracking(serviceOrderId: string) {
   };
 }
 
-function createTrackingSharePackage(serviceOrderId: string) {
+async function createTrackingSharePackage(serviceOrderId: string) {
   const tracking = buildCustomerTracking(serviceOrderId);
 
   if (!tracking) {
     return null;
   }
 
-  const issuedAt = new Date();
-  const expiresAt = new Date(issuedAt);
-  expiresAt.setDate(expiresAt.getDate() + 7);
-  const token = `track_${serviceOrderId}_${issuedAt.getTime()}`;
-  const publicUrl = `https://app.icemax.local/acompanhamento/${token}`;
+  const tokenPackage = isPrismaEnabled()
+    ? await issuePrismaPublicAccessToken({
+        tenantId: tenant.id,
+        prefix: "track",
+        scope: "service_order_tracking",
+        entityType: "service_order",
+        entityId: serviceOrderId,
+        expiresInDays: 7,
+        path: "/acompanhamento/{token}",
+        metadata: {
+          customer: tracking.customer,
+          hidesFinancialData: tracking.privacy.hidesFinancialData,
+          hidesInternalNotes: tracking.privacy.hidesInternalNotes,
+        },
+      })
+    : await issueMockPublicAccessToken({
+        tenantId: tenant.id,
+        prefix: "track",
+        scope: "service_order_tracking",
+        entityType: "service_order",
+        entityId: serviceOrderId,
+        expiresInDays: 7,
+        path: "/acompanhamento/{token}",
+        metadata: {
+          customer: tracking.customer,
+          hidesFinancialData: tracking.privacy.hidesFinancialData,
+          hidesInternalNotes: tracking.privacy.hidesInternalNotes,
+        },
+      });
 
   return {
     serviceOrderId,
     status: "share_package_ready",
-    token,
-    publicUrl,
-    issuedAt: issuedAt.toISOString(),
-    expiresAt: expiresAt.toISOString(),
-    expiresInDays: 7,
+    token: tokenPackage.token,
+    tokenHashPreview: tokenPackage.tokenHashPreview,
+    publicUrl: tokenPackage.publicUrl,
+    issuedAt: tokenPackage.issuedAt,
+    expiresAt: tokenPackage.expiresAt,
+    expiresInDays: tokenPackage.expiresInDays,
     customer: tracking.customer,
     channels: [
       {
         channel: "whatsapp",
         recipient: "+5500000000000",
         template: "os_tracking_link",
-        message: `Ola! Acompanhe sua OS ${serviceOrderId} pelo link: ${publicUrl}`,
+        message: `Ola! Acompanhe sua OS ${serviceOrderId} pelo link: ${tokenPackage.publicUrl}`,
       },
       {
         channel: "email",
         recipient: "cliente@local.dev",
         subject: `Acompanhamento da OS ${serviceOrderId}`,
         template: "os_tracking_link_email",
-        message: `Ola, voce pode acompanhar o andamento da sua OS ${serviceOrderId} pelo link ${publicUrl}.`,
+        message: `Ola, voce pode acompanhar o andamento da sua OS ${serviceOrderId} pelo link ${tokenPackage.publicUrl}.`,
       },
     ],
     security: {
-      tokenType: "opaque_mock",
+      tokenType: "opaque_public_access_token",
       requiresLogin: false,
       expiresAutomatically: true,
       hidesFinancialData: tracking.privacy.hidesFinancialData,
       hidesInternalNotes: tracking.privacy.hidesInternalNotes,
       canBeRevoked: true,
+      rawTokenPersisted: tokenPackage.rawTokenPersisted,
+      hashPersistedInProduction: tokenPackage.hashPersistedInProduction,
+      persistence: tokenPackage.persistence,
+      scope: tokenPackage.scope,
     },
     audit: {
       event: "customer_portal.tracking_link_created",
@@ -177,7 +209,7 @@ function createTrackingSharePackage(serviceOrderId: string) {
       entityId: serviceOrderId,
     },
     nextActions: [
-      "Persistir token publico no banco real.",
+      "Validar abertura do link contra hash persistido quando banco real estiver ativo.",
       "Enviar link pela fila de comunicacao.",
       "Registrar abertura do link em auditoria.",
       "Expirar link apos prazo configurado.",
@@ -291,22 +323,47 @@ function buildCustomerBillingSummary(tenantSlug: string) {
   };
 }
 
-function createCustomerBillingAccessPackage(tenantSlug: string) {
-  const issuedAt = new Date();
-  const expiresAt = new Date(issuedAt);
-  expiresAt.setDate(expiresAt.getDate() + 3);
-  const token = `billing_${tenantSlug}_${issuedAt.getTime()}`;
-  const publicUrl = `https://app.icemax.local/portal/${tenantSlug}?billingToken=${token}`;
+async function createCustomerBillingAccessPackage(tenantSlug: string) {
   const billingSummary = buildCustomerBillingSummary(tenantSlug);
+  const tokenPackage = isPrismaEnabled()
+    ? await issuePrismaPublicAccessToken({
+        tenantId: tenant.id,
+        prefix: "billing",
+        scope: "billing_summary",
+        entityType: "customer_portal",
+        entityId: tenantSlug,
+        expiresInDays: 3,
+        path: `/portal/${tenantSlug}?billingToken={token}`,
+        metadata: {
+          coveredEquipment: billingSummary.summary.coveredEquipment,
+          contracts: billingSummary.summary.contracts,
+          requiresCustomerIdentityInProduction: true,
+        },
+      })
+    : await issueMockPublicAccessToken({
+        tenantId: tenant.id,
+        prefix: "billing",
+        scope: "billing_summary",
+        entityType: "customer_portal",
+        entityId: tenantSlug,
+        expiresInDays: 3,
+        path: `/portal/${tenantSlug}?billingToken={token}`,
+        metadata: {
+          coveredEquipment: billingSummary.summary.coveredEquipment,
+          contracts: billingSummary.summary.contracts,
+          requiresCustomerIdentityInProduction: true,
+        },
+      });
 
   return {
     tenantSlug,
     status: "billing_access_package_ready",
-    token,
-    publicUrl,
-    issuedAt: issuedAt.toISOString(),
-    expiresAt: expiresAt.toISOString(),
-    expiresInDays: 3,
+    token: tokenPackage.token,
+    tokenHashPreview: tokenPackage.tokenHashPreview,
+    publicUrl: tokenPackage.publicUrl,
+    issuedAt: tokenPackage.issuedAt,
+    expiresAt: tokenPackage.expiresAt,
+    expiresInDays: tokenPackage.expiresInDays,
     tenant: billingSummary.tenant,
     accessScope: [
       "contracts_summary",
@@ -327,21 +384,25 @@ function createCustomerBillingAccessPackage(tenantSlug: string) {
         recipient: "cliente@local.dev",
         subject: "Acesso ao resumo do contrato",
         template: "customer_billing_access_email",
-        message: `Acesse o resumo dos seus contratos pelo link ${publicUrl}.`,
+        message: `Acesse o resumo dos seus contratos pelo link ${tokenPackage.publicUrl}.`,
       },
       {
         channel: "whatsapp",
         recipient: "+5500000000000",
         template: "customer_billing_access_whatsapp",
-        message: `Ola! Seu resumo de contrato esta disponivel por 3 dias: ${publicUrl}`,
+        message: `Ola! Seu resumo de contrato esta disponivel por 3 dias: ${tokenPackage.publicUrl}`,
       },
     ],
     security: {
-      tokenType: "opaque_mock",
+      tokenType: "opaque_public_access_token",
       requiresCustomerIdentityInProduction: true,
       expiresAutomatically: true,
       canBeRevoked: true,
       auditEveryAccess: true,
+      rawTokenPersisted: tokenPackage.rawTokenPersisted,
+      hashPersistedInProduction: tokenPackage.hashPersistedInProduction,
+      persistence: tokenPackage.persistence,
+      scope: tokenPackage.scope,
     },
     audit: {
       event: "customer_portal.billing_access_link_created",
@@ -349,7 +410,7 @@ function createCustomerBillingAccessPackage(tenantSlug: string) {
       entityId: tenantSlug,
     },
     nextActions: [
-      "Persistir token no banco real com hash, expiracao e tenant.",
+      "Validar abertura do link contra hash persistido quando banco real estiver ativo.",
       "Exigir validacao de identidade antes de exibir dados reais.",
       "Enviar link pela fila oficial de comunicacao quando provedores estiverem configurados.",
       "Registrar abertura, expiracao e revogacao do link em auditoria.",
@@ -392,6 +453,8 @@ function buildCustomerPortalAccessPolicy(tenantSlug: string) {
       denyByDefaultInProduction: true,
       auditEverySensitiveAccess: true,
       hashTokensInDatabase: true,
+      rawTokenPersisted: false,
+      rawTokenReturnedOnlyOnCreation: true,
       rotateTokensOnCustomerRequest: true,
     },
     releaseChecks: [
@@ -490,6 +553,15 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     return buildCustomerPortalAccessPolicy(tenantSlug);
   });
 
+  app.get("/customer-portal/:tenantSlug/public-token-policy", async (request) => {
+    const { tenantSlug } = request.params as { tenantSlug: string };
+
+    return {
+      tenantSlug,
+      ...getPublicAccessTokenSecurityPolicy(),
+    };
+  });
+
   app.get("/customer-portal/:tenantSlug/external-sharing-policy", async (request) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
 
@@ -498,7 +570,7 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
 
   app.post("/customer-portal/:tenantSlug/billing-access-link", async (request, reply) => {
     const { tenantSlug } = request.params as { tenantSlug: string };
-    const accessPackage = createCustomerBillingAccessPackage(tenantSlug);
+    const accessPackage = await createCustomerBillingAccessPackage(tenantSlug);
 
     await recordAuditEvent({
       tenantId: tenant.id,
@@ -595,7 +667,7 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
 
   app.post("/customer-portal/service-orders/:id/tracking-link", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const sharePackage = createTrackingSharePackage(id);
+    const sharePackage = await createTrackingSharePackage(id);
 
     if (!sharePackage) {
       return reply.code(404).send({ message: "OS nao encontrada para gerar link de acompanhamento." });
