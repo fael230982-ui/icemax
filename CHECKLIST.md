@@ -2487,3 +2487,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Runbook De Homologacao De Provedores Do Reenvio Offline
+
+- [x] Endpoint de runbook de homologacao criado.
+- [x] Fases de selecao, staging, smoke, homologacao e decisao registradas.
+- [x] Politica de evidencias sem segredos definida.
+- [x] Chamadas reais e comunicacao com cliente permanecem bloqueadas.
+- [x] Console web ganhou consulta do runbook.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

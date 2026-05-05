@@ -1278,6 +1278,116 @@ export function getMobileOfflineAssistedRetryProviderActivationGate() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProviderHomologationRunbook() {
+  const activationGate = getMobileOfflineAssistedRetryProviderActivationGate();
+  const phases = [
+    {
+      key: "phase_0_selection",
+      title: "Selecao e aprovacao",
+      status: "pending",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      providers: ["database", "hosting_domain", "email_provider", "maps_provider", "ai_provider", "whatsapp_provider"],
+      requiredEvidence: [
+        "Provedor escolhido por categoria.",
+        "Teto mensal aprovado por provedor.",
+        "Politica de alertas definida.",
+        "Decisao registrada sem expor credenciais.",
+      ],
+      exitCriteria: "Todos os provedores necessarios para staging aprovados e com limite de custo definido.",
+    },
+    {
+      key: "phase_1_secure_staging",
+      title: "Configuracao segura em staging",
+      status: "blocked",
+      owner: "platform",
+      providers: ["database", "hosting_domain", "email_provider", "maps_provider", "ai_provider"],
+      requiredEvidence: [
+        "Variaveis reais cadastradas somente no ambiente seguro.",
+        "Logs de entrega e auditoria habilitados.",
+        "Alertas de uso ativos.",
+        "Nenhum segredo registrado em commit, documento ou log.",
+      ],
+      exitCriteria: "Staging executa chamadas controladas sem vazamento de segredo e com auditoria rastreavel.",
+    },
+    {
+      key: "phase_2_controlled_provider_smoke",
+      title: "Smoke test controlado",
+      status: "blocked",
+      owner: "qa",
+      providers: ["database", "email_provider", "maps_provider", "ai_provider"],
+      requiredEvidence: [
+        "Consulta simples de banco real validada.",
+        "E-mail de teste enviado para destinatario interno.",
+        "Rota/geocodificacao testada com endereco de demonstracao.",
+        "Revisao de texto por IA testada com conteudo ficticio.",
+      ],
+      exitCriteria: "Chamadas externas funcionam em staging, com custo rastreado e sem contato real com cliente.",
+    },
+    {
+      key: "phase_3_business_homologation",
+      title: "Homologacao operacional",
+      status: "blocked",
+      owner: "operations",
+      providers: ["database", "hosting_domain", "email_provider", "maps_provider", "ai_provider", "whatsapp_provider"],
+      requiredEvidence: [
+        "Fluxo de OS completo revisado.",
+        "Cliente ficticio recebe comunicacao apenas em canal de teste.",
+        "Relatorio, assinatura e evidencias conferidos.",
+        "Fallback manual documentado para cada provedor.",
+      ],
+      exitCriteria: "Operacao aprova fluxo sem envio real para cliente externo.",
+    },
+    {
+      key: "phase_4_production_decision",
+      title: "Decisao de producao",
+      status: "blocked",
+      owner: "RAFAEL DA SILVA BEZEERA",
+      providers: ["database", "hosting_domain", "email_provider", "maps_provider", "ai_provider", "whatsapp_provider"],
+      requiredEvidence: [
+        "Checklist completo validado.",
+        "CHANGELOG atualizado.",
+        "npm run validate executado.",
+        "Plano de rollback aprovado.",
+        "Aprovacao humana registrada.",
+      ],
+      exitCriteria: "Somente o titular aprova qualquer ativacao real por tenant.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "provider_homologation_runbook_ready",
+    realExecutionAllowed: false,
+    summary: {
+      phases: phases.length,
+      blockedPhases: phases.filter((phase) => phase.status === "blocked").length,
+      pendingPhases: phases.filter((phase) => phase.status === "pending").length,
+      gateDecision: activationGate.decision.result,
+      productionProviderCallsAllowed: false,
+    },
+    phases,
+    evidencePolicy: {
+      mustAvoidSecrets: true,
+      internalRecipientsOnly: true,
+      customerCommunicationBlocked: true,
+      ownerApprovalRequired: true,
+    },
+    requiredCommands: ["npm run validate", "guard:secrets", "typecheck", "test", "build -w apps/web"],
+    guardrails: [
+      "Usar somente dados ficticios em smoke test de provedor.",
+      "Enviar e-mail, WhatsApp e notificacoes apenas para canais internos de teste.",
+      "Nao colar prints com chaves, tokens, URLs privadas ou dados sensiveis.",
+      "Manter producao bloqueada enquanto o gate de ativacao indicar keep_blocked.",
+    ],
+    nextActions: [
+      "Preparar checklist de decisao de provedor por categoria.",
+      "Definir plano de staging sem expor segredos no repositorio.",
+      "Criar evidencias internas para smoke test controlado.",
+      "Revisar gate de ativacao antes de qualquer chamada real.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

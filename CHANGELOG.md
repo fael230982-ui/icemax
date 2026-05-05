@@ -998,6 +998,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta do gate de provedores.
 - Teste automatizado cobre bloqueio de chamadas reais e acao `production_provider_calls`.
 
+## 0.8.138 - Runbook De Homologacao De Provedores Do Reenvio Offline
+
+- Criado endpoint de runbook de homologacao de provedores do reenvio offline.
+- Runbook organiza selecao, staging seguro, smoke test, homologacao operacional e decisao de producao.
+- Politica de evidencias bloqueia segredos, comunicacao real com clientes e chamadas de producao.
+- Console web ganhou consulta de homologacao de provedores.
+- Teste automatizado cobre gate bloqueado, fases e politica contra segredos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

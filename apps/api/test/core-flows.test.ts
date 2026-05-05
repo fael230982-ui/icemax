@@ -1391,6 +1391,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "whatsapp_provider"));
   assert.ok(retryProviderActivationGate.json().decision.blockedActions.includes("production_provider_calls"));
 
+  const retryProviderHomologationRunbook = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/provider-homologation-runbook",
+  });
+  assert.equal(retryProviderHomologationRunbook.statusCode, 200);
+  assert.equal(retryProviderHomologationRunbook.json().realExecutionAllowed, false);
+  assert.equal(retryProviderHomologationRunbook.json().summary.productionProviderCallsAllowed, false);
+  assert.equal(retryProviderHomologationRunbook.json().summary.gateDecision, "keep_blocked");
+  assert.ok(retryProviderHomologationRunbook.json().phases.some((item: { key: string }) =>
+    item.key === "phase_2_controlled_provider_smoke"));
+  assert.ok(retryProviderHomologationRunbook.json().evidencePolicy.mustAvoidSecrets);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

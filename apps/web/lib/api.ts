@@ -277,6 +277,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/provider-cost-plan", { token }),
   mobileOfflineAssistedRetryProviderActivationGate: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/provider-activation-gate", { token }),
+  mobileOfflineAssistedRetryProviderHomologationRunbook: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/provider-homologation-runbook", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>
