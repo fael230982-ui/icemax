@@ -724,6 +724,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Auditoria diferencia revogacao por token e revogacao por registro.
 - Teste automatizado cobre revogacao de link financeiro ativo pelo ID do inventario.
 
+## 0.8.104 - Revogacao De Link No Console
+
+- Cliente web passou a chamar `POST /customer-portal/public-token-records/:id/revoke`.
+- Console operacional ganhou formulario para revogar link publico pelo ID do inventario.
+- Operacao administrativa revoga sem expor token cru ou URL completa.
+- Estado do painel impede envio sem ID preenchido.
+- Documentado fluxo de revogacao operacional pelo console web.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

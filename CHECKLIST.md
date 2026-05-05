@@ -1957,3 +1957,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Revogacao De Link No Console
+
+- [x] Cliente web conectado ao endpoint de revogacao por registro.
+- [x] Formulario de revogacao adicionado ao console operacional.
+- [x] Console bloqueia envio sem ID preenchido.
+- [x] Fluxo preserva token cru fora da interface.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
