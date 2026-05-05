@@ -368,6 +368,42 @@ export function prepareMobileOfflineAssistedRetry(recordId: string, body: unknow
   };
 }
 
+export function executeMobileOfflineAssistedRetryDryRun(recordId: string, body: unknown) {
+  const payload = body && typeof body === "object" ? body as Record<string, unknown> : {};
+  const executedBy = typeof payload.executedBy === "string" ? payload.executedBy : "supervisor";
+  const idempotencyKey = typeof payload.idempotencyKey === "string"
+    ? payload.idempotencyKey
+    : `mobile-offline-retry:${recordId}`;
+  const steps = [
+    { key: "load_original_action", status: "simulated", detail: "Acao offline original localizada pelo registro bloqueado." },
+    { key: "validate_idempotency", status: "simulated", detail: "Chave de idempotencia conferida antes do reenvio." },
+    { key: "validate_service_order", status: "manual_required", detail: "Estado real da OS deve ser confirmado antes de producao." },
+    { key: "send_payload", status: "dry_run_only", detail: "Envio real permanece bloqueado neste ambiente." },
+    { key: "write_audit", status: "simulated", detail: "Auditoria operacional preparada para registrar resultado." },
+  ];
+
+  return {
+    id: `assisted-retry-execution-${recordId}`,
+    recordId,
+    executedBy,
+    idempotencyKey,
+    status: "dry_run_completed",
+    realSendBlocked: true,
+    duplicateProtected: true,
+    steps,
+    result: {
+      wouldSend: true,
+      sent: false,
+      retryCountAfterSuccess: 0,
+      queueActionAfterSuccess: "remove_from_blocked_queue",
+    },
+    audit: {
+      event: "mobile_offline_assisted_retry_dry_run",
+      recordedAt: new Date().toISOString(),
+    },
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();

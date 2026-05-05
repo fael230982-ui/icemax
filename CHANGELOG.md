@@ -852,6 +852,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao `Preparar` por pendencia bloqueada.
 - Teste automatizado cobre pacote e protecao contra duplicidade.
 
+## 0.8.120 - Dry-Run Do Reenvio Assistido Offline
+
+- Criado endpoint de dry-run para reenvio assistido.
+- Dry-run simula validacao, envio e auditoria sem disparar envio real.
+- Resultado informa protecao contra duplicidade e bloqueio de envio real.
+- Console web ganhou acao `Simular` por pendencia bloqueada.
+- Teste automatizado cobre dry-run concluido e envio real bloqueado.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

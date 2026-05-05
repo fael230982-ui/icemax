@@ -2200,3 +2200,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Dry-Run Do Reenvio Assistido Offline
+
+- [x] Endpoint de dry-run criado.
+- [x] Envio real permanece bloqueado.
+- [x] Protecao contra duplicidade incluida.
+- [x] Console web ganhou acao de simulacao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

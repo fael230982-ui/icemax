@@ -644,6 +644,15 @@ export function OperationsConsole() {
     );
   }
 
+  function runMobileOfflineAssistedRetryDryRun(recordId: string) {
+    void run("Simular reenvio assistido", () =>
+      icemaxApi.runMobileOfflineAssistedRetryDryRun(recordId, {
+        executedBy: "RAFAEL DA SILVA BEZEERA",
+        idempotencyKey: `mobile-offline-retry:${recordId}`,
+      }, token || undefined),
+    );
+  }
+
   function runHomologationCheck() {
     void run("Homologacao", async () => {
       const results = await Promise.all([
@@ -942,6 +951,9 @@ export function OperationsConsole() {
                       </button>
                       <button type="button" className="secondary" onClick={() => prepareMobileOfflineAssistedRetry(item.id)}>
                         Preparar
+                      </button>
+                      <button type="button" className="secondary" onClick={() => runMobileOfflineAssistedRetryDryRun(item.id)}>
+                        Simular
                       </button>
                     </td>
                   </tr>

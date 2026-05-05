@@ -1262,6 +1262,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(assistedRetry.json().checks.some((item: { key: string }) => item.key === "duplicate_guard"));
   assert.equal(assistedRetry.json().idempotencyKey, "mobile-offline-retry:offline-blocked-001");
 
+  const assistedRetryDryRun = await app.inject({
+    method: "POST",
+    url: "/platform/mobile-offline-escalations/offline-blocked-001/assisted-retry/dry-run",
+    payload: {
+      executedBy: "RAFAEL DA SILVA BEZEERA",
+      idempotencyKey: "mobile-offline-retry:offline-blocked-001",
+    },
+  });
+  assert.equal(assistedRetryDryRun.statusCode, 202);
+  assert.equal(assistedRetryDryRun.json().status, "dry_run_completed");
+  assert.equal(assistedRetryDryRun.json().realSendBlocked, true);
+  assert.equal(assistedRetryDryRun.json().result.sent, false);
+
   const gate = await app.inject({ method: "GET", url: "/platform/pre-release-gate" });
   assert.equal(gate.statusCode, 200);
   assert.equal(gate.json().status, "blocked");

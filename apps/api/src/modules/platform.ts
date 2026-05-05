@@ -5,6 +5,7 @@ import {
   getPlatformDiagnostics,
   getPlatformReadiness,
   getMobileOfflineEscalationBoard,
+  executeMobileOfflineAssistedRetryDryRun,
   prepareMobileOfflineAssistedRetry,
   getPreReleaseGate,
   getProductionReadinessPlan,
@@ -23,6 +24,9 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   });
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/assisted-retry", async (request, reply) => {
     return reply.code(202).send(prepareMobileOfflineAssistedRetry(request.params.recordId, request.body));
+  });
+  app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/assisted-retry/dry-run", async (request, reply) => {
+    return reply.code(202).send(executeMobileOfflineAssistedRetryDryRun(request.params.recordId, request.body));
   });
   app.get("/platform/pre-release-gate", async () => getPreReleaseGate());
   app.get("/platform/production-readiness", async () => getProductionReadinessPlan());
