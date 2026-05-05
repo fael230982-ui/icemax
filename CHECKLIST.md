@@ -2020,3 +2020,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Prontidao De Producao
+
+- [x] Endpoint de prontidao de producao criado.
+- [x] Segredos obrigatorios mapeados.
+- [x] Contas externas mapeadas.
+- [x] Gates de validacao, banco, segredos, integracoes e LGPD criados.
+- [x] Console web conectado ao novo diagnostico.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

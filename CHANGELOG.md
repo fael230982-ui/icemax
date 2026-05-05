@@ -756,6 +756,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Recarregamento apos revogacao preserva filtros selecionados.
 - Documentado fluxo operacional com filtros e confirmacao.
 
+## 0.8.108 - Prontidao De Producao
+
+- Adicionado endpoint `GET /platform/production-readiness`.
+- Relatorio lista segredos obrigatorios, contas externas, gates e bloqueios.
+- Console web passou a incluir prontidao de producao no diagnostico de plataforma.
+- Teste automatizado cobre segredo de pepper e conta WhatsApp no plano.
+- Documentado plano tecnico para homologacao controlada.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

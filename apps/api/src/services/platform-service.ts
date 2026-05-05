@@ -141,6 +141,44 @@ export function getPreReleaseGate() {
   };
 }
 
+export function getProductionReadinessPlan() {
+  const requiredSecrets = [
+    { key: "DATABASE_URL", configured: Boolean(process.env.DATABASE_URL), owner: "infra" },
+    { key: "JWT_SECRET", configured: Boolean(process.env.JWT_SECRET) && !config.jwtSecret.includes("dev-secret"), owner: "seguranca" },
+    { key: "PUBLIC_ACCESS_TOKEN_PEPPER", configured: Boolean(process.env.PUBLIC_ACCESS_TOKEN_PEPPER), owner: "seguranca" },
+  ];
+  const externalAccounts = [
+    { provider: "google_maps", purpose: "rotas, ETA e geocodificacao", configured: integrations.some((item) => item.provider === "google_maps" && item.status === "configured") },
+    { provider: "smtp_email", purpose: "envio de OS concluida, garantias e cobrancas", configured: integrations.some((item) => item.provider === "smtp_email" && item.status === "configured") },
+    { provider: "whatsapp_meta", purpose: "avisos de agenda, rota e pos-atendimento", configured: integrations.some((item) => item.provider === "whatsapp" && item.status === "configured") },
+    { provider: "openai", purpose: "revisao tecnica, diagnostico visual e texto profissional", configured: integrations.some((item) => item.provider === "openai" && item.status === "configured") },
+  ];
+  const gates = [
+    { key: "validation", status: "pass", evidence: "npm run validate deve passar antes de release." },
+    { key: "database", status: isPrismaEnabled() && process.env.DATABASE_URL ? "pass" : "block", evidence: "Banco real precisa estar ativo para producao." },
+    { key: "secrets", status: requiredSecrets.every((item) => item.configured) ? "pass" : "block", evidence: "Segredos reais precisam estar fora do repositorio." },
+    { key: "integrations", status: externalAccounts.every((item) => item.configured) ? "pass" : "warn", evidence: "Integracoes podem iniciar em homologacao controlada, mas nao em producao completa." },
+    { key: "lgpd", status: "manual", evidence: "Politica de privacidade, termos e base legal devem ser revisados antes de cliente real." },
+  ];
+  const blockers = gates.filter((item) => item.status === "block");
+
+  return {
+    status: blockers.length ? "blocked" : "candidate",
+    target: "homologacao_controlada",
+    requiredSecrets,
+    externalAccounts,
+    gates,
+    blockers: blockers.map((item) => item.key),
+    nextActions: [
+      "Configurar PostgreSQL e DATABASE_URL em ambiente seguro.",
+      "Trocar JWT_SECRET e PUBLIC_ACCESS_TOKEN_PEPPER por valores longos e privados.",
+      "Definir provedor de e-mail transacional para conclusao de OS e portal.",
+      "Preparar chaves de mapas, WhatsApp e OpenAI sem publicar credenciais no repositorio.",
+      "Executar npm run validate antes de push e homologacao.",
+    ],
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();

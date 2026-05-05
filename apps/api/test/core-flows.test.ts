@@ -1233,6 +1233,12 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.equal(gate.json().status, "blocked");
   assert.ok(gate.json().checks.length >= 5);
 
+  const production = await app.inject({ method: "GET", url: "/platform/production-readiness" });
+  assert.equal(production.statusCode, 200);
+  assert.equal(production.json().target, "homologacao_controlada");
+  assert.ok(production.json().requiredSecrets.some((item: { key: string }) => item.key === "PUBLIC_ACCESS_TOKEN_PEPPER"));
+  assert.ok(production.json().externalAccounts.some((item: { provider: string }) => item.provider === "whatsapp_meta"));
+
   const endOfDay = await app.inject({ method: "GET", url: "/platform/end-of-day-snapshot" });
   assert.equal(endOfDay.statusCode, 200);
   assert.equal(endOfDay.json().project, "ICEMAX");

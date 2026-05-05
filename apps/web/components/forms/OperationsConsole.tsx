@@ -578,6 +578,7 @@ export function OperationsConsole() {
         icemaxApi.platformRoles(token || undefined),
         icemaxApi.platformDiagnostics(token || undefined),
         icemaxApi.preReleaseGate(token || undefined),
+        icemaxApi.productionReadiness(token || undefined),
         icemaxApi.endOfDaySnapshot(token || undefined),
       ]);
 
