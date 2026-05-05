@@ -772,7 +772,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub concluido.
 
 ## Registro De Acompanhamento Do Cliente
 
