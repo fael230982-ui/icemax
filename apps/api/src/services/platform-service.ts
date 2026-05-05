@@ -1172,6 +1172,112 @@ export function getMobileOfflineAssistedRetryProviderCostPlan() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProviderActivationGate() {
+  const costPlan = getMobileOfflineAssistedRetryProviderCostPlan();
+  const activationChecks = [
+    {
+      key: "database",
+      providerCategory: "managed_postgres",
+      requiredBefore: "phase_1_real_persistence",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Provedor de banco ainda precisa ser aprovado." },
+        { key: "budget_limit", status: "pending", detail: "Teto mensal ainda precisa ser definido." },
+        { key: "usage_alerts", status: "pending", detail: "Alertas de armazenamento e conexoes ainda precisam ser ativados." },
+        { key: "secret_configured", status: process.env.DATABASE_URL ? "manual_review" : "pending", detail: "DATABASE_URL deve existir apenas no ambiente seguro." },
+      ],
+    },
+    {
+      key: "hosting_domain",
+      providerCategory: "hosting_domain_ssl",
+      requiredBefore: "public_access",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Hospedagem e dominio ainda precisam ser escolhidos." },
+        { key: "budget_limit", status: "pending", detail: "Teto de hospedagem, trafego e observabilidade ainda precisa ser aprovado." },
+        { key: "usage_alerts", status: "pending", detail: "Alertas de CPU, memoria e trafego ainda precisam ser ativados." },
+        { key: "rollback_plan", status: "pending", detail: "Plano de rollback de deploy ainda precisa ser homologado." },
+      ],
+    },
+    {
+      key: "email_provider",
+      providerCategory: "transactional_email",
+      requiredBefore: "external_email_homologation",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Provedor transacional ainda precisa ser definido." },
+        { key: "budget_limit", status: "pending", detail: "Volume mensal e limite de envio ainda precisam ser aprovados." },
+        { key: "domain_authentication", status: "pending", detail: "Dominio remetente ainda precisa de SPF, DKIM e politica de envio." },
+        { key: "delivery_logs", status: "pending", detail: "Logs de entrega, bounce e rejeicao ainda precisam ser configurados." },
+      ],
+    },
+    {
+      key: "maps_provider",
+      providerCategory: "maps_routes_geocoding",
+      requiredBefore: "route_optimization_real",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Provedor de mapas ainda precisa ser escolhido." },
+        { key: "budget_limit", status: "pending", detail: "Cota diaria e teto mensal de chamadas ainda precisam ser definidos." },
+        { key: "usage_alerts", status: "pending", detail: "Alertas de quota e cobranca ainda precisam ser ativados." },
+        { key: "cache_policy", status: "pending", detail: "Politica de cache de enderecos e rotas ainda precisa ser aprovada." },
+      ],
+    },
+    {
+      key: "ai_provider",
+      providerCategory: "ai_text_vision",
+      requiredBefore: "real_ai_features",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Provedor de IA ainda precisa ser aprovado." },
+        { key: "budget_limit", status: "pending", detail: "Limite por OS, por imagem e por tenant ainda precisa ser definido." },
+        { key: "privacy_policy", status: "pending", detail: "Politica de dados enviados para IA ainda precisa ser validada." },
+        { key: "fallback_manual", status: "pending", detail: "Fluxo manual quando o teto for atingido ainda precisa ser mantido." },
+      ],
+    },
+    {
+      key: "whatsapp_provider",
+      providerCategory: "messaging_whatsapp",
+      requiredBefore: "customer_messaging_real",
+      checks: [
+        { key: "provider_selected", status: "pending", detail: "Conta Meta/WhatsApp ainda precisa ser preparada." },
+        { key: "budget_limit", status: "pending", detail: "Teto de conversas e templates ainda precisa ser aprovado." },
+        { key: "template_approval", status: "pending", detail: "Templates oficiais ainda precisam ser aprovados." },
+        { key: "customer_consent", status: "pending", detail: "Opt-in e historico de consentimento ainda precisam estar rastreaveis." },
+      ],
+    },
+  ];
+  const blockedProviders = activationChecks.filter((provider) =>
+    provider.checks.some((check) => check.status === "pending"));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "provider_activation_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      providers: activationChecks.length,
+      blocked: blockedProviders.length,
+      readyForActivation: activationChecks.length - blockedProviders.length,
+      sourceProviders: costPlan.summary.providers,
+      ownerApprovalRequired: costPlan.approvalPolicy.ownerApprovalRequired,
+    },
+    activationChecks,
+    decision: {
+      result: "keep_blocked",
+      reason: "Provedores ainda nao possuem teto, alertas, homologacao e configuracao segura suficientes.",
+      allowedActions: ["planning", "manual_provider_selection", "budget_approval", "staging_configuration"],
+      blockedActions: ["real_retry", "automatic_retry_loop", "external_customer_send", "production_provider_calls"],
+    },
+    guardrails: [
+      "Nao ativar provedor real sem teto mensal aprovado.",
+      "Nao executar envio real enquanto logs, alertas e rollback nao estiverem prontos.",
+      "Nao registrar segredo em documento, checklist, changelog ou commit.",
+      "Reexecutar validate e homologacao final apos cada configuracao externa.",
+    ],
+    nextActions: [
+      "Escolher banco e hospedagem primeiro.",
+      "Definir teto mensal e alertas por provedor.",
+      "Preparar ambiente de staging com segredos fora do repositorio.",
+      "Revisar este gate antes de liberar qualquer integracao real.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

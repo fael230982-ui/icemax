@@ -2471,3 +2471,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Ativacao De Provedores Do Reenvio Offline
+
+- [x] Endpoint de gate de ativacao criado.
+- [x] Banco, hospedagem, e-mail, mapas, IA e WhatsApp avaliados.
+- [x] Acoes permitidas e bloqueadas registradas.
+- [x] Execucao real e chamadas de producao permanecem bloqueadas.
+- [x] Console web ganhou consulta do gate.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

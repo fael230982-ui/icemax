@@ -990,6 +990,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de custos e provedores.
 - Teste automatizado cobre ausencia de precos fixos, segredos e envio real bloqueado.
 
+## 0.8.137 - Gate De Ativacao De Provedores Do Reenvio Offline
+
+- Criado endpoint de gate de ativacao de provedores do reenvio offline.
+- Gate avalia banco, hospedagem, e-mail, mapas, IA e WhatsApp antes de qualquer chamada real.
+- Decisao padrao mantem provedores bloqueados ate teto, alertas, homologacao e segredos seguros.
+- Console web ganhou consulta do gate de provedores.
+- Teste automatizado cobre bloqueio de chamadas reais e acao `production_provider_calls`.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -1379,6 +1379,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "ai_provider"));
   assert.ok(retryProviderCostPlan.json().approvalPolicy.budgetLimitRequiredBeforeActivation);
 
+  const retryProviderActivationGate = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/provider-activation-gate",
+  });
+  assert.equal(retryProviderActivationGate.statusCode, 200);
+  assert.equal(retryProviderActivationGate.json().realExecutionAllowed, false);
+  assert.equal(retryProviderActivationGate.json().decision.result, "keep_blocked");
+  assert.ok(retryProviderActivationGate.json().summary.blocked >= 6);
+  assert.ok(retryProviderActivationGate.json().activationChecks.some((item: { key: string }) =>
+    item.key === "whatsapp_provider"));
+  assert.ok(retryProviderActivationGate.json().decision.blockedActions.includes("production_provider_calls"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",
