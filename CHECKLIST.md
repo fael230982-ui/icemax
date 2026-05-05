@@ -2309,3 +2309,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Resumo Executivo Do Reenvio Offline
+
+- [x] Endpoint de resumo executivo criado.
+- [x] Pendencias, riscos, gates, dry-run e bloqueio real consolidados.
+- [x] Top riscos operacionais incluidos.
+- [x] Console web ganhou consulta de resumo.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

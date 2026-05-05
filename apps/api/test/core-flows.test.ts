@@ -1268,6 +1268,16 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.event === "mobile_offline_assisted_retry_executed"));
   assert.ok(auditContract.json().immutableFields.includes("idempotencyKey"));
 
+  const retryExecutiveSummary = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/executive-summary",
+  });
+  assert.equal(retryExecutiveSummary.statusCode, 200);
+  assert.equal(retryExecutiveSummary.json().realExecutionAllowed, false);
+  assert.equal(retryExecutiveSummary.json().summary.totalBlockedPendencies, 3);
+  assert.equal(retryExecutiveSummary.json().summary.productionGateBlocked, true);
+  assert.ok(retryExecutiveSummary.json().topRisks.length >= 1);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

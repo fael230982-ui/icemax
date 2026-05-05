@@ -910,6 +910,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao para homologar reenvio offline.
 - Teste automatizado cobre lista de cenarios e execucao bloqueada pelo gate.
 
+## 0.8.127 - Resumo Executivo Do Reenvio Offline
+
+- Criado endpoint de resumo executivo do reenvio offline.
+- Resumo consolida pendencias bloqueadas, riscos, gates, dry-run e execucao real bloqueada.
+- Top riscos operacionais passam a ser retornados para priorizacao gerencial.
+- Console web ganhou consulta de resumo do reenvio offline.
+- Teste automatizado cobre total de pendencias, gate bloqueado e envio real desativado.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

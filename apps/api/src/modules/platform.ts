@@ -3,6 +3,7 @@ import {
   getEndOfDaySnapshot,
   getModuleCatalog,
   getMobileOfflineAssistedRetryAuditContract,
+  getMobileOfflineAssistedRetryExecutiveSummary,
   getMobileOfflineAssistedRetryPermissions,
   getMobileOfflineAssistedRetryProductionGate,
   getMobileOfflineAssistedRetryReadiness,
@@ -27,6 +28,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/mobile-offline-escalations/permissions", async () => getMobileOfflineAssistedRetryPermissions());
   app.get("/platform/mobile-offline-escalations/production-gate", async () => getMobileOfflineAssistedRetryProductionGate());
   app.get("/platform/mobile-offline-escalations/audit-contract", async () => getMobileOfflineAssistedRetryAuditContract());
+  app.get("/platform/mobile-offline-escalations/executive-summary", async () => getMobileOfflineAssistedRetryExecutiveSummary());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

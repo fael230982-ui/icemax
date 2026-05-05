@@ -324,6 +324,61 @@ export function getMobileOfflineAssistedRetryReadiness(recordId: string) {
   };
 }
 
+export function getMobileOfflineAssistedRetryExecutiveSummary() {
+  const board = getMobileOfflineEscalationBoard();
+  const productionGate = getMobileOfflineAssistedRetryProductionGate();
+  const auditContract = getMobileOfflineAssistedRetryAuditContract();
+  const permissions = getMobileOfflineAssistedRetryPermissions();
+  const readinessReports = board.data.map((item) => getMobileOfflineAssistedRetryReadiness(item.id));
+  const blockedRealExecution = readinessReports.filter((item) => !item.realExecutionAllowed).length;
+  const dryRunAllowed = readinessReports.filter((item) => item.dryRunAllowed).length;
+  const topRisks = board.data
+    .slice()
+    .sort((a, b) => b.severityScore - a.severityScore)
+    .slice(0, 3)
+    .map((item) => ({
+      recordId: item.id,
+      serviceOrderId: item.serviceOrderId,
+      customer: item.customer,
+      actionLabel: item.actionLabel,
+      severityScore: item.severityScore,
+      slaStatus: item.slaStatus,
+      owner: item.owner,
+    }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "real_execution_blocked",
+    realExecutionAllowed: false,
+    dryRunAllowed: dryRunAllowed > 0,
+    summary: {
+      totalBlockedPendencies: board.summary.total,
+      criticalPendencies: board.summary.critical,
+      highPendencies: board.summary.high,
+      highestSeverityScore: board.summary.highestSeverityScore,
+      blockedRealExecution,
+      dryRunAllowed,
+      productionGateBlocked: productionGate.status === "blocked",
+      auditPersistenceRequired: auditContract.persistenceRequiredBeforeRealExecution,
+      permissionDefaultDecision: permissions.defaultDecision,
+    },
+    topRisks,
+    blockers: Array.from(new Set(readinessReports.flatMap((item) => item.summary.requiredBeforeRealExecution))),
+    governance: {
+      automaticRetryAllowed: board.policy.automaticRetryAllowed,
+      realExecutionRequiresOwnerOrAdmin: permissions.summary.sensitiveRoles,
+      evidenceRequiredBeforeEnable: productionGate.summary.requiredBeforeEnable,
+      auditEventsRequired: auditContract.summary.totalEvents,
+    },
+    nextActions: [
+      "Tratar pendencias criticas por ordem de score.",
+      "Usar dry-run para validar payload sem envio real.",
+      "Ativar banco real e auditoria persistente antes de qualquer reenvio real.",
+      "Liberar execucao real somente por tenant e apos homologacao controlada.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
