@@ -267,6 +267,35 @@ export function getMobileOfflineEscalationBoard() {
   };
 }
 
+export function reviewMobileOfflineEscalation(recordId: string, body: unknown) {
+  const payload = body && typeof body === "object" ? body as Record<string, unknown> : {};
+  const decision = typeof payload.decision === "string" ? payload.decision : "keep_blocked";
+  const reviewedBy = typeof payload.reviewedBy === "string" ? payload.reviewedBy : "supervisor";
+  const note = typeof payload.note === "string" ? payload.note : "Revisao registrada pelo painel.";
+  const allowedDecisions = ["release_assisted_retry", "request_new_evidence", "keep_blocked"];
+  const normalizedDecision = allowedDecisions.includes(decision) ? decision : "keep_blocked";
+  const nextStatus = normalizedDecision === "release_assisted_retry" ? "ready_for_assisted_retry" : "blocked";
+
+  return {
+    id: `offline-review-${recordId}`,
+    recordId,
+    decision: normalizedDecision,
+    reviewedBy,
+    note,
+    nextStatus,
+    audit: {
+      event: "mobile_offline_escalation_reviewed",
+      recordedAt: new Date().toISOString(),
+      requiresSupervisor: true,
+    },
+    nextActions: normalizedDecision === "release_assisted_retry"
+      ? ["Confirmar dados da OS antes do reenvio.", "Registrar reenvio assistido com auditoria."]
+      : normalizedDecision === "request_new_evidence"
+        ? ["Solicitar nova captura ao tecnico.", "Manter OS em revisao ate evidencia valida."]
+        : ["Manter pendencia bloqueada.", "Encaminhar para suporte se reincidir."],
+  };
+}
+
 export function getEndOfDaySnapshot() {
   const readiness = getPlatformReadiness();
   const gate = getPreReleaseGate();

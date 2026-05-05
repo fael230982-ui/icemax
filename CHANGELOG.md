@@ -828,6 +828,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel web exibe tabela gerencial com motivo e recomendacao.
 - Teste automatizado cobre politica de 5 tentativas e itens bloqueados.
 
+## 0.8.117 - Revisao Gerencial Da Fila Offline
+
+- Criado endpoint de revisao de pendencia offline bloqueada.
+- Revisao registra decisao, responsavel, nota, auditoria e proximas acoes.
+- Console web ganhou acoes por linha para liberar ou manter bloqueio.
+- Fluxo de reenvio assistido ficou separado do envio automatico.
+- Teste automatizado cobre liberacao gerencial para reenvio assistido.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

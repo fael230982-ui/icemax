@@ -620,6 +620,18 @@ export function OperationsConsole() {
     );
   }
 
+  function reviewMobileOfflineEscalation(recordId: string, decision: string) {
+    void run("Revisar pendencia offline", () =>
+      icemaxApi.reviewMobileOfflineEscalation(recordId, {
+        decision,
+        reviewedBy: "RAFAEL DA SILVA BEZEERA",
+        note: decision === "release_assisted_retry"
+          ? "Pendencia conferida e liberada para reenvio assistido."
+          : "Pendencia mantida para tratamento operacional.",
+      }, token || undefined),
+    );
+  }
+
   function runHomologationCheck() {
     void run("Homologacao", async () => {
       const results = await Promise.all([
@@ -895,6 +907,7 @@ export function OperationsConsole() {
                   <th>Acao</th>
                   <th>Motivo</th>
                   <th>Recomendacao</th>
+                  <th>Decisao</th>
                 </tr>
               </thead>
               <tbody>
@@ -905,6 +918,14 @@ export function OperationsConsole() {
                     <td>{item.actionLabel}<br />{item.priority} - tentativa {item.retryCount}</td>
                     <td>{item.blockedReason}</td>
                     <td>{item.recommendedAction}</td>
+                    <td>
+                      <button type="button" className="secondary" onClick={() => reviewMobileOfflineEscalation(item.id, "release_assisted_retry")}>
+                        Liberar
+                      </button>
+                      <button type="button" className="secondary" onClick={() => reviewMobileOfflineEscalation(item.id, "keep_blocked")}>
+                        Manter
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
