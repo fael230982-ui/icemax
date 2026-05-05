@@ -2109,3 +2109,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Mobile Retencao Da Fila Offline
+
+- [x] Politica local de retencao por prioridade criada.
+- [x] Restauracao descarta acoes expiradas.
+- [x] Salvamento local remove acoes expiradas.
+- [x] App informa descartes por idade.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

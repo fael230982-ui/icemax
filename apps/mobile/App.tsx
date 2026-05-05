@@ -32,7 +32,7 @@ import {
   OfflineAction,
   syncOfflineQueuePartially,
 } from "./src/services/api";
-import { clearOfflineQueue, loadOfflineQueue, saveOfflineQueue } from "./src/services/offline-storage";
+import { clearOfflineQueue, loadOfflineQueueSnapshot, saveOfflineQueue } from "./src/services/offline-storage";
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
 import { warrantyPackage } from "./src/data/dashboard";
@@ -46,10 +46,14 @@ export default function App() {
   const [queueLoaded, setQueueLoaded] = useState(false);
 
   useEffect(() => {
-    void loadOfflineQueue()
-      .then((storedActions) => {
-        setPendingActions(storedActions);
-        setSyncStatus(storedActions.length ? "Fila offline restaurada do aparelho." : "Sem pendencias.");
+    void loadOfflineQueueSnapshot()
+      .then((snapshot) => {
+        setPendingActions(snapshot.actions);
+        setSyncStatus(
+          snapshot.discarded
+            ? `${snapshot.actions.length} pendencias restauradas. ${snapshot.discarded} antigas foram descartadas.`
+            : snapshot.actions.length ? "Fila offline restaurada do aparelho." : "Sem pendencias.",
+        );
       })
       .catch(() => setSyncStatus("Nao foi possivel restaurar a fila offline."))
       .finally(() => setQueueLoaded(true));

@@ -804,6 +804,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Contador de tentativa passa a subir apenas no item que falhou.
 - Status mobile informa itens enviados, pendentes e acao bloqueadora.
 
+## 0.8.114 - Mobile Retencao Da Fila Offline
+
+- Criada politica local de retencao por prioridade.
+- Fila offline descarta acoes antigas ao restaurar dados do aparelho.
+- Salvamento local tambem remove acoes expiradas antes de persistir.
+- App informa pendencias restauradas e itens descartados por idade.
+- Janela critica de recuperacao ficou maior que a de eventos normais.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
