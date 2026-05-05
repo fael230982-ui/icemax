@@ -1236,6 +1236,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(mobileOffline.json().data.every((item: { retryCount: number }) => item.retryCount >= 5));
   assert.ok(mobileOffline.json().data.some((item: { slaStatus: string }) => item.slaStatus === "critical_now"));
 
+  const retryPermissions = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/permissions",
+  });
+  assert.equal(retryPermissions.statusCode, 200);
+  assert.equal(retryPermissions.json().defaultDecision, "deny");
+  assert.equal(retryPermissions.json().productionExecutionAllowed, false);
+  assert.ok(retryPermissions.json().stages.some((item: { key: string; status: string }) =>
+    item.key === "execute_real" && item.status === "blocked_until_production_gate"));
+  assert.equal(retryPermissions.json().separationOfDuties.outsourcedTechnicianCannotReleaseQueue, true);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

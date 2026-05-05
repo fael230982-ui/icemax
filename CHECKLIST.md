@@ -2230,3 +2230,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Permissoes Do Reenvio Assistido Offline
+
+- [x] Endpoint de politica de permissoes criado.
+- [x] Revisao, preparo, dry-run e execucao real mapeados.
+- [x] Execucao real permanece bloqueada.
+- [x] Tecnicos, terceiros e clientes bloqueados para liberacao interna.
+- [x] Console web ganhou consulta de permissoes.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

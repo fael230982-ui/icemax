@@ -249,6 +249,8 @@ export const icemaxApi = {
   platformRoles: (token?: string) => apiRequest<ApiListResponse<unknown>>("/platform/roles", { token }),
   platformDiagnostics: (token?: string) => apiRequest<unknown>("/platform/diagnostics", { token }),
   mobileOfflineEscalations: (token?: string) => apiRequest<unknown>("/platform/mobile-offline-escalations", { token }),
+  mobileOfflineAssistedRetryPermissions: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/permissions", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>

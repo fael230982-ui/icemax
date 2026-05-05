@@ -868,6 +868,15 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Resumo informa eventos concluidos, bloqueados e proxima acao.
 - Teste automatizado cobre evento de dry-run e bloqueio de execucao real.
 
+## 0.8.122 - Permissoes Do Reenvio Assistido Offline
+
+- Criado endpoint de politica de permissoes do reenvio assistido offline.
+- Politica separa revisao, preparo, dry-run e execucao real.
+- Execucao real permanece bloqueada ate gate de producao.
+- Tecnicos, terceiros e clientes nao podem liberar fila offline interna.
+- Console web ganhou consulta de permissoes do reenvio offline.
+- Teste automatizado cobre decisao padrao deny e bloqueio da execucao real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

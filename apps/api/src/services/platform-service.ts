@@ -66,6 +66,68 @@ export function getRoleMatrix() {
   };
 }
 
+export function getMobileOfflineAssistedRetryPermissions() {
+  const stages = [
+    {
+      key: "review",
+      label: "Revisar pendencia",
+      allowedRoles: ["owner", "admin", "supervisor"],
+      deniedRoles: ["technician", "outsourced_technician", "customer"],
+      requiredControls: ["justificativa", "registro de auditoria", "decisao explicita"],
+      status: "enabled_mock",
+    },
+    {
+      key: "prepare",
+      label: "Preparar reenvio assistido",
+      allowedRoles: ["owner", "admin", "supervisor"],
+      deniedRoles: ["technician", "outsourced_technician", "customer"],
+      requiredControls: ["revisao gerencial", "idempotencia", "checks manuais"],
+      status: "enabled_mock",
+    },
+    {
+      key: "dry_run",
+      label: "Simular reenvio",
+      allowedRoles: ["owner", "admin", "supervisor"],
+      deniedRoles: ["technician", "outsourced_technician", "customer"],
+      requiredControls: ["payload sem envio real", "resultado registrado", "validacao de duplicidade"],
+      status: "enabled_mock",
+    },
+    {
+      key: "execute_real",
+      label: "Executar reenvio real",
+      allowedRoles: ["owner", "admin"],
+      deniedRoles: ["supervisor", "technician", "outsourced_technician", "customer"],
+      requiredControls: ["banco real", "auditoria persistente", "permissao sensivel", "confirmacao dupla"],
+      status: "blocked_until_production_gate",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    policy: "mobile_offline_assisted_retry_permissions",
+    defaultDecision: "deny",
+    productionExecutionAllowed: false,
+    separationOfDuties: {
+      technicianCannotReleaseOwnQueue: true,
+      outsourcedTechnicianCannotReleaseQueue: true,
+      customerCannotAccessInternalRetry: true,
+      realExecutionRequiresHigherPrivilegeThanReview: true,
+    },
+    stages,
+    summary: {
+      enabledStages: stages.filter((stage) => stage.status === "enabled_mock").length,
+      blockedStages: stages.filter((stage) => stage.status.includes("blocked")).length,
+      sensitiveRoles: ["owner", "admin"],
+      operationalReviewerRoles: ["supervisor"],
+    },
+    nextActions: [
+      "Conectar a politica ao middleware de permissao por rota antes de producao.",
+      "Persistir auditoria de revisao, preparo, dry-run e execucao real.",
+      "Exigir confirmacao dupla para reenvio real de assinatura, estoque e fechamento de OS.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

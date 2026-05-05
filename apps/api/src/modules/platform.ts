@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import {
   getEndOfDaySnapshot,
   getModuleCatalog,
+  getMobileOfflineAssistedRetryPermissions,
   getPlatformDiagnostics,
   getPlatformReadiness,
   getMobileOfflineEscalationBoard,
@@ -20,6 +21,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/roles", async () => getRoleMatrix());
   app.get("/platform/diagnostics", async () => getPlatformDiagnostics());
   app.get("/platform/mobile-offline-escalations", async () => getMobileOfflineEscalationBoard());
+  app.get("/platform/mobile-offline-escalations/permissions", async () => getMobileOfflineAssistedRetryPermissions());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

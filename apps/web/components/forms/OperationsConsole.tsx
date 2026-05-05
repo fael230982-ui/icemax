@@ -623,6 +623,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryPermissions() {
+    void run("Permissoes do reenvio offline", () =>
+      icemaxApi.mobileOfflineAssistedRetryPermissions(token || undefined),
+    );
+  }
+
   function reviewMobileOfflineEscalation(recordId: string, decision: string) {
     void run("Revisar pendencia offline", () =>
       icemaxApi.reviewMobileOfflineEscalation(recordId, {
@@ -844,6 +850,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
         <button type="button" className="secondary" onClick={runAccelerationSuite}>Rodar 99 lotes</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineEscalations}>Pendencias offline</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryPermissions}>Permissoes reenvio offline</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runDatabaseTransitionCheck}>Virada banco</button>
