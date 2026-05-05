@@ -307,6 +307,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-operational-contract-pack", { token }),
   mobileOfflineAssistedRetryWhitelabelSupportSlaGate: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-support-sla-gate", { token }),
+  mobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-security-privacy-gate", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>

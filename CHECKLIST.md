@@ -2726,3 +2726,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Seguranca E LGPD Whitelabel
+
+- [x] Endpoint de gate de seguranca e LGPD criado.
+- [x] Controles de isolamento, DPA, retencao, segredos e incidente definidos.
+- [x] Importacao de dados antes do DPA permanece bloqueada.
+- [x] Portal publico e producao de parceiro permanecem bloqueados.
+- [x] Console web ganhou consulta de LGPD whitelabel.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

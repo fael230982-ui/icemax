@@ -1118,6 +1118,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de SLA whitelabel.
 - Teste automatizado cobre suporte bloqueado sem contrato e runbook.
 
+## 0.8.153 - Gate De Seguranca E LGPD Whitelabel
+
+- Criado endpoint de gate de seguranca e LGPD whitelabel.
+- Controles cobrem isolamento, DPA, retencao, segredos e resposta a incidente.
+- Politica bloqueia importacao de dados, IA e portal publico sem revisao de privacidade.
+- Console web ganhou consulta de LGPD whitelabel.
+- Teste automatizado cobre isolamento de tenant e bloqueio de importacao antes do DPA.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

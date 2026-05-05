@@ -797,6 +797,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate() {
+    void run("Gate de seguranca e LGPD whitelabel", () =>
+      icemaxApi.mobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate(token || undefined),
+    );
+  }
+
   function reviewMobileOfflineEscalation(recordId: string, decision: string) {
     void run("Revisar pendencia offline", () =>
       icemaxApi.reviewMobileOfflineEscalation(recordId, {
@@ -1059,6 +1065,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelTenantCostMatrix}>Custos tenant</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelOperationalContractPack}>Contrato whitelabel</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelSupportSlaGate}>SLA whitelabel</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate}>LGPD whitelabel</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runMobileOfflineRetryHomologation}>Homologar reenvio offline</button>

@@ -2610,6 +2610,97 @@ export function getMobileOfflineAssistedRetryWhitelabelSupportSlaGate() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate() {
+  const supportSla = getMobileOfflineAssistedRetryWhitelabelSupportSlaGate();
+  const controls = [
+    {
+      key: "tenant_data_isolation",
+      label: "Isolamento de dados por tenant",
+      status: "blocked",
+      requiredEvidence: [
+        "Tenant ID dedicado em todas as entidades.",
+        "Usuarios, clientes, OS, estoque e contratos sem compartilhamento.",
+        "Auditoria por tenant validada.",
+      ],
+    },
+    {
+      key: "lgpd_roles",
+      label: "Papeis LGPD e DPA",
+      status: "blocked",
+      requiredEvidence: [
+        "Controlador e operador definidos.",
+        "DPA ou anexo de protecao de dados revisado.",
+        "Canal de solicitacao do titular definido.",
+      ],
+    },
+    {
+      key: "retention_and_deletion",
+      label: "Retencao e descarte",
+      status: "blocked",
+      requiredEvidence: [
+        "Prazo de retencao por tipo de arquivo.",
+        "Processo de descarte de fotos, assinaturas e relatorios.",
+        "Backup e restauracao testados.",
+      ],
+    },
+    {
+      key: "secrets_and_provider_keys",
+      label: "Segredos e chaves de provedores",
+      status: "blocked",
+      requiredEvidence: [
+        "Chaves separadas por tenant.",
+        "Nenhuma credencial no repositorio.",
+        "Rotacao e revogacao documentadas.",
+      ],
+    },
+    {
+      key: "incident_response",
+      label: "Resposta a incidente",
+      status: "blocked",
+      requiredEvidence: [
+        "Runbook de incidente de dados.",
+        "Responsavel de comunicacao.",
+        "Critério de notificacao e contencao.",
+      ],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_security_privacy_gate_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      sourceSupportReady: supportSla.summary.supportReady,
+      controls: controls.length,
+      blockedControls: controls.filter((item) => item.status === "blocked").length,
+      partnerProductionAllowed: false,
+      dataImportAllowed: false,
+      publicPortalAllowed: false,
+    },
+    controls,
+    privacyPolicy: {
+      tenantDataSharingAllowed: false,
+      publicSecretsAllowed: false,
+      customerDataImportBeforeDpaAllowed: false,
+      aiWithoutHumanReviewAllowed: false,
+      auditLogRequired: true,
+      deletionRequestWorkflowRequired: true,
+    },
+    blockedActions: [
+      "import_partner_customer_data_before_dpa",
+      "reuse_icemax_storage_bucket_without_tenant_prefix",
+      "enable_ai_without_privacy_review",
+      "go_live_without_security_incident_runbook",
+    ],
+    nextActions: [
+      "Criar DPA/anexo LGPD padrao para whitelabel.",
+      "Validar isolamento por tenant em banco, arquivos e auditoria.",
+      "Definir retencao e descarte por tipo de evidencia.",
+      "Bloquear importacao real ate aprovar seguranca e privacidade.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

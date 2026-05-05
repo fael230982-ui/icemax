@@ -1574,6 +1574,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.includes("sincronizacao offline")));
   assert.ok(retryWhitelabelSupportSlaGate.json().blockedActions.includes("go_live_without_support_owner"));
 
+  const retryWhitelabelSecurityPrivacyGate = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-security-privacy-gate",
+  });
+  assert.equal(retryWhitelabelSecurityPrivacyGate.statusCode, 200);
+  assert.equal(retryWhitelabelSecurityPrivacyGate.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelSecurityPrivacyGate.json().summary.partnerProductionAllowed, false);
+  assert.equal(retryWhitelabelSecurityPrivacyGate.json().privacyPolicy.tenantDataSharingAllowed, false);
+  assert.equal(retryWhitelabelSecurityPrivacyGate.json().privacyPolicy.deletionRequestWorkflowRequired, true);
+  assert.ok(retryWhitelabelSecurityPrivacyGate.json().controls.some((item: { key: string }) =>
+    item.key === "tenant_data_isolation"));
+  assert.ok(retryWhitelabelSecurityPrivacyGate.json().blockedActions.includes("import_partner_customer_data_before_dpa"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",
