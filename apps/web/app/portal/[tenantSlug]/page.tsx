@@ -3,6 +3,10 @@ import { PortalOrderForm } from "./PortalOrderForm";
 
 type PortalPageProps = {
   params: Promise<{ tenantSlug: string }>;
+  searchParams: Promise<{
+    billingToken?: string;
+    token?: string;
+  }>;
 };
 
 function companyNameFromSlug(slug: string) {
@@ -17,9 +21,11 @@ function companyNameFromSlug(slug: string) {
     .join(" ");
 }
 
-export default async function PortalPage({ params }: PortalPageProps) {
+export default async function PortalPage({ params, searchParams }: PortalPageProps) {
   const { tenantSlug } = await params;
+  const query = await searchParams;
   const companyName = companyNameFromSlug(tenantSlug);
+  const billingToken = query.billingToken ?? query.token;
 
   return (
     <main className="portalPage">
@@ -66,7 +72,7 @@ export default async function PortalPage({ params }: PortalPageProps) {
         </aside>
 
         <article className="portalPanel mainPortalPanel">
-          <PortalBillingSummary tenantSlug={tenantSlug} />
+          <PortalBillingSummary tenantSlug={tenantSlug} billingToken={billingToken} />
         </article>
       </section>
     </main>

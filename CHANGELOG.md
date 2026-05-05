@@ -684,6 +684,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Cliente, equipamento, tecnico, ETA, linha do tempo e orientacoes agora vêm da API quando o link e valido.
 - Documentado comportamento esperado da tela publica de acompanhamento.
 
+## 0.8.99 - Portal Financeiro Validado
+
+- Pagina publica `/portal/[tenantSlug]` passou a ler `billingToken` ou `token` da URL.
+- Resumo financeiro de contratos passou a exigir validacao de token com escopo `billing_summary`.
+- Sem token valido, contratos, valores e vencimentos ficam protegidos.
+- Estado visual informa link necessario, link validado ou link invalido.
+- Documentado controle de acesso financeiro para o portal do cliente.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -74,31 +74,48 @@ function statusLabel(status: string) {
   return labels[status] ?? status.replaceAll("_", " ");
 }
 
-export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
+export function PortalBillingSummary({ tenantSlug, billingToken }: { tenantSlug: string; billingToken?: string }) {
   const [billing, setBilling] = useState<BillingSummary>(fallbackBilling);
   const [policy, setPolicy] = useState<AccessPolicy | null>(null);
-  const [source, setSource] = useState("carregando");
+  const [source, setSource] = useState(billingToken ? "validando" : "link seguro necessario");
   const [accessLink, setAccessLink] = useState<AccessLinkState>({
     status: "idle",
-    message: "Prepare um link seguro para consultar este resumo depois.",
+    message: billingToken ? "Validando permissao de acesso ao resumo." : "Prepare um link seguro para consultar este resumo depois.",
   });
 
   useEffect(() => {
     let active = true;
 
-    void icemaxApi.customerPortalBillingSummary(tenantSlug)
-      .then((response) => {
-        if (active) {
-          setBilling(response as BillingSummary);
-          setSource("online");
-        }
-      })
-      .catch(() => {
+    async function loadBillingSummary() {
+      if (!billingToken) {
         if (active) {
           setBilling(fallbackBilling);
-          setSource("indisponivel");
+          setSource("protegido");
         }
-      });
+        return;
+      }
+
+      try {
+        const validation = await icemaxApi.validateCustomerPortalPublicToken(billingToken, "billing_summary") as { valid?: boolean };
+
+        if (!validation.valid) {
+          throw new Error("invalid public billing link");
+        }
+
+        const response = await icemaxApi.customerPortalBillingSummary(tenantSlug);
+        if (active) {
+          setBilling(response as BillingSummary);
+          setSource("link validado");
+        }
+      } catch {
+        if (active) {
+          setBilling(fallbackBilling);
+          setSource("link invalido");
+        }
+      }
+    }
+
+    void loadBillingSummary();
 
     void icemaxApi.customerPortalAccessPolicy(tenantSlug)
       .then((response) => {
@@ -115,7 +132,7 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
     return () => {
       active = false;
     };
-  }, [tenantSlug]);
+  }, [tenantSlug, billingToken]);
 
   async function createAccessLink() {
     setAccessLink({
@@ -170,8 +187,16 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
 
       <div className={`portalBillingAccess ${accessLink.status}`}>
         <div>
-          <strong>Acesso seguro</strong>
-          <span>{accessLink.message}</span>
+          <strong>{billingToken ? "Acesso validado" : "Acesso seguro"}</strong>
+          <span>
+            {billingToken
+              ? source === "link validado"
+                ? "Resumo liberado para o link validado."
+                : source === "link invalido"
+                  ? "Link invalido ou expirado. Gere um novo acesso pelos canais oficiais."
+                  : accessLink.message
+              : accessLink.message}
+          </span>
           {accessLink.publicUrl ? <small>Expira em {accessLink.expiresInDays} dias</small> : null}
         </div>
         <button type="button" onClick={createAccessLink} disabled={accessLink.status === "creating"}>
@@ -197,7 +222,7 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
       ) : null}
 
       <div className="portalBillingList">
-        {billing.contracts.map((contract) => (
+        {billing.contracts.length ? billing.contracts.map((contract) => (
           <article key={contract.contractId}>
             <div>
               <span>{statusLabel(contract.status)}</span>
@@ -216,7 +241,16 @@ export function PortalBillingSummary({ tenantSlug }: { tenantSlug: string }) {
             </div>
             <p>{contract.customerAction}</p>
           </article>
-        ))}
+        )) : (
+          <article>
+            <div>
+              <span>Resumo protegido</span>
+              <strong>Link seguro necessario</strong>
+              <small>Contratos e valores exigem token valido.</small>
+            </div>
+            <p>Solicite ou gere um link de acesso para consultar informacoes de contrato com seguranca.</p>
+          </article>
+        )}
       </div>
     </div>
   );

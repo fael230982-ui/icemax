@@ -1884,3 +1884,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Portal Financeiro Validado
+
+- [x] Portal le `billingToken` ou `token` da URL.
+- [x] Resumo financeiro exige validacao com escopo `billing_summary`.
+- [x] Dados financeiros ficam protegidos sem token valido.
+- [x] Estados de link necessario, validado e invalido definidos.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
