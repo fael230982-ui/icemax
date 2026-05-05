@@ -1094,6 +1094,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de pre-onboarding de tenant.
 - Teste automatizado cobre bloqueio de credenciais e isolamento de dados.
 
+## 0.8.150 - Matriz De Custos Por Tenant Whitelabel
+
+- Criado endpoint de matriz de custos por tenant whitelabel.
+- Matriz cobre mapas, e-mail, WhatsApp, IA e armazenamento com tetos mensais em reais.
+- Politica bloqueia chaves compartilhadas, custos ocultos e provedores pagos sem teto aprovado.
+- Console web ganhou consulta de custos por tenant.
+- Teste automatizado cobre bloqueio de chaves da ICEMAX para parceiro.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

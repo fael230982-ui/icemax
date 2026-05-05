@@ -29,6 +29,7 @@ import {
   getMobileOfflineAssistedRetryWhitelabelContinuousImprovementPlan,
   getMobileOfflineAssistedRetryWhitelabelScaleDecisionPackage,
   getMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding,
+  getMobileOfflineAssistedRetryWhitelabelTenantCostMatrix,
   getPlatformDiagnostics,
   getPlatformReadiness,
   getMobileOfflineEscalationBoard,
@@ -73,6 +74,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/mobile-offline-escalations/whitelabel-continuous-improvement", async () => getMobileOfflineAssistedRetryWhitelabelContinuousImprovementPlan());
   app.get("/platform/mobile-offline-escalations/whitelabel-scale-decision", async () => getMobileOfflineAssistedRetryWhitelabelScaleDecisionPackage());
   app.get("/platform/mobile-offline-escalations/whitelabel-second-tenant-pre-onboarding", async () => getMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding());
+  app.get("/platform/mobile-offline-escalations/whitelabel-tenant-cost-matrix", async () => getMobileOfflineAssistedRetryWhitelabelTenantCostMatrix());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

@@ -2678,3 +2678,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Matriz De Custos Por Tenant Whitelabel
+
+- [x] Endpoint de matriz de custos por tenant criado.
+- [x] Custos de mapas, e-mail, WhatsApp, IA e armazenamento definidos.
+- [x] Tetos mensais em reais registrados.
+- [x] Chaves e contas compartilhadas permanecem bloqueadas.
+- [x] Console web ganhou consulta de custos por tenant.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -1537,6 +1537,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "data_isolation"));
   assert.ok(retryWhitelabelSecondTenantPreOnboarding.json().blockedActions.includes("collect_second_tenant_credentials"));
 
+  const retryWhitelabelTenantCostMatrix = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-tenant-cost-matrix",
+  });
+  assert.equal(retryWhitelabelTenantCostMatrix.statusCode, 200);
+  assert.equal(retryWhitelabelTenantCostMatrix.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelTenantCostMatrix.json().summary.sharedBillingAllowed, false);
+  assert.equal(retryWhitelabelTenantCostMatrix.json().billingPolicy.sharedProviderKeysAllowed, false);
+  assert.ok(retryWhitelabelTenantCostMatrix.json().summary.totalMonthlyCapBRL > 0);
+  assert.ok(retryWhitelabelTenantCostMatrix.json().costCenters.some((item: { key: string }) =>
+    item.key === "ai"));
+  assert.ok(retryWhitelabelTenantCostMatrix.json().blockedActions.includes("use_icemax_provider_keys_for_partner"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

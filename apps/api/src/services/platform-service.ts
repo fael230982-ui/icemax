@@ -2348,6 +2348,87 @@ export function getMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelTenantCostMatrix() {
+  const preOnboarding = getMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding();
+  const costCenters = [
+    {
+      key: "maps",
+      label: "Mapas e rotas",
+      status: "blocked",
+      billingMode: "por uso",
+      monthlyCapBRL: 250,
+      controls: ["Limite por tenant", "Auditoria de chamadas", "Bloqueio sem chave aprovada"],
+    },
+    {
+      key: "email",
+      label: "E-mail transacional",
+      status: "blocked",
+      billingMode: "por volume",
+      monthlyCapBRL: 120,
+      controls: ["Templates por tenant", "Dominio validado", "Copia opcional ao cliente"],
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp/Meta",
+      status: "blocked",
+      billingMode: "por conversa",
+      monthlyCapBRL: 300,
+      controls: ["Opt-in do cliente", "Templates aprovados", "Fallback por e-mail"],
+    },
+    {
+      key: "ai",
+      label: "IA para texto, foto e diagnostico",
+      status: "blocked",
+      billingMode: "por consumo",
+      monthlyCapBRL: 400,
+      controls: ["Mascaramento de dados", "Limite por usuario", "Revisao humana obrigatoria"],
+    },
+    {
+      key: "storage",
+      label: "Armazenamento de fotos, assinaturas e relatorios",
+      status: "attention",
+      billingMode: "por espaco",
+      monthlyCapBRL: 180,
+      controls: ["Retencao por contrato", "Separacao por tenant", "Backup e descarte LGPD"],
+    },
+  ];
+  const totalMonthlyCapBRL = costCenters.reduce((total, item) => total + item.monthlyCapBRL, 0);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_tenant_cost_matrix_blocked",
+    realExecutionAllowed: false,
+    summary: {
+      sourceCandidateAllowed: preOnboarding.summary.candidateTenantAllowed,
+      costCenters: costCenters.length,
+      blockedCostCenters: costCenters.filter((item) => item.status === "blocked").length,
+      totalMonthlyCapBRL,
+      sharedBillingAllowed: false,
+      productionProviderCallsAllowed: false,
+    },
+    costCenters,
+    billingPolicy: {
+      tenantLevelCostTrackingRequired: true,
+      sharedCardsBetweenTenantsAllowed: false,
+      sharedProviderKeysAllowed: false,
+      ownerMonthlyCostApprovalRequired: true,
+      automaticShutdownOnCapExceeded: true,
+    },
+    blockedActions: [
+      "use_icemax_provider_keys_for_partner",
+      "enable_paid_provider_without_cap",
+      "hide_provider_cost_from_owner",
+      "bill_partner_without_cost_breakdown",
+    ],
+    nextActions: [
+      "Definir teto mensal por tenant antes do segundo onboarding.",
+      "Separar contas, chaves e custos por empresa.",
+      "Criar revisao mensal de custos por modulo e por OS.",
+      "Manter provedores pagos bloqueados ate aprovacao executiva.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
