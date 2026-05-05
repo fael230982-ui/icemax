@@ -676,6 +676,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre token valido de contrato, token valido de acompanhamento e bloqueio por escopo incorreto.
 - Documentado fluxo de validacao de link publico antes de exibir dados do cliente.
 
+## 0.8.98 - Acompanhamento Web Validado
+
+- Pagina publica `/acompanhamento/[token]` passou a validar o token na API antes de exibir dados.
+- Front-end passou a buscar o acompanhamento da OS pela entidade retornada pela validacao.
+- Quando o token falha, a pagina mantem dados sensiveis protegidos e exibe estado indisponivel.
+- Cliente, equipamento, tecnico, ETA, linha do tempo e orientacoes agora vêm da API quando o link e valido.
+- Documentado comportamento esperado da tela publica de acompanhamento.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

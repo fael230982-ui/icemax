@@ -191,6 +191,8 @@ export const icemaxApi = {
   customerPortalBillingSummary: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/billing-summary`),
   customerPortalAccessPolicy: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/access-policy`),
   customerPortalExternalSharingPolicy: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/external-sharing-policy`),
+  validateCustomerPortalPublicToken: (publicToken: string, scope: "service_order_tracking" | "billing_summary") =>
+    apiRequest<unknown>(withQuery(`/public/customer-portal/tokens/${publicToken}/validate`, { scope })),
   createCustomerPortalBillingAccessLink: (tenantSlug: string) =>
     apiRequest<unknown>(`/customer-portal/${tenantSlug}/billing-access-link`, { method: "POST" }),
   previewPortalTriage: (body: unknown) => apiRequest<unknown>("/customer-portal/triage", { method: "POST", body }),

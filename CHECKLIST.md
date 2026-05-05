@@ -1870,3 +1870,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Acompanhamento Web Validado
+
+- [x] Pagina publica valida token antes de exibir dados.
+- [x] Acompanhamento da OS e carregado pela entidade validada.
+- [x] Estado invalido protege dados sensiveis.
+- [x] Cliente, equipamento, tecnico, ETA e timeline usam resposta da API.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
