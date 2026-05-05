@@ -1014,6 +1014,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de evidencias de provedores.
 - Teste automatizado cobre bloqueio, itens privados e rejeicao de segredo visivel.
 
+## 0.8.140 - Pacote De Decisao De Ativacao Por Tenant
+
+- Criado endpoint de pacote de decisao de ativacao por tenant.
+- Pacote consolida gate, evidencias, orcamento, segredos seguros e aprovacao humana.
+- Decisao padrao impede ativacao comercial do tenant e chamadas reais de provedores.
+- Console web ganhou consulta de decisao por tenant.
+- Teste automatizado cobre bloqueio comercial, signoff do titular e blocos criticos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

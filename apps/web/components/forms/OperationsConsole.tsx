@@ -719,6 +719,12 @@ export function OperationsConsole() {
     );
   }
 
+  function loadMobileOfflineAssistedRetryTenantActivationDecision() {
+    void run("Decisao de ativacao por tenant", () =>
+      icemaxApi.mobileOfflineAssistedRetryTenantActivationDecision(token || undefined),
+    );
+  }
+
   function reviewMobileOfflineEscalation(recordId: string, decision: string) {
     void run("Revisar pendencia offline", () =>
       icemaxApi.reviewMobileOfflineEscalation(recordId, {
@@ -968,6 +974,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryProviderActivationGate}>Gate provedores offline</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryProviderHomologationRunbook}>Homologar provedores offline</button>
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryProviderEvidenceBoard}>Evidencias provedores offline</button>
+        <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryTenantActivationDecision}>Decisao tenant offline</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
         <button type="button" className="secondary" onClick={runMobileOfflineRetryHomologation}>Homologar reenvio offline</button>

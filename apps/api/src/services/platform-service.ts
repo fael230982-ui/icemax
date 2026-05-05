@@ -1441,6 +1441,83 @@ export function getMobileOfflineAssistedRetryProviderEvidenceBoard() {
   };
 }
 
+export function getMobileOfflineAssistedRetryTenantActivationDecisionPackage() {
+  const evidenceBoard = getMobileOfflineAssistedRetryProviderEvidenceBoard();
+  const blockingReasons = [
+    {
+      key: "provider_gate",
+      severity: "critical",
+      status: "blocked",
+      detail: "Gate de provedores ainda indica keep_blocked.",
+    },
+    {
+      key: "evidence_board",
+      severity: "critical",
+      status: "blocked",
+      detail: "Evidencias de homologacao ainda possuem itens bloqueados ou pendentes.",
+    },
+    {
+      key: "budget_approval",
+      severity: "high",
+      status: "pending",
+      detail: "Teto mensal por provedor e por tenant ainda precisa de aprovacao formal.",
+    },
+    {
+      key: "secure_secrets",
+      severity: "critical",
+      status: "blocked",
+      detail: "Segredos reais devem existir somente no ambiente seguro antes da ativacao.",
+    },
+    {
+      key: "human_approval",
+      severity: "critical",
+      status: "pending",
+      detail: "Aprovacao humana do titular ainda e obrigatoria para cada tenant.",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "tenant_activation_decision_package_ready",
+    tenantId: config.defaultTenantId,
+    tenantScope: "default_whitelabel_template",
+    realExecutionAllowed: false,
+    summary: {
+      decision: "do_not_activate",
+      blockingReasons: blockingReasons.length,
+      criticalBlocks: blockingReasons.filter((item) => item.severity === "critical").length,
+      evidenceItems: evidenceBoard.summary.evidenceItems,
+      evidenceBlocked: evidenceBoard.summary.blockedItems,
+      gateDecision: evidenceBoard.summary.gateDecision,
+    },
+    decision: {
+      result: "do_not_activate",
+      reason: "Tenant ainda nao possui evidencias, orcamento, alertas, segredos seguros e aprovacao suficientes para provedores reais.",
+      allowedActions: ["continue_development", "prepare_staging", "collect_internal_evidence", "approve_provider_budget"],
+      blockedActions: ["activate_real_provider", "enable_customer_send", "enable_automatic_retry", "enable_commercial_tenant_release"],
+    },
+    blockingReasons,
+    requiredSignoffs: [
+      { role: "owner", name: "RAFAEL DA SILVA BEZEERA", status: "pending", requiredFor: "tenant_activation" },
+      { role: "platform", name: "DESENVOLVEDOR E PROJETISTA", status: "pending", requiredFor: "secure_configuration" },
+      { role: "operations", name: "Operacao", status: "pending", requiredFor: "business_homologation" },
+    ],
+    tenantReleaseCriteria: [
+      "Gate de provedores precisa sair de keep_blocked.",
+      "Todas as evidencias precisam estar aprovadas sem segredos visiveis.",
+      "Teto mensal e alertas precisam estar configurados por provedor.",
+      "Rollback e validacao tecnica precisam estar executados.",
+      "Aprovacao humana precisa estar registrada por tenant.",
+    ],
+    nextActions: [
+      "Manter tenant em modo de desenvolvimento local.",
+      "Preparar staging seguro antes de qualquer tenant comercial.",
+      "Coletar evidencias internas e revisar itens sensiveis.",
+      "Reavaliar pacote de decisao apos homologacao completa.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

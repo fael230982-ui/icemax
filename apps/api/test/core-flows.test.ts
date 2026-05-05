@@ -1416,6 +1416,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryProviderEvidenceBoard.json().rejectionRules.some((item: string) =>
     item.includes("segredo visivel")));
 
+  const retryTenantActivationDecision = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/tenant-activation-decision",
+  });
+  assert.equal(retryTenantActivationDecision.statusCode, 200);
+  assert.equal(retryTenantActivationDecision.json().realExecutionAllowed, false);
+  assert.equal(retryTenantActivationDecision.json().decision.result, "do_not_activate");
+  assert.ok(retryTenantActivationDecision.json().decision.blockedActions.includes("enable_commercial_tenant_release"));
+  assert.ok(retryTenantActivationDecision.json().requiredSignoffs.some((item: { role: string }) =>
+    item.role === "owner"));
+  assert.ok(retryTenantActivationDecision.json().summary.criticalBlocks >= 3);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

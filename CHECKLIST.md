@@ -2519,3 +2519,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pacote De Decisao De Ativacao Por Tenant
+
+- [x] Endpoint de decisao por tenant criado.
+- [x] Gate, evidencias, orcamento, segredos e aprovacao humana consolidados.
+- [x] Ativacao comercial e chamadas reais permanecem bloqueadas.
+- [x] Signoffs obrigatorios definidos.
+- [x] Console web ganhou consulta de decisao por tenant.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
