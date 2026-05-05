@@ -692,6 +692,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Estado visual informa link necessario, link validado ou link invalido.
 - Documentado controle de acesso financeiro para o portal do cliente.
 
+## 0.8.100 - Revogacao De Token Publico
+
+- Adicionado endpoint `POST /customer-portal/public-tokens/:token/revoke`.
+- Revogacao exige escopo explicito para evitar desligamento acidental de outro tipo de link.
+- Em Prisma, a revogacao grava `revokedAt` no `PublicAccessToken`.
+- Em mock, a revogacao retorna pacote auditavel sem persistir token cru.
+- Teste automatizado cobre revogacao valida e tentativa com escopo incorreto.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

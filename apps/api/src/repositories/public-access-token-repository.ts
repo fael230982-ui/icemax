@@ -145,3 +145,62 @@ export async function validateMockPublicAccessToken(tenantId: string, rawPublicA
     expiresAt: "mock_expiration_checked_on_creation_package",
   };
 }
+
+export async function revokeMockPublicAccessToken(tenantId: string, rawPublicAccessValue: string, scope: PublicAccessTokenScope) {
+  const parsed = parsePublicAccessTokenValue(rawPublicAccessValue);
+
+  if (!parsed || parsed.scope !== scope) {
+    return { revoked: false, reason: "not_found_or_scope_mismatch", tenantId };
+  }
+
+  return {
+    revoked: true,
+    reason: "revoked_mock",
+    tenantId,
+    entityType: parsed.entityType,
+    entityId: parsed.entityId,
+    scope: parsed.scope,
+    revokedAt: new Date().toISOString(),
+    hashPreview: createPublicAccessTokenHashPreview(rawPublicAccessValue),
+    rawTokenPersisted: false,
+  };
+}
+
+export async function revokePrismaPublicAccessToken(tenantId: string, rawPublicAccessValue: string, scope: PublicAccessTokenScope) {
+  const tokenHash = hashPublicAccessToken(rawPublicAccessValue);
+  const record = await getPrisma().publicAccessToken.findUnique({
+    where: { tenantId_tokenHash: { tenantId, tokenHash } },
+  });
+
+  if (!record || record.scope !== scope) {
+    return { revoked: false, reason: "not_found_or_scope_mismatch", tenantId };
+  }
+
+  if (record.revokedAt) {
+    return {
+      revoked: true,
+      reason: "already_revoked",
+      tenantId,
+      entityType: record.entityType,
+      entityId: record.entityId,
+      scope: record.scope,
+      revokedAt: record.revokedAt.toISOString(),
+    };
+  }
+
+  const revokedAt = new Date();
+  await getPrisma().publicAccessToken.update({
+    where: { id: record.id },
+    data: { revokedAt },
+  });
+
+  return {
+    revoked: true,
+    reason: "revoked",
+    tenantId,
+    entityType: record.entityType,
+    entityId: record.entityId,
+    scope: record.scope,
+    revokedAt: revokedAt.toISOString(),
+  };
+}

@@ -4,6 +4,8 @@ import { serviceContracts, serviceOrders, tenant, technicianLocations } from "..
 import {
   issueMockPublicAccessToken,
   issuePrismaPublicAccessToken,
+  revokeMockPublicAccessToken,
+  revokePrismaPublicAccessToken,
   validateMockPublicAccessToken,
   validatePrismaPublicAccessToken,
 } from "../repositories/public-access-token-repository";
@@ -592,6 +594,33 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
     });
 
     return validation.valid ? validation : reply.code(404).send(validation);
+  });
+
+  app.post("/customer-portal/public-tokens/:token/revoke", async (request, reply) => {
+    const { token: publicAccessValue } = request.params as { token: string };
+    const { scope } = request.query as { scope?: "service_order_tracking" | "billing_summary" };
+
+    if (scope !== "service_order_tracking" && scope !== "billing_summary") {
+      return reply.code(400).send({ message: "Escopo de token publico invalido para revogacao." });
+    }
+
+    const revocation = isPrismaEnabled()
+      ? await revokePrismaPublicAccessToken(tenant.id, publicAccessValue, scope)
+      : await revokeMockPublicAccessToken(tenant.id, publicAccessValue, scope);
+
+    await recordAuditEvent({
+      tenantId: tenant.id,
+      action: "customer_portal.public_token_revoked",
+      entity: revocation.revoked ? revocation.entityType ?? "public_access_token" : "public_access_token",
+      entityId: revocation.revoked ? revocation.entityId ?? "unknown" : "unknown",
+      metadata: {
+        scope,
+        revoked: revocation.revoked,
+        reason: revocation.reason,
+      },
+    });
+
+    return revocation.revoked ? revocation : reply.code(404).send(revocation);
   });
 
   app.get("/customer-portal/:tenantSlug/external-sharing-policy", async (request) => {

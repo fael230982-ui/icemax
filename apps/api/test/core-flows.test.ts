@@ -829,6 +829,21 @@ test("customer portal can request optional service order", async () => {
   assert.equal(wrongScopeValidation.statusCode, 404);
   assert.equal(wrongScopeValidation.json().valid, false);
 
+  const trackingTokenRevocation = await app.inject({
+    method: "POST",
+    url: `/customer-portal/public-tokens/${trackingLink.json().token}/revoke?scope=service_order_tracking`,
+  });
+  assert.equal(trackingTokenRevocation.statusCode, 200);
+  assert.equal(trackingTokenRevocation.json().revoked, true);
+  assert.equal(trackingTokenRevocation.json().entityId, "1048");
+
+  const wrongScopeRevocation = await app.inject({
+    method: "POST",
+    url: `/customer-portal/public-tokens/${trackingLink.json().token}/revoke?scope=billing_summary`,
+  });
+  assert.equal(wrongScopeRevocation.statusCode, 404);
+  assert.equal(wrongScopeRevocation.json().revoked, false);
+
   const attachments = await app.inject({
     method: "POST",
     url: "/customer-portal/service-orders/1048/attachments",

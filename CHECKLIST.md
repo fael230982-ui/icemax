@@ -1898,3 +1898,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Revogacao De Token Publico
+
+- [x] Endpoint de revogacao criado.
+- [x] Revogacao exige escopo explicito.
+- [x] Prisma grava `revokedAt`.
+- [x] Mock retorna pacote auditavel sem persistir token cru.
+- [x] Auditoria de revogacao adicionada.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
