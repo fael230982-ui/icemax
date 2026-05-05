@@ -161,10 +161,24 @@ export function getProductionReadinessPlan() {
     { key: "lgpd", status: "manual", evidence: "Politica de privacidade, termos e base legal devem ser revisados antes de cliente real." },
   ];
   const blockers = gates.filter((item) => item.status === "block");
+  const score = Math.round((
+    gates.filter((item) => item.status === "pass").length * 18
+    + gates.filter((item) => item.status === "warn" || item.status === "manual").length * 8
+    + externalAccounts.filter((item) => item.configured).length * 4
+    + requiredSecrets.filter((item) => item.configured).length * 6
+  ) / 1.4);
+  const homologationReady = gates.every((item) => item.status !== "block");
+  const productionReady = gates.every((item) => item.status === "pass") && externalAccounts.every((item) => item.configured);
 
   return {
     status: blockers.length ? "blocked" : "candidate",
     target: "homologacao_controlada",
+    score: Math.min(score, 100),
+    readinessLevels: {
+      development: "active",
+      controlledHomologation: homologationReady ? "ready" : "blocked",
+      fullProduction: productionReady ? "ready" : "blocked",
+    },
     requiredSecrets,
     externalAccounts,
     gates,

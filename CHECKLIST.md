@@ -2036,3 +2036,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Score De Prontidao De Producao
+
+- [x] Score numerico adicionado ao relatorio.
+- [x] Niveis de desenvolvimento, homologacao e producao adicionados.
+- [x] `PUBLIC_ACCESS_TOKEN_PEPPER` incluido no `.env.example`.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

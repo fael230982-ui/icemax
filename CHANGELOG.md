@@ -764,6 +764,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre segredo de pepper e conta WhatsApp no plano.
 - Documentado plano tecnico para homologacao controlada.
 
+## 0.8.109 - Score De Prontidao De Producao
+
+- Prontidao de producao passou a retornar `score` numerico.
+- Relatorio separa desenvolvimento, homologacao controlada e producao plena.
+- `.env.example` passou a declarar `PUBLIC_ACCESS_TOKEN_PEPPER`.
+- Teste automatizado cobre score e niveis de prontidao.
+- Documentada interpretacao do score de prontidao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

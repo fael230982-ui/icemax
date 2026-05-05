@@ -1236,6 +1236,9 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   const production = await app.inject({ method: "GET", url: "/platform/production-readiness" });
   assert.equal(production.statusCode, 200);
   assert.equal(production.json().target, "homologacao_controlada");
+  assert.ok(production.json().score >= 0);
+  assert.equal(production.json().readinessLevels.development, "active");
+  assert.equal(production.json().readinessLevels.fullProduction, "blocked");
   assert.ok(production.json().requiredSecrets.some((item: { key: string }) => item.key === "PUBLIC_ACCESS_TOKEN_PEPPER"));
   assert.ok(production.json().externalAccounts.some((item: { provider: string }) => item.provider === "whatsapp_meta"));
 
