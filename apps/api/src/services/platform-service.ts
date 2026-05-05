@@ -466,6 +466,81 @@ export function getMobileOfflineAssistedRetryActionPlan() {
   };
 }
 
+export function getMobileOfflineAssistedRetryDailyCommand() {
+  const actionPlan = getMobileOfflineAssistedRetryActionPlan();
+  const productionGate = getMobileOfflineAssistedRetryProductionGate();
+  const dailyCapacity = {
+    supervisor: 6,
+    qualidade: 5,
+    estoque: 4,
+  };
+  const workload = actionPlan.lanes.map((lane) => {
+    const capacity = dailyCapacity[lane.owner as keyof typeof dailyCapacity] ?? 3;
+    const utilization = Math.round((lane.total / capacity) * 100);
+
+    return {
+      owner: lane.owner,
+      total: lane.total,
+      critical: lane.critical,
+      high: lane.high,
+      dailyCapacity: capacity,
+      utilization,
+      status: utilization > 100 ? "over_capacity" : utilization >= 80 ? "attention" : "controlled",
+    };
+  });
+  const todayQueue = actionPlan.actions
+    .filter((item) => item.dueInHours <= 6)
+    .map((item) => ({
+      recordId: item.recordId,
+      serviceOrderId: item.serviceOrderId,
+      customer: item.customer,
+      owner: item.recommendedOwner,
+      dueInHours: item.dueInHours,
+      priority: item.priority,
+      severityScore: item.severityScore,
+      nextStep: item.nextStep,
+    }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "daily_command_ready",
+    realExecutionAllowed: false,
+    summary: {
+      totalActions: actionPlan.summary.totalActions,
+      todayQueue: todayQueue.length,
+      dueInTwoHours: actionPlan.summary.dueInTwoHours,
+      overloadedLanes: workload.filter((item) => item.status === "over_capacity").length,
+      productionGateStatus: productionGate.status,
+      realExecutionBlocked: true,
+    },
+    workload,
+    todayQueue,
+    decisions: [
+      {
+        key: "real_execution",
+        status: "blocked",
+        reason: "Execucao real depende de banco real, auditoria persistente e permissao sensivel.",
+      },
+      {
+        key: "dry_run",
+        status: "allowed",
+        reason: "Dry-run valida payload e idempotencia sem alterar sistemas externos.",
+      },
+      {
+        key: "daily_capacity",
+        status: workload.some((item) => item.status === "over_capacity") ? "rebalance_required" : "controlled",
+        reason: "Capacidade diaria estimada por area para tratar pendencias offline.",
+      },
+    ],
+    nextActions: [
+      "Executar primeiro as pendencias com vencimento em ate duas horas.",
+      "Rebalancear areas acima da capacidade antes de iniciar dry-runs em lote.",
+      "Registrar decisao gerencial em cada pendencia antes de preparar reenvio assistido.",
+      "Manter envio real bloqueado ate o gate de producao ficar aprovado.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

@@ -4,6 +4,7 @@ import {
   getModuleCatalog,
   getMobileOfflineAssistedRetryActionPlan,
   getMobileOfflineAssistedRetryAuditContract,
+  getMobileOfflineAssistedRetryDailyCommand,
   getMobileOfflineAssistedRetryExecutiveSummary,
   getMobileOfflineAssistedRetryPermissions,
   getMobileOfflineAssistedRetryProductionGate,
@@ -31,6 +32,7 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
   app.get("/platform/mobile-offline-escalations/audit-contract", async () => getMobileOfflineAssistedRetryAuditContract());
   app.get("/platform/mobile-offline-escalations/executive-summary", async () => getMobileOfflineAssistedRetryExecutiveSummary());
   app.get("/platform/mobile-offline-escalations/action-plan", async () => getMobileOfflineAssistedRetryActionPlan());
+  app.get("/platform/mobile-offline-escalations/daily-command", async () => getMobileOfflineAssistedRetryDailyCommand());
   app.post<{ Params: { recordId: string }; Body: unknown }>("/platform/mobile-offline-escalations/:recordId/review", async (request, reply) => {
     return reply.code(201).send(reviewMobileOfflineEscalation(request.params.recordId, request.body));
   });

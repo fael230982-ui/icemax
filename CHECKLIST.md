@@ -2340,3 +2340,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Comando Diario Do Reenvio Offline
+
+- [x] Endpoint de comando diario criado.
+- [x] Fila diaria e vencimentos prioritarios consolidados.
+- [x] Capacidade por area calculada.
+- [x] Decisoes de dry-run e envio real expostas.
+- [x] Execucao real permanece bloqueada.
+- [x] Console web ganhou consulta do comando diario.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

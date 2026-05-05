@@ -926,6 +926,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta do plano de acao.
 - Teste automatizado cobre bloqueio do envio real e acoes priorizadas.
 
+## 0.8.129 - Comando Diario Do Reenvio Offline
+
+- Criado endpoint de comando diario do reenvio offline.
+- Comando consolida fila do dia, capacidade por area e vencimentos prioritarios.
+- Decisoes operacionais indicam dry-run permitido e envio real bloqueado.
+- Console web ganhou consulta do comando diario.
+- Teste automatizado cobre fila diaria, decisoes e bloqueio de producao.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
