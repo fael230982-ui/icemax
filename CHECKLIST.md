@@ -2455,3 +2455,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano De Custos E Provedores Do Reenvio Offline
+
+- [x] Endpoint de custos e provedores criado.
+- [x] Provedores por categoria e ordem de ativacao definidos.
+- [x] Guardrails de teto mensal e alertas registrados.
+- [x] Ausencia de precos fixos e segredos validada.
+- [x] Console web ganhou consulta de custos.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

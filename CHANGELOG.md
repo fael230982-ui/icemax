@@ -982,6 +982,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de infraestrutura pendente.
 - Teste automatizado cobre guardrail contra segredos e bloqueio do envio real.
 
+## 0.8.136 - Plano De Custos E Provedores Do Reenvio Offline
+
+- Criado endpoint de plano de custos e provedores do reenvio offline.
+- Plano organiza banco, e-mail, mapas, IA, hospedagem e WhatsApp por modelo de custo.
+- Guardrails exigem teto mensal, alertas e aprovacao antes de ativacao.
+- Console web ganhou consulta de custos e provedores.
+- Teste automatizado cobre ausencia de precos fixos, segredos e envio real bloqueado.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

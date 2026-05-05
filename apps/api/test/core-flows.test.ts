@@ -1367,6 +1367,18 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(retryInfrastructureBacklog.json().guardrails.some((item: string) =>
     item.includes("Nao registrar segredos")));
 
+  const retryProviderCostPlan = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/provider-cost-plan",
+  });
+  assert.equal(retryProviderCostPlan.statusCode, 200);
+  assert.equal(retryProviderCostPlan.json().realExecutionAllowed, false);
+  assert.equal(retryProviderCostPlan.json().summary.fixedPricesIncluded, false);
+  assert.equal(retryProviderCostPlan.json().summary.secretsIncluded, false);
+  assert.ok(retryProviderCostPlan.json().providerPlans.some((item: { key: string }) =>
+    item.key === "ai_provider"));
+  assert.ok(retryProviderCostPlan.json().approvalPolicy.budgetLimitRequiredBeforeActivation);
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

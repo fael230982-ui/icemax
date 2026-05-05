@@ -1049,6 +1049,129 @@ export function getMobileOfflineAssistedRetryInfrastructureBacklog() {
   };
 }
 
+export function getMobileOfflineAssistedRetryProviderCostPlan() {
+  const infrastructure = getMobileOfflineAssistedRetryInfrastructureBacklog();
+  const providerPlans = [
+    {
+      key: "database",
+      providerCategory: "managed_postgres",
+      purpose: "Persistir tenants, OS, evidencias, auditoria e idempotencia.",
+      requiredBefore: "phase_1_real_persistence",
+      costModel: "monthly_base_plus_storage_and_backups",
+      budgetGuardrails: [
+        "Definir teto mensal antes de migrar.",
+        "Ativar alertas de uso e armazenamento.",
+        "Separar staging e producao quando o plano permitir.",
+      ],
+      secretPolicy: "DATABASE_URL somente no provedor de hospedagem ou cofre seguro.",
+      status: "pending",
+    },
+    {
+      key: "email_provider",
+      providerCategory: "transactional_email",
+      purpose: "Enviar conclusao de OS, copia ao cliente e notificacoes operacionais.",
+      requiredBefore: "external_email_homologation",
+      costModel: "per_email_or_monthly_plan",
+      budgetGuardrails: [
+        "Validar volume mensal previsto por tenant.",
+        "Configurar dominio remetente antes do envio real.",
+        "Monitorar bounces, rejeicoes e reputacao.",
+      ],
+      secretPolicy: "SMTP/API key fora do repositorio.",
+      status: "pending",
+    },
+    {
+      key: "maps_provider",
+      providerCategory: "maps_routes_geocoding",
+      purpose: "Calcular rotas, tempo de deslocamento, geocodificacao e apoio ao rastreamento.",
+      requiredBefore: "route_optimization_real",
+      costModel: "per_request_or_usage_quota",
+      budgetGuardrails: [
+        "Definir cota diaria de geocodificacao.",
+        "Cachear enderecos e matrizes de rota quando permitido.",
+        "Bloquear chamadas repetidas fora da janela operacional.",
+      ],
+      secretPolicy: "Chave de mapas somente em variavel de ambiente do servidor.",
+      status: "pending",
+    },
+    {
+      key: "ai_provider",
+      providerCategory: "ai_text_vision",
+      purpose: "Revisar textos tecnicos, apoiar diagnostico visual e padronizar relatorios.",
+      requiredBefore: "real_ai_features",
+      costModel: "per_token_or_image_usage",
+      budgetGuardrails: [
+        "Definir limite por OS e por tenant.",
+        "Registrar apenas metadados necessarios para auditoria.",
+        "Aplicar fallback manual quando o teto de uso for atingido.",
+      ],
+      secretPolicy: "OPENAI_API_KEY somente em ambiente seguro, nunca em documento ou commit.",
+      status: "pending",
+    },
+    {
+      key: "hosting_domain",
+      providerCategory: "hosting_domain_ssl",
+      purpose: "Publicar API, painel web, portais e ambientes por tenant.",
+      requiredBefore: "public_access",
+      costModel: "monthly_hosting_plus_domain_annual",
+      budgetGuardrails: [
+        "Separar custo de hospedagem, dominio, SSL e observabilidade.",
+        "Ativar alertas de CPU, memoria, trafego e armazenamento.",
+        "Manter rollback de deploy antes da homologacao externa.",
+      ],
+      secretPolicy: "Variaveis reais configuradas somente no painel de hospedagem.",
+      status: "pending",
+    },
+    {
+      key: "whatsapp_provider",
+      providerCategory: "messaging_whatsapp",
+      purpose: "Enviar notificacoes, lembretes e comunicacao operacional quando ativado.",
+      requiredBefore: "customer_messaging_real",
+      costModel: "per_conversation_or_template",
+      budgetGuardrails: [
+        "Aprovar templates antes do uso real.",
+        "Definir limite de conversas por cliente e por contrato.",
+        "Manter opt-in e historico de consentimento.",
+      ],
+      secretPolicy: "Token Meta/WhatsApp somente no cofre ou ambiente seguro.",
+      status: "pending",
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "provider_cost_plan_ready",
+    realExecutionAllowed: false,
+    summary: {
+      providers: providerPlans.length,
+      pending: providerPlans.filter((item) => item.status === "pending").length,
+      criticalInfrastructureItems: infrastructure.summary.critical,
+      fixedPricesIncluded: false,
+      secretsIncluded: false,
+    },
+    providerPlans,
+    approvalPolicy: {
+      ownerApprovalRequired: true,
+      budgetLimitRequiredBeforeActivation: true,
+      usageAlertsRequired: true,
+      noSecretsInRepository: true,
+    },
+    rolloutOrder: ["database", "hosting_domain", "email_provider", "maps_provider", "ai_provider", "whatsapp_provider"],
+    guardrails: [
+      "Nao registrar valores de chaves, tokens ou senhas.",
+      "Validar custo estimado no painel oficial de cada provedor antes de ativar.",
+      "Definir teto mensal e alertas antes da homologacao externa.",
+      "Manter execucao real bloqueada ate provedores criticos estarem configurados.",
+    ],
+    nextActions: [
+      "Escolher provedor de banco e hospedagem antes da primeira homologacao externa.",
+      "Definir teto mensal por provedor e por tenant.",
+      "Cadastrar chaves reais somente no ambiente seguro.",
+      "Reexecutar validacao tecnica apos ativar cada provedor.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
