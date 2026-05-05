@@ -34,6 +34,11 @@ const scenarios = [
     steps: ["registrar check-in", "salvar localizacao", "sincronizar fila", "auditar eventos"],
   },
   {
+    key: "reenvio-offline-real",
+    title: "Gate de reenvio real offline",
+    steps: ["classificar risco", "validar permissoes", "validar auditoria", "executar dry-run", "bloquear envio real"],
+  },
+  {
     key: "whitelabel-tenant",
     title: "Preparacao whitelabel",
     steps: ["criar marca", "validar papeis", "revisar integracoes", "diagnosticar readiness"],
@@ -61,17 +66,21 @@ export function runHomologationScenario(key: string) {
   if (!scenario) {
     return null;
   }
+  const realOfflineRetry = key === "reenvio-offline-real";
 
   return {
     id: `homologation-${key}-${Date.now()}`,
     ...scenario,
-    status: "passed_mock",
+    status: realOfflineRetry ? "blocked_by_production_gate" : "passed_mock",
     executedAt: new Date().toISOString(),
     evidence: scenario.steps.map((step, index) => ({
       step: index + 1,
       label: step,
-      status: "ok",
+      status: realOfflineRetry && step === "bloquear envio real" ? "blocked_as_expected" : "ok",
     })),
+    recommendation: realOfflineRetry
+      ? "Manter envio real bloqueado; validar apenas revisao, preparo e dry-run ate banco real e auditoria persistente."
+      : "Cenario homologado em modo mock.",
   };
 }
 

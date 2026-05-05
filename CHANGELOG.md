@@ -902,6 +902,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou acao `Prontidao` por pendencia offline.
 - Teste automatizado cobre bloqueio da execucao real e prerequisitos pendentes.
 
+## 0.8.126 - Homologacao Do Reenvio Real Offline
+
+- Criado cenario de homologacao `reenvio-offline-real`.
+- Execucao do cenario retorna bloqueio esperado pelo gate de producao.
+- Evidencia de homologacao marca envio real bloqueado como comportamento correto.
+- Console web ganhou acao para homologar reenvio offline.
+- Teste automatizado cobre lista de cenarios e execucao bloqueada pelo gate.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

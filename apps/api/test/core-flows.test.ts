@@ -1357,11 +1357,17 @@ test("homologation contracts observability and demo snapshot are available", asy
 
   const scenarios = await app.inject({ method: "GET", url: "/homologation/scenarios" });
   assert.equal(scenarios.statusCode, 200);
-  assert.equal(scenarios.json().total, 4);
+  assert.equal(scenarios.json().total, 5);
+  assert.ok(scenarios.json().data.some((item: { key: string }) => item.key === "reenvio-offline-real"));
 
   const run = await app.inject({ method: "POST", url: "/homologation/scenarios/os-completa/run" });
   assert.equal(run.statusCode, 201);
   assert.equal(run.json().status, "passed_mock");
+
+  const offlineRetryRun = await app.inject({ method: "POST", url: "/homologation/scenarios/reenvio-offline-real/run" });
+  assert.equal(offlineRetryRun.statusCode, 201);
+  assert.equal(offlineRetryRun.json().status, "blocked_by_production_gate");
+  assert.ok(offlineRetryRun.json().evidence.some((item: { status: string }) => item.status === "blocked_as_expected"));
 
   const observability = await app.inject({ method: "GET", url: "/observability/summary" });
   assert.equal(observability.statusCode, 200);

@@ -699,6 +699,12 @@ export function OperationsConsole() {
     });
   }
 
+  function runMobileOfflineRetryHomologation() {
+    void run("Homologacao reenvio offline", () =>
+      icemaxApi.runHomologationScenario("reenvio-offline-real", token || undefined),
+    );
+  }
+
   function runDatabaseTransitionCheck() {
     void run("Virada para banco", async () => {
       const results = await Promise.all([
@@ -873,6 +879,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadMobileOfflineAssistedRetryAuditContract}>Auditoria reenvio offline</button>
         <button type="button" className="secondary" onClick={runPlatformCheck}>Diagnostico</button>
         <button type="button" className="secondary" onClick={runHomologationCheck}>Homologacao</button>
+        <button type="button" className="secondary" onClick={runMobileOfflineRetryHomologation}>Homologar reenvio offline</button>
         <button type="button" className="secondary" onClick={runDatabaseTransitionCheck}>Virada banco</button>
       </div>
 

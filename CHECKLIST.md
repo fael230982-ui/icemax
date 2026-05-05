@@ -2294,3 +2294,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Homologacao Do Reenvio Real Offline
+
+- [x] Cenario de homologacao criado.
+- [x] Execucao retorna bloqueio esperado pelo gate.
+- [x] Evidencia marca envio real bloqueado como comportamento correto.
+- [x] Console web ganhou acao de homologacao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
