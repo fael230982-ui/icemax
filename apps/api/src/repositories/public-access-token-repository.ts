@@ -31,6 +31,10 @@ type PublicAccessTokenFilters = {
   status?: "active" | "revoked" | "expired" | "all";
 };
 
+type PublicAccessTokenRevocationOptions = {
+  reason?: string;
+};
+
 type MockPublicAccessTokenRecord = {
   id: string;
   tenantId: string;
@@ -59,6 +63,17 @@ export type PublicAccessTokenPackage = {
 };
 
 const mockPublicAccessTokens: MockPublicAccessTokenRecord[] = [];
+
+function mergeRevocationMetadata(metadata: unknown, options?: PublicAccessTokenRevocationOptions) {
+  const current = metadata && typeof metadata === "object" && !Array.isArray(metadata)
+    ? metadata as Record<string, unknown>
+    : {};
+
+  return {
+    ...current,
+    ...(options?.reason ? { revocationReason: options.reason } : {}),
+  };
+}
 
 function createTokenDates(expiresInDays: number) {
   const issuedAt = new Date();
@@ -267,7 +282,7 @@ export async function revokePrismaPublicAccessToken(tenantId: string, rawPublicA
   };
 }
 
-export async function revokeMockPublicAccessTokenById(tenantId: string, id: string) {
+export async function revokeMockPublicAccessTokenById(tenantId: string, id: string, options: PublicAccessTokenRevocationOptions = {}) {
   const record = mockPublicAccessTokens.find((item) => item.tenantId === tenantId && item.id === id);
 
   if (!record) {
@@ -276,6 +291,7 @@ export async function revokeMockPublicAccessTokenById(tenantId: string, id: stri
 
   const alreadyRevoked = Boolean(record.revokedAt);
   record.revokedAt ??= new Date().toISOString();
+  record.metadata = mergeRevocationMetadata(record.metadata, options);
 
   return {
     revoked: true,
@@ -286,12 +302,13 @@ export async function revokeMockPublicAccessTokenById(tenantId: string, id: stri
     entityId: record.entityId,
     scope: record.scope,
     revokedAt: record.revokedAt,
+    revocationReason: record.metadata.revocationReason,
     tokenHashPreview: record.tokenHashPreview,
     rawTokenPersisted: false,
   };
 }
 
-export async function revokePrismaPublicAccessTokenById(tenantId: string, id: string) {
+export async function revokePrismaPublicAccessTokenById(tenantId: string, id: string, options: PublicAccessTokenRevocationOptions = {}) {
   const record = await getPrisma().publicAccessToken.findFirst({
     where: { tenantId, id },
   });
@@ -310,15 +327,17 @@ export async function revokePrismaPublicAccessTokenById(tenantId: string, id: st
       entityId: record.entityId,
       scope: record.scope,
       revokedAt: record.revokedAt.toISOString(),
+      revocationReason: mergeRevocationMetadata(record.metadata).revocationReason,
       tokenHashPreview: `${record.tokenHash.slice(0, 12)}...`,
       rawTokenPersisted: false,
     };
   }
 
   const revokedAt = new Date();
+  const metadata = mergeRevocationMetadata(record.metadata, options);
   await getPrisma().publicAccessToken.update({
     where: { id: record.id },
-    data: { revokedAt },
+    data: { revokedAt, metadata: metadata as Prisma.InputJsonValue },
   });
 
   return {
@@ -330,6 +349,7 @@ export async function revokePrismaPublicAccessTokenById(tenantId: string, id: st
     entityId: record.entityId,
     scope: record.scope,
     revokedAt: revokedAt.toISOString(),
+    revocationReason: metadata.revocationReason,
     tokenHashPreview: `${record.tokenHash.slice(0, 12)}...`,
     rawTokenPersisted: false,
   };

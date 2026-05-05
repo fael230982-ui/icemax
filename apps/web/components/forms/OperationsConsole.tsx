@@ -10,6 +10,7 @@ function encodeTextFile(content: string) {
 export function OperationsConsole() {
   const [token, setToken] = useState("");
   const [publicTokenRecordId, setPublicTokenRecordId] = useState("");
+  const [publicTokenRevocationReason, setPublicTokenRevocationReason] = useState("Link revogado por solicitacao operacional.");
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
 
@@ -315,13 +316,21 @@ export function OperationsConsole() {
   function revokePublicTokenRecord(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const recordId = publicTokenRecordId.trim();
+    const reason = publicTokenRevocationReason.trim();
 
     if (!recordId) {
       setStatus("Informe o ID do registro do link publico.");
       return;
     }
 
-    void run("Revogar link publico", () => icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, token || undefined));
+    if (reason.length < 3) {
+      setStatus("Informe um motivo para a revogacao.");
+      return;
+    }
+
+    void run("Revogar link publico", () =>
+      icemaxApi.revokeCustomerPortalPublicTokenRecord(recordId, { reason }, token || undefined),
+    );
   }
 
   function loadQuoteApprovalPackage() {
@@ -643,6 +652,12 @@ export function OperationsConsole() {
             placeholder="ID do registro no inventario"
             value={publicTokenRecordId}
             onChange={(event) => setPublicTokenRecordId(event.target.value)}
+          />
+          <input
+            name="publicTokenRevocationReason"
+            placeholder="Motivo da revogacao"
+            value={publicTokenRevocationReason}
+            onChange={(event) => setPublicTokenRevocationReason(event.target.value)}
           />
           <button type="submit">Revogar link</button>
         </form>

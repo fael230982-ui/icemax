@@ -320,6 +320,10 @@ export const customerPortalAttachmentSchema = z.object({
   })).min(1).max(8),
 });
 
+export const publicTokenRevocationSchema = z.object({
+  reason: z.string().min(3).max(500).default("Revogacao administrativa pelo console operacional."),
+});
+
 export const createWarrantyTermSchema = z.object({
   serviceOrderId: z.string().min(1),
   customerId: z.string().min(1),
@@ -489,6 +493,7 @@ export type VisualDiagnosisPackageInput = z.output<typeof visualDiagnosisPackage
 export type CustomerPortalOrderInput = z.output<typeof customerPortalOrderSchema>;
 export type CustomerPortalTriageInput = z.output<typeof customerPortalTriageSchema>;
 export type CustomerPortalAttachmentInput = z.output<typeof customerPortalAttachmentSchema>;
+export type PublicTokenRevocationInput = z.output<typeof publicTokenRevocationSchema>;
 export type CreateWarrantyTermInput = z.output<typeof createWarrantyTermSchema>;
 export type CreatePmocPlanInput = z.output<typeof createPmocPlanSchema>;
 export type CreateInvoiceDraftInput = z.output<typeof createInvoiceDraftSchema>;

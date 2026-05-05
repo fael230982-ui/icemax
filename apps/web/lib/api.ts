@@ -193,8 +193,8 @@ export const icemaxApi = {
   customerPortalExternalSharingPolicy: (tenantSlug: string) => apiRequest<unknown>(`/customer-portal/${tenantSlug}/external-sharing-policy`),
   customerPortalPublicTokens: (token?: string, filters?: { scope?: string; entityType?: string; entityId?: string; status?: string }) =>
     apiRequest<unknown>(withQuery("/customer-portal/public-tokens", filters), { token }),
-  revokeCustomerPortalPublicTokenRecord: (recordId: string, token?: string) =>
-    apiRequest<unknown>(`/customer-portal/public-token-records/${recordId}/revoke`, { method: "POST", token }),
+  revokeCustomerPortalPublicTokenRecord: (recordId: string, body: { reason: string }, token?: string) =>
+    apiRequest<unknown>(`/customer-portal/public-token-records/${recordId}/revoke`, { method: "POST", body, token }),
   validateCustomerPortalPublicToken: (publicToken: string, scope: "service_order_tracking" | "billing_summary") =>
     apiRequest<unknown>(withQuery(`/public/customer-portal/tokens/${publicToken}/validate`, { scope })),
   createCustomerPortalBillingAccessLink: (tenantSlug: string) =>

@@ -881,10 +881,14 @@ test("customer portal can request optional service order", async () => {
   const billingTokenRecordRevocation = await app.inject({
     method: "POST",
     url: `/customer-portal/public-token-records/${activeBillingTokenList.json().data[0].id}/revoke`,
+    payload: {
+      reason: "Cliente solicitou novo link financeiro.",
+    },
   });
   assert.equal(billingTokenRecordRevocation.statusCode, 200);
   assert.equal(billingTokenRecordRevocation.json().revoked, true);
   assert.equal(billingTokenRecordRevocation.json().scope, "billing_summary");
+  assert.equal(billingTokenRecordRevocation.json().revocationReason, "Cliente solicitou novo link financeiro.");
   assert.equal(billingTokenRecordRevocation.json().rawTokenPersisted, false);
 
   const revokedBillingTokenValidation = await app.inject({

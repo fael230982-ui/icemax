@@ -18,6 +18,7 @@ import {
   customerPortalOrderSchema,
   customerPortalTriageSchema,
   parseBody,
+  publicTokenRevocationSchema,
   type CustomerPortalAttachmentInput,
   type CustomerPortalTriageInput,
 } from "../schemas";
@@ -667,9 +668,10 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
 
   app.post("/customer-portal/public-token-records/:id/revoke", async (request, reply) => {
     const { id } = request.params as { id: string };
+    const input = parseBody(publicTokenRevocationSchema, request.body ?? {});
     const revocation = isPrismaEnabled()
-      ? await revokePrismaPublicAccessTokenById(tenant.id, id)
-      : await revokeMockPublicAccessTokenById(tenant.id, id);
+      ? await revokePrismaPublicAccessTokenById(tenant.id, id, { reason: input.reason })
+      : await revokeMockPublicAccessTokenById(tenant.id, id, { reason: input.reason });
 
     await recordAuditEvent({
       tenantId: tenant.id,
@@ -680,6 +682,7 @@ export async function registerCustomerPortalRoutes(app: FastifyInstance) {
         id,
         revoked: revocation.revoked,
         reason: revocation.reason,
+        revocationReason: input.reason,
       },
     });
 

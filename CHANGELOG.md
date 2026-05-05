@@ -732,6 +732,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Estado do painel impede envio sem ID preenchido.
 - Documentado fluxo de revogacao operacional pelo console web.
 
+## 0.8.105 - Motivo De Revogacao De Link
+
+- Revogacao por registro passou a aceitar motivo operacional validado.
+- Console web exige motivo antes de revogar link publico.
+- Mock e Prisma preservam `revocationReason` nos metadados do token.
+- Auditoria registra o motivo junto da revogacao.
+- Teste automatizado cobre motivo em revogacao de link financeiro.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

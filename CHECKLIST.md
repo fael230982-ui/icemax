@@ -1971,3 +1971,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Motivo De Revogacao De Link
+
+- [x] Schema de motivo de revogacao criado.
+- [x] API recebe motivo na revogacao por registro.
+- [x] Mock preserva motivo em metadados.
+- [x] Prisma preserva motivo em metadados.
+- [x] Console exige motivo antes da revogacao.
+- [x] Auditoria inclui motivo operacional.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
