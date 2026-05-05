@@ -1198,5 +1198,11 @@ test("database transition exposes cutover schema seed and environment plans", as
   assert.ok(rollback.json().blockedDestructiveCommands[0].includes("pg_restore"));
   assert.ok(rollback.json().goNoGoCriteria[0].includes("Backup"));
 
+  const smoke = await app.inject({ method: "GET", url: "/database/prisma-smoke-test" });
+  assert.equal(smoke.statusCode, 200);
+  assert.equal(smoke.json().status, "skipped");
+  assert.equal(smoke.json().mode, "mock");
+  assert.ok(smoke.json().requiredBeforeRun.includes("npm run db:seed"));
+
   await app.close();
 });

@@ -1809,3 +1809,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Smoke Test Prisma
+
+- [x] Endpoint de smoke test Prisma criado.
+- [x] Checks minimos por tenant definidos.
+- [x] Modo mock retorna skipped com pre-requisitos.
+- [x] Console operacional conectado ao smoke test.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

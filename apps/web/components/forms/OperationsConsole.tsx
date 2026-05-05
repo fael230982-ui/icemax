@@ -534,6 +534,7 @@ export function OperationsConsole() {
         icemaxApi.dataReadinessBoard(token || undefined),
         icemaxApi.tenantIsolationGate(token || undefined),
         icemaxApi.databaseRollbackDrill(token || undefined),
+        icemaxApi.prismaSmokeTest(token || undefined),
       ]);
 
       return { checks: results.length, results };

@@ -644,6 +644,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre flag de idempotencia e ID deterministico de OS.
 - Documentado uso seguro do seed para homologacao repetivel.
 
+## 0.8.94 - Smoke Test Prisma
+
+- Adicionado endpoint `GET /database/prisma-smoke-test`.
+- Smoke test consulta contagens minimas por tenant quando `API_DATA_SOURCE=prisma`.
+- Em modo mock, endpoint retorna `skipped` com pre-requisitos claros para execucao real.
+- Console operacional passou a consultar o smoke test junto dos checks de virada para banco.
+- Teste automatizado cobre comportamento seguro em modo mock.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

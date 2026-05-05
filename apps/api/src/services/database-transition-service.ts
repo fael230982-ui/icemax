@@ -1,4 +1,5 @@
 import { config, isPrismaEnabled } from "../config";
+import { getPrisma } from "../database";
 
 const schemaDomains = [
   { domain: "multiempresa", models: ["Tenant", "User", "IntegrationSetting", "AuditLog"] },
@@ -364,4 +365,109 @@ export function getDatabaseRollbackDrill() {
     blockedDestructiveCommands: destructiveCommands,
     steps: rollbackDrillSteps,
   };
+}
+
+export async function getPrismaSmokeTest() {
+  const checks = [
+    { key: "tenant", label: "Tenant ICEMAX" },
+    { key: "user", label: "Usuarios" },
+    { key: "customer", label: "Clientes" },
+    { key: "equipment", label: "Equipamentos" },
+    { key: "serviceOrder", label: "Ordens de servico" },
+    { key: "serviceContract", label: "Contratos" },
+    { key: "part", label: "Pecas" },
+    { key: "stockLocation", label: "Locais de estoque" },
+    { key: "checklistTemplate", label: "Checklists" },
+    { key: "manual", label: "Manuais" },
+    { key: "integrationSetting", label: "Integracoes" },
+  ];
+
+  if (!isPrismaEnabled()) {
+    return {
+      generatedAt: new Date().toISOString(),
+      mode: "mock",
+      status: "skipped",
+      reason: "API_DATA_SOURCE ainda nao esta em modo prisma.",
+      requiredBeforeRun: ["DATABASE_URL", "API_DATA_SOURCE=prisma", "npm run db:migrate", "npm run db:seed"],
+      checks: checks.map((check) => ({ ...check, status: "not_run" })),
+    };
+  }
+
+  try {
+    const prisma = getPrisma();
+    const [
+      tenants,
+      users,
+      customers,
+      equipment,
+      serviceOrders,
+      serviceContracts,
+      parts,
+      stockLocations,
+      checklistTemplates,
+      manuals,
+      integrationSettings,
+    ] = await Promise.all([
+      prisma.tenant.count({ where: { id: config.defaultTenantId } }),
+      prisma.user.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.customer.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.equipment.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.serviceOrder.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.serviceContract.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.part.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.stockLocation.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.checklistTemplate.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.manual.count({ where: { tenantId: config.defaultTenantId } }),
+      prisma.integrationSetting.count({ where: { tenantId: config.defaultTenantId } }),
+    ]);
+    const counts = {
+      tenant: tenants,
+      user: users,
+      customer: customers,
+      equipment,
+      serviceOrder: serviceOrders,
+      serviceContract: serviceContracts,
+      part: parts,
+      stockLocation: stockLocations,
+      checklistTemplate: checklistTemplates,
+      manual: manuals,
+      integrationSetting: integrationSettings,
+    };
+    const rows = checks.map((check) => ({
+      ...check,
+      count: counts[check.key as keyof typeof counts],
+      status: counts[check.key as keyof typeof counts] > 0 ? "pass" : "empty",
+    }));
+    const empty = rows.filter((row) => row.status === "empty");
+
+    return {
+      generatedAt: new Date().toISOString(),
+      mode: "prisma",
+      status: empty.length > 0 ? "attention" : "passed",
+      defaultTenantId: config.defaultTenantId,
+      summary: {
+        checks: rows.length,
+        passed: rows.filter((row) => row.status === "pass").length,
+        empty: empty.length,
+      },
+      checks: rows,
+      nextActions: empty.length > 0
+        ? ["Executar `npm run db:seed` e repetir smoke test antes da homologacao."]
+        : ["Banco Prisma possui dados minimos para smoke test operacional."],
+    };
+  } catch (error) {
+    return {
+      generatedAt: new Date().toISOString(),
+      mode: "prisma",
+      status: "failed",
+      defaultTenantId: config.defaultTenantId,
+      error: error instanceof Error ? error.message : "Falha desconhecida ao consultar Prisma.",
+      nextActions: [
+        "Conferir DATABASE_URL.",
+        "Executar migracoes Prisma.",
+        "Executar seed idempotente.",
+        "Repetir validacao antes da homologacao.",
+      ],
+    };
+  }
 }

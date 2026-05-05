@@ -5,6 +5,7 @@ import {
   getDatabaseSchemaSummary,
   getDataReadinessBoard,
   getEnvironmentChecklist,
+  getPrismaSmokeTest,
   getSeedPlan,
   getTenantIsolationGate,
 } from "../services/database-transition-service";
@@ -17,4 +18,5 @@ export async function registerDatabaseTransitionRoutes(app: FastifyInstance) {
   app.get("/database/data-readiness-board", async () => getDataReadinessBoard());
   app.get("/database/tenant-isolation-gate", async () => getTenantIsolationGate());
   app.get("/database/rollback-drill", async () => getDatabaseRollbackDrill());
+  app.get("/database/prisma-smoke-test", async () => getPrismaSmokeTest());
 }
