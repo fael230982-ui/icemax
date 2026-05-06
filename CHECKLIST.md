@@ -3191,7 +3191,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Ordenacao Da Fila Offline No Web
 
@@ -3206,7 +3206,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Indicadores De Severidade Da Fila Offline Web
 
@@ -3221,7 +3221,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Fila Diaria Compacta Offline Web
 
@@ -3235,7 +3235,7 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
 
 ## Acoes Rapidas Na Fila Compacta Offline
 
@@ -3250,4 +3250,4 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Testes executados.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
-- [ ] Push para GitHub pendente.
+- [x] Push para GitHub realizado.
