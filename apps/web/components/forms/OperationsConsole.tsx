@@ -976,6 +976,165 @@ export function OperationsConsole() {
     );
   }
 
+  const actionGroups = [
+    {
+      title: "Comando e auditoria",
+      detail: "Visao executiva, diagnostico, homologacao e arquivos.",
+      actions: [
+        { label: "Auditoria produto", onClick: loadProductAuditSnapshot },
+        { label: "Comando do dia", onClick: loadDayCommandCenter },
+        { label: "Diagnostico", onClick: runPlatformCheck },
+        { label: "Homologacao", onClick: runHomologationCheck },
+        { label: "Virada banco", onClick: runDatabaseTransitionCheck },
+        { label: "Ver auditoria", onClick: loadAudit },
+        { label: "Enviar arquivo teste", onClick: uploadSample },
+      ],
+    },
+    {
+      title: "OS em campo",
+      detail: "Despacho, rota, execucao, evidencias, assinatura e fechamento.",
+      actions: [
+        { label: "Ver equipe no mapa", onClick: loadLocations },
+        { label: "Planta operacional", onClick: loadFloorPlanOperationalView },
+        { label: "Otimizar rota", onClick: optimizeRoute },
+        { label: "Despacho inteligente", onClick: loadDispatchRecommendations },
+        { label: "Aceite tecnico", onClick: createDispatchAssignmentDecision },
+        { label: "Prontidao da OS", onClick: loadDispatchReadiness },
+        { label: "Aviso deslocamento", onClick: loadDispatchDepartureCommunication },
+        { label: "Acompanhar rota", onClick: loadDispatchRouteTracking },
+        { label: "Pacote chegada", onClick: loadDispatchArrivalCheckIn },
+        { label: "Inicio execucao", onClick: loadFieldExecutionStart },
+        { label: "Evidencias campo", onClick: loadFieldExecutionEvidence },
+        { label: "Fechamento campo", onClick: loadFieldExecutionCloseout },
+        { label: "Assinatura cliente", onClick: loadFieldCustomerSignature },
+        { label: "Registrar assinatura", onClick: recordFieldCustomerSignature },
+        { label: "Board finalizacao", onClick: loadFieldFinalizationBoard },
+      ],
+    },
+    {
+      title: "Cliente, portal e pos-atendimento",
+      detail: "Acompanhamento publico, garantia, manuais, anexos e relacionamento.",
+      actions: [
+        { label: "OS pelo cliente", onClick: createPortalOrder },
+        { label: "Acompanhar OS cliente", onClick: loadCustomerTracking },
+        { label: "Link acompanhamento", onClick: createCustomerTrackingLink },
+        { label: "Anexos portal", onClick: createCustomerPortalAttachments },
+        { label: "Inventario links publicos", onClick: loadPublicTokenInventory },
+        { label: "Pos-atendimento", onClick: loadPostServicePlan },
+        { label: "Garantia OS", onClick: loadServiceOrderWarrantyPackage },
+        { label: "Manual OS", onClick: loadServiceOrderManualPackage },
+      ],
+    },
+    {
+      title: "IA, preparo e estoque",
+      detail: "Revisao profissional, diagnostico assistido, pecas e preparo da visita.",
+      actions: [
+        { label: "Preparo da visita", onClick: createVisitPreparation },
+        { label: "Reservar pecas", onClick: reserveServiceOrderParts },
+        { label: "Revisar texto IA", onClick: improveText },
+        { label: "Sugerir causas", onClick: suggestCauses },
+        { label: "Diagnostico visual IA", onClick: createVisualDiagnosisPackage },
+        { label: "Revisar conclusao OS", onClick: reviewServiceOrderCompletion },
+      ],
+    },
+    {
+      title: "Orcamentos e contratos",
+      detail: "Aprovacao, comunicacao, ativacao e recorrencia contratual.",
+      actions: [
+        { label: "Board orcamentos", onClick: loadQuoteApprovalBoard },
+        { label: "Lembretes orcamento", onClick: createQuoteApprovalReminders },
+        { label: "Aprovar orcamento", onClick: loadQuoteApprovalPackage },
+        { label: "Comunicar orcamento", onClick: loadQuoteCommunicationPackage },
+        { label: "Fila do orcamento", onClick: createQuoteCommunicationQueue },
+        { label: "Handoff orcamento", onClick: loadQuoteDecisionHandoff },
+        { label: "Ativar orcamento", onClick: activateApprovedQuote },
+        { label: "Prontidao orcamento", onClick: loadQuoteExecutionReadiness },
+        { label: "Timeline orcamento", onClick: loadQuoteApprovalTimeline },
+        { label: "Fila orcamentos aprovados", onClick: loadQuoteExecutionDispatchQueue },
+        { label: "Oportunidade contrato", onClick: loadContractOpportunity },
+        { label: "Proposta contrato", onClick: loadContractProposal },
+        { label: "Ativar contrato", onClick: loadContractActivationPlan },
+        { label: "Aceite contrato", onClick: loadContractAcceptancePackage },
+        { label: "Contrato aceito", onClick: activateAcceptedContract },
+        { label: "Calendario contratos", onClick: loadContractCalendar },
+        { label: "Financeiro contrato", onClick: loadContractBillingPlan },
+      ],
+    },
+    {
+      title: "Comunicacao e provedores",
+      detail: "E-mail, WhatsApp, fila persistente, cofre, observabilidade e freeze.",
+      actions: [
+        { label: "E-mail conclusao", onClick: loadFieldCompletionEmail },
+        { label: "Enfileirar e-mail", onClick: queueFieldCompletionEmail },
+        { label: "Comunicacao OS", onClick: loadServiceOrderCommunicationPackage },
+        { label: "Comunicacao contrato", onClick: loadContractCommunicationPackage },
+        { label: "Fila comunicacao OS", onClick: createServiceOrderCommunicationQueue },
+        { label: "Fila comunicacao contrato", onClick: createContractCommunicationQueue },
+        { label: "Fila persistente comunicacao", onClick: loadCommunicationPersistentQueueReadiness },
+        { label: "Ativar provedores", onClick: loadCommunicationProviderActivationPlan },
+        { label: "Cofre credenciais", onClick: loadProviderCredentialVaultPolicy },
+        { label: "Observabilidade provedores", onClick: loadProviderObservabilityGate },
+        { label: "Go-live provedores", onClick: loadProviderGoLiveDecisionBoard },
+        { label: "Evidencias provedores", onClick: loadProviderHomologationEvidencePack },
+        { label: "Runbook provedores", onClick: loadProviderFinalHomologationRunbook },
+        { label: "Ata provedores", onClick: loadProviderHomologationDecisionRecord },
+        { label: "Freeze provedores", onClick: loadProviderReleaseFreezeChecklist },
+        { label: "Snapshot provedores", onClick: loadProviderControlledReleaseSnapshot },
+      ],
+    },
+    {
+      title: "Offline tecnico",
+      detail: "Fila bloqueada, permissao, dry-run, evidencias e homologacao offline.",
+      actions: [
+        { label: "Pendencias offline", onClick: loadMobileOfflineEscalations },
+        { label: "Permissoes reenvio offline", onClick: loadMobileOfflineAssistedRetryPermissions },
+        { label: "Gate reenvio offline", onClick: loadMobileOfflineAssistedRetryProductionGate },
+        { label: "Auditoria reenvio offline", onClick: loadMobileOfflineAssistedRetryAuditContract },
+        { label: "Resumo reenvio offline", onClick: loadMobileOfflineAssistedRetryExecutiveSummary },
+        { label: "Plano reenvio offline", onClick: loadMobileOfflineAssistedRetryActionPlan },
+        { label: "Comando reenvio offline", onClick: loadMobileOfflineAssistedRetryDailyCommand },
+        { label: "Lote dry-run offline", onClick: loadMobileOfflineAssistedRetryDryRunBatch },
+        { label: "Evidencias reenvio offline", onClick: loadMobileOfflineAssistedRetryEvidencePackage },
+        { label: "Homologacao final offline", onClick: loadMobileOfflineAssistedRetryFinalHomologation },
+        { label: "Liberacao offline", onClick: loadMobileOfflineAssistedRetryControlledRelease },
+        { label: "Prontidao producao offline", onClick: loadMobileOfflineAssistedRetryProductionReadiness },
+        { label: "Infra reenvio offline", onClick: loadMobileOfflineAssistedRetryInfrastructureBacklog },
+        { label: "Homologar reenvio offline", onClick: runMobileOfflineRetryHomologation },
+      ],
+    },
+    {
+      title: "Whitelabel e escala",
+      detail: "Segundo tenant, custo, SLA, LGPD, contrato e go-live parceiro.",
+      actions: [
+        { label: "Rodar suite operacional", onClick: runBusinessSuite },
+        { label: "Rodar suite escala", onClick: runEnterpriseSuite },
+        { label: "Rodar 99 lotes", onClick: runAccelerationSuite },
+        { label: "Custos provedores offline", onClick: loadMobileOfflineAssistedRetryProviderCostPlan },
+        { label: "Gate provedores offline", onClick: loadMobileOfflineAssistedRetryProviderActivationGate },
+        { label: "Homologar provedores offline", onClick: loadMobileOfflineAssistedRetryProviderHomologationRunbook },
+        { label: "Evidencias provedores offline", onClick: loadMobileOfflineAssistedRetryProviderEvidenceBoard },
+        { label: "Decisao tenant offline", onClick: loadMobileOfflineAssistedRetryTenantActivationDecision },
+        { label: "Rollout whitelabel offline", onClick: loadMobileOfflineAssistedRetryWhitelabelRolloutPlan },
+        { label: "Onboarding whitelabel offline", onClick: loadMobileOfflineAssistedRetryWhitelabelOnboardingChecklist },
+        { label: "Handoff whitelabel offline", onClick: loadMobileOfflineAssistedRetryWhitelabelOperationalHandoff },
+        { label: "Go-live whitelabel offline", onClick: loadMobileOfflineAssistedRetryWhitelabelGoLiveReadiness },
+        { label: "Pos-go-live whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelPostGoLivePlan },
+        { label: "Health tenant whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelTenantHealthScore },
+        { label: "Melhoria whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelContinuousImprovement },
+        { label: "Escala whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelScaleDecision },
+        { label: "Pre-onboarding tenant", onClick: loadMobileOfflineAssistedRetryWhitelabelSecondTenantPreOnboarding },
+        { label: "Custos tenant", onClick: loadMobileOfflineAssistedRetryWhitelabelTenantCostMatrix },
+        { label: "Contrato whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelOperationalContractPack },
+        { label: "SLA whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelSupportSlaGate },
+        { label: "LGPD whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelSecurityPrivacyGate },
+        { label: "Aceite parceiro", onClick: loadMobileOfflineAssistedRetryWhitelabelPartnerGoLiveAcceptance },
+        { label: "Encerrar dia whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelEndOfDayClosure },
+        { label: "Comando manha whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelMorningCommand },
+        { label: "Matriz producao whitelabel", onClick: loadMobileOfflineAssistedRetryWhitelabelProductionExecutionMatrix },
+      ],
+    },
+  ];
+
   return (
     <div className="opsConsole">
       <div className="opsHeader">
@@ -1056,7 +1215,28 @@ export function OperationsConsole() {
         </form>
       </div>
 
-      <div className="opsActions">
+      <div className="opsJourneyGrid">
+        {actionGroups.map((group) => (
+          <section className="opsJourney" key={group.title}>
+            <div className="opsJourneyHeader">
+              <div>
+                <strong>{group.title}</strong>
+                <span>{group.detail}</span>
+              </div>
+              <small>{group.actions.length} comandos</small>
+            </div>
+            <div className="opsActions">
+              {group.actions.map((action) => (
+                <button type="button" className="secondary" onClick={action.onClick} key={action.label}>
+                  {action.label}
+                </button>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <div className="opsActions legacyActions" aria-hidden="true">
         <button type="button" className="secondary" onClick={uploadSample}>Enviar arquivo teste</button>
         <button type="button" className="secondary" onClick={loadAudit}>Ver auditoria</button>
         <button type="button" className="secondary" onClick={loadLocations}>Ver equipe no mapa</button>

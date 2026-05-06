@@ -260,6 +260,50 @@ h2 {
   flex-wrap: wrap;
 }
 
+.opsJourneyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.opsJourney {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.opsJourneyHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.opsJourneyHeader div,
+.opsJourneyHeader strong,
+.opsJourneyHeader span {
+  display: grid;
+  gap: 4px;
+}
+
+.opsJourneyHeader span,
+.opsJourneyHeader small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.opsJourneyHeader small {
+  white-space: nowrap;
+}
+
+.legacyActions {
+  display: none;
+}
+
 .opsPanel {
   display: grid;
   gap: 10px;
@@ -2235,6 +2279,7 @@ dd {
   }
 
   .opsHeader,
+  .opsJourneyGrid,
   .formGrid,
   .finalizationSummary,
   .finalizationControls,

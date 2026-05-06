@@ -1262,6 +1262,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de auditoria geral do produto.
 - Teste automatizado cobre bloqueios de producao, dominio mobile em atencao e acoes bloqueadas.
 
+## 0.8.171 - Console Web Por Jornadas Operacionais
+
+- Console web passou a agrupar comandos por jornadas reais de operacao.
+- Criados grupos para comando, OS em campo, cliente, IA/estoque, orcamentos, comunicacao, offline e whitelabel.
+- Lista plana anterior foi preservada de forma oculta para reduzir risco de regressao durante a transicao visual.
+- Experiencia de homologacao ficou mais legivel para demonstracao e uso gerencial.
+- Responsividade do console foi ajustada para mobile e desktop.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -3012,3 +3012,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Console Web Por Jornadas Operacionais
+
+- [x] Comandos do console agrupados por jornada real.
+- [x] Jornada de comando e auditoria criada.
+- [x] Jornada de OS em campo criada.
+- [x] Jornada de cliente, portal e pos-atendimento criada.
+- [x] Jornadas de IA, estoque, contratos, comunicacao, offline e whitelabel criadas.
+- [x] Lista plana anterior preservada de forma oculta para transicao segura.
+- [x] Estilos responsivos adicionados.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
