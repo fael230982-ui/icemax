@@ -336,6 +336,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerHomologationDecisionRecord.json().signOffs.some((item: { role: string; status: string }) =>
     item.role === "owner" && item.status === "pending"));
 
+  const providerReleaseFreezeChecklist = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-release-freeze-checklist",
+  });
+  assert.equal(providerReleaseFreezeChecklist.statusCode, 200);
+  assert.equal(providerReleaseFreezeChecklist.json().productionReleaseAllowed, false);
+  assert.equal(providerReleaseFreezeChecklist.json().projectPercentAfterBlock, 99);
+  assert.equal(providerReleaseFreezeChecklist.json().summary.canChangeWithoutRevalidation, false);
+  assert.equal(providerReleaseFreezeChecklist.json().freezePolicy.anyCredentialChangeExpiresDecision, true);
+  assert.ok(providerReleaseFreezeChecklist.json().blockedActions.includes("disable_kill_switch_during_freeze"));
+  assert.ok(providerReleaseFreezeChecklist.json().finalGates.some((item: { key: string; status: string }) =>
+    item.key === "evidence_hashes_attached" && item.status === "blocked"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

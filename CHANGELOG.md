@@ -1238,6 +1238,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de ata de provedores.
 - Teste automatizado cobre bloqueio sem sign-offs, imutabilidade e expiracao por troca de credencial.
 
+## 0.8.168 - Freeze De Release De Provedores
+
+- Criado endpoint de checklist de freeze de release de provedores.
+- Freeze cobre templates, credenciais, custos, LGPD, observabilidade, webhooks e kill switch.
+- Release de producao permanece bloqueado ate ata, evidencias por hash, fallback, custo e LGPD.
+- Console web ganhou consulta de freeze de provedores.
+- Teste automatizado cobre expiracao por mudanca, bloqueio de kill switch e evidencias pendentes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

@@ -13,6 +13,7 @@ import {
   getProviderHomologationDecisionRecord,
   getProviderHomologationEvidencePack,
   getProviderObservabilityGate,
+  getProviderReleaseFreezeChecklist,
   listMockIntegrations,
   listMockNotifications,
   listMockWhatsappTemplates,
@@ -98,6 +99,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderHomologationDecisionRecord(context.tenantId);
+  });
+
+  app.get("/integrations/provider-release-freeze-checklist", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderReleaseFreezeChecklist(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

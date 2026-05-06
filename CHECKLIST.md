@@ -2964,3 +2964,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Freeze De Release De Provedores
+
+- [x] Endpoint de freeze de release criado.
+- [x] Templates, credenciais, custos, LGPD, observabilidade e kill switch cobertos.
+- [x] Release de producao permanece bloqueado.
+- [x] Mudancas criticas expiram a decisao.
+- [x] Console web ganhou consulta de freeze.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

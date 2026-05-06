@@ -921,3 +921,95 @@ export async function getProviderHomologationDecisionRecord(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderReleaseFreezeChecklist(tenantId: string) {
+  const frozenSurfaces = [
+    {
+      key: "notification_templates",
+      label: "Templates de comunicacao",
+      freezeStatus: "frozen_until_new_decision",
+      allowedChanges: ["correcao ortografica sem mudar sentido", "ajuste visual validado em dry-run"],
+      blockedChanges: ["novo template WhatsApp", "novo destinatario automatico", "mudanca de anexo sensivel"],
+    },
+    {
+      key: "provider_credentials",
+      label: "Credenciais e configuracoes de provider",
+      freezeStatus: "frozen_until_new_decision",
+      allowedChanges: ["revogacao emergencial", "rotacao com nova homologacao"],
+      blockedChanges: ["troca de token sem ata", "alteracao de dominio sem smoke test", "remocao de restricao de chave"],
+    },
+    {
+      key: "cost_limits",
+      label: "Limites de custo por tenant",
+      freezeStatus: "frozen_until_owner_review",
+      allowedChanges: ["reduzir limite", "bloquear provider"],
+      blockedChanges: ["aumentar budget sem owner", "remover alerta de custo", "desligar kill switch financeiro"],
+    },
+    {
+      key: "privacy_rules",
+      label: "LGPD, opt-in e mascaramento",
+      freezeStatus: "frozen_until_admin_review",
+      allowedChanges: ["aumentar protecao", "bloquear canal sem consentimento"],
+      blockedChanges: ["reduzir mascaramento", "ignorar opt-in", "ampliar retencao sem aceite"],
+    },
+    {
+      key: "observability_rules",
+      label: "Observabilidade, webhooks e kill switch",
+      freezeStatus: "frozen_until_engineering_review",
+      allowedChanges: ["reduzir limiar de bloqueio", "adicionar alerta"],
+      blockedChanges: ["desativar webhook", "desligar kill switch", "aumentar retentativas sem revisao"],
+    },
+  ];
+
+  const finalGates = [
+    { key: "homologation_decision_record", label: "Ata de decisao assinada", status: "blocked", requiredRole: "owner" },
+    { key: "evidence_hashes_attached", label: "Hashes de evidencias anexados", status: "blocked", requiredRole: "engineering" },
+    { key: "support_fallback_ready", label: "Fallback manual pronto", status: "blocked", requiredRole: "support" },
+    { key: "cost_guard_active", label: "Guard de custo ativo", status: "blocked", requiredRole: "owner" },
+    { key: "lgpd_acceptance_active", label: "Aceite LGPD ativo", status: "blocked", requiredRole: "admin" },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_release_freeze_blocked",
+    projectPercentAfterBlock: 99,
+    productionReleaseAllowed: false,
+    summary: {
+      frozenSurfaces: frozenSurfaces.length,
+      finalGates: finalGates.length,
+      blockedGates: finalGates.filter((item) => item.status === "blocked").length,
+      freezeRequiredBeforeGoLive: true,
+      canChangeWithoutRevalidation: false,
+    },
+    frozenSurfaces,
+    finalGates,
+    freezePolicy: {
+      anyProviderChangeExpiresDecision: true,
+      anyCredentialChangeExpiresDecision: true,
+      anyPrivacyRuleChangeExpiresDecision: true,
+      anyCostLimitIncreaseExpiresDecision: true,
+      emergencyRollbackBypassesApproval: true,
+    },
+    emergencyActions: [
+      "revogar credencial",
+      "bloquear provider por tenant",
+      "congelar retentativas automaticas",
+      "acionar fallback manual",
+      "registrar incidente pos-acao",
+    ],
+    blockedActions: [
+      "release_provider_after_unreviewed_change",
+      "increase_cost_limit_during_freeze",
+      "change_template_after_signoff",
+      "disable_kill_switch_during_freeze",
+      "approve_release_without_evidence_hashes",
+    ],
+    nextActions: [
+      "Criar snapshot final de release.",
+      "Vincular checklist ao board de producao.",
+      "Executar ultima validacao antes do push final.",
+      "Manter push pendente ate decisao de fechamento do dia.",
+    ],
+  };
+}
