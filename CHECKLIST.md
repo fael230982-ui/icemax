@@ -3419,3 +3419,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Destaque Da Tabela Completa Offline
+
+- [x] Destaque visual por ancora criado na tabela completa.
+- [x] Estado `:target` usado sem estado adicional no React.
+- [x] Margem de rolagem do destino ajustada.
+- [x] Estilo alinhado ao risco oculto critico.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

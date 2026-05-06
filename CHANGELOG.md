@@ -1465,6 +1465,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Atalho aparece apenas quando a maior severidade oculta for igual ou superior a 85.
 - Documentacao operacional criada para o atalho de risco oculto.
 
+## 0.8.199 - Destaque Da Tabela Completa Offline
+
+- Tabela completa offline passou a receber destaque visual ao ser acessada pela ancora.
+- Destaque usa estado `:target` sem criar estado adicional no painel.
+- Margem de rolagem ajustada para manter o destino confortavel na tela.
+- Documentacao operacional criada para destaque da tabela completa.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
