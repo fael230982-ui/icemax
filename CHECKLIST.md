@@ -2948,3 +2948,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Ata De Decisao De Homologacao De Provedores
+
+- [x] Endpoint de ata de decisao de homologacao criado.
+- [x] Sign-offs de owner, admin, engenharia e suporte definidos.
+- [x] Motivo, escopo, validade, rollback owner e evidencias por hash definidos.
+- [x] Liberacao de producao permanece bloqueada.
+- [x] Console web ganhou consulta de ata de provedores.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

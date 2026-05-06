@@ -828,3 +828,96 @@ export async function getProviderFinalHomologationRunbook(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderHomologationDecisionRecord(tenantId: string) {
+  const signOffs = [
+    {
+      role: "owner",
+      label: "Aprovacao comercial e budget",
+      status: "pending",
+      required: true,
+      evidenceRequired: ["budget por tenant", "limite de custo", "responsavel financeiro"],
+    },
+    {
+      role: "admin",
+      label: "Aprovacao LGPD e operacao",
+      status: "pending",
+      required: true,
+      evidenceRequired: ["opt-in", "termo LGPD", "politica de IA", "retencao de evidencias"],
+    },
+    {
+      role: "engineering",
+      label: "Aprovacao tecnica",
+      status: "pending",
+      required: true,
+      evidenceRequired: ["fila persistente", "cofre", "webhooks", "kill switch"],
+    },
+    {
+      role: "support",
+      label: "Aprovacao de suporte e fallback",
+      status: "pending",
+      required: true,
+      evidenceRequired: ["procedimento manual", "SLA de contingencia", "roteiro de atendimento"],
+    },
+  ];
+
+  const decisionFields = [
+    { key: "decision", label: "Decisao", required: true, allowedValues: ["approved_limited_pilot", "rejected", "pending_evidence"] },
+    { key: "reason", label: "Motivo da decisao", required: true, minLength: 20 },
+    { key: "scope", label: "Escopo aprovado", required: true, allowedValues: ["dry_run", "limited_tenant_pilot", "production_blocked"] },
+    { key: "expiresAt", label: "Validade da decisao", required: true, maxDays: 30 },
+    { key: "rollbackOwner", label: "Responsavel pelo rollback", required: true },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_homologation_decision_pending",
+    projectPercentAfterBlock: 98,
+    productionReleaseAllowed: false,
+    summary: {
+      signOffs: signOffs.length,
+      pendingSignOffs: signOffs.filter((item) => item.status === "pending").length,
+      requiredDecisionFields: decisionFields.length,
+      decisionCanExpire: true,
+      requiresRevalidationAfterChange: true,
+    },
+    signOffs,
+    decisionFields,
+    decisionTemplate: {
+      defaultDecision: "pending_evidence",
+      allowedScope: "dry_run",
+      realTrafficAllowed: false,
+      limitedPilotAllowed: false,
+      requiresAllSignOffs: true,
+    },
+    auditPolicy: {
+      immutableAfterApproval: true,
+      recordApproverUserId: true,
+      recordApprovalIp: true,
+      recordEvidenceHashes: true,
+      recordRejectedReasons: true,
+      reopenCreatesNewVersion: true,
+    },
+    expirationPolicy: {
+      maxDecisionValidityDays: 30,
+      expireOnProviderConfigChange: true,
+      expireOnCredentialRotation: true,
+      expireOnBudgetChange: true,
+      expireOnLgpdPolicyChange: true,
+    },
+    blockedActions: [
+      "approve_provider_without_all_signoffs",
+      "approve_provider_without_reason",
+      "approve_provider_without_expiration",
+      "approve_provider_after_config_change_without_revalidation",
+      "edit_approved_decision_in_place",
+    ],
+    nextActions: [
+      "Criar comando persistente para registrar decisao.",
+      "Vincular hashes de evidencias ao registro formal.",
+      "Exigir nova versao quando houver mudanca de provider, budget ou credencial.",
+      "Conectar o registro ao board de go-live whitelabel.",
+    ],
+  };
+}

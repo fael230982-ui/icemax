@@ -10,6 +10,7 @@ import {
   getProviderCredentialVaultPolicy,
   getProviderFinalHomologationRunbook,
   getProviderGoLiveDecisionBoard,
+  getProviderHomologationDecisionRecord,
   getProviderHomologationEvidencePack,
   getProviderObservabilityGate,
   listMockIntegrations,
@@ -91,6 +92,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderFinalHomologationRunbook(context.tenantId);
+  });
+
+  app.get("/integrations/provider-homologation-decision-record", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderHomologationDecisionRecord(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

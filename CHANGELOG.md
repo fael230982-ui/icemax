@@ -1230,6 +1230,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de runbook final de provedores.
 - Teste automatizado cobre bloqueio de producao, validacao LGPD, custo e rollback drill.
 
+## 0.8.167 - Ata De Decisao De Homologacao De Provedores
+
+- Criado endpoint de ata de decisao de homologacao de provedores.
+- Ata exige sign-offs de owner, admin, engenharia e suporte antes de qualquer liberacao.
+- Decisao formal inclui motivo, escopo, validade, rollback owner e evidencias por hash.
+- Console web ganhou consulta de ata de provedores.
+- Teste automatizado cobre bloqueio sem sign-offs, imutabilidade e expiracao por troca de credencial.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

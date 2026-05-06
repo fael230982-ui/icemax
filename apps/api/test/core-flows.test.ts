@@ -322,6 +322,20 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerFinalHomologationRunbook.json().steps.some((item: { key: string; stopOnFailure: boolean }) =>
     item.key === "validate_cost_and_budget" && item.stopOnFailure === true));
 
+  const providerHomologationDecisionRecord = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-homologation-decision-record",
+  });
+  assert.equal(providerHomologationDecisionRecord.statusCode, 200);
+  assert.equal(providerHomologationDecisionRecord.json().productionReleaseAllowed, false);
+  assert.equal(providerHomologationDecisionRecord.json().projectPercentAfterBlock, 98);
+  assert.equal(providerHomologationDecisionRecord.json().decisionTemplate.realTrafficAllowed, false);
+  assert.equal(providerHomologationDecisionRecord.json().auditPolicy.immutableAfterApproval, true);
+  assert.equal(providerHomologationDecisionRecord.json().expirationPolicy.expireOnCredentialRotation, true);
+  assert.ok(providerHomologationDecisionRecord.json().blockedActions.includes("approve_provider_without_all_signoffs"));
+  assert.ok(providerHomologationDecisionRecord.json().signOffs.some((item: { role: string; status: string }) =>
+    item.role === "owner" && item.status === "pending"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",
