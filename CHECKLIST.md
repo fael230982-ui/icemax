@@ -3251,3 +3251,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [x] Push para GitHub realizado.
+
+## Retorno Das Acoes Na Fila Compacta Offline
+
+- [x] Estado individual por card criado.
+- [x] Feedback de acao em andamento criado.
+- [x] Feedback de conclusao criado.
+- [x] Feedback de falha criado.
+- [x] Resultado global do console preservado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

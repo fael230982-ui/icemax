@@ -72,6 +72,7 @@ export function OperationsConsole() {
   const [mobileOfflineOwnerFilter, setMobileOfflineOwnerFilter] = useState("all");
   const [mobileOfflineTechnicianFilter, setMobileOfflineTechnicianFilter] = useState("all");
   const [mobileOfflineSort, setMobileOfflineSort] = useState("severity_desc");
+  const [compactActionStatus, setCompactActionStatus] = useState<Record<string, string>>({});
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
   const mobileOfflineItems = mobileOfflineEscalations?.data ?? [];
@@ -121,6 +122,22 @@ export function OperationsConsole() {
       setStatus(`${label}: concluido.`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Falha inesperada.");
+    }
+  }
+
+  async function runCompactMobileOfflineAction(recordId: string, label: string, action: () => Promise<unknown>) {
+    setCompactActionStatus((current) => ({ ...current, [recordId]: `${label}: em andamento.` }));
+
+    try {
+      setStatus(`${label}: enviando...`);
+      const response = await action();
+      setResult(JSON.stringify(response, null, 2));
+      setStatus(`${label}: concluido.`);
+      setCompactActionStatus((current) => ({ ...current, [recordId]: `${label}: concluido.` }));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Falha inesperada.";
+      setStatus(message);
+      setCompactActionStatus((current) => ({ ...current, [recordId]: `${label}: falhou.` }));
     }
   }
 
@@ -1534,16 +1551,43 @@ export function OperationsConsole() {
                       <span className={getEscalationPriorityClass(item.priority)}>{item.priority}</span>
                     </div>
                     <div className="compactQueueActions">
-                      <button type="button" className="secondary" onClick={() => prepareMobileOfflineAssistedRetry(item.id)}>
+                      <button
+                        type="button"
+                        className="secondary"
+                        onClick={() => void runCompactMobileOfflineAction(item.id, "Preparar reenvio", () =>
+                          icemaxApi.prepareMobileOfflineAssistedRetry(item.id, {
+                            approvedBy: "RAFAEL DA SILVA BEZEERA",
+                            reason: "Pendencia revisada pela fila compacta antes do reenvio assistido.",
+                          }, token || undefined),
+                        )}
+                      >
                         Preparar
                       </button>
-                      <button type="button" className="secondary" onClick={() => runMobileOfflineAssistedRetryDryRun(item.id)}>
+                      <button
+                        type="button"
+                        className="secondary"
+                        onClick={() => void runCompactMobileOfflineAction(item.id, "Simular reenvio", () =>
+                          icemaxApi.runMobileOfflineAssistedRetryDryRun(item.id, {
+                            executedBy: "RAFAEL DA SILVA BEZEERA",
+                            idempotencyKey: `mobile-offline-retry:${item.id}`,
+                          }, token || undefined),
+                        )}
+                      >
                         Simular
                       </button>
-                      <button type="button" className="secondary" onClick={() => loadMobileOfflineEscalationTimeline(item.id)}>
+                      <button
+                        type="button"
+                        className="secondary"
+                        onClick={() => void runCompactMobileOfflineAction(item.id, "Abrir timeline", () =>
+                          icemaxApi.mobileOfflineEscalationTimeline(item.id, token || undefined),
+                        )}
+                      >
                         Timeline
                       </button>
                     </div>
+                    {compactActionStatus[item.id] ? (
+                      <span className="compactQueueFeedback">{compactActionStatus[item.id]}</span>
+                    ) : null}
                   </article>
                 ))}
               </div>

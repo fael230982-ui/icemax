@@ -434,6 +434,14 @@ h2 {
   font-size: 12px;
 }
 
+.compactQueueFeedback {
+  display: block;
+  min-height: 20px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .tableWrap {
   overflow-x: auto;
 }

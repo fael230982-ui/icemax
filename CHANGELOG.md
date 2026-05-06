@@ -1381,6 +1381,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Layout dos botoes foi ajustado para leitura rapida no desktop e no mobile.
 - Documentacao operacional criada para acoes rapidas da fila compacta.
 
+## 0.8.187 - Retorno Das Acoes Na Fila Compacta Offline
+
+- Cards compactos passaram a exibir o resultado da ultima acao disparada.
+- Feedback por pendencia informa acao em andamento, conclusao ou falha.
+- Acoes compactas atualizam tambem o resultado global do console.
+- Documentacao operacional criada para retorno visual da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
