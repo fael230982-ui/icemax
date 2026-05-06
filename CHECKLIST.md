@@ -3134,3 +3134,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Revisao De Pendencias Criticas No Mobile
+
+- [x] Painel offline recebeu a OS ativa.
+- [x] Pendencias criticas da OS ativa ficaram destacadas.
+- [x] Itens criticos mostram tentativa atual.
+- [x] Acao direta de sincronizacao foi adicionada ao bloco critico.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

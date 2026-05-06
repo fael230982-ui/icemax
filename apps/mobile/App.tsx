@@ -413,6 +413,7 @@ export default function App() {
           <SyncPanel
             pendingActions={pendingActions}
             status={syncStatus}
+            activeServiceOrderId={activeServiceOrderId}
             onAddCheckIn={addCheckIn}
             onAddExecutionPack={addExecutionPack}
             onAddVisitPreparation={addVisitPreparationAck}

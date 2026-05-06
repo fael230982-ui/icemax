@@ -1,9 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { buildFieldCommandChecklist, maxOfflineRetryCount, sortOfflineQueueForSync, summarizeOfflineQueue, type OfflineAction } from "../services/api";
+import {
+  buildFieldCommandChecklist,
+  getCriticalPendingActionsForServiceOrder,
+  maxOfflineRetryCount,
+  sortOfflineQueueForSync,
+  summarizeOfflineQueue,
+  type OfflineAction,
+} from "../services/api";
 
 type SyncPanelProps = {
   pendingActions: OfflineAction[];
   status: string;
+  activeServiceOrderId: string;
   onAddCheckIn: () => void;
   onAddExecutionPack: () => void;
   onAddVisitPreparation: () => void;
@@ -25,10 +33,11 @@ type SyncPanelProps = {
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onAddFieldCommand, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, activeServiceOrderId, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onAddFieldCommand, onSync }: SyncPanelProps) {
   const summary = summarizeOfflineQueue(pendingActions);
   const sortedActions = sortOfflineQueueForSync(pendingActions);
   const commandChecklist = buildFieldCommandChecklist(pendingActions);
+  const activeCriticalActions = getCriticalPendingActionsForServiceOrder(pendingActions, activeServiceOrderId);
 
   return (
     <View style={styles.card}>
@@ -36,6 +45,22 @@ export function SyncPanel({ pendingActions, status, onAddCheckIn, onAddExecution
         <Text style={styles.title}>Sincronizacao offline</Text>
         <Text style={styles.status}>{status}</Text>
       </View>
+      {activeCriticalActions.length ? (
+        <View style={styles.criticalBox}>
+          <Text style={styles.criticalTitle}>Pendencias criticas da OS {activeServiceOrderId}</Text>
+          <Text style={styles.criticalDetail}>
+            {activeCriticalActions.length} item trava a troca de missao ate sincronizar ou revisar.
+          </Text>
+          {activeCriticalActions.map((action) => (
+            <Text key={action.id} style={styles.criticalItem}>
+              {action.label} - tentativa {action.retryCount ?? 0}
+            </Text>
+          ))}
+          <TouchableOpacity style={[styles.button, styles.criticalButton]} onPress={onSync}>
+            <Text style={styles.buttonText}>Sincronizar criticas</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.button} onPress={onAddCheckIn}>
           <Text style={styles.buttonText}>Check-in offline</Text>
@@ -166,6 +191,30 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: "#102033",
+  },
+  criticalBox: {
+    gap: 7,
+    borderColor: "#F4B4B4",
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: "#FFF5F5",
+    padding: 12,
+  },
+  criticalTitle: {
+    color: "#7F1D1D",
+    fontWeight: "900",
+  },
+  criticalDetail: {
+    color: "#7F1D1D",
+    fontWeight: "700",
+  },
+  criticalItem: {
+    color: "#102033",
+    fontWeight: "800",
+  },
+  criticalButton: {
+    alignSelf: "flex-start",
+    backgroundColor: "#B42318",
   },
   pending: {
     color: "#102033",

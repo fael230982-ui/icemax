@@ -1324,6 +1324,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Status do app informa a quantidade de pendencias criticas antes de permitir nova missao.
 - Documentacao operacional criada para a trava de troca de OS.
 
+## 0.8.179 - Revisao De Pendencias Criticas No Mobile
+
+- Painel offline passou a destacar pendencias criticas da OS ativa.
+- Tecnico consegue ver quais itens estao travando a troca de missao.
+- Bloco critico exibe quantidade, tentativa atual e acao direta de sincronizacao.
+- Documentacao operacional criada para revisao de pendencias criticas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
