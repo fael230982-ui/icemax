@@ -1270,6 +1270,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Experiencia de homologacao ficou mais legivel para demonstracao e uso gerencial.
 - Responsividade do console foi ajustada para mobile e desktop.
 
+## 0.8.172 - Missao Mobile Do Tecnico Em Campo
+
+- Aplicativo mobile ganhou painel de missao atual do tecnico.
+- Missao consolida OS, cliente, equipamento, status, prioridade, ETA e risco offline.
+- Jornada visual mostra chegada, diagnostico, execucao e fechamento.
+- Evidencias obrigatorias e acoes rapidas ficaram visiveis antes do fluxo offline.
+- Nova documentacao descreve a experiencia de campo e proximas evolucoes.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

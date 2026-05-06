@@ -2,11 +2,12 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ContractCard } from "./src/components/ContractCard";
+import { FieldMissionPanel } from "./src/components/FieldMissionPanel";
 import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldEvidenceRequirements, fieldJourneySteps, fieldMission, fieldQuickActions, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -219,6 +220,15 @@ export default function App() {
           <Text style={styles.eyebrow}>ICEMAX Tecnico</Text>
           <Text style={styles.title}>Operacao de campo</Text>
         </View>
+
+        <Section title="Missao atual">
+          <FieldMissionPanel
+            mission={fieldMission}
+            steps={fieldJourneySteps}
+            evidence={fieldEvidenceRequirements}
+            quickActions={fieldQuickActions}
+          />
+        </Section>
 
         <Section title="Ordens de servico">
           {orders.map((order) => (

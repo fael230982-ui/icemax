@@ -4,6 +4,40 @@ export const orders = [
   { id: "#1051", customer: "Mercado Avante", status: "Agendada", detail: "Dreno vazando", priority: "Alta" },
 ];
 
+export const fieldMission = {
+  serviceOrderId: "1049",
+  customer: "Condominio Central",
+  equipment: "Split Hi Wall 24.000 BTUs - Sala de reuniao",
+  status: "Pronto para executar",
+  priority: "Alta",
+  routeEta: "18 min",
+  offlineRisk: "medio",
+  nextAction: "Confirmar chegada, validar escopo aprovado e iniciar evidencias.",
+};
+
+export const fieldJourneySteps = [
+  { title: "Chegada", detail: "Registrar localizacao, responsavel no local e condicao inicial.", state: "ready" },
+  { title: "Diagnostico", detail: "Conferir sintomas, fotos e medicoes antes de intervir.", state: "next" },
+  { title: "Execucao", detail: "Executar apenas o escopo aprovado e registrar pecas usadas.", state: "locked" },
+  { title: "Fechamento", detail: "Revisar relatorio, evidencias, garantia e assinatura.", state: "locked" },
+];
+
+export const fieldEvidenceRequirements = [
+  { title: "Fotos obrigatorias", detail: "Antes, durante e depois do atendimento.", status: "2 pendentes" },
+  { title: "Checklist tecnico", detail: "Limpeza, dreno, corrente, temperatura e vazamento.", status: "0/5" },
+  { title: "Assinatura", detail: "Nome, relacao com cliente, aceite e copia opcional.", status: "bloqueada" },
+  { title: "Relatorio IA", detail: "Texto sera revisado antes do envio ao cliente.", status: "rascunho" },
+];
+
+export const fieldQuickActions = [
+  { title: "Check-in", detail: "Salva chegada e posicao atual na fila offline." },
+  { title: "Foto before", detail: "Registra evidencia inicial protegida." },
+  { title: "Checklist", detail: "Marca itens obrigatorios da OS." },
+  { title: "Peca usada", detail: "Baixa item reservado do veiculo." },
+  { title: "Assinatura", detail: "Coleta aceite quando fechamento estiver completo." },
+  { title: "Sincronizar", detail: "Envia fila quando houver conexao segura." },
+];
+
 export const tools = [
   { title: "Checklist", detail: "Itens obrigatorios por servico" },
   { title: "QR Code", detail: "Abrir ficha do equipamento" },

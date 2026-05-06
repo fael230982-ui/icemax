@@ -3029,3 +3029,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Missao Mobile Do Tecnico Em Campo
+
+- [x] Painel de missao atual criado no app mobile.
+- [x] OS, cliente, equipamento, prioridade, ETA e risco offline destacados.
+- [x] Jornada de chegada, diagnostico, execucao e fechamento criada.
+- [x] Evidencias obrigatorias ficaram visiveis.
+- [x] Acoes rapidas de campo ficaram visiveis.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
