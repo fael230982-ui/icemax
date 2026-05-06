@@ -2774,3 +2774,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Comando Da Manha Whitelabel
+
+- [x] Endpoint de comando da manha criado.
+- [x] Frentes de producao, mobile, banco, web e provedores priorizadas.
+- [x] Regras de bloqueio de producao real e segredos preservadas.
+- [x] Percentual planejado e objetivo estendido registrados.
+- [x] Console web ganhou consulta de comando da manha.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

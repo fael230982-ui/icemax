@@ -2901,6 +2901,99 @@ export function getMobileOfflineAssistedRetryWhitelabelEndOfDayClosure() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelMorningCommand() {
+  const closure = getMobileOfflineAssistedRetryWhitelabelEndOfDayClosure();
+  const workstreams = [
+    {
+      key: "production_readiness",
+      label: "Prontidao de producao",
+      priority: "critical",
+      owner: "platform",
+      outcome: "Converter bloqueios em criterios objetivos de liberacao sem ativar provedores reais.",
+      targetPercentGain: 1,
+    },
+    {
+      key: "mobile_field_experience",
+      label: "Experiencia mobile do tecnico",
+      priority: "critical",
+      owner: "field_product",
+      outcome: "Fortalecer operacao em campo com offline, evidencias, assinatura, checklist e leitura rapida.",
+      targetPercentGain: 1,
+    },
+    {
+      key: "database_persistence",
+      label: "Banco persistente e isolamento",
+      priority: "high",
+      owner: "data",
+      outcome: "Aproximar o mock da virada real para Prisma, tenantId e auditoria persistente.",
+      targetPercentGain: 1,
+    },
+    {
+      key: "web_command_center",
+      label: "Console web gerencial",
+      priority: "high",
+      owner: "operations",
+      outcome: "Melhorar velocidade de decisao com consultas executivas e botoes de homologacao.",
+      targetPercentGain: 0,
+    },
+    {
+      key: "provider_activation_readiness",
+      label: "Preparacao de provedores externos",
+      priority: "medium",
+      owner: "integrations",
+      outcome: "Manter Google, Meta, e-mail e OpenAI planejados sem segredos no repositorio.",
+      targetPercentGain: 0,
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_morning_command_ready",
+    realExecutionAllowed: false,
+    summary: {
+      sourceProjectPercent: closure.summary.projectPercent,
+      plannedProjectPercent: 87,
+      stretchProjectPercent: 88,
+      workstreams: workstreams.length,
+      criticalWorkstreams: workstreams.filter((item) => item.priority === "critical").length,
+      productionStillBlocked: true,
+      githubPushRequiredNow: false,
+    },
+    operatingRules: {
+      keepProductionBlocked: true,
+      keepSecretsOutOfRepository: true,
+      validateBeforeCommit: true,
+      pushAtEndOfDayUnlessRequested: true,
+      avoidLargeUnvalidatedSurface: true,
+    },
+    workstreams,
+    executionOrder: [
+      "production_readiness",
+      "mobile_field_experience",
+      "database_persistence",
+      "web_command_center",
+      "provider_activation_readiness",
+    ],
+    todayDefinitionOfDone: [
+      "Novo bloco com endpoint, console web, teste, documentacao, changelog e checklist.",
+      "Validacao local executada com guard de segredos, typecheck, testes e build.",
+      "Commit local criado com escopo fechado.",
+      "Percentual do bloco reportado ao dono do projeto.",
+    ],
+    blockedActions: [
+      "enable_real_provider_calls",
+      "store_provider_secret_in_repository",
+      "activate_real_partner_customer",
+      "skip_validation_before_commit",
+    ],
+    nextActions: [
+      "Iniciar pela prontidao de producao e experiencia mobile.",
+      "Manter provedores externos em modo planejado ate existirem contas e limites aprovados.",
+      "Registrar cada avancado relevante em checklist, changelog e testes.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",

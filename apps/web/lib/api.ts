@@ -313,6 +313,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-partner-go-live-acceptance", { token }),
   mobileOfflineAssistedRetryWhitelabelEndOfDayClosure: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-end-of-day-closure", { token }),
+  mobileOfflineAssistedRetryWhitelabelMorningCommand: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-morning-command", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>

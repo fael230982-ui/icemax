@@ -1611,6 +1611,19 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
     item.key === "production_readiness_followup"));
   assert.ok(retryWhitelabelEndOfDayClosure.json().blockedActions.includes("activate_partner_without_acceptance"));
 
+  const retryWhitelabelMorningCommand = await app.inject({
+    method: "GET",
+    url: "/platform/mobile-offline-escalations/whitelabel-morning-command",
+  });
+  assert.equal(retryWhitelabelMorningCommand.statusCode, 200);
+  assert.equal(retryWhitelabelMorningCommand.json().realExecutionAllowed, false);
+  assert.equal(retryWhitelabelMorningCommand.json().summary.sourceProjectPercent, 86);
+  assert.equal(retryWhitelabelMorningCommand.json().summary.plannedProjectPercent, 87);
+  assert.equal(retryWhitelabelMorningCommand.json().operatingRules.keepSecretsOutOfRepository, true);
+  assert.ok(retryWhitelabelMorningCommand.json().workstreams.some((item: { key: string }) =>
+    item.key === "mobile_field_experience"));
+  assert.ok(retryWhitelabelMorningCommand.json().blockedActions.includes("enable_real_provider_calls"));
+
   const mobileOfflineReview = await app.inject({
     method: "POST",
     url: "/platform/mobile-offline-escalations/offline-blocked-001/review",

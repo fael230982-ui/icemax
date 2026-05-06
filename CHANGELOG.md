@@ -1142,6 +1142,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de encerramento whitelabel.
 - Teste automatizado cobre percentual do dia, push recomendado e bloqueio de ativacao prematura.
 
+## 0.8.156 - Comando Da Manha Whitelabel
+
+- Criado endpoint de comando da manha whitelabel.
+- Plano transforma o fechamento do dia em frentes priorizadas para producao, mobile, banco, web e provedores.
+- Politica mantem producao real bloqueada, segredos fora do repositorio e push apenas quando adequado.
+- Console web ganhou consulta de comando da manha.
+- Teste automatizado cobre percentual planejado, regra de segredos e bloqueio de provedores reais.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
