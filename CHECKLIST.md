@@ -2885,3 +2885,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Gate De Observabilidade De Provedores
+
+- [x] Endpoint de gate de observabilidade criado.
+- [x] E-mail, WhatsApp, mapas e OpenAI cobertos.
+- [x] Saude, custo, webhook e kill switch definidos.
+- [x] Trafego real permanece bloqueado.
+- [x] Console web ganhou consulta de observabilidade.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

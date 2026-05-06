@@ -269,6 +269,20 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerCredentialVaultPolicy.json().credentialGroups.some((item: { provider: string; displayPolicy: string }) =>
     item.provider === "whatsapp" && item.displayPolicy === "never_show_token"));
 
+  const providerObservabilityGate = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-observability-gate",
+  });
+  assert.equal(providerObservabilityGate.statusCode, 200);
+  assert.equal(providerObservabilityGate.json().productionTrafficAllowed, false);
+  assert.equal(providerObservabilityGate.json().projectPercentAfterBlock, 94);
+  assert.equal(providerObservabilityGate.json().summary.killSwitchRequired, true);
+  assert.equal(providerObservabilityGate.json().incidentPolicy.freezeAutomaticRetries, true);
+  assert.equal(providerObservabilityGate.json().thresholds.maxAiRedactionFailuresAllowed, 0);
+  assert.ok(providerObservabilityGate.json().blockedActions.includes("enable_provider_without_cost_guard"));
+  assert.ok(providerObservabilityGate.json().providers.some((item: { key: string; realTrafficAllowed: boolean }) =>
+    item.key === "maps" && item.realTrafficAllowed === false));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

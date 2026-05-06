@@ -423,3 +423,111 @@ export async function getProviderCredentialVaultPolicy(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderObservabilityGate(tenantId: string) {
+  const providers = [
+    {
+      key: "email",
+      label: "E-mail transacional",
+      healthStatus: "blocked_until_provider_configured",
+      realTrafficAllowed: false,
+      monitoredSignals: ["delivery_rate", "bounce_rate", "provider_latency_ms", "daily_cost_brl"],
+      automaticKillSwitch: {
+        enabled: true,
+        triggers: ["bounce_rate_above_5_percent", "daily_budget_above_90_percent", "webhook_inactive_15_minutes"],
+      },
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp Business",
+      healthStatus: "blocked_until_opt_in_and_templates",
+      realTrafficAllowed: false,
+      monitoredSignals: ["conversation_cost_brl", "template_rejection_rate", "delivery_status_lag", "opt_out_rate"],
+      automaticKillSwitch: {
+        enabled: true,
+        triggers: ["template_rejection_above_2_percent", "opt_out_spike", "webhook_signature_failure"],
+      },
+    },
+    {
+      key: "maps",
+      label: "Google Maps Platform",
+      healthStatus: "blocked_until_cost_limits",
+      realTrafficAllowed: false,
+      monitoredSignals: ["geocode_cache_hit_rate", "route_api_calls", "daily_cost_brl", "quota_remaining"],
+      automaticKillSwitch: {
+        enabled: true,
+        triggers: ["quota_below_15_percent", "daily_budget_above_80_percent", "cache_hit_rate_below_40_percent"],
+      },
+    },
+    {
+      key: "openai",
+      label: "OpenAI",
+      healthStatus: "blocked_until_privacy_budget",
+      realTrafficAllowed: false,
+      monitoredSignals: ["token_usage", "monthly_cost_brl", "redaction_failures", "fallback_rate"],
+      automaticKillSwitch: {
+        enabled: true,
+        triggers: ["redaction_failure", "monthly_budget_above_85_percent", "unsafe_prompt_detected"],
+      },
+    },
+  ];
+
+  const dashboards = [
+    { key: "provider_health", label: "Saude por provedor", owner: "operations", requiredBeforeGoLive: true },
+    { key: "cost_guard", label: "Custo por tenant e por canal", owner: "finance", requiredBeforeGoLive: true },
+    { key: "webhook_monitor", label: "Monitor de webhooks", owner: "engineering", requiredBeforeGoLive: true },
+    { key: "manual_fallback", label: "Fila manual de contingencia", owner: "support", requiredBeforeGoLive: true },
+    { key: "audit_trace", label: "Trilha de auditoria de callbacks", owner: "admin", requiredBeforeGoLive: true },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_observability_gate_blocked",
+    projectPercentAfterBlock: 94,
+    productionTrafficAllowed: false,
+    summary: {
+      providers: providers.length,
+      dashboards: dashboards.length,
+      killSwitchRequired: true,
+      webhookMonitoringRequired: true,
+      costMonitoringRequired: true,
+      readyForRealTraffic: false,
+    },
+    providers,
+    dashboards,
+    thresholds: {
+      maxDailyProviderCostWithoutOwnerReviewBrl: 100,
+      maxWebhookLagMinutes: 15,
+      maxRetryAttemptsBeforeManualFallback: 5,
+      minGeocodeCacheHitRatePercent: 40,
+      maxAiRedactionFailuresAllowed: 0,
+    },
+    incidentPolicy: {
+      openIncidentOnKillSwitch: true,
+      notifyOwnerAndAdmin: true,
+      freezeAutomaticRetries: true,
+      preservePayloadHash: true,
+      requirePostIncidentReview: true,
+    },
+    fallbackPolicy: {
+      emailFallback: "manual_send_from_queue_snapshot",
+      whatsappFallback: "manual_contact_with_opt_in_check",
+      mapsFallback: "manual_route_review",
+      aiFallback: "manual_text_review",
+    },
+    blockedActions: [
+      "enable_provider_without_health_dashboard",
+      "enable_provider_without_cost_guard",
+      "enable_provider_without_webhook_monitoring",
+      "continue_provider_after_kill_switch_trigger",
+      "retry_failed_provider_without_manual_review",
+    ],
+    nextActions: [
+      "Criar indicadores persistentes de saude por provedor.",
+      "Adicionar alerta de custo por tenant antes do primeiro envio real.",
+      "Auditar todos os callbacks de webhook com assinatura validada.",
+      "Preparar fallback manual para cada canal externo.",
+    ],
+  };
+}

@@ -8,6 +8,7 @@ import {
   createPrismaNotificationTemplate,
   getCommunicationPersistentQueueReadiness,
   getProviderCredentialVaultPolicy,
+  getProviderObservabilityGate,
   listMockIntegrations,
   listMockNotifications,
   listMockWhatsappTemplates,
@@ -63,6 +64,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderCredentialVaultPolicy(context.tenantId);
+  });
+
+  app.get("/integrations/provider-observability-gate", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderObservabilityGate(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {
