@@ -251,6 +251,10 @@ export function getCriticalPendingActionsForServiceOrder(actions: OfflineAction[
   return actions.filter((action) => action.priority === "critical" && getOfflineActionServiceOrderId(action) === serviceOrderId);
 }
 
+export function getBlockedCriticalPendingActionsForServiceOrder(actions: OfflineAction[], serviceOrderId: string) {
+  return getCriticalPendingActionsForServiceOrder(actions, serviceOrderId).filter(isOfflineActionBlocked);
+}
+
 export function buildFieldCommandChecklist(actions: OfflineAction[]): FieldCommandChecklistItem[] {
   const summary = summarizeOfflineQueue(actions);
 
@@ -389,6 +393,35 @@ export function createFieldCommandChecklistAckAction(serviceOrderId: string, tec
     },
     createdAt: new Date().toISOString(),
     priority: checklist.some((item) => item.status === "blocked") ? "critical" : "high",
+    retryCount: 0,
+  } satisfies OfflineAction;
+}
+
+export function createMobileOfflineEscalationReviewAction(action: OfflineAction, reviewedBy: string) {
+  const serviceOrderId = getOfflineActionServiceOrderId(action);
+
+  return {
+    id: offlineId("offline-review"),
+    label: `Revisao gestor ${action.label}`,
+    method: "POST",
+    path: `/platform/mobile-offline-escalations/${action.id}/review`,
+    payload: {
+      tenantId: "icemax-demo",
+      offlineActionId: action.id,
+      serviceOrderId,
+      decision: "manager_review_requested_from_mobile",
+      reviewedBy,
+      note: `Tecnico solicitou revisao assistida para ${action.label} apos ${action.retryCount ?? 0} tentativas.`,
+      recordedAt: new Date().toISOString(),
+      mobileContext: {
+        originalLabel: action.label,
+        originalPath: action.path,
+        originalPriority: action.priority ?? "normal",
+        originalRetryCount: action.retryCount ?? 0,
+      },
+    },
+    createdAt: new Date().toISOString(),
+    priority: "high",
     retryCount: 0,
   } satisfies OfflineAction;
 }

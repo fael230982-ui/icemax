@@ -3148,3 +3148,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Solicitacao De Revisao Do Gestor No Mobile
+
+- [x] Helper de pendencias criticas bloqueadas criado.
+- [x] Acao offline de revisao do gestor criada.
+- [x] Botao de solicitacao aparece apenas para pendencias criticas bloqueadas.
+- [x] Payload preserva OS, prioridade, rota original e tentativas.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -1331,6 +1331,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Bloco critico exibe quantidade, tentativa atual e acao direta de sincronizacao.
 - Documentacao operacional criada para revisao de pendencias criticas.
 
+## 0.8.180 - Solicitacao De Revisao Do Gestor No Mobile
+
+- Pendencias criticas bloqueadas agora exibem acao para solicitar revisao do gestor.
+- App tecnico cria solicitacao offline vinculada ao item original bloqueado.
+- Payload de revisao leva OS, rota original, prioridade, tentativa e decisao operacional.
+- Documentacao operacional criada para escalonamento assistido pelo mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

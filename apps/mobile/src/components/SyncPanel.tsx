@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
   buildFieldCommandChecklist,
+  getBlockedCriticalPendingActionsForServiceOrder,
   getCriticalPendingActionsForServiceOrder,
   maxOfflineRetryCount,
   sortOfflineQueueForSync,
@@ -30,14 +31,16 @@ type SyncPanelProps = {
   onAddFieldSignature: () => void;
   onAddCompletionEmail: () => void;
   onAddFieldCommand: () => void;
+  onRequestManagerReview: () => void;
   onSync: () => void;
 };
 
-export function SyncPanel({ pendingActions, status, activeServiceOrderId, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onAddFieldCommand, onSync }: SyncPanelProps) {
+export function SyncPanel({ pendingActions, status, activeServiceOrderId, onAddCheckIn, onAddExecutionPack, onAddVisitPreparation, onAddPartsLoad, onAddWarranty, onAddSurvey, onAddManual, onAddQuoteApproval, onAddQuoteActivation, onAddQuoteTimeline, onAddQuoteBoard, onAddQuoteReminder, onAddQuoteExecutionReadiness, onAddQuoteExecutionDispatchQueue, onAddFieldCloseout, onAddFieldSignature, onAddCompletionEmail, onAddFieldCommand, onRequestManagerReview, onSync }: SyncPanelProps) {
   const summary = summarizeOfflineQueue(pendingActions);
   const sortedActions = sortOfflineQueueForSync(pendingActions);
   const commandChecklist = buildFieldCommandChecklist(pendingActions);
   const activeCriticalActions = getCriticalPendingActionsForServiceOrder(pendingActions, activeServiceOrderId);
+  const blockedCriticalActions = getBlockedCriticalPendingActionsForServiceOrder(pendingActions, activeServiceOrderId);
 
   return (
     <View style={styles.card}>
@@ -59,6 +62,11 @@ export function SyncPanel({ pendingActions, status, activeServiceOrderId, onAddC
           <TouchableOpacity style={[styles.button, styles.criticalButton]} onPress={onSync}>
             <Text style={styles.buttonText}>Sincronizar criticas</Text>
           </TouchableOpacity>
+          {blockedCriticalActions.length ? (
+            <TouchableOpacity style={[styles.button, styles.reviewButton]} onPress={onRequestManagerReview}>
+              <Text style={[styles.buttonText, styles.reviewButtonText]}>Solicitar revisao</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : null}
       <View style={styles.actions}>
@@ -215,6 +223,15 @@ const styles = StyleSheet.create({
   criticalButton: {
     alignSelf: "flex-start",
     backgroundColor: "#B42318",
+  },
+  reviewButton: {
+    alignSelf: "flex-start",
+    borderColor: "#F4B4B4",
+    borderWidth: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  reviewButtonText: {
+    color: "#7F1D1D",
   },
   pending: {
     color: "#102033",

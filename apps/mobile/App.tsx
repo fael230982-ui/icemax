@@ -19,6 +19,7 @@ import {
   createFieldExecutionCloseoutAckAction,
   createLocationAction,
   createManualConsultedAction,
+  createMobileOfflineEscalationReviewAction,
   createPartsLoadAckAction,
   createPartUsageAction,
   createPhotoEvidenceAction,
@@ -33,6 +34,7 @@ import {
   createWarrantyPresentedAction,
   AssignedOrdersSource,
   fetchAssignedMobileOrdersWithSource,
+  getBlockedCriticalPendingActionsForServiceOrder,
   getCriticalPendingActionsForServiceOrder,
   MobileOrder,
   OfflineAction,
@@ -352,6 +354,18 @@ export default function App() {
     setSyncStatus("Comando de campo salvo offline.");
   }
 
+  function requestManagerReviewForBlockedCritical() {
+    const blockedActions = getBlockedCriticalPendingActionsForServiceOrder(pendingActions, activeServiceOrderId);
+    if (!blockedActions.length) {
+      setSyncStatus(`OS ${activeServiceOrderId} nao tem pendencia critica bloqueada para revisao.`);
+      return;
+    }
+
+    const reviewActions = blockedActions.map((action) => createMobileOfflineEscalationReviewAction(action, "RAFAEL DA SILVA BEZEERA"));
+    setPendingActions((current) => [...reviewActions, ...current]);
+    setSyncStatus(`${reviewActions.length} solicitacao de revisao da OS ${activeServiceOrderId} salva para envio ao gestor.`);
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -432,6 +446,7 @@ export default function App() {
             onAddFieldSignature={addFieldCustomerSignatureAck}
             onAddCompletionEmail={addFieldCompletionEmailAck}
             onAddFieldCommand={addFieldCommandChecklistAck}
+            onRequestManagerReview={requestManagerReviewForBlockedCritical}
             onSync={syncPending}
           />
         </Section>
