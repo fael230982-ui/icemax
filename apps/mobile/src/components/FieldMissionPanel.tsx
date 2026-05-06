@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Mission = {
   serviceOrderId: string;
@@ -12,6 +12,7 @@ type Mission = {
 };
 
 type Item = {
+  key?: string;
   title: string;
   detail: string;
   state?: string;
@@ -23,9 +24,10 @@ type FieldMissionPanelProps = {
   steps: Item[];
   evidence: Item[];
   quickActions: Item[];
+  onQuickAction: (key: string) => void;
 };
 
-export function FieldMissionPanel({ mission, steps, evidence, quickActions }: FieldMissionPanelProps) {
+export function FieldMissionPanel({ mission, steps, evidence, quickActions, onQuickAction }: FieldMissionPanelProps) {
   return (
     <View style={styles.panel}>
       <View style={styles.hero}>
@@ -73,10 +75,15 @@ export function FieldMissionPanel({ mission, steps, evidence, quickActions }: Fi
 
       <View style={styles.quickGrid}>
         {quickActions.map((action) => (
-          <View style={styles.quickAction} key={action.title}>
+          <TouchableOpacity
+            activeOpacity={0.78}
+            style={styles.quickAction}
+            key={action.title}
+            onPress={() => onQuickAction(action.key ?? action.title)}
+          >
             <Text style={styles.quickTitle}>{action.title}</Text>
             <Text style={styles.quickDetail}>{action.detail}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
@@ -233,6 +240,7 @@ const styles = StyleSheet.create({
   quickAction: {
     width: "31%",
     minHeight: 82,
+    justifyContent: "center",
     borderColor: "#DCE7F0",
     borderRadius: 8,
     borderWidth: 1,

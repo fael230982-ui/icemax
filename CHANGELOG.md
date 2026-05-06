@@ -1278,6 +1278,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Evidencias obrigatorias e acoes rapidas ficaram visiveis antes do fluxo offline.
 - Nova documentacao descreve a experiencia de campo e proximas evolucoes.
 
+## 0.8.173 - Acoes Rapidas Offline Na Missao Mobile
+
+- Acoes rapidas da missao mobile passaram a gravar eventos reais na fila offline.
+- Check-in, foto inicial, checklist, peca usada, assinatura e sincronizacao ficaram acionaveis no painel principal.
+- A missao usa as mesmas funcoes de fila offline do SyncPanel para evitar duplicidade de logica.
+- Status do app informa imediatamente qual acao foi salva ou sincronizada.
+- Documentacao operacional atualizada com o comportamento das acoes rapidas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

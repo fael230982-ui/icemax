@@ -30,12 +30,12 @@ export const fieldEvidenceRequirements = [
 ];
 
 export const fieldQuickActions = [
-  { title: "Check-in", detail: "Salva chegada e posicao atual na fila offline." },
-  { title: "Foto before", detail: "Registra evidencia inicial protegida." },
-  { title: "Checklist", detail: "Marca itens obrigatorios da OS." },
-  { title: "Peca usada", detail: "Baixa item reservado do veiculo." },
-  { title: "Assinatura", detail: "Coleta aceite quando fechamento estiver completo." },
-  { title: "Sincronizar", detail: "Envia fila quando houver conexao segura." },
+  { key: "check_in", title: "Check-in", detail: "Salva chegada e posicao atual na fila offline." },
+  { key: "photo_before", title: "Foto before", detail: "Registra evidencia inicial protegida." },
+  { key: "checklist", title: "Checklist", detail: "Marca itens obrigatorios da OS." },
+  { key: "part_usage", title: "Peca usada", detail: "Baixa item reservado do veiculo." },
+  { key: "signature", title: "Assinatura", detail: "Coleta aceite quando fechamento estiver completo." },
+  { key: "sync", title: "Sincronizar", detail: "Envia fila quando houver conexao segura." },
 ];
 
 export const tools = [

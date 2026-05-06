@@ -3044,3 +3044,20 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Acoes Rapidas Offline Na Missao Mobile
+
+- [x] Acoes rapidas da missao mobile ficaram acionaveis.
+- [x] Check-in grava localizacao e status na fila offline.
+- [x] Foto inicial grava evidencia protegida na fila offline.
+- [x] Checklist grava resposta tecnica na fila offline.
+- [x] Peca usada grava consumo na fila offline.
+- [x] Assinatura usa fluxo offline ja existente.
+- [x] Sincronizacao pode ser acionada pela missao atual.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

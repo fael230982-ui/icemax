@@ -90,6 +90,58 @@ export default function App() {
     setSyncStatus("Pacote completo de execucao salvo offline.");
   }
 
+  function addMissionPhotoBefore() {
+    const action = createPhotoEvidenceAction("1049", "before");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Foto inicial da missao salva offline.");
+  }
+
+  function addMissionChecklist() {
+    const action = createChecklistAction("1049", "checklist-diagnostico", "Diagnostico inicial conferido em campo.");
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Checklist da missao salvo offline.");
+  }
+
+  function addMissionPartUsage() {
+    const action = createPartUsageAction("1049", "part-001", 1);
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Uso de peca da missao salvo offline.");
+  }
+
+  function runMissionQuickAction(actionKey: string) {
+    if (actionKey === "check_in") {
+      addCheckIn();
+      return;
+    }
+
+    if (actionKey === "photo_before") {
+      addMissionPhotoBefore();
+      return;
+    }
+
+    if (actionKey === "checklist") {
+      addMissionChecklist();
+      return;
+    }
+
+    if (actionKey === "part_usage") {
+      addMissionPartUsage();
+      return;
+    }
+
+    if (actionKey === "signature") {
+      addFieldCustomerSignatureAck();
+      return;
+    }
+
+    if (actionKey === "sync") {
+      void syncPending();
+      return;
+    }
+
+    setSyncStatus("Acao rapida ainda nao configurada.");
+  }
+
   function addVisitPreparationAck() {
     const action = createVisitPreparationAckAction("1048", "tech-001");
     setPendingActions((current) => [action, ...current]);
@@ -227,6 +279,7 @@ export default function App() {
             steps={fieldJourneySteps}
             evidence={fieldEvidenceRequirements}
             quickActions={fieldQuickActions}
+            onQuickAction={runMissionQuickAction}
           />
         </Section>
 
