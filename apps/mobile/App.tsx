@@ -6,7 +6,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -14,6 +14,7 @@ import {
   createCustomerSignatureAction,
   createFieldCompletionEmailAckAction,
   createFieldCustomerSignaturePackageAckAction,
+  createFieldCommandChecklistAckAction,
   createFieldExecutionCloseoutAckAction,
   createLocationAction,
   createManualConsultedAction,
@@ -181,6 +182,12 @@ export default function App() {
     setSyncStatus("Pacote de e-mail final salvo offline.");
   }
 
+  function addFieldCommandChecklistAck() {
+    const action = createFieldCommandChecklistAckAction("1049", "tech-002", pendingActions);
+    setPendingActions((current) => [action, ...current]);
+    setSyncStatus("Comando de campo salvo offline.");
+  }
+
   async function syncPending() {
     if (!pendingActions.length) {
       setSyncStatus("Nada para sincronizar.");
@@ -240,8 +247,17 @@ export default function App() {
             onAddFieldCloseout={addFieldExecutionCloseoutAck}
             onAddFieldSignature={addFieldCustomerSignatureAck}
             onAddCompletionEmail={addFieldCompletionEmailAck}
+            onAddFieldCommand={addFieldCommandChecklistAck}
             onSync={syncPending}
           />
+        </Section>
+
+        <Section title="Comando de campo">
+          <View style={styles.grid}>
+            {fieldCommandCenter.map((item) => (
+              <InfoCard key={item.title} title={item.title} detail={item.detail} />
+            ))}
+          </View>
         </Section>
 
         <Section title="Preparo da visita">

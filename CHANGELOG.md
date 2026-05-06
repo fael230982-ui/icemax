@@ -1158,6 +1158,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de matriz de producao whitelabel.
 - Teste automatizado cobre percentual 88, bloqueio de provedores e protecao contra migracao sem tenant.
 
+## 0.8.158 - Comando De Campo No Mobile
+
+- App mobile ganhou checklist de comando de campo antes da execucao.
+- Fila offline agora gera diagnostico de pendencias, acoes criticas, rota, pecas, assinatura e relatorio.
+- Tecnico pode registrar comando de campo como acao offline auditavel.
+- Painel mobile mostra nova secao de comando de campo com bloqueios operacionais.
+- Typecheck mobile cobre o novo contrato de checklist e acao offline.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

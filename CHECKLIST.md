@@ -2806,3 +2806,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Comando De Campo No Mobile
+
+- [x] Checklist de comando de campo criado no app mobile.
+- [x] Diagnostico local de fila offline e acoes criticas incluido.
+- [x] Acao offline auditavel de comando de campo criada.
+- [x] Secao mobile de comando de campo adicionada.
+- [x] Bloqueios de assinatura, relatorio, escopo e revisao gerencial documentados.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

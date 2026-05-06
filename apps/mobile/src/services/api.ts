@@ -61,6 +61,13 @@ export type OfflineAction = {
   retryCount?: number;
 };
 
+export type FieldCommandChecklistItem = {
+  key: string;
+  label: string;
+  status: "ready" | "attention" | "blocked";
+  detail: string;
+};
+
 export const maxOfflineRetryCount = 5;
 
 function offlineId(prefix: string) {
@@ -95,6 +102,49 @@ export function summarizeOfflineQueue(actions: OfflineAction[]) {
     oldest,
     hasCritical: Boolean(byPriority.critical),
   };
+}
+
+export function buildFieldCommandChecklist(actions: OfflineAction[]): FieldCommandChecklistItem[] {
+  const summary = summarizeOfflineQueue(actions);
+
+  return [
+    {
+      key: "offline_queue",
+      label: "Fila offline",
+      status: summary.blocked ? "blocked" : summary.total ? "attention" : "ready",
+      detail: summary.blocked
+        ? `${summary.blocked} acao bloqueada exige revisao do gestor.`
+        : summary.total
+          ? `${summary.total} acao pendente deve sincronizar antes do fechamento final.`
+          : "Sem pendencias locais antes de iniciar novo atendimento.",
+    },
+    {
+      key: "critical_actions",
+      label: "Acoes criticas",
+      status: summary.hasCritical ? "attention" : "ready",
+      detail: summary.hasCritical
+        ? "Assinatura, foto final ou evidencia critica devem ser sincronizadas com prioridade."
+        : "Nenhuma acao critica pendente no aparelho.",
+    },
+    {
+      key: "route_and_arrival",
+      label: "Rota e chegada",
+      status: "ready",
+      detail: "Confirmar deslocamento, responsavel no local e check-in antes da execucao.",
+    },
+    {
+      key: "parts_and_scope",
+      label: "Pecas e escopo",
+      status: "attention",
+      detail: "Conferir pecas carregadas e nao executar fora do escopo aprovado.",
+    },
+    {
+      key: "signature_and_report",
+      label: "Assinatura e relatorio",
+      status: "attention",
+      detail: "Fechamento tecnico, assinatura e e-mail final devem seguir a ordem correta.",
+    },
+  ];
 }
 
 export function sortOfflineQueueForSync(actions: OfflineAction[]) {
@@ -168,6 +218,32 @@ export async function syncOfflineQueuePartially(
       ? "Acoes bloqueadas por excesso de tentativas continuam pendentes."
       : undefined,
   };
+}
+
+export function createFieldCommandChecklistAckAction(serviceOrderId: string, technicianUserId: string, actions: OfflineAction[]) {
+  const checklist = buildFieldCommandChecklist(actions);
+
+  return {
+    id: offlineId("field-command"),
+    label: `Comando campo OS ${serviceOrderId}`,
+    method: "POST",
+    path: `/service-orders/${serviceOrderId}/notes`,
+    payload: {
+      rawText: `Comando de campo da OS ${serviceOrderId} conferido no aplicativo tecnico antes da execucao.`,
+      source: "mobile_offline_field_command",
+      mobileAck: {
+        technicianUserId,
+        checkedAt: new Date().toISOString(),
+        offline: true,
+        checklist,
+        blocked: checklist.filter((item) => item.status === "blocked").length,
+        attention: checklist.filter((item) => item.status === "attention").length,
+      },
+    },
+    createdAt: new Date().toISOString(),
+    priority: checklist.some((item) => item.status === "blocked") ? "critical" : "high",
+    retryCount: 0,
+  } satisfies OfflineAction;
 }
 
 export function createCheckInAction(serviceOrderId: string) {

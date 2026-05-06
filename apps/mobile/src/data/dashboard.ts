@@ -123,6 +123,15 @@ export const quoteExecutionDispatchQueue = [
   { title: "Mobile", detail: "Tecnico registra ciencia offline e sincroniza quando recuperar conexao" },
 ];
 
+export const fieldCommandCenter = [
+  { title: "Fila offline", detail: "Conferir pendencias locais antes de sair do cliente ou iniciar nova OS" },
+  { title: "Rota", detail: "Confirmar deslocamento, chegada e responsavel no local antes da execucao" },
+  { title: "Escopo", detail: "Nao executar item fora do orcamento aprovado sem nova autorizacao" },
+  { title: "Evidencias", detail: "Fotos, medicoes e checklist devem estar completos antes da assinatura" },
+  { title: "Assinatura", detail: "Fechamento tecnico precisa estar revisado antes do aceite do cliente" },
+  { title: "Bloqueio", detail: "Acoes com excesso de tentativa devem ir para revisao gerencial" },
+];
+
 export const fieldCloseoutPackage = [
   { title: "Evidencias", detail: "Fotos antes, durante e depois devem estar conferidas antes da assinatura" },
   { title: "Medicoes", detail: "Temperaturas, corrente e verificacoes tecnicas entram no relatorio" },
