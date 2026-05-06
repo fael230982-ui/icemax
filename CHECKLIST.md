@@ -3336,3 +3336,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Alerta De Itens Ocultos Na Fila Compacta
+
+- [x] Destaque visual para ocultas maior que zero criado.
+- [x] Estado zero permanece neutro.
+- [x] Padrao visual alinhado aos badges operacionais.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

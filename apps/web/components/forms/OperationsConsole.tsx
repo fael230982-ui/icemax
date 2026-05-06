@@ -1552,7 +1552,9 @@ export function OperationsConsole() {
                   </label>
                   <span>App tecnico: {compactMobileRequestCount}</span>
                   <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
-                  <span>Ocultas: {hiddenCompactMobileOfflineCount}</span>
+                  <span className={hiddenCompactMobileOfflineCount ? "compactQueueHiddenWarning" : undefined}>
+                    Ocultas: {hiddenCompactMobileOfflineCount}
+                  </span>
                 </div>
               </div>
               <div className="compactQueueGrid">

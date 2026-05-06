@@ -1423,6 +1423,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Gestor consegue perceber quando precisa usar a tabela completa para ver o restante da fila.
 - Documentacao operacional criada para itens ocultos da fila compacta.
 
+## 0.8.193 - Alerta De Itens Ocultos Na Fila Compacta
+
+- Contador de itens ocultos ganhou destaque visual quando houver pendencias fora dos cards.
+- Estado zero permanece neutro para evitar ruido visual.
+- Alerta usa padrao de atencao ja aplicado em indicadores operacionais.
+- Documentacao operacional criada para alerta de itens ocultos.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
