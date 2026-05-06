@@ -349,6 +349,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerReleaseFreezeChecklist.json().finalGates.some((item: { key: string; status: string }) =>
     item.key === "evidence_hashes_attached" && item.status === "blocked"));
 
+  const providerControlledReleaseSnapshot = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-controlled-release-snapshot",
+  });
+  assert.equal(providerControlledReleaseSnapshot.statusCode, 200);
+  assert.equal(providerControlledReleaseSnapshot.json().controlledReadinessComplete, true);
+  assert.equal(providerControlledReleaseSnapshot.json().productionReleaseAllowed, false);
+  assert.equal(providerControlledReleaseSnapshot.json().projectPercentAfterBlock, 100);
+  assert.equal(providerControlledReleaseSnapshot.json().githubPolicy.pushPending, true);
+  assert.ok(providerControlledReleaseSnapshot.json().blockedActions.includes("treat_controlled_readiness_as_real_go_live"));
+  assert.ok(providerControlledReleaseSnapshot.json().remainingExternalDependencies.some((item: { key: string; blocksProduction: boolean }) =>
+    item.key === "provider_credentials" && item.blocksProduction === true));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

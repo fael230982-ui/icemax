@@ -238,6 +238,7 @@ export const icemaxApi = {
   providerFinalHomologationRunbook: (token?: string) => apiRequest<unknown>("/integrations/provider-final-homologation-runbook", { token }),
   providerHomologationDecisionRecord: (token?: string) => apiRequest<unknown>("/integrations/provider-homologation-decision-record", { token }),
   providerReleaseFreezeChecklist: (token?: string) => apiRequest<unknown>("/integrations/provider-release-freeze-checklist", { token }),
+  providerControlledReleaseSnapshot: (token?: string) => apiRequest<unknown>("/integrations/provider-controlled-release-snapshot", { token }),
   createServiceCatalogItem: (body: unknown, token?: string) => apiRequest<unknown>("/service-catalog/items", { method: "POST", body, token }),
   createPriceBook: (body: unknown, token?: string) => apiRequest<unknown>("/price-books", { method: "POST", body, token }),
   executiveKpis: (token?: string) => apiRequest<unknown>("/kpis/executive", { token }),

@@ -1246,6 +1246,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de freeze de provedores.
 - Teste automatizado cobre expiracao por mudanca, bloqueio de kill switch e evidencias pendentes.
 
+## 0.8.169 - Snapshot Controlado De Release De Provedores
+
+- Criado endpoint de snapshot controlado de release de provedores.
+- Snapshot fecha a trilha em 100% de prontidao controlada sem liberar trafego real.
+- Dependencias externas restantes ficam explicitas: banco real, cofre, credenciais, sign-offs, dominio e hospedagem.
+- Console web ganhou consulta de snapshot de release de provedores.
+- Teste automatizado diferencia prontidao controlada de go-live real.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

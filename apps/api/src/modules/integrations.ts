@@ -7,6 +7,7 @@ import {
   getCommunicationProviderActivationPlan,
   createPrismaNotificationTemplate,
   getCommunicationPersistentQueueReadiness,
+  getProviderControlledReleaseSnapshot,
   getProviderCredentialVaultPolicy,
   getProviderFinalHomologationRunbook,
   getProviderGoLiveDecisionBoard,
@@ -105,6 +106,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderReleaseFreezeChecklist(context.tenantId);
+  });
+
+  app.get("/integrations/provider-controlled-release-snapshot", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderControlledReleaseSnapshot(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

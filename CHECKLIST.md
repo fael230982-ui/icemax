@@ -2980,3 +2980,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Snapshot Controlado De Release De Provedores
+
+- [x] Endpoint de snapshot controlado de release criado.
+- [x] 100% de prontidao controlada definido sem liberar trafego real.
+- [x] Dependencias externas restantes mapeadas.
+- [x] Politica de GitHub e validacao final registrada.
+- [x] Console web ganhou consulta de snapshot.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

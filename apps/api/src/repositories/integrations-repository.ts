@@ -1013,3 +1013,74 @@ export async function getProviderReleaseFreezeChecklist(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderControlledReleaseSnapshot(tenantId: string) {
+  const completedTracks = [
+    "fila_persistente",
+    "plano_ativacao",
+    "cofre_credenciais",
+    "observabilidade",
+    "board_go_live",
+    "evidencias_homologacao",
+    "runbook_final",
+    "ata_decisao",
+    "freeze_release",
+  ];
+
+  const remainingExternalDependencies = [
+    { key: "real_database", label: "Banco real com migracoes aplicadas", blocksProduction: true },
+    { key: "provider_credentials", label: "Credenciais reais em cofre gerenciado", blocksProduction: true },
+    { key: "signed_approvals", label: "Sign-offs formais por tenant", blocksProduction: true },
+    { key: "github_push", label: "Push final para GitHub", blocksProduction: false },
+    { key: "domain_hosting", label: "Dominio e hospedagem configurados", blocksProduction: true },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_controlled_release_snapshot_ready",
+    projectPercentAfterBlock: 100,
+    controlledReadinessComplete: true,
+    productionReleaseAllowed: false,
+    summary: {
+      completedTracks: completedTracks.length,
+      remainingExternalDependencies: remainingExternalDependencies.length,
+      productionBlockingDependencies: remainingExternalDependencies.filter((item) => item.blocksProduction).length,
+      finalValidationRequiredBeforePush: true,
+      safeToContinueWithoutProviderKeys: true,
+    },
+    completedTracks,
+    remainingExternalDependencies,
+    releaseInterpretation: {
+      percentMeaning: "100% da trilha controlada de prontidao de provedores foi preparada em modo seguro.",
+      doesNotMean: "Nao significa trafego real liberado nem providers externos ativos.",
+      productionCondition: "Producao real depende de banco real, cofre, credenciais, sign-offs, dominio, hospedagem e validacao final.",
+    },
+    finalValidationPlan: [
+      "Executar npm run validate antes do push final.",
+      "Revisar guard de segredos.",
+      "Confirmar CHECKLIST e CHANGELOG atualizados.",
+      "Confirmar que nenhum provider real foi ativado.",
+      "Executar git status antes de publicar.",
+    ],
+    githubPolicy: {
+      pushPending: true,
+      pushWhen: "fechamento_do_dia_ou_ordem_explicita",
+      pushRequiresValidation: true,
+      includeNoSecrets: true,
+    },
+    blockedActions: [
+      "treat_controlled_readiness_as_real_go_live",
+      "push_without_final_validation",
+      "enable_provider_without_real_vault",
+      "enable_provider_without_signed_approvals",
+      "enable_provider_without_real_database",
+    ],
+    nextActions: [
+      "Usar este snapshot para fechamento do dia.",
+      "Executar validacao final antes do push.",
+      "Preparar resumo detalhado de percentuais para GitHub.",
+      "Manter provedores reais bloqueados ate infraestrutura externa estar pronta.",
+    ],
+  };
+}

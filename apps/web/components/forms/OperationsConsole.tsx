@@ -596,6 +596,10 @@ export function OperationsConsole() {
     void run("Freeze release provedores", () => icemaxApi.providerReleaseFreezeChecklist(token || undefined));
   }
 
+  function loadProviderControlledReleaseSnapshot() {
+    void run("Snapshot release provedores", () => icemaxApi.providerControlledReleaseSnapshot(token || undefined));
+  }
+
   function loadDayCommandCenter() {
     void run("Comando do dia", () => icemaxApi.dayCommandCenter(token || undefined));
   }
@@ -618,6 +622,7 @@ export function OperationsConsole() {
         icemaxApi.providerFinalHomologationRunbook(token || undefined),
         icemaxApi.providerHomologationDecisionRecord(token || undefined),
         icemaxApi.providerReleaseFreezeChecklist(token || undefined),
+        icemaxApi.providerControlledReleaseSnapshot(token || undefined),
         icemaxApi.communicationPreview({ channel: "whatsapp", recipient: "+5500000000000", template: "visita_agendada", variables: { data: "2026-05-10" } }, token || undefined),
         icemaxApi.communicationPreview({ channel: "push", recipient: "tech-001", template: "nova_os", variables: { os: "1048" } }, token || undefined),
         icemaxApi.createServiceCatalogItem({ name: "Higienizacao split", description: "Servico padrao" }, token || undefined),
@@ -1110,6 +1115,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadProviderFinalHomologationRunbook}>Runbook provedores</button>
         <button type="button" className="secondary" onClick={loadProviderHomologationDecisionRecord}>Ata provedores</button>
         <button type="button" className="secondary" onClick={loadProviderReleaseFreezeChecklist}>Freeze provedores</button>
+        <button type="button" className="secondary" onClick={loadProviderControlledReleaseSnapshot}>Snapshot provedores</button>
         <button type="button" className="secondary" onClick={loadDayCommandCenter}>Comando do dia</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>
