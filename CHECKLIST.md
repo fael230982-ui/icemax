@@ -3207,3 +3207,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Indicadores De Severidade Da Fila Offline Web
+
+- [x] Badge de severidade criado.
+- [x] Badge de prioridade criado.
+- [x] Badge de origem criado.
+- [x] Badge de responsavel criado.
+- [x] Estilos reutilizaveis adicionados.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

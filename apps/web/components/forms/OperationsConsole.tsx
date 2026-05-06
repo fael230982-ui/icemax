@@ -105,6 +105,12 @@ export function OperationsConsole() {
 
     return right.severityScore - left.severityScore || right.retryCount - left.retryCount;
   });
+  const getEscalationSeverityClass = (score: number) => (
+    score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
+  );
+  const getEscalationPriorityClass = (priority: string) => (
+    priority === "critical" ? "badge badgeDanger" : priority === "high" ? "badge badgeWarning" : "badge badgeNeutral"
+  );
 
   async function run(label: string, action: () => Promise<unknown>) {
     try {
@@ -1520,14 +1526,22 @@ export function OperationsConsole() {
                 {sortedMobileOfflineItems.map((item) => (
                   <tr key={item.id}>
                     <td>{item.serviceOrderId}<br />{item.customer}</td>
-                    <td>{item.technicianName}<br />{item.owner}</td>
-                    <td>{item.severityScore}<br />{item.slaStatus}<br />{item.ageHours ?? 0}h</td>
+                    <td>{item.technicianName}<br /><span className="badge badgeNeutral">{item.owner}</span></td>
                     <td>
-                      {item.requestedFromMobile ? "App tecnico" : "Guarda sync"}
+                      <span className={getEscalationSeverityClass(item.severityScore)}>{item.severityScore}</span>
+                      <br />
+                      {item.slaStatus}
+                      <br />
+                      {item.ageHours ?? 0}h
+                    </td>
+                    <td>
+                      <span className={item.requestedFromMobile ? "badge badgeInfo" : "badge badgeNeutral"}>
+                        {item.requestedFromMobile ? "App tecnico" : "Guarda sync"}
+                      </span>
                       <br />
                       {item.requestedAt ? new Date(item.requestedAt).toLocaleString("pt-BR") : item.source ?? "sync_guard"}
                     </td>
-                    <td>{item.actionLabel}<br />{item.priority} - tentativa {item.retryCount}</td>
+                    <td>{item.actionLabel}<br /><span className={getEscalationPriorityClass(item.priority)}>{item.priority}</span> tentativa {item.retryCount}</td>
                     <td>{item.blockedReason}<br />{item.likelyCause}</td>
                     <td>{item.recommendedAction}<br />{item.impact}<br />{item.mobileNote}</td>
                     <td>

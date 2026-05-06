@@ -1360,6 +1360,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Resumo da fila informa a ordenacao aplicada.
 - Documentacao operacional criada para ordenacao da fila offline web.
 
+## 0.8.184 - Indicadores De Severidade Da Fila Offline Web
+
+- Fila offline web ganhou badges visuais de severidade, prioridade, origem e responsavel.
+- Estilos reutilizaveis foram adicionados para perigo, atencao, informacao e neutro.
+- Leitura da triagem ficou mais rapida para gestor identificar bloqueios criticos.
+- Documentacao operacional criada para indicadores da fila offline web.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
