@@ -3310,3 +3310,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Contador App Na Fila Compacta Offline
+
+- [x] Contador app tecnico criado no cabecalho compacto.
+- [x] Contador considera recorte filtrado.
+- [x] Contador fica independente do limite de seis cards.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

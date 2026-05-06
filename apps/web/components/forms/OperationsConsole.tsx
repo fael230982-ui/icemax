@@ -112,6 +112,7 @@ export function OperationsConsole() {
     .filter((item) => !compactMobileOnly || item.requestedFromMobile)
     .slice(0, 6);
   const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
+  const compactMobileRequestCount = sortedMobileOfflineItems.filter((item) => item.requestedFromMobile).length;
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1548,6 +1549,7 @@ export function OperationsConsole() {
                     />
                     Apenas app tecnico
                   </label>
+                  <span>App tecnico: {compactMobileRequestCount}</span>
                   <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
                 </div>
               </div>

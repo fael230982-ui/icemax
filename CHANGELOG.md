@@ -1409,6 +1409,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Controle do filtro permanece acessivel mesmo sem cards visiveis.
 - Documentacao operacional criada para estado vazio da fila compacta app.
 
+## 0.8.191 - Contador App Na Fila Compacta Offline
+
+- Cabecalho da fila compacta passou a exibir o total de pedidos vindos do app tecnico.
+- Contador considera o recorte filtrado e ordenado antes do limite dos seis cards.
+- Gestor consegue saber se existem mais solicitacoes do app alem dos cards visiveis.
+- Documentacao operacional criada para contador app da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
