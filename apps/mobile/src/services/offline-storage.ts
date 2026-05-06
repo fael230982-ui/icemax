@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { OfflineAction } from "./api";
 
 const offlineQueueKey = "@icemax/mobile/offline-queue";
+const activeOrderKey = "@icemax/mobile/active-order-id";
 const retentionHoursByPriority = {
   critical: 168,
   high: 96,
@@ -40,6 +41,20 @@ export async function saveOfflineQueue(actions: OfflineAction[]) {
 
 export async function clearOfflineQueue() {
   await AsyncStorage.removeItem(offlineQueueKey);
+}
+
+export async function loadActiveOrderId(allowedOrderIds: string[], fallbackOrderId: string) {
+  const raw = await AsyncStorage.getItem(activeOrderKey);
+
+  if (raw && allowedOrderIds.includes(raw)) {
+    return raw;
+  }
+
+  return fallbackOrderId;
+}
+
+export async function saveActiveOrderId(orderId: string) {
+  await AsyncStorage.setItem(activeOrderKey, orderId);
 }
 
 export function getOfflineActionRetentionHours(action: OfflineAction) {

@@ -3077,3 +3077,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Persistencia Da OS Ativa No Mobile
+
+- [x] Chave de armazenamento da OS ativa criada.
+- [x] App restaura a ultima OS ativa ao abrir.
+- [x] App valida se a OS restaurada ainda existe na lista permitida.
+- [x] Troca de missao salva o novo ID ativo.
+- [x] Fallback para primeira OS foi mantido.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

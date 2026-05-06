@@ -1294,6 +1294,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Cards de OS exibem estado visual de missao ativa.
 - Documentacao operacional criada para a selecao de OS ativa.
 
+## 0.8.175 - Persistencia Da OS Ativa No Mobile
+
+- Aplicativo mobile passou a salvar a ultima OS ativa no aparelho.
+- Abertura do app restaura a missao ativa quando a OS ainda existe na lista do tecnico.
+- Persistencia usa AsyncStorage separado da fila offline.
+- Troca de missao continua atualizando o status do app.
+- Documentacao operacional criada para a persistencia da missao ativa.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

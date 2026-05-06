@@ -34,7 +34,7 @@ import {
   OfflineAction,
   syncOfflineQueuePartially,
 } from "./src/services/api";
-import { clearOfflineQueue, loadOfflineQueueSnapshot, saveOfflineQueue } from "./src/services/offline-storage";
+import { clearOfflineQueue, loadActiveOrderId, loadOfflineQueueSnapshot, saveActiveOrderId, saveOfflineQueue } from "./src/services/offline-storage";
 import { visitPreparation } from "./src/data/dashboard";
 import { reservedParts } from "./src/data/dashboard";
 import { warrantyPackage } from "./src/data/dashboard";
@@ -46,6 +46,7 @@ export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
   const [syncStatus, setSyncStatus] = useState("Sem pendencias.");
   const [queueLoaded, setQueueLoaded] = useState(false);
+  const [activeOrderLoaded, setActiveOrderLoaded] = useState(false);
   const [activeOrderId, setActiveOrderId] = useState(orders[0].id);
   const activeOrder = orders.find((order) => order.id === activeOrderId) ?? orders[0];
   const activeServiceOrderId = activeOrder.id.replace("#", "");
@@ -75,10 +76,28 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    void loadActiveOrderId(orders.map((order) => order.id), orders[0].id)
+      .then((orderId) => {
+        setActiveOrderId(orderId);
+        if (orderId !== orders[0].id) {
+          setSyncStatus(`Missao ativa restaurada: OS ${orderId.replace("#", "")}.`);
+        }
+      })
+      .catch(() => setSyncStatus("Nao foi possivel restaurar a missao ativa."))
+      .finally(() => setActiveOrderLoaded(true));
+  }, []);
+
+  useEffect(() => {
     if (queueLoaded) {
       void saveOfflineQueue(pendingActions);
     }
   }, [pendingActions, queueLoaded]);
+
+  useEffect(() => {
+    if (activeOrderLoaded) {
+      void saveActiveOrderId(activeOrderId);
+    }
+  }, [activeOrderId, activeOrderLoaded]);
 
   function addCheckIn() {
     const action = createCheckInAction(activeServiceOrderId);
