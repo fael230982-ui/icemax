@@ -626,3 +626,96 @@ export async function getProviderGoLiveDecisionBoard(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderHomologationEvidencePack(tenantId: string) {
+  const scenarios = [
+    {
+      key: "email_final_report",
+      provider: "email",
+      label: "Relatorio final e garantia por e-mail",
+      status: "pending_evidence",
+      realTrafficAllowed: false,
+      requiredEvidence: ["template renderizado", "fila persistente", "bounce simulado", "auditoria sem segredo"],
+      passCriteria: ["destinatario validado", "idempotencia aplicada", "fallback manual disponivel"],
+    },
+    {
+      key: "whatsapp_schedule_eta",
+      provider: "whatsapp",
+      label: "Agendamento e ETA por WhatsApp",
+      status: "pending_evidence",
+      realTrafficAllowed: false,
+      requiredEvidence: ["opt-in registrado", "template aprovado", "webhook assinado", "opt-out respeitado"],
+      passCriteria: ["sem envio fora da janela", "bloqueio sem consentimento", "callback auditado"],
+    },
+    {
+      key: "maps_route_dispatch",
+      provider: "maps",
+      label: "Rota e despacho por mapas",
+      status: "pending_evidence",
+      realTrafficAllowed: false,
+      requiredEvidence: ["cache ativo", "limite de custo", "quota simulada", "fallback de rota manual"],
+      passCriteria: ["cache hit minimo respeitado", "custo bloqueado no limite", "sem chamada sem tenant"],
+    },
+    {
+      key: "openai_text_review",
+      provider: "openai",
+      label: "Revisao de texto e diagnostico assistido",
+      status: "pending_evidence",
+      realTrafficAllowed: false,
+      requiredEvidence: ["mascaramento de dados", "limite de tokens", "prompt versionado", "fallback manual"],
+      passCriteria: ["zero falha de redacao", "auditoria sem conteudo sensivel", "bloqueio por budget"],
+    },
+  ];
+
+  const evidenceArtifacts = [
+    { key: "request_sample", label: "Amostra de requisicao sem segredo", required: true },
+    { key: "response_sample", label: "Amostra de resposta sem dado sensivel", required: true },
+    { key: "audit_event", label: "Evento de auditoria com payload hash", required: true },
+    { key: "cost_snapshot", label: "Snapshot de custo por tenant", required: true },
+    { key: "rollback_proof", label: "Prova de rollback/fallback manual", required: true },
+    { key: "lgpd_acceptance", label: "Aceite LGPD e consentimento aplicavel", required: true },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_homologation_evidence_pending",
+    projectPercentAfterBlock: 96,
+    realProviderTrafficAllowed: false,
+    summary: {
+      scenarios: scenarios.length,
+      pendingScenarios: scenarios.filter((item) => item.status === "pending_evidence").length,
+      requiredArtifacts: evidenceArtifacts.length,
+      readyForCustomerPilot: false,
+      readyForProduction: false,
+    },
+    scenarios,
+    evidenceArtifacts,
+    approvalFlow: [
+      { step: "technical_review", owner: "engineering", required: true },
+      { step: "lgpd_review", owner: "admin", required: true },
+      { step: "cost_review", owner: "owner", required: true },
+      { step: "support_fallback_review", owner: "support", required: true },
+    ],
+    securityRules: {
+      storeSecretsInEvidence: false,
+      storeRawCustomerSensitiveData: false,
+      requirePayloadHash: true,
+      requireSignedWebhookSamples: true,
+      requireTenantScopedEvidence: true,
+    },
+    blockedActions: [
+      "approve_provider_without_evidence_pack",
+      "attach_secret_to_evidence",
+      "approve_whatsapp_without_opt_in_sample",
+      "approve_openai_without_redaction_sample",
+      "approve_maps_without_cost_snapshot",
+    ],
+    nextActions: [
+      "Gerar evidencias dry-run por provider.",
+      "Anexar snapshots de custo e auditoria sem segredo.",
+      "Validar fallback manual antes de piloto.",
+      "Levar pacote para o board de decisao go-live.",
+    ],
+  };
+}

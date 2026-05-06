@@ -9,6 +9,7 @@ import {
   getCommunicationPersistentQueueReadiness,
   getProviderCredentialVaultPolicy,
   getProviderGoLiveDecisionBoard,
+  getProviderHomologationEvidencePack,
   getProviderObservabilityGate,
   listMockIntegrations,
   listMockNotifications,
@@ -77,6 +78,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderGoLiveDecisionBoard(context.tenantId);
+  });
+
+  app.get("/integrations/provider-homologation-evidence-pack", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderHomologationEvidencePack(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

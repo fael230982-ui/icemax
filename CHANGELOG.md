@@ -1214,6 +1214,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de decisao go-live de provedores.
 - Teste automatizado cobre aprovacao owner, bloqueio por cofre e tenant budget.
 
+## 0.8.165 - Pacote De Evidencias De Homologacao De Provedores
+
+- Criado endpoint de pacote de evidencias de homologacao de provedores.
+- Pacote cobre cenarios de e-mail, WhatsApp, mapas e OpenAI antes de qualquer trafego real.
+- Evidencias exigem auditoria sem segredo, payload hash, custo, LGPD, webhook e fallback manual.
+- Console web ganhou consulta de evidencias de provedores.
+- Teste automatizado cobre bloqueio de producao sem opt-in, custo e amostra de redacao de IA.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

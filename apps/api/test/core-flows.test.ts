@@ -296,6 +296,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerGoLiveDecisionBoard.json().decisionItems.some((item: { key: string; status: string }) =>
     item.key === "tenant_budget" && item.status === "blocked"));
 
+  const providerHomologationEvidencePack = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-homologation-evidence-pack",
+  });
+  assert.equal(providerHomologationEvidencePack.statusCode, 200);
+  assert.equal(providerHomologationEvidencePack.json().realProviderTrafficAllowed, false);
+  assert.equal(providerHomologationEvidencePack.json().projectPercentAfterBlock, 96);
+  assert.equal(providerHomologationEvidencePack.json().summary.readyForProduction, false);
+  assert.equal(providerHomologationEvidencePack.json().securityRules.storeSecretsInEvidence, false);
+  assert.ok(providerHomologationEvidencePack.json().blockedActions.includes("approve_openai_without_redaction_sample"));
+  assert.ok(providerHomologationEvidencePack.json().scenarios.some((item: { provider: string; status: string }) =>
+    item.provider === "whatsapp" && item.status === "pending_evidence"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

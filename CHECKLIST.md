@@ -2916,3 +2916,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Pacote De Evidencias De Homologacao De Provedores
+
+- [x] Endpoint de evidencias de homologacao criado.
+- [x] Cenarios de e-mail, WhatsApp, mapas e OpenAI definidos.
+- [x] Evidencias sem segredo, com payload hash, custo e fallback definidas.
+- [x] Trafego real permanece bloqueado.
+- [x] Console web ganhou consulta de evidencias.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
