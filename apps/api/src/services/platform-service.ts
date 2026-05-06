@@ -3398,6 +3398,10 @@ export function getMobileOfflineEscalationBoard() {
       recommendedAction: "Conferir status da OS, validar assinatura com o cliente e liberar reenvio assistido.",
       owner: "supervisor",
       impact: "Fechamento da OS e envio de e-mail ao cliente podem ficar travados.",
+      source: "mobile_manager_review_request",
+      requestedFromMobile: true,
+      requestedAt: "2026-05-06T10:35:00.000Z",
+      mobileNote: "Tecnico solicitou revisao pelo app apos assinatura ficar bloqueada.",
     },
     {
       id: "offline-blocked-002",
@@ -3414,6 +3418,10 @@ export function getMobileOfflineEscalationBoard() {
       recommendedAction: "Solicitar nova captura da evidencia ou reenviar arquivo pelo painel.",
       owner: "qualidade",
       impact: "Arquivo de fechamento pode ficar incompleto.",
+      source: "mobile_manager_review_request",
+      requestedFromMobile: true,
+      requestedAt: "2026-05-06T09:50:00.000Z",
+      mobileNote: "App indicou falha repetida no envio da foto final.",
     },
     {
       id: "offline-blocked-003",
@@ -3430,6 +3438,10 @@ export function getMobileOfflineEscalationBoard() {
       recommendedAction: "Conferir saldo do almoxarifado e ajustar reserva antes de sincronizar.",
       owner: "estoque",
       impact: "Saldo de peca e custo da OS podem ficar divergentes.",
+      source: "sync_guard",
+      requestedFromMobile: false,
+      requestedAt: null,
+      mobileNote: null,
     },
   ].map((item) => {
     const priorityWeight = item.priority === "critical" ? 70 : item.priority === "high" ? 45 : 25;
@@ -3444,6 +3456,11 @@ export function getMobileOfflineEscalationBoard() {
   });
   const critical = items.filter((item) => item.priority === "critical").length;
   const high = items.filter((item) => item.priority === "high").length;
+  const managerReviewRequests = items.filter((item) => item.requestedFromMobile).length;
+  const oldestManagerReviewAgeHours = Math.max(
+    0,
+    ...items.filter((item) => item.requestedFromMobile).map((item) => item.ageHours),
+  );
 
   return {
     generatedAt: new Date().toISOString(),
@@ -3458,6 +3475,8 @@ export function getMobileOfflineEscalationBoard() {
       high,
       oldestAgeHours: Math.max(...items.map((item) => item.ageHours)),
       highestSeverityScore: Math.max(...items.map((item) => item.severityScore)),
+      managerReviewRequests,
+      oldestManagerReviewAgeHours,
       owners: Array.from(new Set(items.map((item) => item.owner))),
     },
     data: items,

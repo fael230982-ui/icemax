@@ -1338,6 +1338,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Payload de revisao leva OS, rota original, prioridade, tentativa e decisao operacional.
 - Documentacao operacional criada para escalonamento assistido pelo mobile.
 
+## 0.8.181 - Fila Web De Revisoes Solicitadas Pelo Mobile
+
+- Quadro web de pendencias offline passou a destacar pedidos vindos do app tecnico.
+- API passou a expor origem, data, nota mobile, causa provavel e impacto operacional.
+- Resumo do quadro informa quantidade de solicitacoes geradas pelo mobile.
+- Teste automatizado cobre solicitacoes de revisao vindas do app.
+- Documentacao operacional criada para a fila web de revisoes mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

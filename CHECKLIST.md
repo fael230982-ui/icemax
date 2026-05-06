@@ -3162,3 +3162,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Fila Web De Revisoes Solicitadas Pelo Mobile
+
+- [x] API expõe origem e nota mobile das pendencias bloqueadas.
+- [x] Resumo informa quantidade de pedidos feitos pelo app.
+- [x] Console web mostra origem, data, causa provavel e impacto.
+- [x] Teste automatizado cobre pedidos vindos do app.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

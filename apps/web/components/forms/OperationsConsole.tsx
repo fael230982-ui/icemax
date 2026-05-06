@@ -31,8 +31,14 @@ type MobileOfflineEscalationItem = {
   severityScore: number;
   slaStatus: string;
   blockedReason: string;
+  likelyCause?: string;
   recommendedAction: string;
   owner: string;
+  impact?: string;
+  source?: string;
+  requestedFromMobile?: boolean;
+  requestedAt?: string | null;
+  mobileNote?: string | null;
 };
 
 type MobileOfflineEscalationResponse = {
@@ -42,6 +48,8 @@ type MobileOfflineEscalationResponse = {
     high: number;
     oldestAgeHours: number;
     highestSeverityScore: number;
+    managerReviewRequests?: number;
+    oldestManagerReviewAgeHours?: number;
   };
   data?: MobileOfflineEscalationItem[];
 };
@@ -1420,6 +1428,7 @@ export function OperationsConsole() {
               <span>Total: {mobileOfflineEscalations.summary.total}</span>
               <span>Criticas: {mobileOfflineEscalations.summary.critical}</span>
               <span>Altas: {mobileOfflineEscalations.summary.high}</span>
+              <span>Pedidos app: {mobileOfflineEscalations.summary.managerReviewRequests ?? 0}</span>
               <span>Mais antiga: {mobileOfflineEscalations.summary.oldestAgeHours}h</span>
               <span>Maior risco: {mobileOfflineEscalations.summary.highestSeverityScore}</span>
             </div>
@@ -1431,6 +1440,7 @@ export function OperationsConsole() {
                   <th>OS</th>
                   <th>Tecnico</th>
                   <th>Risco</th>
+                  <th>Origem</th>
                   <th>Acao</th>
                   <th>Motivo</th>
                   <th>Recomendacao</th>
@@ -1443,9 +1453,14 @@ export function OperationsConsole() {
                     <td>{item.serviceOrderId}<br />{item.customer}</td>
                     <td>{item.technicianName}<br />{item.owner}</td>
                     <td>{item.severityScore}<br />{item.slaStatus}</td>
+                    <td>
+                      {item.requestedFromMobile ? "App tecnico" : "Guarda sync"}
+                      <br />
+                      {item.requestedAt ? new Date(item.requestedAt).toLocaleString("pt-BR") : item.source ?? "sync_guard"}
+                    </td>
                     <td>{item.actionLabel}<br />{item.priority} - tentativa {item.retryCount}</td>
-                    <td>{item.blockedReason}</td>
-                    <td>{item.recommendedAction}</td>
+                    <td>{item.blockedReason}<br />{item.likelyCause}</td>
+                    <td>{item.recommendedAction}<br />{item.impact}<br />{item.mobileNote}</td>
                     <td>
                       <button type="button" className="secondary" onClick={() => reviewMobileOfflineEscalation(item.id, "release_assisted_retry")}>
                         Liberar
