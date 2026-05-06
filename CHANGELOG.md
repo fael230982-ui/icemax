@@ -1458,6 +1458,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Severidade critica oculta recebe destaque visual de risco.
 - Documentacao operacional criada para risco oculto da fila compacta.
 
+## 0.8.198 - Atalho Para Tabela Completa Offline
+
+- Fila compacta ganhou atalho para a tabela completa quando houver risco oculto critico.
+- Tabela detalhada recebeu ancora operacional para navegacao direta.
+- Atalho aparece apenas quando a maior severidade oculta for igual ou superior a 85.
+- Documentacao operacional criada para o atalho de risco oculto.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

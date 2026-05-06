@@ -3405,3 +3405,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Atalho Para Tabela Completa Offline
+
+- [x] Atalho para tabela completa criado para risco oculto critico.
+- [x] Ancora da tabela detalhada criada.
+- [x] Atalho condicionado a severidade oculta maior ou igual a 85.
+- [x] Estilo do atalho alinhado aos indicadores de risco.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

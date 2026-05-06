@@ -439,6 +439,22 @@ h2 {
   font-weight: 700;
 }
 
+.compactQueueTableLink {
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  padding: 5px 10px;
+  color: #991b1b;
+  background: #fff7ed;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.compactQueueTableLink:hover {
+  border-color: #fca5a5;
+  background: #ffedd5;
+}
+
 .compactQueueFilterNotice {
   display: flex;
   align-items: center;

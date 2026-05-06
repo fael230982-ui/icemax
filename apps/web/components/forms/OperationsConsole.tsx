@@ -1598,6 +1598,11 @@ export function OperationsConsole() {
                       Risco oculto: {hiddenCompactMobileOfflineMaxSeverity}
                     </span>
                   ) : null}
+                  {hiddenCompactMobileOfflineMaxSeverity >= 85 ? (
+                    <a className="compactQueueTableLink" href="#mobile-offline-full-table">
+                      Ver tabela
+                    </a>
+                  ) : null}
                   <button
                     type="button"
                     className="secondary compactQueueReset"
@@ -1695,7 +1700,7 @@ export function OperationsConsole() {
               ) : null}
             </div>
           ) : null}
-          <div className="tableWrap">
+          <div className="tableWrap" id="mobile-offline-full-table">
             <table>
               <thead>
                 <tr>
