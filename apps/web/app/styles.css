@@ -469,6 +469,16 @@ h2 {
   line-height: 1.45;
 }
 
+.compactQueueEmpty {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--muted);
+  background: #f8fafc;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .compactQueueFeedback {
   display: block;
   min-height: 20px;

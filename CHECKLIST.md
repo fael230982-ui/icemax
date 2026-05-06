@@ -3296,3 +3296,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Estado Vazio Da Fila Compacta App
+
+- [x] Painel compacto mantido quando filtro app zera.
+- [x] Mensagem especifica de estado vazio criada.
+- [x] Controle do filtro permanece acessivel.
+- [x] Orientacao para voltar a fila completa adicionada.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -1402,6 +1402,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Contador de prioridades visiveis passa a refletir o filtro compacto.
 - Documentacao operacional criada para filtro rapido da fila compacta.
 
+## 0.8.190 - Estado Vazio Da Fila Compacta App
+
+- Fila compacta passou a manter o painel visivel quando o filtro app tecnico nao encontra itens.
+- Estado vazio orienta o gestor a desativar o filtro para voltar a fila compacta completa.
+- Controle do filtro permanece acessivel mesmo sem cards visiveis.
+- Documentacao operacional criada para estado vazio da fila compacta app.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

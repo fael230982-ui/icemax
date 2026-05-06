@@ -111,6 +111,7 @@ export function OperationsConsole() {
   const compactMobileOfflineItems = sortedMobileOfflineItems
     .filter((item) => !compactMobileOnly || item.requestedFromMobile)
     .slice(0, 6);
+  const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1534,7 +1535,7 @@ export function OperationsConsole() {
               <span>Maior risco: {mobileOfflineEscalations.summary.highestSeverityScore}</span>
             </div>
           ) : null}
-          {compactMobileOfflineItems.length ? (
+          {hasCompactMobileOfflineSourceItems ? (
             <div className="compactQueue">
               <div className="compactQueueHeader">
                 <strong>Fila diaria compacta</strong>
@@ -1624,6 +1625,11 @@ export function OperationsConsole() {
                   </article>
                 ))}
               </div>
+              {!compactMobileOfflineItems.length ? (
+                <div className="compactQueueEmpty">
+                  Nenhuma solicitacao do app tecnico encontrada nas prioridades visiveis. Desative o filtro para ver a fila compacta completa.
+                </div>
+              ) : null}
             </div>
           ) : null}
           <div className="tableWrap">
