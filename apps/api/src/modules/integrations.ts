@@ -4,6 +4,7 @@ import { isPrismaEnabled } from "../config";
 import { aiRequests } from "../mock-data";
 import {
   createMockNotificationTemplate,
+  getCommunicationProviderActivationPlan,
   createPrismaNotificationTemplate,
   getCommunicationPersistentQueueReadiness,
   listMockIntegrations,
@@ -49,6 +50,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getCommunicationPersistentQueueReadiness(context.tenantId);
+  });
+
+  app.get("/communications/provider-activation-plan", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getCommunicationProviderActivationPlan(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

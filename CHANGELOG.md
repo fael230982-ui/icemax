@@ -1182,6 +1182,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de fila persistente de comunicacao.
 - Teste automatizado cobre bloqueio de WhatsApp sem opt-in e proibicao de segredo no payload.
 
+## 0.8.161 - Plano De Ativacao De Provedores De Comunicacao
+
+- Criado endpoint de plano de ativacao de provedores de comunicacao.
+- Plano cobre e-mail, WhatsApp, mapas e OpenAI com custos, chaves, controles e bloqueios.
+- Envio real segue bloqueado ate orçamento, LGPD, fila persistente, webhooks, homologacao e rollback.
+- Console web ganhou consulta de ativacao de provedores.
+- Teste automatizado cobre bloqueios de custo, opt-in, IA e mapas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

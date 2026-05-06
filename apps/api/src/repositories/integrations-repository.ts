@@ -218,3 +218,106 @@ export async function getCommunicationPersistentQueueReadiness(tenantId: string)
     ],
   };
 }
+
+export async function getCommunicationProviderActivationPlan(tenantId: string) {
+  const providers = [
+    {
+      key: "email",
+      label: "E-mail transacional",
+      targetUse: "relatorio final, garantia, cobranca e avisos de contrato",
+      activationStage: "homologation_ready",
+      realSendAllowed: false,
+      requiredCredentials: ["EMAIL_PROVIDER_API_KEY", "EMAIL_SENDER_DOMAIN"],
+      requiredControls: ["fila persistente", "idempotencia", "webhook de bounce", "limite diario por tenant"],
+      estimatedMonthlyCostRangeBrl: "R$ 50 a R$ 350 no inicio",
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp Business Cloud API",
+      targetUse: "agendamento, deslocamento, aprovacao de orcamento e pos-atendimento",
+      activationStage: "legal_and_template_blocked",
+      realSendAllowed: false,
+      requiredCredentials: ["META_APP_ID", "WHATSAPP_ACCESS_TOKEN", "WHATSAPP_PHONE_NUMBER_ID"],
+      requiredControls: ["opt-in", "templates aprovados", "janela de atendimento", "webhook de status"],
+      estimatedMonthlyCostRangeBrl: "variavel por conversa e categoria",
+    },
+    {
+      key: "maps",
+      label: "Google Maps Platform",
+      targetUse: "despacho inteligente, rota, ETA e geocodificacao",
+      activationStage: "cost_guard_required",
+      realSendAllowed: false,
+      requiredCredentials: ["GOOGLE_MAPS_API_KEY"],
+      requiredControls: ["limite de chamadas", "cache de enderecos", "restricao por dominio/app", "alerta de custo"],
+      estimatedMonthlyCostRangeBrl: "depende de volume e creditos da conta",
+    },
+    {
+      key: "openai",
+      label: "OpenAI",
+      targetUse: "revisao de texto, diagnostico assistido e resumo profissional",
+      activationStage: "privacy_guard_required",
+      realSendAllowed: false,
+      requiredCredentials: ["OPENAI_API_KEY"],
+      requiredControls: ["mascara de dados sensiveis", "log de uso", "limite por tenant", "fallback manual"],
+      estimatedMonthlyCostRangeBrl: "variavel por tokens usados",
+    },
+  ];
+
+  const gates = [
+    { key: "commercial_approval", label: "Aprovacao de custos", status: "required", owner: "owner" },
+    { key: "lgpd_review", label: "Revisao LGPD e consentimentos", status: "required", owner: "admin" },
+    { key: "persistent_queue", label: "Fila persistente com idempotencia", status: "required", owner: "engineering" },
+    { key: "provider_webhooks", label: "Webhooks de entrega, falha e revogacao", status: "required", owner: "engineering" },
+    { key: "homologation_evidence", label: "Evidencias de homologacao", status: "required", owner: "operations" },
+    { key: "rollback_plan", label: "Plano de rollback e modo manual", status: "required", owner: "operations" },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "communication_provider_activation_blocked",
+    projectPercentAfterBlock: 92,
+    realProviderCallsAllowed: false,
+    summary: {
+      providers: providers.length,
+      blockedProviders: providers.filter((item) => !item.realSendAllowed).length,
+      requiredGates: gates.length,
+      readyForCredentialCollection: true,
+      readyForProductionSend: false,
+    },
+    providers,
+    gates,
+    costPolicy: {
+      requireMonthlyBudgetByTenant: true,
+      requireUsageAlerts: true,
+      blockOnMissingBudget: true,
+      exposeCostToTenantAdmin: true,
+    },
+    privacyPolicy: {
+      maskSensitiveDataBeforeAi: true,
+      whatsappRequiresOptIn: true,
+      publicLinkPreferredForSensitiveDocuments: true,
+      auditEveryProviderCallback: true,
+    },
+    rolloutPlan: [
+      "Homologar e-mail com dominio de teste e destinatarios internos.",
+      "Ativar WhatsApp apenas com templates aprovados e opt-in registrado.",
+      "Ativar mapas primeiro com cache, cotas e alertas de custo.",
+      "Ativar IA com mascaramento de dados e limite por tenant.",
+      "Liberar envio real por tenant somente apos evidencias e aceite formal.",
+    ],
+    rollbackPlan: [
+      "Desligar chave do provider por tenant.",
+      "Retornar notificacoes para modo manual.",
+      "Bloquear novas tentativas automaticas.",
+      "Preservar auditoria, payload hash e motivo da falha.",
+    ],
+    blockedActions: [
+      "collect_provider_keys_without_owner_budget",
+      "enable_whatsapp_without_template_approval",
+      "enable_ai_without_sensitive_data_mask",
+      "enable_maps_without_cost_limit",
+      "enable_real_send_without_rollback_plan",
+    ],
+  };
+}

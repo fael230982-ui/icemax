@@ -2853,3 +2853,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Plano De Ativacao De Provedores De Comunicacao
+
+- [x] Endpoint de plano de ativacao de provedores criado.
+- [x] E-mail, WhatsApp, mapas e OpenAI mapeados.
+- [x] Custos, chaves, controles e bloqueios definidos.
+- [x] Envio real permanece bloqueado.
+- [x] Console web ganhou consulta de ativacao de provedores.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

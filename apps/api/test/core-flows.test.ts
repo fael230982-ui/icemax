@@ -242,6 +242,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(communicationPersistentQueueReadiness.json().channels.some((item: { key: string; decision: string }) =>
     item.key === "whatsapp" && item.decision === "blocked"));
 
+  const communicationProviderActivationPlan = await app.inject({
+    method: "GET",
+    url: "/communications/provider-activation-plan",
+  });
+  assert.equal(communicationProviderActivationPlan.statusCode, 200);
+  assert.equal(communicationProviderActivationPlan.json().realProviderCallsAllowed, false);
+  assert.equal(communicationProviderActivationPlan.json().projectPercentAfterBlock, 92);
+  assert.equal(communicationProviderActivationPlan.json().costPolicy.blockOnMissingBudget, true);
+  assert.equal(communicationProviderActivationPlan.json().privacyPolicy.whatsappRequiresOptIn, true);
+  assert.ok(communicationProviderActivationPlan.json().blockedActions.includes("enable_maps_without_cost_limit"));
+  assert.ok(communicationProviderActivationPlan.json().providers.some((item: { key: string; realSendAllowed: boolean }) =>
+    item.key === "openai" && item.realSendAllowed === false));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",
