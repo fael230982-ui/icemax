@@ -73,6 +73,7 @@ export function OperationsConsole() {
   const [mobileOfflineTechnicianFilter, setMobileOfflineTechnicianFilter] = useState("all");
   const [mobileOfflineSort, setMobileOfflineSort] = useState("severity_desc");
   const [compactActionStatus, setCompactActionStatus] = useState<Record<string, string>>({});
+  const [expandedCompactOfflineCards, setExpandedCompactOfflineCards] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
   const mobileOfflineItems = mobileOfflineEscalations?.data ?? [];
@@ -139,6 +140,10 @@ export function OperationsConsole() {
       setStatus(message);
       setCompactActionStatus((current) => ({ ...current, [recordId]: `${label}: falhou.` }));
     }
+  }
+
+  function toggleCompactOfflineCard(recordId: string) {
+    setExpandedCompactOfflineCards((current) => ({ ...current, [recordId]: !current[recordId] }));
   }
 
   function submitCustomer(event: FormEvent<HTMLFormElement>) {
@@ -1585,6 +1590,21 @@ export function OperationsConsole() {
                         Timeline
                       </button>
                     </div>
+                    <button
+                      type="button"
+                      className="secondary compactQueueToggle"
+                      onClick={() => toggleCompactOfflineCard(item.id)}
+                    >
+                      {expandedCompactOfflineCards[item.id] ? "Ocultar detalhes" : "Ver detalhes"}
+                    </button>
+                    {expandedCompactOfflineCards[item.id] ? (
+                      <div className="compactQueueDetails">
+                        <span>Motivo: {item.blockedReason}</span>
+                        <span>Impacto: {item.impact ?? "Nao informado"}</span>
+                        <span>Recomendacao: {item.recommendedAction}</span>
+                        {item.mobileNote ? <span>Nota app: {item.mobileNote}</span> : null}
+                      </div>
+                    ) : null}
                     {compactActionStatus[item.id] ? (
                       <span className="compactQueueFeedback">{compactActionStatus[item.id]}</span>
                     ) : null}

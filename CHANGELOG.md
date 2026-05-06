@@ -1388,6 +1388,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Acoes compactas atualizam tambem o resultado global do console.
 - Documentacao operacional criada para retorno visual da fila compacta.
 
+## 0.8.188 - Detalhes Expansiveis Na Fila Compacta Offline
+
+- Cards compactos ganharam opcao para abrir e ocultar detalhes operacionais.
+- Detalhes exibem motivo do bloqueio, impacto, recomendacao e nota vinda do app.
+- Gestor consegue investigar pendencias prioritarias sem depender da tabela completa.
+- Documentacao operacional criada para detalhes expansíveis da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

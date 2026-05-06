@@ -3266,3 +3266,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Detalhes Expansiveis Na Fila Compacta Offline
+
+- [x] Estado de expansao por card criado.
+- [x] Botao de abrir e ocultar detalhes criado.
+- [x] Motivo do bloqueio exibido no card.
+- [x] Impacto operacional exibido no card.
+- [x] Recomendacao exibida no card.
+- [x] Nota do app exibida quando existir.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

@@ -434,6 +434,24 @@ h2 {
   font-size: 12px;
 }
 
+.compactQueueToggle {
+  min-height: 34px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.compactQueueDetails {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  color: var(--text);
+  background: #f8fafc;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .compactQueueFeedback {
   display: block;
   min-height: 20px;
