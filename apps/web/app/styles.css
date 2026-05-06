@@ -460,6 +460,17 @@ h2 {
   font-size: 12px;
 }
 
+.compactQueueReset {
+  min-height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.compactQueueReset:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .compactQueueToggle {
   min-height: 34px;
   padding: 6px 8px;

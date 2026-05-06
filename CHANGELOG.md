@@ -1430,6 +1430,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Alerta usa padrao de atencao ja aplicado em indicadores operacionais.
 - Documentacao operacional criada para alerta de itens ocultos.
 
+## 0.8.194 - Limpeza Rapida De Filtros Offline
+
+- Fila compacta ganhou acao rapida para restaurar filtros operacionais.
+- Reset retorna origem, prioridade, responsavel, tecnico, ordenacao e modo app tecnico ao padrao.
+- Botao fica desabilitado quando a fila ja esta no estado inicial.
+- Documentacao operacional criada para limpeza rapida de filtros.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

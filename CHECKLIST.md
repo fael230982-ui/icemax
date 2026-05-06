@@ -3349,3 +3349,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Limpeza Rapida De Filtros Offline
+
+- [x] Acao de reset dos filtros offline criada.
+- [x] Reset cobre origem, prioridade, responsavel, tecnico e ordenacao.
+- [x] Reset cobre modo compacto apenas app tecnico.
+- [x] Botao desabilita quando nao ha filtro ativo.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

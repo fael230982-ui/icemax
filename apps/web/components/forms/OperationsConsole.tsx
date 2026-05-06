@@ -114,6 +114,12 @@ export function OperationsConsole() {
   const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
   const compactMobileRequestCount = sortedMobileOfflineItems.filter((item) => item.requestedFromMobile).length;
   const hiddenCompactMobileOfflineCount = Math.max(compactMobileOfflineFilteredItems.length - compactMobileOfflineItems.length, 0);
+  const hasActiveMobileOfflineFilters = mobileOfflineSourceFilter !== "all"
+    || mobileOfflinePriorityFilter !== "all"
+    || mobileOfflineOwnerFilter !== "all"
+    || mobileOfflineTechnicianFilter !== "all"
+    || mobileOfflineSort !== "severity_desc"
+    || compactMobileOnly;
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -150,6 +156,15 @@ export function OperationsConsole() {
 
   function toggleCompactOfflineCard(recordId: string) {
     setExpandedCompactOfflineCards((current) => ({ ...current, [recordId]: !current[recordId] }));
+  }
+
+  function resetMobileOfflineFilters() {
+    setMobileOfflineSourceFilter("all");
+    setMobileOfflinePriorityFilter("all");
+    setMobileOfflineOwnerFilter("all");
+    setMobileOfflineTechnicianFilter("all");
+    setMobileOfflineSort("severity_desc");
+    setCompactMobileOnly(false);
   }
 
   function submitCustomer(event: FormEvent<HTMLFormElement>) {
@@ -1555,6 +1570,14 @@ export function OperationsConsole() {
                   <span className={hiddenCompactMobileOfflineCount ? "compactQueueHiddenWarning" : undefined}>
                     Ocultas: {hiddenCompactMobileOfflineCount}
                   </span>
+                  <button
+                    type="button"
+                    className="secondary compactQueueReset"
+                    onClick={resetMobileOfflineFilters}
+                    disabled={!hasActiveMobileOfflineFilters}
+                  >
+                    Limpar filtros
+                  </button>
                 </div>
               </div>
               <div className="compactQueueGrid">
