@@ -230,6 +230,18 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   });
   assert.equal(notification.statusCode, 202);
 
+  const communicationPersistentQueueReadiness = await app.inject({
+    method: "GET",
+    url: "/communications/persistent-queue-readiness",
+  });
+  assert.equal(communicationPersistentQueueReadiness.statusCode, 200);
+  assert.equal(communicationPersistentQueueReadiness.json().realProviderSendAllowed, false);
+  assert.equal(communicationPersistentQueueReadiness.json().summary.projectPercentAfterBlock, 91);
+  assert.equal(communicationPersistentQueueReadiness.json().storagePolicy.storeSecretsInQueue, false);
+  assert.ok(communicationPersistentQueueReadiness.json().blockedActions.includes("send_whatsapp_without_opt_in"));
+  assert.ok(communicationPersistentQueueReadiness.json().channels.some((item: { key: string; decision: string }) =>
+    item.key === "whatsapp" && item.decision === "blocked"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

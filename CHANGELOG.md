@@ -1174,6 +1174,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web passou a incluir a matriz na verificacao de virada de banco.
 - Teste automatizado cobre bloqueio de migracao real, fase de estoque e provedores antes de fila persistida.
 
+## 0.8.160 - Prontidao Da Fila Persistente De Comunicacao
+
+- Criado endpoint de prontidao da fila persistente de comunicacao.
+- Fila cobre e-mail, WhatsApp, avisos internos e push tecnico em modo dry-run.
+- Politica bloqueia envio real sem tenantId, opt-in, idempotencia, webhook e fila persistida.
+- Console web ganhou consulta de fila persistente de comunicacao.
+- Teste automatizado cobre bloqueio de WhatsApp sem opt-in e proibicao de segredo no payload.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

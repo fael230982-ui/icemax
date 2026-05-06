@@ -2837,3 +2837,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Prontidao Da Fila Persistente De Comunicacao
+
+- [x] Endpoint de prontidao da fila persistente criado.
+- [x] Canais de e-mail, WhatsApp, interno e push tecnico definidos.
+- [x] Envio real permanece bloqueado.
+- [x] Politicas de tenantId, idempotencia, webhook e opt-in registradas.
+- [x] Console web ganhou consulta de fila persistente.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

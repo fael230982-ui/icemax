@@ -5,6 +5,7 @@ import { aiRequests } from "../mock-data";
 import {
   createMockNotificationTemplate,
   createPrismaNotificationTemplate,
+  getCommunicationPersistentQueueReadiness,
   listMockIntegrations,
   listMockNotifications,
   listMockWhatsappTemplates,
@@ -42,6 +43,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
       : await sendMockNotification(context.tenantId, input);
 
     return reply.code(202).send(notification);
+  });
+
+  app.get("/communications/persistent-queue-readiness", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getCommunicationPersistentQueueReadiness(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

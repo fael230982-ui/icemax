@@ -131,3 +131,90 @@ export async function sendPrismaNotification(tenantId: string, input: SendNotifi
     },
   });
 }
+
+export async function getCommunicationPersistentQueueReadiness(tenantId: string) {
+  const channels = [
+    {
+      key: "email",
+      label: "E-mail transacional",
+      decision: "prepare",
+      providerProductionAllowed: false,
+      requiredBeforeProduction: ["template por tenant", "fila persistida", "bounce handling", "limite de envio"],
+      idempotencyKeyPattern: "tenant:channel:entity:template",
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp Business",
+      decision: "blocked",
+      providerProductionAllowed: false,
+      requiredBeforeProduction: ["opt-in do cliente", "template aprovado", "fila persistida", "webhook de status"],
+      idempotencyKeyPattern: "tenant:whatsapp:recipient:template:entity",
+    },
+    {
+      key: "internal",
+      label: "Avisos internos",
+      decision: "prepare",
+      providerProductionAllowed: false,
+      requiredBeforeProduction: ["usuario destino", "auditoria", "deduplicacao", "retencao"],
+      idempotencyKeyPattern: "tenant:internal:user:event",
+    },
+    {
+      key: "push",
+      label: "Push tecnico",
+      decision: "blocked",
+      providerProductionAllowed: false,
+      requiredBeforeProduction: ["device token", "consentimento", "fila persistida", "fallback interno"],
+      idempotencyKeyPattern: "tenant:push:user:event",
+    },
+  ];
+  const queueStates = [
+    { key: "draft", label: "Rascunho", canSend: false, keepsPayload: true },
+    { key: "queued", label: "Enfileirada", canSend: false, keepsPayload: true },
+    { key: "ready_for_provider", label: "Pronta para provedor", canSend: false, keepsPayload: true },
+    { key: "sent", label: "Enviada", canSend: false, keepsPayload: false },
+    { key: "failed_retryable", label: "Falha com reenvio", canSend: false, keepsPayload: true },
+    { key: "failed_blocked", label: "Falha bloqueada", canSend: false, keepsPayload: true },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "communication_persistent_queue_readiness_blocked",
+    realProviderSendAllowed: false,
+    summary: {
+      projectPercentAfterBlock: 91,
+      channels: channels.length,
+      blockedChannels: channels.filter((item) => item.decision === "blocked").length,
+      persistentQueueRequired: true,
+      providerKeysRequiredNow: false,
+    },
+    channels,
+    queueStates,
+    storagePolicy: {
+      storeSecretsInQueue: false,
+      storeProviderToken: false,
+      storePayloadHash: true,
+      tenantIsolationRequired: true,
+      retentionDaysBeforeArchive: 90,
+    },
+    processingPolicy: {
+      dryRunOnly: true,
+      maxAttempts: 5,
+      exponentialBackoffRequired: true,
+      manualReviewAfterMaxAttempts: true,
+      providerWebhookRequiredBeforeRealSend: true,
+    },
+    blockedActions: [
+      "send_real_email_without_persistent_queue",
+      "send_whatsapp_without_opt_in",
+      "store_provider_token_in_notification_payload",
+      "process_queue_without_tenant_id",
+    ],
+    nextActions: [
+      "Persistir notificacoes por tenant antes de conectar provedores reais.",
+      "Adicionar idempotencia por canal, template e entidade.",
+      "Criar webhooks de status para e-mail e WhatsApp antes do envio real.",
+      "Manter provedores em dry-run ate custos, LGPD e aceite estarem aprovados.",
+    ],
+  };
+}
