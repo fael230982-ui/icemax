@@ -1367,6 +1367,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Leitura da triagem ficou mais rapida para gestor identificar bloqueios criticos.
 - Documentacao operacional criada para indicadores da fila offline web.
 
+## 0.8.185 - Fila Diaria Compacta Offline Web
+
+- Console web ganhou uma visao compacta com as principais pendencias offline filtradas.
+- Cards exibem OS, risco, cliente, tecnico, origem e proxima acao operacional.
+- Fila compacta respeita os filtros e a ordenacao ja escolhidos pelo gestor.
+- Documentacao operacional criada para uso diario da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

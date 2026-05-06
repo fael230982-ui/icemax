@@ -105,6 +105,7 @@ export function OperationsConsole() {
 
     return right.severityScore - left.severityScore || right.retryCount - left.retryCount;
   });
+  const compactMobileOfflineItems = sortedMobileOfflineItems.slice(0, 6);
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1506,6 +1507,35 @@ export function OperationsConsole() {
               <span>Pedidos app: {mobileOfflineEscalations.summary.managerReviewRequests ?? 0}</span>
               <span>Mais antiga: {mobileOfflineEscalations.summary.oldestAgeHours}h</span>
               <span>Maior risco: {mobileOfflineEscalations.summary.highestSeverityScore}</span>
+            </div>
+          ) : null}
+          {compactMobileOfflineItems.length ? (
+            <div className="compactQueue">
+              <div className="compactQueueHeader">
+                <strong>Fila diaria compacta</strong>
+                <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
+              </div>
+              <div className="compactQueueGrid">
+                {compactMobileOfflineItems.map((item) => (
+                  <article key={`compact-${item.id}`}>
+                    <div className="compactQueueTop">
+                      <strong>{item.serviceOrderId}</strong>
+                      <span className={getEscalationSeverityClass(item.severityScore)}>{item.severityScore}</span>
+                    </div>
+                    <p>{item.customer}</p>
+                    <div className="compactQueueMeta">
+                      <span>{item.technicianName}</span>
+                      <span className={item.requestedFromMobile ? "badge badgeInfo" : "badge badgeNeutral"}>
+                        {item.requestedFromMobile ? "App tecnico" : "Guarda sync"}
+                      </span>
+                    </div>
+                    <div className="compactQueueAction">
+                      <span>{item.actionLabel}</span>
+                      <span className={getEscalationPriorityClass(item.priority)}>{item.priority}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           ) : null}
           <div className="tableWrap">

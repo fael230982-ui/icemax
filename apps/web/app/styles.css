@@ -374,6 +374,54 @@ h2 {
   background: #f8fafc;
 }
 
+.compactQueue {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.compactQueueHeader,
+.compactQueueTop,
+.compactQueueMeta,
+.compactQueueAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.compactQueueHeader span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.compactQueueGrid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.compactQueueGrid article {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.compactQueueGrid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.compactQueueMeta,
+.compactQueueAction {
+  font-size: 13px;
+}
+
 .tableWrap {
   overflow-x: auto;
 }
@@ -2349,7 +2397,8 @@ dd {
   .capacityCritical,
   .billingSummary,
   .billingControls,
-  .billingRows article {
+  .billingRows article,
+  .compactQueueGrid {
     grid-template-columns: 1fr;
   }
 }
