@@ -28,6 +28,7 @@ type MobileOfflineEscalationItem = {
   actionLabel: string;
   priority: string;
   retryCount: number;
+  ageHours?: number;
   severityScore: number;
   slaStatus: string;
   blockedReason: string;
@@ -70,6 +71,7 @@ export function OperationsConsole() {
   const [mobileOfflinePriorityFilter, setMobileOfflinePriorityFilter] = useState("all");
   const [mobileOfflineOwnerFilter, setMobileOfflineOwnerFilter] = useState("all");
   const [mobileOfflineTechnicianFilter, setMobileOfflineTechnicianFilter] = useState("all");
+  const [mobileOfflineSort, setMobileOfflineSort] = useState("severity_desc");
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
   const mobileOfflineItems = mobileOfflineEscalations?.data ?? [];
@@ -84,6 +86,24 @@ export function OperationsConsole() {
     const technicianMatches = mobileOfflineTechnicianFilter === "all" || item.technicianName === mobileOfflineTechnicianFilter;
 
     return sourceMatches && priorityMatches && ownerMatches && technicianMatches;
+  });
+  const sortedMobileOfflineItems = [...filteredMobileOfflineItems].sort((left, right) => {
+    if (mobileOfflineSort === "age_desc") {
+      return (right.ageHours ?? 0) - (left.ageHours ?? 0) || right.severityScore - left.severityScore;
+    }
+
+    if (mobileOfflineSort === "priority_desc") {
+      const priorityWeight = { critical: 2, high: 1 } as Record<string, number>;
+      return (priorityWeight[right.priority] ?? 0) - (priorityWeight[left.priority] ?? 0)
+        || right.severityScore - left.severityScore;
+    }
+
+    if (mobileOfflineSort === "mobile_first") {
+      return Number(right.requestedFromMobile) - Number(left.requestedFromMobile)
+        || right.severityScore - left.severityScore;
+    }
+
+    return right.severityScore - left.severityScore || right.retryCount - left.retryCount;
   });
 
   async function run(label: string, action: () => Promise<unknown>) {
@@ -1462,12 +1482,19 @@ export function OperationsConsole() {
                   <option key={technician} value={technician}>{technician}</option>
                 ))}
               </select>
+              <select value={mobileOfflineSort} onChange={(event) => setMobileOfflineSort(event.target.value)}>
+                <option value="severity_desc">Maior risco</option>
+                <option value="priority_desc">Prioridade</option>
+                <option value="mobile_first">Pedidos app primeiro</option>
+                <option value="age_desc">Mais tentativas</option>
+              </select>
             </div>
           </div>
           {mobileOfflineEscalations.summary ? (
             <div className="summaryPills">
               <span>Total: {mobileOfflineEscalations.summary.total}</span>
-              <span>Filtradas: {filteredMobileOfflineItems.length}</span>
+              <span>Filtradas: {sortedMobileOfflineItems.length}</span>
+              <span>Ordem: {mobileOfflineSort}</span>
               <span>Criticas: {mobileOfflineEscalations.summary.critical}</span>
               <span>Altas: {mobileOfflineEscalations.summary.high}</span>
               <span>Pedidos app: {mobileOfflineEscalations.summary.managerReviewRequests ?? 0}</span>
@@ -1490,11 +1517,11 @@ export function OperationsConsole() {
                 </tr>
               </thead>
               <tbody>
-                {filteredMobileOfflineItems.map((item) => (
+                {sortedMobileOfflineItems.map((item) => (
                   <tr key={item.id}>
                     <td>{item.serviceOrderId}<br />{item.customer}</td>
                     <td>{item.technicianName}<br />{item.owner}</td>
-                    <td>{item.severityScore}<br />{item.slaStatus}</td>
+                    <td>{item.severityScore}<br />{item.slaStatus}<br />{item.ageHours ?? 0}h</td>
                     <td>
                       {item.requestedFromMobile ? "App tecnico" : "Guarda sync"}
                       <br />
@@ -1527,7 +1554,7 @@ export function OperationsConsole() {
                 ))}
               </tbody>
             </table>
-            {!filteredMobileOfflineItems.length ? (
+            {!sortedMobileOfflineItems.length ? (
               <div className="emptyState">Nenhuma pendencia offline encontrada com os filtros atuais.</div>
             ) : null}
           </div>

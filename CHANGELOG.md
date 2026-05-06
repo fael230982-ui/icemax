@@ -1353,6 +1353,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Estado vazio foi adicionado quando nenhum item combina com os filtros.
 - Documentacao operacional criada para filtros da fila offline web.
 
+## 0.8.183 - Ordenacao Da Fila Offline No Web
+
+- Console web ganhou ordenacao por risco, prioridade, origem mobile e tempo bloqueado.
+- Coluna de risco passou a exibir horas bloqueadas.
+- Resumo da fila informa a ordenacao aplicada.
+- Documentacao operacional criada para ordenacao da fila offline web.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

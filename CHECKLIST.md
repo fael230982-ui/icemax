@@ -3192,3 +3192,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Ordenacao Da Fila Offline No Web
+
+- [x] Ordenacao por maior risco criada.
+- [x] Ordenacao por prioridade criada.
+- [x] Ordenacao por pedidos do app primeiro criada.
+- [x] Ordenacao por tempo bloqueado criada.
+- [x] Horas bloqueadas exibidas na coluna de risco.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
