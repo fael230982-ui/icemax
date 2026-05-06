@@ -3391,3 +3391,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Risco Maximo Oculto Na Fila Compacta
+
+- [x] Lista de itens ocultos calculada a partir do recorte compacto.
+- [x] Maior severidade oculta calculada.
+- [x] Indicador aparece apenas quando ha itens ocultos.
+- [x] Destaque critico aplicado para risco oculto alto.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

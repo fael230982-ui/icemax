@@ -111,9 +111,14 @@ export function OperationsConsole() {
   const compactMobileOfflineFilteredItems = sortedMobileOfflineItems
     .filter((item) => !compactMobileOnly || item.requestedFromMobile);
   const compactMobileOfflineItems = compactMobileOfflineFilteredItems.slice(0, 6);
+  const hiddenCompactMobileOfflineItems = compactMobileOfflineFilteredItems.slice(6);
   const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
   const compactMobileRequestCount = sortedMobileOfflineItems.filter((item) => item.requestedFromMobile).length;
-  const hiddenCompactMobileOfflineCount = Math.max(compactMobileOfflineFilteredItems.length - compactMobileOfflineItems.length, 0);
+  const hiddenCompactMobileOfflineCount = hiddenCompactMobileOfflineItems.length;
+  const hiddenCompactMobileOfflineMaxSeverity = hiddenCompactMobileOfflineItems.reduce(
+    (highest, item) => Math.max(highest, item.severityScore),
+    0,
+  );
   const compactMobileOfflineVisiblePercent = compactMobileOfflineFilteredItems.length
     ? Math.round((compactMobileOfflineItems.length / compactMobileOfflineFilteredItems.length) * 100)
     : 0;
@@ -1586,6 +1591,13 @@ export function OperationsConsole() {
                   <span className={hiddenCompactMobileOfflineCount ? "compactQueueHiddenWarning" : undefined}>
                     Ocultas: {hiddenCompactMobileOfflineCount}
                   </span>
+                  {hiddenCompactMobileOfflineCount ? (
+                    <span
+                      className={hiddenCompactMobileOfflineMaxSeverity >= 85 ? "compactQueueHiddenSeverityDanger" : "compactQueueHiddenWarning"}
+                    >
+                      Risco oculto: {hiddenCompactMobileOfflineMaxSeverity}
+                    </span>
+                  ) : null}
                   <button
                     type="button"
                     className="secondary compactQueueReset"

@@ -1451,6 +1451,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Cobertura abaixo de 100% recebe destaque visual de atencao.
 - Documentacao operacional criada para cobertura visivel da fila.
 
+## 0.8.197 - Risco Maximo Oculto Na Fila Compacta
+
+- Fila compacta passou a calcular maior severidade entre itens ocultos.
+- Indicador aparece apenas quando ha pendencias fora dos seis cards visiveis.
+- Severidade critica oculta recebe destaque visual de risco.
+- Documentacao operacional criada para risco oculto da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

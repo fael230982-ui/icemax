@@ -430,6 +430,15 @@ h2 {
   font-weight: 700;
 }
 
+.compactQueueHiddenSeverityDanger {
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: #991b1b;
+  background: #fef2f2;
+  font-weight: 700;
+}
+
 .compactQueueFilterNotice {
   display: flex;
   align-items: center;
