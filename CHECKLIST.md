@@ -3323,3 +3323,16 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Contador De Itens Ocultos Na Fila Compacta
+
+- [x] Lista compacta filtrada antes do limite criada.
+- [x] Contador de itens ocultos criado.
+- [x] Contador respeita filtro app tecnico.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

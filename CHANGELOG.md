@@ -1416,6 +1416,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Gestor consegue saber se existem mais solicitacoes do app alem dos cards visiveis.
 - Documentacao operacional criada para contador app da fila compacta.
 
+## 0.8.192 - Contador De Itens Ocultos Na Fila Compacta
+
+- Cabecalho da fila compacta passou a informar quantos itens ficaram fora dos seis cards.
+- Contador respeita o filtro rapido `Apenas app tecnico`.
+- Gestor consegue perceber quando precisa usar a tabela completa para ver o restante da fila.
+- Documentacao operacional criada para itens ocultos da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

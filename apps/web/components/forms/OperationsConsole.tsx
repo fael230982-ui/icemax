@@ -108,11 +108,12 @@ export function OperationsConsole() {
 
     return right.severityScore - left.severityScore || right.retryCount - left.retryCount;
   });
-  const compactMobileOfflineItems = sortedMobileOfflineItems
-    .filter((item) => !compactMobileOnly || item.requestedFromMobile)
-    .slice(0, 6);
+  const compactMobileOfflineFilteredItems = sortedMobileOfflineItems
+    .filter((item) => !compactMobileOnly || item.requestedFromMobile);
+  const compactMobileOfflineItems = compactMobileOfflineFilteredItems.slice(0, 6);
   const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
   const compactMobileRequestCount = sortedMobileOfflineItems.filter((item) => item.requestedFromMobile).length;
+  const hiddenCompactMobileOfflineCount = Math.max(compactMobileOfflineFilteredItems.length - compactMobileOfflineItems.length, 0);
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1551,6 +1552,7 @@ export function OperationsConsole() {
                   </label>
                   <span>App tecnico: {compactMobileRequestCount}</span>
                   <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
+                  <span>Ocultas: {hiddenCompactMobileOfflineCount}</span>
                 </div>
               </div>
               <div className="compactQueueGrid">
