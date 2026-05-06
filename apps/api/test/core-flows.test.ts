@@ -283,6 +283,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerObservabilityGate.json().providers.some((item: { key: string; realTrafficAllowed: boolean }) =>
     item.key === "maps" && item.realTrafficAllowed === false));
 
+  const providerGoLiveDecisionBoard = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-go-live-decision-board",
+  });
+  assert.equal(providerGoLiveDecisionBoard.statusCode, 200);
+  assert.equal(providerGoLiveDecisionBoard.json().goLiveAllowed, false);
+  assert.equal(providerGoLiveDecisionBoard.json().projectPercentAfterBlock, 95);
+  assert.equal(providerGoLiveDecisionBoard.json().executiveDecision.recommendedMode, "dry_run_with_manual_fallback");
+  assert.equal(providerGoLiveDecisionBoard.json().summary.requiresOwnerApproval, true);
+  assert.ok(providerGoLiveDecisionBoard.json().blockedActions.includes("release_provider_go_live_without_vault"));
+  assert.ok(providerGoLiveDecisionBoard.json().decisionItems.some((item: { key: string; status: string }) =>
+    item.key === "tenant_budget" && item.status === "blocked"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

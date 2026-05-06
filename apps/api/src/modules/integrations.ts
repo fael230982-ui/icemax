@@ -8,6 +8,7 @@ import {
   createPrismaNotificationTemplate,
   getCommunicationPersistentQueueReadiness,
   getProviderCredentialVaultPolicy,
+  getProviderGoLiveDecisionBoard,
   getProviderObservabilityGate,
   listMockIntegrations,
   listMockNotifications,
@@ -70,6 +71,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderObservabilityGate(context.tenantId);
+  });
+
+  app.get("/integrations/provider-go-live-decision-board", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderGoLiveDecisionBoard(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {

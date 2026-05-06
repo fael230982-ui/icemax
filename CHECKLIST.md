@@ -2901,3 +2901,18 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Board De Decisao Go-Live De Provedores
+
+- [x] Endpoint de decisao go-live de provedores criado.
+- [x] Fila, ativacao, cofre, observabilidade, budget e aceite consolidados.
+- [x] Go-live real permanece bloqueado.
+- [x] Console web ganhou consulta de decisao go-live.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

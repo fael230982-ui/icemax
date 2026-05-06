@@ -531,3 +531,98 @@ export async function getProviderObservabilityGate(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderGoLiveDecisionBoard(tenantId: string) {
+  const decisionItems = [
+    {
+      key: "persistent_queue",
+      label: "Fila persistente de comunicacao",
+      status: "blocked",
+      businessImpact: "Evita duplicidade, perda de mensagem e envio sem tenant.",
+      requiredEvidence: ["idempotencia", "retentativa", "payload hash", "fallback manual"],
+    },
+    {
+      key: "provider_activation",
+      label: "Plano de ativacao de provedores",
+      status: "blocked",
+      businessImpact: "Impede ativar custo externo sem aceite e governanca.",
+      requiredEvidence: ["orcamento aprovado", "LGPD revisada", "templates homologados", "rollback"],
+    },
+    {
+      key: "credential_vault",
+      label: "Cofre de credenciais",
+      status: "blocked",
+      businessImpact: "Protege chaves de e-mail, WhatsApp, mapas e IA.",
+      requiredEvidence: ["cofre gerenciado", "mascaramento", "rotacao", "auditoria sem segredo"],
+    },
+    {
+      key: "observability",
+      label: "Observabilidade e kill switch",
+      status: "blocked",
+      businessImpact: "Permite desligar provider antes de custo, falha ou privacidade sairem do controle.",
+      requiredEvidence: ["dashboard", "alerta de custo", "monitor de webhook", "incidente automatico"],
+    },
+    {
+      key: "tenant_budget",
+      label: "Orcamento por tenant",
+      status: "blocked",
+      businessImpact: "Garante previsibilidade financeira no whitelabel.",
+      requiredEvidence: ["limite mensal", "alertas", "responsavel financeiro", "bloqueio por estouro"],
+    },
+    {
+      key: "legal_acceptance",
+      label: "Aceite legal e operacional",
+      status: "blocked",
+      businessImpact: "Formaliza responsabilidades de comunicacao, IA, rastreamento e dados.",
+      requiredEvidence: ["termo LGPD", "politica WhatsApp", "uso de IA", "autorizacao de rastreamento"],
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_go_live_decision_blocked",
+    projectPercentAfterBlock: 95,
+    goLiveAllowed: false,
+    executiveDecision: {
+      decision: "do_not_release_real_provider_traffic",
+      reason: "Integracoes externas ainda dependem de fila persistente, cofre real, observabilidade, custo aprovado e aceite legal.",
+      recommendedMode: "dry_run_with_manual_fallback",
+      nextDecisionWindow: "apos smoke test com banco real e evidencias de homologacao",
+    },
+    summary: {
+      totalItems: decisionItems.length,
+      blockedItems: decisionItems.filter((item) => item.status === "blocked").length,
+      readyItems: decisionItems.filter((item) => item.status === "ready").length,
+      requiresOwnerApproval: true,
+      requiresAdminApproval: true,
+      requiresTechnicalApproval: true,
+    },
+    decisionItems,
+    approvalsRequired: [
+      { role: "owner", name: "Aprovacao comercial e custo", required: true },
+      { role: "admin", name: "Aprovacao LGPD e operacao", required: true },
+      { role: "engineering", name: "Aprovacao tecnica de fila, cofre e webhooks", required: true },
+      { role: "support", name: "Aprovacao de fallback manual", required: true },
+    ],
+    releaseStages: [
+      { stage: "stage_1", label: "Dry-run interno", realTrafficAllowed: false, exitCriteria: "todos os eventos auditados" },
+      { stage: "stage_2", label: "Homologacao controlada", realTrafficAllowed: false, exitCriteria: "webhooks e custos simulados aprovados" },
+      { stage: "stage_3", label: "Piloto com tenant ICEMAX", realTrafficAllowed: false, exitCriteria: "owner aprova custo e LGPD" },
+      { stage: "stage_4", label: "Trafego real limitado", realTrafficAllowed: false, exitCriteria: "kill switch e alertas ativos" },
+    ],
+    blockedActions: [
+      "release_provider_go_live_without_owner_approval",
+      "release_provider_go_live_without_vault",
+      "release_provider_go_live_without_observability",
+      "release_provider_go_live_without_tenant_budget",
+      "release_provider_go_live_without_rollback",
+    ],
+    nextActions: [
+      "Conectar esta decisao ao board de go-live whitelabel.",
+      "Criar evidencias de homologacao por provider.",
+      "Adicionar aceite formal antes de trafego real.",
+      "Manter operacao em dry-run ate banco real e cofre estarem prontos.",
+    ],
+  };
+}

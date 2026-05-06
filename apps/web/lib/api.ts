@@ -233,6 +233,7 @@ export const icemaxApi = {
   communicationProviderActivationPlan: (token?: string) => apiRequest<unknown>("/communications/provider-activation-plan", { token }),
   providerCredentialVaultPolicy: (token?: string) => apiRequest<unknown>("/integrations/provider-credential-vault-policy", { token }),
   providerObservabilityGate: (token?: string) => apiRequest<unknown>("/integrations/provider-observability-gate", { token }),
+  providerGoLiveDecisionBoard: (token?: string) => apiRequest<unknown>("/integrations/provider-go-live-decision-board", { token }),
   createServiceCatalogItem: (body: unknown, token?: string) => apiRequest<unknown>("/service-catalog/items", { method: "POST", body, token }),
   createPriceBook: (body: unknown, token?: string) => apiRequest<unknown>("/price-books", { method: "POST", body, token }),
   executiveKpis: (token?: string) => apiRequest<unknown>("/kpis/executive", { token }),

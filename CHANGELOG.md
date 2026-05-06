@@ -1206,6 +1206,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de observabilidade de provedores.
 - Teste automatizado cobre bloqueio de trafego real, custo, kill switch e redacao de IA.
 
+## 0.8.164 - Board De Decisao Go-Live De Provedores
+
+- Criado endpoint de board executivo de decisao go-live de provedores.
+- Board consolida fila persistente, ativacao, cofre, observabilidade, orcamento por tenant e aceite legal.
+- Go-live real permanece bloqueado e recomendado em dry-run com fallback manual.
+- Console web ganhou consulta de decisao go-live de provedores.
+- Teste automatizado cobre aprovacao owner, bloqueio por cofre e tenant budget.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
