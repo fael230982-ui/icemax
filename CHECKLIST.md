@@ -3092,3 +3092,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Carga De OS Atribuidas Pela API No Mobile
+
+- [x] App mobile passou a buscar OS atribuidas pela API.
+- [x] Normalizador de resposta criado para campos variaveis do backend.
+- [x] Fallback local mantido para indisponibilidade da API.
+- [x] Restauracao da OS ativa passou a usar a lista carregada.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

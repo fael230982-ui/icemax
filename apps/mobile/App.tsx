@@ -7,7 +7,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldEvidenceRequirements, fieldJourneySteps, fieldQuickActions, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldEvidenceRequirements, fieldJourneySteps, fieldQuickActions, fieldSignaturePackage, orders as fallbackOrders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -31,6 +31,8 @@ import {
   createSatisfactionSurveyAction,
   createVisitPreparationAckAction,
   createWarrantyPresentedAction,
+  fetchAssignedMobileOrders,
+  MobileOrder,
   OfflineAction,
   syncOfflineQueuePartially,
 } from "./src/services/api";
@@ -46,9 +48,11 @@ export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
   const [syncStatus, setSyncStatus] = useState("Sem pendencias.");
   const [queueLoaded, setQueueLoaded] = useState(false);
+  const [ordersLoaded, setOrdersLoaded] = useState(false);
+  const [assignedOrders, setAssignedOrders] = useState<MobileOrder[]>(fallbackOrders);
   const [activeOrderLoaded, setActiveOrderLoaded] = useState(false);
-  const [activeOrderId, setActiveOrderId] = useState(orders[0].id);
-  const activeOrder = orders.find((order) => order.id === activeOrderId) ?? orders[0];
+  const [activeOrderId, setActiveOrderId] = useState(fallbackOrders[0].id);
+  const activeOrder = assignedOrders.find((order) => order.id === activeOrderId) ?? assignedOrders[0] ?? fallbackOrders[0];
   const activeServiceOrderId = activeOrder.id.replace("#", "");
   const activeMission = {
     serviceOrderId: activeServiceOrderId,
@@ -76,16 +80,52 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    void loadActiveOrderId(orders.map((order) => order.id), orders[0].id)
+    let cancelled = false;
+
+    void fetchAssignedMobileOrders(fallbackOrders)
+      .then((loadedOrders) => {
+        if (cancelled) {
+          return;
+        }
+
+        setAssignedOrders(loadedOrders);
+        setSyncStatus(`${loadedOrders.length} OS atribuidas carregadas para o tecnico.`);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAssignedOrders(fallbackOrders);
+          setSyncStatus("API indisponivel. Usando OS locais em modo offline.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setOrdersLoaded(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ordersLoaded) {
+      return;
+    }
+
+    const allowedOrderIds = assignedOrders.map((order) => order.id);
+    const fallbackOrderId = assignedOrders[0]?.id ?? fallbackOrders[0].id;
+
+    void loadActiveOrderId(allowedOrderIds, fallbackOrderId)
       .then((orderId) => {
         setActiveOrderId(orderId);
-        if (orderId !== orders[0].id) {
+        if (orderId !== fallbackOrderId) {
           setSyncStatus(`Missao ativa restaurada: OS ${orderId.replace("#", "")}.`);
         }
       })
       .catch(() => setSyncStatus("Nao foi possivel restaurar a missao ativa."))
       .finally(() => setActiveOrderLoaded(true));
-  }, []);
+  }, [assignedOrders, ordersLoaded]);
 
   useEffect(() => {
     if (queueLoaded) {
@@ -316,7 +356,7 @@ export default function App() {
         </Section>
 
         <Section title="Ordens de servico">
-          {orders.map((order) => (
+          {assignedOrders.map((order) => (
             <OrderCard
               key={order.id}
               {...order}

@@ -6,6 +6,10 @@ export type MobileOrder = {
   status: string;
   detail: string;
   priority: string;
+  equipment: string;
+  routeEta: string;
+  offlineRisk: string;
+  nextAction: string;
 };
 
 export async function fetchAssignedOrders(token?: string) {
@@ -21,6 +25,113 @@ export async function fetchAssignedOrders(token?: string) {
   }
 
   return response.json() as Promise<{ data: unknown[]; total: number }>;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readString(source: Record<string, unknown>, keys: string[], fallback: string) {
+  for (const key of keys) {
+    const value = source[key];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return fallback;
+}
+
+function readNestedName(source: Record<string, unknown>, key: string, fallback: string) {
+  const value = source[key];
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+
+  if (isRecord(value)) {
+    return readString(value, ["name", "label", "title", "serialNumber", "code"], fallback);
+  }
+
+  return fallback;
+}
+
+function normalizeOrderId(value: string, fallback: string) {
+  const cleanValue = value.trim();
+  if (!cleanValue) {
+    return fallback;
+  }
+
+  return cleanValue.startsWith("#") ? cleanValue : `#${cleanValue}`;
+}
+
+function normalizePriority(value: string) {
+  const normalized = value.trim().toLowerCase();
+  if (["emergency", "emergencia", "urgente", "critical", "critica"].includes(normalized)) {
+    return "Emergencia";
+  }
+
+  if (["high", "alta"].includes(normalized)) {
+    return "Alta";
+  }
+
+  if (["low", "baixa"].includes(normalized)) {
+    return "Baixa";
+  }
+
+  if (["normal", "medium", "media"].includes(normalized)) {
+    return "Normal";
+  }
+
+  return value || "Normal";
+}
+
+function normalizeAssignedOrder(rawOrder: unknown, fallback: MobileOrder, index: number): MobileOrder {
+  if (!isRecord(rawOrder)) {
+    return fallback;
+  }
+
+  const id = normalizeOrderId(readString(rawOrder, ["id", "serviceOrderId", "number", "code"], fallback.id), fallback.id);
+  const customer = readString(rawOrder, ["customerName", "clientName", "customer"], readNestedName(rawOrder, "customer", fallback.customer));
+  const equipment = readString(
+    rawOrder,
+    ["equipmentLabel", "equipmentName", "assetName", "equipment"],
+    readNestedName(rawOrder, "equipment", fallback.equipment),
+  );
+  const detail = readString(rawOrder, ["detail", "title", "problem", "description", "summary"], fallback.detail);
+  const status = readString(rawOrder, ["status", "state", "stage"], fallback.status);
+  const priority = normalizePriority(readString(rawOrder, ["priority", "urgency"], fallback.priority));
+  const routeEta = readString(rawOrder, ["routeEta", "eta", "estimatedArrival"], fallback.routeEta);
+  const offlineRisk = readString(rawOrder, ["offlineRisk", "connectivityRisk"], fallback.offlineRisk);
+  const nextAction = readString(
+    rawOrder,
+    ["nextAction", "recommendedAction", "fieldInstruction"],
+    fallback.nextAction || `Abrir a OS ${id.replace("#", "")} e seguir o checklist tecnico.`,
+  );
+
+  return {
+    ...fallback,
+    id,
+    customer: customer || `Cliente ${index + 1}`,
+    equipment,
+    detail,
+    status,
+    priority,
+    routeEta,
+    offlineRisk,
+    nextAction,
+  };
+}
+
+export function normalizeAssignedOrdersResponse(response: { data?: unknown[] }, fallbackOrders: MobileOrder[]) {
+  const rawOrders = Array.isArray(response.data) ? response.data : [];
+  const normalizedOrders = rawOrders.map((order, index) => normalizeAssignedOrder(order, fallbackOrders[index] ?? fallbackOrders[0], index));
+
+  return normalizedOrders.length ? normalizedOrders : fallbackOrders;
+}
+
+export async function fetchAssignedMobileOrders(fallbackOrders: MobileOrder[], token?: string) {
+  const response = await fetchAssignedOrders(token);
+  return normalizeAssignedOrdersResponse(response, fallbackOrders);
 }
 
 export async function sendOfflineAction(action: OfflineAction, token?: string) {

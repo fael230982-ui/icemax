@@ -1302,6 +1302,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Troca de missao continua atualizando o status do app.
 - Documentacao operacional criada para a persistencia da missao ativa.
 
+## 0.8.176 - Carga De OS Atribuidas Pela API No Mobile
+
+- App tecnico passou a carregar OS atribuidas pela API.
+- Resposta de OS e normalizada para o formato da missao mobile.
+- Fallback local preserva operacao quando API estiver indisponivel.
+- Restauracao da OS ativa passou a validar a lista carregada para o tecnico.
+- Documentacao operacional criada para carga de OS atribuidas no mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
