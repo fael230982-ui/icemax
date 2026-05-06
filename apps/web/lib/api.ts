@@ -343,5 +343,6 @@ export const icemaxApi = {
   dataReadinessBoard: (token?: string) => apiRequest<unknown>("/database/data-readiness-board", { token }),
   tenantIsolationGate: (token?: string) => apiRequest<unknown>("/database/tenant-isolation-gate", { token }),
   databaseRollbackDrill: (token?: string) => apiRequest<unknown>("/database/rollback-drill", { token }),
+  databaseIncrementalMigrationMatrix: (token?: string) => apiRequest<unknown>("/database/incremental-migration-matrix", { token }),
   prismaSmokeTest: (token?: string) => apiRequest<unknown>("/database/prisma-smoke-test", { token }),
 };

@@ -901,6 +901,7 @@ export function OperationsConsole() {
         icemaxApi.dataReadinessBoard(token || undefined),
         icemaxApi.tenantIsolationGate(token || undefined),
         icemaxApi.databaseRollbackDrill(token || undefined),
+        icemaxApi.databaseIncrementalMigrationMatrix(token || undefined),
         icemaxApi.prismaSmokeTest(token || undefined),
       ]);
 

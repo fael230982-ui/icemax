@@ -1789,6 +1789,15 @@ test("database transition exposes cutover schema seed and environment plans", as
   assert.ok(rollback.json().blockedDestructiveCommands[0].includes("pg_restore"));
   assert.ok(rollback.json().goNoGoCriteria[0].includes("Backup"));
 
+  const migrationMatrix = await app.inject({ method: "GET", url: "/database/incremental-migration-matrix" });
+  assert.equal(migrationMatrix.statusCode, 200);
+  assert.equal(migrationMatrix.json().realDataMigrationAllowed, false);
+  assert.equal(migrationMatrix.json().summary.projectPercentAfterBlock, 90);
+  assert.equal(migrationMatrix.json().executionPolicy.providerActivationBeforeDatabaseCutoverAllowed, false);
+  assert.ok(migrationMatrix.json().matrix.some((item: { key: string; decision: string }) =>
+    item.key === "phase_4_stock" && item.decision === "blocked"));
+  assert.ok(migrationMatrix.json().blockedActions.includes("connect_real_providers_before_persistent_queue"));
+
   const smoke = await app.inject({ method: "GET", url: "/database/prisma-smoke-test" });
   assert.equal(smoke.statusCode, 200);
   assert.equal(smoke.json().status, "skipped");

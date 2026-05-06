@@ -2821,3 +2821,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Matriz Incremental De Migracao Prisma
+
+- [x] Endpoint de matriz incremental de migracao criado.
+- [x] Fases de identidade, clientes, OS, contratos, estoque, portal, comunicacao e documentos definidas.
+- [x] Backup, smoke test e isolamento por tenant registrados como obrigatorios.
+- [x] Dados reais e provedores permanecem bloqueados.
+- [x] Console web inclui matriz na verificacao de virada de banco.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

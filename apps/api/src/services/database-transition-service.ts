@@ -370,6 +370,116 @@ export function getDatabaseRollbackDrill() {
   };
 }
 
+export function getDatabaseIncrementalMigrationMatrix() {
+  const readiness = getDataReadinessBoard();
+  const isolation = getTenantIsolationGate();
+  const matrix = [
+    {
+      key: "phase_1_identity_customers",
+      label: "Identidade, clientes e equipamentos",
+      decision: "ready_to_prepare",
+      domains: ["multiempresa", "clientes"],
+      minimumReadiness: 78,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["login por tenant", "clientes por tenant", "equipamentos por cliente"],
+      rollbackPoint: "antes de importar OS e contratos",
+    },
+    {
+      key: "phase_2_service_orders",
+      label: "Ordens de servico e historico tecnico",
+      decision: "prepare_with_blockers",
+      domains: ["ordens"],
+      minimumReadiness: 72,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["OS por tenant", "notas por OS", "fotos em storage privado"],
+      rollbackPoint: "antes de ativar assinatura, fotos reais e e-mail final",
+    },
+    {
+      key: "phase_3_contracts_billing",
+      label: "Contratos, visitas e cobranca recorrente",
+      decision: "prepare_with_blockers",
+      domains: ["contratos"],
+      minimumReadiness: 68,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["contrato por tenant", "agenda recorrente", "aceite auditavel"],
+      rollbackPoint: "antes de gerar cobranca real",
+    },
+    {
+      key: "phase_4_stock",
+      label: "Estoque e reservas",
+      decision: "blocked",
+      domains: ["estoque"],
+      minimumReadiness: 64,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["saldo inicial", "bloqueio de saldo negativo", "concorrencia de reservas"],
+      rollbackPoint: "antes de baixar estoque real",
+    },
+    {
+      key: "phase_5_public_portal",
+      label: "Portal publico e tokens",
+      decision: "prepare_with_blockers",
+      domains: ["portal_cliente"],
+      minimumReadiness: 64,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["hash de token", "escopo por entidade", "expiracao e revogacao"],
+      rollbackPoint: "antes de publicar links para clientes reais",
+    },
+    {
+      key: "phase_6_communications_documents",
+      label: "Comunicacao e documentos",
+      decision: "blocked",
+      domains: ["comunicacao", "documentos"],
+      minimumReadiness: 52,
+      tenantIsolationRequired: true,
+      productionAllowed: false,
+      validation: ["fila persistida", "storage privado", "download autenticado"],
+      rollbackPoint: "antes de conectar e-mail, WhatsApp, IA ou storage real",
+    },
+  ];
+  const blocked = matrix.filter((item) => item.decision === "blocked");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "incremental_migration_matrix_ready",
+    currentMode: isPrismaEnabled() ? "prisma" : "mock",
+    targetMode: "prisma",
+    realDataMigrationAllowed: false,
+    summary: {
+      sourceAverageReadiness: readiness.summary.averageReadiness,
+      isolationProductionCutoverAllowed: isolation.productionCutoverAllowed,
+      phases: matrix.length,
+      blockedPhases: blocked.length,
+      firstExecutablePhase: "phase_1_identity_customers",
+      projectPercentAfterBlock: 90,
+    },
+    executionPolicy: {
+      incrementalOnly: true,
+      backupBeforeEachPhaseRequired: true,
+      smokeAfterEachPhaseRequired: true,
+      tenantIsolationBeforeRealDataRequired: true,
+      providerActivationBeforeDatabaseCutoverAllowed: false,
+    },
+    matrix,
+    blockedActions: [
+      "bulk_import_real_data_without_backup",
+      "migrate_service_orders_without_private_storage",
+      "enable_real_billing_before_contract_acceptance",
+      "connect_real_providers_before_persistent_queue",
+    ],
+    nextActions: [
+      "Preparar fase 1 com tenant, usuarios, clientes e equipamentos.",
+      "Manter OS, contratos, estoque, comunicacao e documentos em migracao controlada.",
+      "Executar smoke test por fase antes de liberar a proxima.",
+      "Nao conectar provedores reais antes de fila persistida e isolamento aprovado.",
+    ],
+  };
+}
+
 export async function getPrismaSmokeTest() {
   const checks = [
     { key: "tenant", label: "Tenant ICEMAX" },

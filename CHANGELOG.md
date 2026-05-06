@@ -1166,6 +1166,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Painel mobile mostra nova secao de comando de campo com bloqueios operacionais.
 - Typecheck mobile cobre o novo contrato de checklist e acao offline.
 
+## 0.8.159 - Matriz Incremental De Migracao Prisma
+
+- Criado endpoint de matriz incremental de migracao para Prisma.
+- Matriz divide a virada em fases de identidade, clientes, OS, contratos, estoque, portal, comunicacao e documentos.
+- Dados reais, provedores e cobranca permanecem bloqueados sem backup, smoke test e isolamento por tenant.
+- Console web passou a incluir a matriz na verificacao de virada de banco.
+- Teste automatizado cobre bloqueio de migracao real, fase de estoque e provedores antes de fila persistida.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

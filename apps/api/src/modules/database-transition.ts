@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import {
   getDatabaseCutoverPlan,
+  getDatabaseIncrementalMigrationMatrix,
   getDatabaseRollbackDrill,
   getDatabaseSchemaSummary,
   getDataReadinessBoard,
@@ -18,5 +19,6 @@ export async function registerDatabaseTransitionRoutes(app: FastifyInstance) {
   app.get("/database/data-readiness-board", async () => getDataReadinessBoard());
   app.get("/database/tenant-isolation-gate", async () => getTenantIsolationGate());
   app.get("/database/rollback-drill", async () => getDatabaseRollbackDrill());
+  app.get("/database/incremental-migration-matrix", async () => getDatabaseIncrementalMigrationMatrix());
   app.get("/database/prisma-smoke-test", async () => getPrismaSmokeTest());
 }
