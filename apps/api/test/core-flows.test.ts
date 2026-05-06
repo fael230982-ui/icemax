@@ -255,6 +255,20 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(communicationProviderActivationPlan.json().providers.some((item: { key: string; realSendAllowed: boolean }) =>
     item.key === "openai" && item.realSendAllowed === false));
 
+  const providerCredentialVaultPolicy = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-credential-vault-policy",
+  });
+  assert.equal(providerCredentialVaultPolicy.statusCode, 200);
+  assert.equal(providerCredentialVaultPolicy.json().realSecretCollectionAllowed, false);
+  assert.equal(providerCredentialVaultPolicy.json().projectPercentAfterBlock, 93);
+  assert.equal(providerCredentialVaultPolicy.json().summary.secretsStoredInRepository, false);
+  assert.equal(providerCredentialVaultPolicy.json().storagePolicy.productionUsesVaultOnly, true);
+  assert.equal(providerCredentialVaultPolicy.json().auditPolicy.auditNeverStoresSecretValue, true);
+  assert.ok(providerCredentialVaultPolicy.json().blockedActions.includes("return_secret_value_from_api"));
+  assert.ok(providerCredentialVaultPolicy.json().credentialGroups.some((item: { provider: string; displayPolicy: string }) =>
+    item.provider === "whatsapp" && item.displayPolicy === "never_show_token"));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

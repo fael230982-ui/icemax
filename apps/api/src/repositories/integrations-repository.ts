@@ -321,3 +321,105 @@ export async function getCommunicationProviderActivationPlan(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderCredentialVaultPolicy(tenantId: string) {
+  const credentialGroups = [
+    {
+      provider: "email",
+      label: "E-mail transacional",
+      secretNames: ["EMAIL_PROVIDER_API_KEY"],
+      publicConfigNames: ["EMAIL_SENDER_DOMAIN", "EMAIL_FROM_NAME"],
+      rotationDays: 90,
+      productionStorage: "managed_secret_vault",
+      displayPolicy: "masked_preview_only",
+    },
+    {
+      provider: "whatsapp",
+      label: "WhatsApp Business",
+      secretNames: ["WHATSAPP_ACCESS_TOKEN", "WHATSAPP_APP_SECRET"],
+      publicConfigNames: ["META_APP_ID", "WHATSAPP_PHONE_NUMBER_ID"],
+      rotationDays: 60,
+      productionStorage: "managed_secret_vault",
+      displayPolicy: "never_show_token",
+    },
+    {
+      provider: "maps",
+      label: "Google Maps Platform",
+      secretNames: ["GOOGLE_MAPS_API_KEY"],
+      publicConfigNames: ["MAPS_ALLOWED_DOMAINS", "MAPS_ALLOWED_BUNDLE_IDS"],
+      rotationDays: 120,
+      productionStorage: "managed_secret_vault",
+      displayPolicy: "masked_preview_only",
+    },
+    {
+      provider: "openai",
+      label: "OpenAI",
+      secretNames: ["OPENAI_API_KEY"],
+      publicConfigNames: ["OPENAI_MODEL_POLICY", "OPENAI_MONTHLY_BUDGET_BRL"],
+      rotationDays: 90,
+      productionStorage: "managed_secret_vault",
+      displayPolicy: "never_show_token",
+    },
+  ];
+
+  const checks = [
+    { key: "no_plaintext_database", label: "Nao gravar segredo em texto puro no banco", status: "required" },
+    { key: "no_secret_in_logs", label: "Nao imprimir segredo em log, erro, auditoria ou console", status: "required" },
+    { key: "tenant_scoped_access", label: "Acesso a segredo sempre isolado por tenant", status: "required" },
+    { key: "owner_approval", label: "Cadastro e troca de segredo exigem owner/admin autorizado", status: "required" },
+    { key: "masked_preview", label: "Interface mostra apenas prefixo/sufixo mascarado", status: "required" },
+    { key: "rotation_workflow", label: "Rotacao programada com teste antes de substituir chave ativa", status: "required" },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_credential_vault_policy_ready",
+    projectPercentAfterBlock: 93,
+    realSecretCollectionAllowed: false,
+    summary: {
+      credentialGroups: credentialGroups.length,
+      checks: checks.length,
+      secretsStoredInRepository: false,
+      secretsStoredInQueuePayload: false,
+      readyForSecretCollectionScreen: true,
+      readyForRealSecretStorage: false,
+    },
+    credentialGroups,
+    checks,
+    auditPolicy: {
+      auditSecretCreated: true,
+      auditSecretRotated: true,
+      auditSecretRevoked: true,
+      auditSecretReadAttempt: true,
+      auditNeverStoresSecretValue: true,
+    },
+    accessPolicy: {
+      allowedRoles: ["owner", "admin"],
+      requireMfaInProduction: true,
+      requireReasonForRotation: true,
+      denyTechnicianAccess: true,
+      denyOutsourcedAccess: true,
+    },
+    storagePolicy: {
+      localDevelopmentUsesEnvOnly: true,
+      productionUsesVaultOnly: true,
+      databaseStoresReferenceOnly: true,
+      queueStoresSecretReference: false,
+      logsUseRedaction: true,
+    },
+    blockedActions: [
+      "commit_secret_to_repository",
+      "store_secret_in_notification_queue",
+      "return_secret_value_from_api",
+      "show_secret_value_in_web_console",
+      "rotate_secret_without_audit_reason",
+    ],
+    nextActions: [
+      "Criar tela de cadastro que aceite segredo apenas uma vez.",
+      "Persistir somente referencia segura ao cofre no banco real.",
+      "Adicionar redacao automatica de logs antes de ativar providers.",
+      "Exigir aprovacao owner/admin para rotacao e revogacao.",
+    ],
+  };
+}

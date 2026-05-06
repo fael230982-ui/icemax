@@ -231,6 +231,7 @@ export const icemaxApi = {
   communicationPreview: (body: unknown, token?: string) => apiRequest<unknown>("/communications/preview", { method: "POST", body, token }),
   communicationPersistentQueueReadiness: (token?: string) => apiRequest<unknown>("/communications/persistent-queue-readiness", { token }),
   communicationProviderActivationPlan: (token?: string) => apiRequest<unknown>("/communications/provider-activation-plan", { token }),
+  providerCredentialVaultPolicy: (token?: string) => apiRequest<unknown>("/integrations/provider-credential-vault-policy", { token }),
   createServiceCatalogItem: (body: unknown, token?: string) => apiRequest<unknown>("/service-catalog/items", { method: "POST", body, token }),
   createPriceBook: (body: unknown, token?: string) => apiRequest<unknown>("/price-books", { method: "POST", body, token }),
   executiveKpis: (token?: string) => apiRequest<unknown>("/kpis/executive", { token }),

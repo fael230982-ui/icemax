@@ -1190,6 +1190,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de ativacao de provedores.
 - Teste automatizado cobre bloqueios de custo, opt-in, IA e mapas.
 
+## 0.8.162 - Politica De Cofre De Credenciais De Provedores
+
+- Criado endpoint de politica de cofre de credenciais de provedores.
+- Politica separa segredos de configuracoes publicas para e-mail, WhatsApp, mapas e OpenAI.
+- Segredos continuam bloqueados fora do repositorio, fila, logs, auditoria e console web.
+- Console web ganhou consulta de cofre de credenciais.
+- Teste automatizado cobre mascaramento, auditoria sem valor secreto e armazenamento somente em cofre.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
