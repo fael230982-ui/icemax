@@ -1222,6 +1222,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de evidencias de provedores.
 - Teste automatizado cobre bloqueio de producao sem opt-in, custo e amostra de redacao de IA.
 
+## 0.8.166 - Runbook Final De Homologacao De Provedores
+
+- Criado endpoint de runbook final de homologacao de provedores.
+- Runbook define congelamento, dry-run, custo, LGPD, webhooks, kill switch e decisao formal.
+- Trafego real permanece bloqueado durante toda a execucao do runbook.
+- Console web ganhou consulta de runbook final de provedores.
+- Teste automatizado cobre bloqueio de producao, validacao LGPD, custo e rollback drill.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

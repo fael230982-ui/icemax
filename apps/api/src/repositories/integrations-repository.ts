@@ -719,3 +719,112 @@ export async function getProviderHomologationEvidencePack(tenantId: string) {
     ],
   };
 }
+
+export async function getProviderFinalHomologationRunbook(tenantId: string) {
+  const steps = [
+    {
+      order: 1,
+      key: "freeze_configuration",
+      label: "Congelar configuracao de homologacao",
+      owner: "engineering",
+      expectedResult: "Providers seguem em dry-run e sem trafego real.",
+      stopOnFailure: true,
+    },
+    {
+      order: 2,
+      key: "execute_dry_run_scenarios",
+      label: "Executar cenarios dry-run",
+      owner: "operations",
+      expectedResult: "E-mail, WhatsApp, mapas e OpenAI geram evidencias sem segredo.",
+      stopOnFailure: true,
+    },
+    {
+      order: 3,
+      key: "validate_cost_and_budget",
+      label: "Validar custo e budget por tenant",
+      owner: "owner",
+      expectedResult: "Custos simulados ficam dentro dos limites aprovados.",
+      stopOnFailure: true,
+    },
+    {
+      order: 4,
+      key: "validate_lgpd_and_consent",
+      label: "Validar LGPD, opt-in e mascaramento",
+      owner: "admin",
+      expectedResult: "Nenhum dado sensivel ou envio sem consentimento passa pelo pacote.",
+      stopOnFailure: true,
+    },
+    {
+      order: 5,
+      key: "validate_webhooks_and_kill_switch",
+      label: "Validar webhooks e kill switch",
+      owner: "engineering",
+      expectedResult: "Falhas simuladas congelam retentativas e abrem incidente.",
+      stopOnFailure: true,
+    },
+    {
+      order: 6,
+      key: "approve_or_reject_go_live",
+      label: "Aprovar ou reprovar go-live",
+      owner: "owner",
+      expectedResult: "Decisao formal registrada com motivo e pendencias.",
+      stopOnFailure: false,
+    },
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    tenantId,
+    status: "provider_final_homologation_runbook_ready",
+    projectPercentAfterBlock: 97,
+    realTrafficAllowedDuringRunbook: false,
+    summary: {
+      steps: steps.length,
+      stopOnFailureSteps: steps.filter((item) => item.stopOnFailure).length,
+      requiredApprovals: 4,
+      readyToExecuteDryRun: true,
+      readyToApproveProduction: false,
+    },
+    steps,
+    entryCriteria: [
+      "Pacote de evidencias de provedores criado.",
+      "Board de decisao go-live revisado.",
+      "Cofre de credenciais definido sem segredo real em payload.",
+      "Observabilidade, custo e fallback manual documentados.",
+    ],
+    exitCriteria: [
+      "Todos os cenarios dry-run aprovados.",
+      "Nenhuma evidencia contem segredo ou dado sensivel cru.",
+      "Custos por tenant aprovados.",
+      "Kill switch testado com incidente simulado.",
+      "Owner, admin, engenharia e suporte aprovaram formalmente.",
+    ],
+    rejectionRules: [
+      "Qualquer segredo em evidencia reprova a homologacao.",
+      "Qualquer falha de opt-in reprova WhatsApp.",
+      "Qualquer falha de mascaramento reprova IA.",
+      "Qualquer custo sem budget reprova provider.",
+      "Qualquer webhook sem assinatura valida reprova go-live.",
+    ],
+    rollbackDrill: {
+      required: true,
+      mode: "manual_fallback_first",
+      freezeAutomaticRetries: true,
+      preserveAuditHash: true,
+      notifyRoles: ["owner", "admin", "engineering", "support"],
+    },
+    blockedActions: [
+      "run_homologation_with_real_traffic",
+      "skip_cost_validation",
+      "skip_lgpd_validation",
+      "approve_go_live_without_rejection_review",
+      "approve_go_live_without_rollback_drill",
+    ],
+    nextActions: [
+      "Criar execucao dry-run persistente deste runbook.",
+      "Anexar evidencias ao board executivo.",
+      "Gerar ata de aprovacao/reprovacao por tenant.",
+      "Manter trafego real bloqueado ate aprovacao formal.",
+    ],
+  };
+}

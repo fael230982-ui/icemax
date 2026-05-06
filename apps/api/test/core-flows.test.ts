@@ -309,6 +309,19 @@ test("contracts stock integrations quote endpoints accept mock flow", async () =
   assert.ok(providerHomologationEvidencePack.json().scenarios.some((item: { provider: string; status: string }) =>
     item.provider === "whatsapp" && item.status === "pending_evidence"));
 
+  const providerFinalHomologationRunbook = await app.inject({
+    method: "GET",
+    url: "/integrations/provider-final-homologation-runbook",
+  });
+  assert.equal(providerFinalHomologationRunbook.statusCode, 200);
+  assert.equal(providerFinalHomologationRunbook.json().realTrafficAllowedDuringRunbook, false);
+  assert.equal(providerFinalHomologationRunbook.json().projectPercentAfterBlock, 97);
+  assert.equal(providerFinalHomologationRunbook.json().summary.readyToApproveProduction, false);
+  assert.equal(providerFinalHomologationRunbook.json().rollbackDrill.required, true);
+  assert.ok(providerFinalHomologationRunbook.json().blockedActions.includes("skip_lgpd_validation"));
+  assert.ok(providerFinalHomologationRunbook.json().steps.some((item: { key: string; stopOnFailure: boolean }) =>
+    item.key === "validate_cost_and_budget" && item.stopOnFailure === true));
+
   const decision = await app.inject({
     method: "PATCH",
     url: "/quotes/quote-001/decision",

@@ -8,6 +8,7 @@ import {
   createPrismaNotificationTemplate,
   getCommunicationPersistentQueueReadiness,
   getProviderCredentialVaultPolicy,
+  getProviderFinalHomologationRunbook,
   getProviderGoLiveDecisionBoard,
   getProviderHomologationEvidencePack,
   getProviderObservabilityGate,
@@ -84,6 +85,12 @@ export async function registerIntegrationRoutes(app: FastifyInstance) {
     const context = await getAuthContext(request);
 
     return getProviderHomologationEvidencePack(context.tenantId);
+  });
+
+  app.get("/integrations/provider-final-homologation-runbook", async (request) => {
+    const context = await getAuthContext(request);
+
+    return getProviderFinalHomologationRunbook(context.tenantId);
   });
 
   app.get("/integrations", async (request) => {
