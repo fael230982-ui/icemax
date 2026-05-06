@@ -2790,3 +2790,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Matriz De Execucao De Producao Whitelabel
+
+- [x] Endpoint de matriz de execucao de producao criado.
+- [x] Celulas de continuar, preparar e bloquear definidas.
+- [x] Provedores reais e parceiro real continuam bloqueados.
+- [x] Migracao sem isolamento por tenant permanece bloqueada.
+- [x] Console web ganhou consulta de matriz de producao.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

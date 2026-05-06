@@ -315,6 +315,8 @@ export const icemaxApi = {
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-end-of-day-closure", { token }),
   mobileOfflineAssistedRetryWhitelabelMorningCommand: (token?: string) =>
     apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-morning-command", { token }),
+  mobileOfflineAssistedRetryWhitelabelProductionExecutionMatrix: (token?: string) =>
+    apiRequest<unknown>("/platform/mobile-offline-escalations/whitelabel-production-execution-matrix", { token }),
   reviewMobileOfflineEscalation: (recordId: string, body: unknown, token?: string) =>
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/review`, { method: "POST", body, token }),
   prepareMobileOfflineAssistedRetry: (recordId: string, body: unknown, token?: string) =>

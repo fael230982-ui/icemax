@@ -1150,6 +1150,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de comando da manha.
 - Teste automatizado cobre percentual planejado, regra de segredos e bloqueio de provedores reais.
 
+## 0.8.157 - Matriz De Execucao De Producao Whitelabel
+
+- Criado endpoint de matriz de execucao de producao whitelabel.
+- Matriz separa frentes que podem continuar, preparar ou permanecer bloqueadas.
+- Provedores reais, parceiro real e migracao sem isolamento continuam bloqueados.
+- Console web ganhou consulta de matriz de producao whitelabel.
+- Teste automatizado cobre percentual 88, bloqueio de provedores e protecao contra migracao sem tenant.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

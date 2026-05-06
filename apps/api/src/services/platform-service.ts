@@ -2994,6 +2994,112 @@ export function getMobileOfflineAssistedRetryWhitelabelMorningCommand() {
   };
 }
 
+export function getMobileOfflineAssistedRetryWhitelabelProductionExecutionMatrix() {
+  const morningCommand = getMobileOfflineAssistedRetryWhitelabelMorningCommand();
+  const executionCells = [
+    {
+      key: "mock_operational_flows",
+      label: "Fluxos operacionais em mock",
+      area: "platform",
+      decision: "continue",
+      readiness: 92,
+      todayAction: "Aprofundar cobertura de testes e contratos de API sem dados reais.",
+      releaseCondition: "Validacao local sem falhas e sem segredo publicado.",
+    },
+    {
+      key: "mobile_field_offline",
+      label: "Mobile tecnico offline",
+      area: "mobile",
+      decision: "continue",
+      readiness: 78,
+      todayAction: "Melhorar experiencia de campo, resumo de fila, evidencias e retorno visual.",
+      releaseCondition: "Sincronizacao confiavel, bloqueio de duplicidade e auditoria persistente.",
+    },
+    {
+      key: "database_persistence",
+      label: "Banco persistente",
+      area: "data",
+      decision: "prepare",
+      readiness: 72,
+      todayAction: "Mapear entidades criticas, tenantId obrigatorio e plano de migracao incremental.",
+      releaseCondition: "DATABASE_URL real, migrations aplicadas e smoke test com Prisma.",
+    },
+    {
+      key: "provider_integrations",
+      label: "Provedores externos",
+      area: "integrations",
+      decision: "blocked",
+      readiness: 55,
+      todayAction: "Manter planejamento de Google, Meta, e-mail e OpenAI sem chaves reais.",
+      releaseCondition: "Contas, limites de custo, ambiente seguro e homologacao controlada.",
+    },
+    {
+      key: "partner_whitelabel_go_live",
+      label: "Go-live de parceiro",
+      area: "whitelabel",
+      decision: "blocked",
+      readiness: 54,
+      todayAction: "Consolidar criterios de aceite e impedir uso real por cliente de parceiro.",
+      releaseCondition: "Contrato, DPA, custos, suporte, simulacao completa e aceite do dono.",
+    },
+    {
+      key: "web_management_console",
+      label: "Console web gerencial",
+      area: "web",
+      decision: "continue",
+      readiness: 88,
+      todayAction: "Criar consultas executivas para decisao rapida e homologacao.",
+      releaseCondition: "Fluxos principais revisados em desktop, mobile e build de producao.",
+    },
+  ];
+  const blockedCells = executionCells.filter((item) => item.decision === "blocked").length;
+  const averageReadiness = Math.round(executionCells.reduce((total, item) => total + item.readiness, 0) / executionCells.length);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    status: "whitelabel_production_execution_matrix_ready",
+    realExecutionAllowed: false,
+    summary: {
+      sourcePlannedProjectPercent: morningCommand.summary.plannedProjectPercent,
+      projectPercentAfterBlock: 88,
+      averageReadiness,
+      executionCells: executionCells.length,
+      blockedCells,
+      continueCells: executionCells.filter((item) => item.decision === "continue").length,
+      providerProductionAllowed: false,
+      partnerProductionAllowed: false,
+    },
+    executionCells,
+    releaseRules: {
+      partialProgressAllowed: true,
+      realProviderCallsAllowed: false,
+      realPartnerCustomerAllowed: false,
+      databaseBeforeProviderActivationRequired: true,
+      ownerAcceptanceBeforeCommercialUseRequired: true,
+    },
+    todayPriorityOrder: [
+      "mock_operational_flows",
+      "mobile_field_offline",
+      "database_persistence",
+      "web_management_console",
+      "provider_integrations",
+      "partner_whitelabel_go_live",
+    ],
+    blockedActions: [
+      "turn_on_provider_production_without_cost_caps",
+      "activate_partner_customer_before_acceptance",
+      "migrate_real_data_without_tenant_isolation",
+      "skip_mobile_offline_duplicate_protection",
+    ],
+    nextActions: [
+      "Usar a matriz para priorizar blocos de hoje.",
+      "Avancar em mobile, API e web onde a decisao e continue.",
+      "Preparar banco persistente sem ativar dados reais antes dos gates.",
+      "Manter provedores e parceiro bloqueados ate aceite completo.",
+    ],
+  };
+}
+
 export function getPlatformDiagnostics() {
   return {
     service: "icemax-api",
