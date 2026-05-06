@@ -1310,6 +1310,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Restauracao da OS ativa passou a validar a lista carregada para o tecnico.
 - Documentacao operacional criada para carga de OS atribuidas no mobile.
 
+## 0.8.177 - Indicador De Origem Da Agenda Mobile
+
+- App tecnico passou a exibir se a agenda esta carregando, sincronizada pela API ou em contingencia.
+- Carga de OS mobile agora retorna origem da lista junto com os dados normalizados.
+- Fallback offline ficou explicito para reduzir confusao operacional em campo.
+- Documentacao operacional criada para origem da agenda mobile.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

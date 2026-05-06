@@ -3106,3 +3106,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Indicador De Origem Da Agenda Mobile
+
+- [x] Estado de origem da agenda criado no app mobile.
+- [x] App diferencia carregamento, API e contingencia offline.
+- [x] Servico mobile retorna origem da carga junto com OS normalizadas.
+- [x] Indicador visual adicionado antes da lista de OS.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

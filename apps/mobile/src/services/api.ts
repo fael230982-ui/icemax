@@ -12,6 +12,8 @@ export type MobileOrder = {
   nextAction: string;
 };
 
+export type AssignedOrdersSource = "api" | "fallback";
+
 export async function fetchAssignedOrders(token?: string) {
   const response = await fetch(`${apiBaseUrl}/service-orders?status=in_progress`, {
     headers: {
@@ -129,9 +131,19 @@ export function normalizeAssignedOrdersResponse(response: { data?: unknown[] }, 
   return normalizedOrders.length ? normalizedOrders : fallbackOrders;
 }
 
-export async function fetchAssignedMobileOrders(fallbackOrders: MobileOrder[], token?: string) {
+export async function fetchAssignedMobileOrdersWithSource(fallbackOrders: MobileOrder[], token?: string) {
   const response = await fetchAssignedOrders(token);
-  return normalizeAssignedOrdersResponse(response, fallbackOrders);
+  const rawOrders = Array.isArray(response.data) ? response.data : [];
+
+  return {
+    orders: normalizeAssignedOrdersResponse(response, fallbackOrders),
+    source: (rawOrders.length ? "api" : "fallback") as AssignedOrdersSource,
+  };
+}
+
+export async function fetchAssignedMobileOrders(fallbackOrders: MobileOrder[], token?: string) {
+  const result = await fetchAssignedMobileOrdersWithSource(fallbackOrders, token);
+  return result.orders;
 }
 
 export async function sendOfflineAction(action: OfflineAction, token?: string) {

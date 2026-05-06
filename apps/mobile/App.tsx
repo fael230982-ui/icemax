@@ -31,7 +31,8 @@ import {
   createSatisfactionSurveyAction,
   createVisitPreparationAckAction,
   createWarrantyPresentedAction,
-  fetchAssignedMobileOrders,
+  AssignedOrdersSource,
+  fetchAssignedMobileOrdersWithSource,
   MobileOrder,
   OfflineAction,
   syncOfflineQueuePartially,
@@ -50,6 +51,7 @@ export default function App() {
   const [queueLoaded, setQueueLoaded] = useState(false);
   const [ordersLoaded, setOrdersLoaded] = useState(false);
   const [assignedOrders, setAssignedOrders] = useState<MobileOrder[]>(fallbackOrders);
+  const [assignedOrdersSource, setAssignedOrdersSource] = useState<AssignedOrdersSource | "loading">("loading");
   const [activeOrderLoaded, setActiveOrderLoaded] = useState(false);
   const [activeOrderId, setActiveOrderId] = useState(fallbackOrders[0].id);
   const activeOrder = assignedOrders.find((order) => order.id === activeOrderId) ?? assignedOrders[0] ?? fallbackOrders[0];
@@ -82,18 +84,24 @@ export default function App() {
   useEffect(() => {
     let cancelled = false;
 
-    void fetchAssignedMobileOrders(fallbackOrders)
-      .then((loadedOrders) => {
+    void fetchAssignedMobileOrdersWithSource(fallbackOrders)
+      .then((result) => {
         if (cancelled) {
           return;
         }
 
-        setAssignedOrders(loadedOrders);
-        setSyncStatus(`${loadedOrders.length} OS atribuidas carregadas para o tecnico.`);
+        setAssignedOrders(result.orders);
+        setAssignedOrdersSource(result.source);
+        setSyncStatus(
+          result.source === "api"
+            ? `${result.orders.length} OS atribuidas carregadas para o tecnico.`
+            : "API sem OS atribuidas. Usando fila local de seguranca.",
+        );
       })
       .catch(() => {
         if (!cancelled) {
           setAssignedOrders(fallbackOrders);
+          setAssignedOrdersSource("fallback");
           setSyncStatus("API indisponivel. Usando OS locais em modo offline.");
         }
       })
@@ -138,6 +146,19 @@ export default function App() {
       void saveActiveOrderId(activeOrderId);
     }
   }, [activeOrderId, activeOrderLoaded]);
+
+  const assignedOrdersSourceTitle =
+    assignedOrdersSource === "loading"
+      ? "Carregando agenda"
+      : assignedOrdersSource === "api"
+        ? "Agenda sincronizada"
+        : "Agenda em contingencia";
+  const assignedOrdersSourceDetail =
+    assignedOrdersSource === "loading"
+      ? "Consultando OS atribuidas ao tecnico."
+      : assignedOrdersSource === "api"
+        ? `${assignedOrders.length} OS vieram da API e estao prontas para execucao.`
+        : "API sem retorno util no momento. O app manteve a lista local para nao parar o atendimento.";
 
   function addCheckIn() {
     const action = createCheckInAction(activeServiceOrderId);
@@ -356,6 +377,10 @@ export default function App() {
         </Section>
 
         <Section title="Ordens de servico">
+          <View style={styles.orderSource}>
+            <Text style={styles.orderSourceTitle}>{assignedOrdersSourceTitle}</Text>
+            <Text style={styles.orderSourceDetail}>{assignedOrdersSourceDetail}</Text>
+          </View>
           {assignedOrders.map((order) => (
             <OrderCard
               key={order.id}
@@ -579,6 +604,21 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "800",
     marginTop: 6,
+  },
+  orderSource: {
+    borderColor: "#DCE7F0",
+    borderRadius: 8,
+    borderWidth: 1,
+    backgroundColor: "#FFFFFF",
+    padding: 14,
+  },
+  orderSourceTitle: {
+    color: "#102033",
+    fontWeight: "800",
+  },
+  orderSourceDetail: {
+    color: "#5D6B7A",
+    marginTop: 5,
   },
   grid: {
     flexDirection: "row",
