@@ -3363,3 +3363,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Resumo De Filtros Ativos Offline
+
+- [x] Resumo de filtros ativos criado na fila compacta.
+- [x] Resumo cobre origem, prioridade, responsavel, tecnico e ordenacao.
+- [x] Resumo cobre modo compacto apenas app tecnico.
+- [x] Estado sem filtros permanece sem aviso.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

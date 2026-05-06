@@ -421,6 +421,23 @@ h2 {
   font-weight: 700;
 }
 
+.compactQueueFilterNotice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.compactQueueFilterNotice span {
+  color: #1e40af;
+}
+
 .compactQueueGrid {
   display: grid;
   gap: 10px;

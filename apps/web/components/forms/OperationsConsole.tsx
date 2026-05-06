@@ -120,6 +120,14 @@ export function OperationsConsole() {
     || mobileOfflineTechnicianFilter !== "all"
     || mobileOfflineSort !== "severity_desc"
     || compactMobileOnly;
+  const activeMobileOfflineFilterLabels = [
+    mobileOfflineSourceFilter !== "all" ? `Origem: ${mobileOfflineSourceFilter === "mobile" ? "app tecnico" : "guarda sync"}` : null,
+    mobileOfflinePriorityFilter !== "all" ? `Prioridade: ${mobileOfflinePriorityFilter}` : null,
+    mobileOfflineOwnerFilter !== "all" ? `Responsavel: ${mobileOfflineOwnerFilter}` : null,
+    mobileOfflineTechnicianFilter !== "all" ? `Tecnico: ${mobileOfflineTechnicianFilter}` : null,
+    mobileOfflineSort !== "severity_desc" ? `Ordem: ${mobileOfflineSort}` : null,
+    compactMobileOnly ? "Compacta: apenas app tecnico" : null,
+  ].filter(Boolean);
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1580,6 +1588,12 @@ export function OperationsConsole() {
                   </button>
                 </div>
               </div>
+              {hasActiveMobileOfflineFilters ? (
+                <div className="compactQueueFilterNotice">
+                  <strong>Filtros ativos</strong>
+                  <span>{activeMobileOfflineFilterLabels.join(" | ")}</span>
+                </div>
+              ) : null}
               <div className="compactQueueGrid">
                 {compactMobileOfflineItems.map((item) => (
                   <article key={`compact-${item.id}`}>
