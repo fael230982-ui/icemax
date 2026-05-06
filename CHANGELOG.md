@@ -1286,6 +1286,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Status do app informa imediatamente qual acao foi salva ou sincronizada.
 - Documentacao operacional atualizada com o comportamento das acoes rapidas.
 
+## 0.8.174 - Selecao De OS Ativa No Mobile
+
+- Aplicativo mobile passou a permitir selecionar a OS ativa tocando no card da ordem.
+- Painel de missao atual agora usa cliente, equipamento, status, prioridade, ETA e risco da OS selecionada.
+- Acoes rapidas de check-in, foto, checklist e peca usada passaram a usar o ID da OS ativa.
+- Cards de OS exibem estado visual de missao ativa.
+- Documentacao operacional criada para a selecao de OS ativa.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

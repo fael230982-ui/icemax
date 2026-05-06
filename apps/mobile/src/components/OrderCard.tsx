@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type OrderCardProps = {
   id: string;
@@ -6,19 +6,22 @@ type OrderCardProps = {
   status: string;
   detail: string;
   priority: string;
+  active?: boolean;
+  onPress?: () => void;
 };
 
-export function OrderCard({ id, customer, status, detail, priority }: OrderCardProps) {
+export function OrderCard({ id, customer, status, detail, priority, active, onPress }: OrderCardProps) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity activeOpacity={0.78} onPress={onPress} style={[styles.card, active ? styles.activeCard : null]}>
       <View style={styles.row}>
         <Text style={styles.orderId}>{id}</Text>
-        <Text style={styles.priority}>{priority}</Text>
+        <Text style={[styles.priority, active ? styles.activePriority : null]}>{priority}</Text>
       </View>
       <Text style={styles.customer}>{customer}</Text>
       <Text style={styles.detail}>{detail}</Text>
       <Text style={styles.status}>{status}</Text>
-    </View>
+      {active ? <Text style={styles.activeLabel}>Missao ativa</Text> : null}
+    </TouchableOpacity>
   );
 }
 
@@ -29,6 +32,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 16,
+  },
+  activeCard: {
+    borderColor: "#0B7CEB",
+    backgroundColor: "#F0F8FF",
   },
   row: {
     flexDirection: "row",
@@ -42,6 +49,9 @@ const styles = StyleSheet.create({
   priority: {
     color: "#0B7CEB",
     fontWeight: "800",
+  },
+  activePriority: {
+    color: "#075985",
   },
   customer: {
     color: "#102033",
@@ -57,5 +67,18 @@ const styles = StyleSheet.create({
     color: "#0E9F6E",
     marginTop: 7,
     fontWeight: "700",
+  },
+  activeLabel: {
+    alignSelf: "flex-start",
+    marginTop: 10,
+    borderRadius: 8,
+    overflow: "hidden",
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+    color: "#075985",
+    backgroundColor: "#E0F2FE",
+    fontSize: 12,
+    fontWeight: "900",
+    textTransform: "uppercase",
   },
 });

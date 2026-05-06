@@ -7,7 +7,7 @@ import { InfoCard } from "./src/components/InfoCard";
 import { OrderCard } from "./src/components/OrderCard";
 import { Section } from "./src/components/Section";
 import { SyncPanel } from "./src/components/SyncPanel";
-import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldEvidenceRequirements, fieldJourneySteps, fieldMission, fieldQuickActions, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
+import { approvedQuoteActivation, completionEmailPackage, contracts, executionSteps, fieldCloseoutPackage, fieldCommandCenter, fieldEvidenceRequirements, fieldJourneySteps, fieldQuickActions, fieldSignaturePackage, orders, quality, quoteApprovalBoard, quoteApprovalReminders, quoteApprovalTimeline, quoteExecutionDispatchQueue, quoteExecutionReadiness, tools } from "./src/data/dashboard";
 import {
   createApprovedQuoteActivationAckAction,
   createCheckInAction,
@@ -46,6 +46,19 @@ export default function App() {
   const [pendingActions, setPendingActions] = useState<OfflineAction[]>([]);
   const [syncStatus, setSyncStatus] = useState("Sem pendencias.");
   const [queueLoaded, setQueueLoaded] = useState(false);
+  const [activeOrderId, setActiveOrderId] = useState(orders[0].id);
+  const activeOrder = orders.find((order) => order.id === activeOrderId) ?? orders[0];
+  const activeServiceOrderId = activeOrder.id.replace("#", "");
+  const activeMission = {
+    serviceOrderId: activeServiceOrderId,
+    customer: activeOrder.customer,
+    equipment: activeOrder.equipment,
+    status: activeOrder.status,
+    priority: activeOrder.priority,
+    routeEta: activeOrder.routeEta,
+    offlineRisk: activeOrder.offlineRisk,
+    nextAction: activeOrder.nextAction,
+  };
 
   useEffect(() => {
     void loadOfflineQueueSnapshot()
@@ -68,14 +81,14 @@ export default function App() {
   }, [pendingActions, queueLoaded]);
 
   function addCheckIn() {
-    const action = createCheckInAction("1048");
-    const location = createLocationAction("tech-001", "1048");
+    const action = createCheckInAction(activeServiceOrderId);
+    const location = createLocationAction("tech-001", activeServiceOrderId);
     setPendingActions((current) => [location, action, ...current]);
-    setSyncStatus("Acao salva para envio quando houver conexao.");
+    setSyncStatus(`Check-in da OS ${activeServiceOrderId} salvo para envio quando houver conexao.`);
   }
 
   function addExecutionPack() {
-    const serviceOrderId = "1048";
+    const serviceOrderId = activeServiceOrderId;
     const actions = [
       createLocationAction("tech-001", serviceOrderId),
       createCheckInAction(serviceOrderId),
@@ -91,21 +104,21 @@ export default function App() {
   }
 
   function addMissionPhotoBefore() {
-    const action = createPhotoEvidenceAction("1049", "before");
+    const action = createPhotoEvidenceAction(activeServiceOrderId, "before");
     setPendingActions((current) => [action, ...current]);
-    setSyncStatus("Foto inicial da missao salva offline.");
+    setSyncStatus(`Foto inicial da OS ${activeServiceOrderId} salva offline.`);
   }
 
   function addMissionChecklist() {
-    const action = createChecklistAction("1049", "checklist-diagnostico", "Diagnostico inicial conferido em campo.");
+    const action = createChecklistAction(activeServiceOrderId, "checklist-diagnostico", "Diagnostico inicial conferido em campo.");
     setPendingActions((current) => [action, ...current]);
-    setSyncStatus("Checklist da missao salvo offline.");
+    setSyncStatus(`Checklist da OS ${activeServiceOrderId} salvo offline.`);
   }
 
   function addMissionPartUsage() {
-    const action = createPartUsageAction("1049", "part-001", 1);
+    const action = createPartUsageAction(activeServiceOrderId, "part-001", 1);
     setPendingActions((current) => [action, ...current]);
-    setSyncStatus("Uso de peca da missao salvo offline.");
+    setSyncStatus(`Uso de peca da OS ${activeServiceOrderId} salvo offline.`);
   }
 
   function runMissionQuickAction(actionKey: string) {
@@ -275,7 +288,7 @@ export default function App() {
 
         <Section title="Missao atual">
           <FieldMissionPanel
-            mission={fieldMission}
+            mission={activeMission}
             steps={fieldJourneySteps}
             evidence={fieldEvidenceRequirements}
             quickActions={fieldQuickActions}
@@ -285,7 +298,15 @@ export default function App() {
 
         <Section title="Ordens de servico">
           {orders.map((order) => (
-            <OrderCard key={order.id} {...order} />
+            <OrderCard
+              key={order.id}
+              {...order}
+              active={order.id === activeOrderId}
+              onPress={() => {
+                setActiveOrderId(order.id);
+                setSyncStatus(`OS ${order.id.replace("#", "")} definida como missao ativa.`);
+              }}
+            />
           ))}
         </Section>
 

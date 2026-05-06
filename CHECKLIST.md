@@ -3061,3 +3061,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Selecao De OS Ativa No Mobile
+
+- [x] Cards de OS ficaram selecionaveis.
+- [x] Missao atual passou a refletir a OS ativa.
+- [x] Cliente, equipamento, prioridade, ETA e risco offline mudam conforme OS selecionada.
+- [x] Acoes rapidas usam o ID da OS ativa.
+- [x] Estado visual de missao ativa foi adicionado ao card.
+- [x] Status do app informa a troca de missao.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

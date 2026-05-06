@@ -1,7 +1,37 @@
 export const orders = [
-  { id: "#1048", customer: "ClimaSul Hotel", status: "Em atendimento", detail: "Sem refrigeracao", priority: "Emergencia" },
-  { id: "#1050", customer: "Clinica Vida", status: "Em rota", detail: "Preventiva trimestral", priority: "Normal" },
-  { id: "#1051", customer: "Mercado Avante", status: "Agendada", detail: "Dreno vazando", priority: "Alta" },
+  {
+    id: "#1048",
+    customer: "ClimaSul Hotel",
+    status: "Em atendimento",
+    detail: "Sem refrigeracao",
+    priority: "Emergencia",
+    equipment: "Piso teto 60.000 BTUs - Recepcao",
+    routeEta: "12 min",
+    offlineRisk: "alto",
+    nextAction: "Registrar evidencias finais, revisar relatorio e coletar assinatura.",
+  },
+  {
+    id: "#1050",
+    customer: "Clinica Vida",
+    status: "Em rota",
+    detail: "Preventiva trimestral",
+    priority: "Normal",
+    equipment: "Split Hi Wall 18.000 BTUs - Sala 03",
+    routeEta: "24 min",
+    offlineRisk: "baixo",
+    nextAction: "Confirmar chegada, executar checklist PMOC e registrar fotos.",
+  },
+  {
+    id: "#1051",
+    customer: "Mercado Avante",
+    status: "Agendada",
+    detail: "Dreno vazando",
+    priority: "Alta",
+    equipment: "Cassete 36.000 BTUs - Area de frios",
+    routeEta: "38 min",
+    offlineRisk: "medio",
+    nextAction: "Conferir acesso, rota, pecas provaveis e responsavel no local.",
+  },
 ];
 
 export const fieldMission = {
