@@ -1395,6 +1395,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Gestor consegue investigar pendencias prioritarias sem depender da tabela completa.
 - Documentacao operacional criada para detalhes expansíveis da fila compacta.
 
+## 0.8.189 - Filtro Rapido App Na Fila Compacta Offline
+
+- Fila compacta ganhou filtro rapido para exibir somente pedidos vindos do app tecnico.
+- Filtro compacto nao altera a tabela completa nem os filtros gerais da fila offline.
+- Contador de prioridades visiveis passa a refletir o filtro compacto.
+- Documentacao operacional criada para filtro rapido da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

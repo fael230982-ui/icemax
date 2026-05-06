@@ -395,6 +395,23 @@ h2 {
   font-size: 13px;
 }
 
+.compactQueueHeaderActions,
+.compactQueueHeaderActions label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.compactQueueHeaderActions label {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.compactQueueHeaderActions input {
+  margin: 0;
+}
+
 .compactQueueGrid {
   display: grid;
   gap: 10px;
@@ -2410,6 +2427,8 @@ dd {
   }
 
   .opsHeader,
+  .compactQueueHeader,
+  .compactQueueHeaderActions,
   .opsJourneyGrid,
   .formGrid,
   .finalizationSummary,

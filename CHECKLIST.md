@@ -3282,3 +3282,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Filtro Rapido App Na Fila Compacta Offline
+
+- [x] Filtro apenas app tecnico criado.
+- [x] Contador compacto atualizado pelo filtro.
+- [x] Filtro compacto independente da tabela completa.
+- [x] Layout responsivo ajustado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

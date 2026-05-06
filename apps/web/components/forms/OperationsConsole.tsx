@@ -74,6 +74,7 @@ export function OperationsConsole() {
   const [mobileOfflineSort, setMobileOfflineSort] = useState("severity_desc");
   const [compactActionStatus, setCompactActionStatus] = useState<Record<string, string>>({});
   const [expandedCompactOfflineCards, setExpandedCompactOfflineCards] = useState<Record<string, boolean>>({});
+  const [compactMobileOnly, setCompactMobileOnly] = useState(false);
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
   const mobileOfflineItems = mobileOfflineEscalations?.data ?? [];
@@ -107,7 +108,9 @@ export function OperationsConsole() {
 
     return right.severityScore - left.severityScore || right.retryCount - left.retryCount;
   });
-  const compactMobileOfflineItems = sortedMobileOfflineItems.slice(0, 6);
+  const compactMobileOfflineItems = sortedMobileOfflineItems
+    .filter((item) => !compactMobileOnly || item.requestedFromMobile)
+    .slice(0, 6);
   const getEscalationSeverityClass = (score: number) => (
     score >= 85 ? "badge badgeDanger" : score >= 65 ? "badge badgeWarning" : "badge badgeNeutral"
   );
@@ -1535,7 +1538,17 @@ export function OperationsConsole() {
             <div className="compactQueue">
               <div className="compactQueueHeader">
                 <strong>Fila diaria compacta</strong>
-                <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
+                <div className="compactQueueHeaderActions">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={compactMobileOnly}
+                      onChange={(event) => setCompactMobileOnly(event.target.checked)}
+                    />
+                    Apenas app tecnico
+                  </label>
+                  <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
+                </div>
               </div>
               <div className="compactQueueGrid">
                 {compactMobileOfflineItems.map((item) => (
