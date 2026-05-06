@@ -1346,6 +1346,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Teste automatizado cobre solicitacoes de revisao vindas do app.
 - Documentacao operacional criada para a fila web de revisoes mobile.
 
+## 0.8.182 - Filtros Da Fila Offline No Web
+
+- Console web ganhou filtros por origem, prioridade, responsavel e tecnico na fila offline.
+- Resumo passou a informar a quantidade de pendencias filtradas.
+- Estado vazio foi adicionado quando nenhum item combina com os filtros.
+- Documentacao operacional criada para filtros da fila offline web.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

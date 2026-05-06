@@ -3176,3 +3176,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Filtros Da Fila Offline No Web
+
+- [x] Filtro por origem criado.
+- [x] Filtro por prioridade criado.
+- [x] Filtro por responsavel criado.
+- [x] Filtro por tecnico criado.
+- [x] Contador de itens filtrados adicionado.
+- [x] Estado vazio adicionado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

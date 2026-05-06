@@ -365,6 +365,16 @@ h2 {
   text-transform: uppercase;
 }
 
+.emptyState {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  margin-top: 10px;
+  padding: 12px;
+  color: var(--muted);
+  background: #f8fafc;
+  font-size: 13px;
+}
+
 .apiResult {
   max-height: 300px;
   overflow: auto;

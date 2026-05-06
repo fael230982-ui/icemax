@@ -66,8 +66,25 @@ export function OperationsConsole() {
   const [mobileOfflineEscalations, setMobileOfflineEscalations] = useState<MobileOfflineEscalationResponse | null>(null);
   const [publicTokenStatusFilter, setPublicTokenStatusFilter] = useState("all");
   const [publicTokenScopeFilter, setPublicTokenScopeFilter] = useState("");
+  const [mobileOfflineSourceFilter, setMobileOfflineSourceFilter] = useState("all");
+  const [mobileOfflinePriorityFilter, setMobileOfflinePriorityFilter] = useState("all");
+  const [mobileOfflineOwnerFilter, setMobileOfflineOwnerFilter] = useState("all");
+  const [mobileOfflineTechnicianFilter, setMobileOfflineTechnicianFilter] = useState("all");
   const [status, setStatus] = useState("Pronto para operar com a API local.");
   const [result, setResult] = useState("");
+  const mobileOfflineItems = mobileOfflineEscalations?.data ?? [];
+  const mobileOfflineTechnicians = Array.from(new Set(mobileOfflineItems.map((item) => item.technicianName))).sort();
+  const mobileOfflineOwners = Array.from(new Set(mobileOfflineItems.map((item) => item.owner))).sort();
+  const filteredMobileOfflineItems = mobileOfflineItems.filter((item) => {
+    const sourceMatches = mobileOfflineSourceFilter === "all"
+      || (mobileOfflineSourceFilter === "mobile" && item.requestedFromMobile)
+      || (mobileOfflineSourceFilter === "sync_guard" && !item.requestedFromMobile);
+    const priorityMatches = mobileOfflinePriorityFilter === "all" || item.priority === mobileOfflinePriorityFilter;
+    const ownerMatches = mobileOfflineOwnerFilter === "all" || item.owner === mobileOfflineOwnerFilter;
+    const technicianMatches = mobileOfflineTechnicianFilter === "all" || item.technicianName === mobileOfflineTechnicianFilter;
+
+    return sourceMatches && priorityMatches && ownerMatches && technicianMatches;
+  });
 
   async function run(label: string, action: () => Promise<unknown>) {
     try {
@@ -1422,10 +1439,35 @@ export function OperationsConsole() {
         <div className="opsPanel">
           <div className="opsPanelHeader">
             <strong>Pendencias offline bloqueadas</strong>
+            <div className="opsPanelFilters">
+              <select value={mobileOfflineSourceFilter} onChange={(event) => setMobileOfflineSourceFilter(event.target.value)}>
+                <option value="all">Todas origens</option>
+                <option value="mobile">App tecnico</option>
+                <option value="sync_guard">Guarda sync</option>
+              </select>
+              <select value={mobileOfflinePriorityFilter} onChange={(event) => setMobileOfflinePriorityFilter(event.target.value)}>
+                <option value="all">Todas prioridades</option>
+                <option value="critical">Criticas</option>
+                <option value="high">Altas</option>
+              </select>
+              <select value={mobileOfflineOwnerFilter} onChange={(event) => setMobileOfflineOwnerFilter(event.target.value)}>
+                <option value="all">Todos responsaveis</option>
+                {mobileOfflineOwners.map((owner) => (
+                  <option key={owner} value={owner}>{owner}</option>
+                ))}
+              </select>
+              <select value={mobileOfflineTechnicianFilter} onChange={(event) => setMobileOfflineTechnicianFilter(event.target.value)}>
+                <option value="all">Todos tecnicos</option>
+                {mobileOfflineTechnicians.map((technician) => (
+                  <option key={technician} value={technician}>{technician}</option>
+                ))}
+              </select>
+            </div>
           </div>
           {mobileOfflineEscalations.summary ? (
             <div className="summaryPills">
               <span>Total: {mobileOfflineEscalations.summary.total}</span>
+              <span>Filtradas: {filteredMobileOfflineItems.length}</span>
               <span>Criticas: {mobileOfflineEscalations.summary.critical}</span>
               <span>Altas: {mobileOfflineEscalations.summary.high}</span>
               <span>Pedidos app: {mobileOfflineEscalations.summary.managerReviewRequests ?? 0}</span>
@@ -1448,7 +1490,7 @@ export function OperationsConsole() {
                 </tr>
               </thead>
               <tbody>
-                {mobileOfflineEscalations.data.map((item) => (
+                {filteredMobileOfflineItems.map((item) => (
                   <tr key={item.id}>
                     <td>{item.serviceOrderId}<br />{item.customer}</td>
                     <td>{item.technicianName}<br />{item.owner}</td>
@@ -1485,6 +1527,9 @@ export function OperationsConsole() {
                 ))}
               </tbody>
             </table>
+            {!filteredMobileOfflineItems.length ? (
+              <div className="emptyState">Nenhuma pendencia offline encontrada com os filtros atuais.</div>
+            ) : null}
           </div>
         </div>
       ) : null}
