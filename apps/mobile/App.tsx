@@ -33,6 +33,7 @@ import {
   createWarrantyPresentedAction,
   AssignedOrdersSource,
   fetchAssignedMobileOrdersWithSource,
+  getCriticalPendingActionsForServiceOrder,
   MobileOrder,
   OfflineAction,
   syncOfflineQueuePartially,
@@ -159,6 +160,23 @@ export default function App() {
       : assignedOrdersSource === "api"
         ? `${assignedOrders.length} OS vieram da API e estao prontas para execucao.`
         : "API sem retorno util no momento. O app manteve a lista local para nao parar o atendimento.";
+
+  function selectActiveOrder(order: MobileOrder) {
+    if (order.id === activeOrderId) {
+      return;
+    }
+
+    const criticalPendingActions = getCriticalPendingActionsForServiceOrder(pendingActions, activeServiceOrderId);
+    if (criticalPendingActions.length) {
+      setSyncStatus(
+        `Troca bloqueada: OS ${activeServiceOrderId} tem ${criticalPendingActions.length} pendencia critica offline. Sincronize ou revise antes de mudar.`,
+      );
+      return;
+    }
+
+    setActiveOrderId(order.id);
+    setSyncStatus(`OS ${order.id.replace("#", "")} definida como missao ativa.`);
+  }
 
   function addCheckIn() {
     const action = createCheckInAction(activeServiceOrderId);
@@ -386,10 +404,7 @@ export default function App() {
               key={order.id}
               {...order}
               active={order.id === activeOrderId}
-              onPress={() => {
-                setActiveOrderId(order.id);
-                setSyncStatus(`OS ${order.id.replace("#", "")} definida como missao ativa.`);
-              }}
+              onPress={() => selectActiveOrder(order)}
             />
           ))}
         </Section>

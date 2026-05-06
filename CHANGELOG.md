@@ -1317,6 +1317,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Fallback offline ficou explicito para reduzir confusao operacional em campo.
 - Documentacao operacional criada para origem da agenda mobile.
 
+## 0.8.178 - Trava De Troca De OS Critica No Mobile
+
+- App tecnico passou a bloquear troca de OS quando a missao atual tem pendencia critica offline.
+- Servico mobile identifica a OS vinculada a cada acao offline pendente.
+- Status do app informa a quantidade de pendencias criticas antes de permitir nova missao.
+- Documentacao operacional criada para a trava de troca de OS.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

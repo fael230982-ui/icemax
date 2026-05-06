@@ -3120,3 +3120,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Trava De Troca De OS Critica No Mobile
+
+- [x] Helper identifica a OS de cada acao offline.
+- [x] Helper lista pendencias criticas por OS.
+- [x] App bloqueia troca de missao com pendencia critica da OS atual.
+- [x] Status informa a quantidade de pendencias criticas bloqueantes.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

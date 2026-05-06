@@ -227,6 +227,30 @@ export function summarizeOfflineQueue(actions: OfflineAction[]) {
   };
 }
 
+export function getOfflineActionServiceOrderId(action: OfflineAction) {
+  const serviceOrderPathMatch = action.path.match(/\/service-orders\/([^/]+)/);
+  if (serviceOrderPathMatch?.[1]) {
+    return serviceOrderPathMatch[1];
+  }
+
+  const dispatchPathMatch = action.path.match(/\/dispatch\/service-orders\/([^/]+)/);
+  if (dispatchPathMatch?.[1]) {
+    return dispatchPathMatch[1];
+  }
+
+  const payloadServiceOrderId = action.payload.serviceOrderId;
+  if (typeof payloadServiceOrderId === "string" && payloadServiceOrderId.trim()) {
+    return payloadServiceOrderId.trim();
+  }
+
+  const labelMatch = action.label.match(/OS\s+#?([A-Za-z0-9-]+)/i);
+  return labelMatch?.[1] ?? null;
+}
+
+export function getCriticalPendingActionsForServiceOrder(actions: OfflineAction[], serviceOrderId: string) {
+  return actions.filter((action) => action.priority === "critical" && getOfflineActionServiceOrderId(action) === serviceOrderId);
+}
+
 export function buildFieldCommandChecklist(actions: OfflineAction[]): FieldCommandChecklistItem[] {
   const summary = summarizeOfflineQueue(actions);
 
