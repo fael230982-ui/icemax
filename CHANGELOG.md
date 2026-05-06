@@ -1444,6 +1444,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Faixa visual diferencia visao recortada da visao operacional completa.
 - Documentacao operacional criada para resumo de filtros ativos.
 
+## 0.8.196 - Cobertura Visivel Da Fila Compacta
+
+- Fila compacta passou a exibir percentual visivel do recorte atual.
+- Indicador considera o limite de seis cards sobre o total filtrado.
+- Cobertura abaixo de 100% recebe destaque visual de atencao.
+- Documentacao operacional criada para cobertura visivel da fila.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

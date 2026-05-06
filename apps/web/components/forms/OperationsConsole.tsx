@@ -114,6 +114,9 @@ export function OperationsConsole() {
   const hasCompactMobileOfflineSourceItems = Boolean(sortedMobileOfflineItems.length);
   const compactMobileRequestCount = sortedMobileOfflineItems.filter((item) => item.requestedFromMobile).length;
   const hiddenCompactMobileOfflineCount = Math.max(compactMobileOfflineFilteredItems.length - compactMobileOfflineItems.length, 0);
+  const compactMobileOfflineVisiblePercent = compactMobileOfflineFilteredItems.length
+    ? Math.round((compactMobileOfflineItems.length / compactMobileOfflineFilteredItems.length) * 100)
+    : 0;
   const hasActiveMobileOfflineFilters = mobileOfflineSourceFilter !== "all"
     || mobileOfflinePriorityFilter !== "all"
     || mobileOfflineOwnerFilter !== "all"
@@ -1575,6 +1578,11 @@ export function OperationsConsole() {
                   </label>
                   <span>App tecnico: {compactMobileRequestCount}</span>
                   <span>{compactMobileOfflineItems.length} prioridades visiveis</span>
+                  <span
+                    className={compactMobileOfflineVisiblePercent < 100 ? "compactQueueCoverageWarning" : undefined}
+                  >
+                    Visivel: {compactMobileOfflineVisiblePercent}%
+                  </span>
                   <span className={hiddenCompactMobileOfflineCount ? "compactQueueHiddenWarning" : undefined}>
                     Ocultas: {hiddenCompactMobileOfflineCount}
                   </span>

@@ -3377,3 +3377,17 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Cobertura Visivel Da Fila Compacta
+
+- [x] Percentual visivel da fila compacta criado.
+- [x] Calculo considera total filtrado antes do limite de seis cards.
+- [x] Destaque visual aplicado quando cobertura fica abaixo de 100%.
+- [x] Estado sem itens preserva percentual zero.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.
