@@ -2996,3 +2996,19 @@ Este checklist deve ser revisado antes de push, homologacao e release.
 - [x] Build do painel web executado.
 - [x] Commit local criado.
 - [ ] Push para GitHub pendente.
+
+## Auditoria Geral De Produto
+
+- [x] Endpoint de auditoria geral de produto criado.
+- [x] Percentual geral diferenciado da prontidao controlada de provedores.
+- [x] Dominios de produto, maturidade e proximas acoes mapeados.
+- [x] Bloqueios criticos de producao mantidos explicitos.
+- [x] Console web ganhou consulta de auditoria geral.
+- [x] Teste automatizado atualizado.
+- [x] Documentacao criada.
+- [x] CHANGELOG atualizado.
+- [x] Typecheck executado.
+- [x] Testes executados.
+- [x] Build do painel web executado.
+- [x] Commit local criado.
+- [ ] Push para GitHub pendente.

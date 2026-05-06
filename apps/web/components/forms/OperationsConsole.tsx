@@ -604,6 +604,10 @@ export function OperationsConsole() {
     void run("Comando do dia", () => icemaxApi.dayCommandCenter(token || undefined));
   }
 
+  function loadProductAuditSnapshot() {
+    void run("Auditoria geral do produto", () => icemaxApi.productAuditSnapshot(token || undefined));
+  }
+
   function runEnterpriseSuite() {
     void run("Suite escala", async () => {
       const results = await Promise.all([
@@ -657,6 +661,7 @@ export function OperationsConsole() {
         icemaxApi.mobileOfflineEscalations(token || undefined),
         icemaxApi.preReleaseGate(token || undefined),
         icemaxApi.productionReadiness(token || undefined),
+        icemaxApi.productAuditSnapshot(token || undefined),
         icemaxApi.endOfDaySnapshot(token || undefined),
       ]);
 
@@ -1116,6 +1121,7 @@ export function OperationsConsole() {
         <button type="button" className="secondary" onClick={loadProviderHomologationDecisionRecord}>Ata provedores</button>
         <button type="button" className="secondary" onClick={loadProviderReleaseFreezeChecklist}>Freeze provedores</button>
         <button type="button" className="secondary" onClick={loadProviderControlledReleaseSnapshot}>Snapshot provedores</button>
+        <button type="button" className="secondary" onClick={loadProductAuditSnapshot}>Auditoria produto</button>
         <button type="button" className="secondary" onClick={loadDayCommandCenter}>Comando do dia</button>
         <button type="button" className="secondary" onClick={runBusinessSuite}>Rodar suite operacional</button>
         <button type="button" className="secondary" onClick={runEnterpriseSuite}>Rodar suite escala</button>

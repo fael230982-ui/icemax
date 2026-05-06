@@ -38,6 +38,7 @@ import {
   getMobileOfflineAssistedRetryWhitelabelMorningCommand,
   getMobileOfflineAssistedRetryWhitelabelProductionExecutionMatrix,
   getPlatformDiagnostics,
+  getProductAuditSnapshot,
   getPlatformReadiness,
   getMobileOfflineEscalationBoard,
   executeMobileOfflineAssistedRetryDryRun,
@@ -104,5 +105,6 @@ export async function registerPlatformRoutes(app: FastifyInstance) {
     getMobileOfflineEscalationTimeline(request.params.recordId));
   app.get("/platform/pre-release-gate", async () => getPreReleaseGate());
   app.get("/platform/production-readiness", async () => getProductionReadinessPlan());
+  app.get("/platform/product-audit-snapshot", async () => getProductAuditSnapshot());
   app.get("/platform/end-of-day-snapshot", async () => getEndOfDaySnapshot());
 }

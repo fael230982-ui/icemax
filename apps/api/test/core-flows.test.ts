@@ -1839,6 +1839,17 @@ test("platform diagnostics expose readiness catalog and role matrix", async () =
   assert.ok(production.json().requiredSecrets.some((item: { key: string }) => item.key === "PUBLIC_ACCESS_TOKEN_PEPPER"));
   assert.ok(production.json().externalAccounts.some((item: { provider: string }) => item.provider === "whatsapp_meta"));
 
+  const productAudit = await app.inject({ method: "GET", url: "/platform/product-audit-snapshot" });
+  assert.equal(productAudit.statusCode, 200);
+  assert.equal(productAudit.json().project, "ICEMAX");
+  assert.equal(productAudit.json().productionReleaseAllowed, false);
+  assert.equal(productAudit.json().controlledProviderReadinessPercent, 100);
+  assert.ok(productAudit.json().overallProductPercent >= 80);
+  assert.ok(productAudit.json().criticalBlockers.length >= 4);
+  assert.ok(productAudit.json().domains.some((item: { key: string; readiness: number }) =>
+    item.key === "mobile_field" && item.readiness < 85));
+  assert.ok(productAudit.json().blockedActions.includes("treat_product_percent_as_production_go_live"));
+
   const endOfDay = await app.inject({ method: "GET", url: "/platform/end-of-day-snapshot" });
   assert.equal(endOfDay.statusCode, 200);
   assert.equal(endOfDay.json().project, "ICEMAX");

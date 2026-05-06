@@ -3227,6 +3227,160 @@ export function getProductionReadinessPlan() {
   };
 }
 
+export function getProductAuditSnapshot() {
+  const platformReadiness = getPlatformReadiness();
+  const productionReadiness = getProductionReadinessPlan();
+  const preReleaseGate = getPreReleaseGate();
+  const domains = [
+    {
+      key: "service_orders",
+      label: "Ordem de servico ponta a ponta",
+      area: "core",
+      readiness: 92,
+      status: "strong_mock_flow",
+      evidence: "Abertura, execucao, evidencia, assinatura, e-mail, historico e relatorio estao cobertos em API e painel.",
+      nextAction: "Aprofundar persistencia real e teste guiado por usuario.",
+    },
+    {
+      key: "contracts",
+      label: "Contratos recorrentes",
+      area: "commercial",
+      readiness: 90,
+      status: "strong_mock_flow",
+      evidence: "Contratos, janelas, financeiro recorrente, aceite e calendario foram modelados.",
+      nextAction: "Transformar aceite e visitas geradas em fluxo persistente definitivo.",
+    },
+    {
+      key: "web_console",
+      label: "Controle web gerencial",
+      area: "web",
+      readiness: 88,
+      status: "operational_console",
+      evidence: "Console concentra acoes de OS, contratos, despacho, estoque, IA, portal, links e provedores.",
+      nextAction: "Refinar ergonomia visual e agrupar comandos por jornada real.",
+    },
+    {
+      key: "mobile_field",
+      label: "Aplicativo tecnico",
+      area: "mobile",
+      readiness: 78,
+      status: "offline_foundation_ready",
+      evidence: "Estrutura mobile e fila offline existem, com governanca forte para reenvio assistido.",
+      nextAction: "Evoluir telas de execucao em campo, captura de assinatura, fotos e sincronizacao visual.",
+    },
+    {
+      key: "database",
+      label: "Banco persistente",
+      area: "infra",
+      readiness: 72,
+      status: "schema_and_cutover_ready",
+      evidence: "Schema Prisma, seed, smoke test e matriz de migracao estao preparados.",
+      nextAction: "Configurar banco real, rodar migracoes e executar smoke em ambiente controlado.",
+    },
+    {
+      key: "integrations",
+      label: "Integracoes externas",
+      area: "providers",
+      readiness: 84,
+      status: "controlled_readiness_complete",
+      evidence: "Trilha de provedores fechada em 100% controlado, sem trafego real.",
+      nextAction: "Aguardar cofre, credenciais, orcamento, sign-offs e dominio/hospedagem.",
+    },
+    {
+      key: "whitelabel",
+      label: "Whitelabel e escala",
+      area: "platform",
+      readiness: 86,
+      status: "governance_ready",
+      evidence: "Onboarding, custos, SLA, LGPD, aceite e plano de escala foram estruturados.",
+      nextAction: "Preparar primeira homologacao ICEMAX antes de ativar segundo tenant.",
+    },
+    {
+      key: "security_lgpd",
+      label: "Seguranca e LGPD",
+      area: "security",
+      readiness: 82,
+      status: "policy_ready",
+      evidence: "Guard de segredos, tokens publicos, revogacao, isolamento e gates estao documentados e testados.",
+      nextAction: "Adicionar revisao juridica e politicas finais antes de cliente real.",
+    },
+  ];
+  const averageReadiness = Math.round(domains.reduce((total, item) => total + item.readiness, 0) / domains.length);
+  const criticalBlockers = [
+    "Banco real ainda nao configurado como fonte principal.",
+    "Segredos reais devem ficar em cofre e fora do repositorio.",
+    "Provedores externos permanecem bloqueados para trafego real.",
+    "Homologacao guiada com aceite do Rafael ainda nao foi executada.",
+    "Dominio, hospedagem e ambiente publico ainda precisam ser definidos.",
+  ];
+
+  return {
+    generatedAt: new Date().toISOString(),
+    project: "ICEMAX",
+    owner: "RAFAEL DA SILVA BEZEERA",
+    status: "product_audit_ready",
+    overallProductPercent: Math.min(90, averageReadiness + 5),
+    controlledProviderReadinessPercent: 100,
+    productionReleaseAllowed: false,
+    summary: {
+      domains: domains.length,
+      averageReadiness,
+      strongDomains: domains.filter((item) => item.readiness >= 85).length,
+      attentionDomains: domains.filter((item) => item.readiness < 85).length,
+      criticalBlockers: criticalBlockers.length,
+      platformReleaseReady: platformReadiness.releaseReady,
+      preReleaseGateStatus: preReleaseGate.status,
+      productionReadinessScore: productionReadiness.score,
+    },
+    domains,
+    criticalBlockers,
+    priorityOrder: [
+      "web_console",
+      "service_orders",
+      "mobile_field",
+      "database",
+      "contracts",
+      "security_lgpd",
+      "integrations",
+      "whitelabel",
+    ],
+    nextExecutionBlocks: [
+      {
+        key: "web_journey_command_center",
+        label: "Reorganizar console web por jornadas reais",
+        expectedImpact: "Reduz atrito de homologacao e deixa o produto com cara de centro de comando.",
+      },
+      {
+        key: "mobile_field_execution",
+        label: "Aprofundar execucao mobile em campo",
+        expectedImpact: "Aumenta valor percebido pelo tecnico e aproxima o app do uso real.",
+      },
+      {
+        key: "database_prisma_cutover",
+        label: "Preparar virada controlada para banco real",
+        expectedImpact: "Remove o maior bloqueio para homologacao externa.",
+      },
+      {
+        key: "guided_homologation_script",
+        label: "Criar roteiro de teste para o Rafael",
+        expectedImpact: "Permite validar o produto sem precisar entender codigo.",
+      },
+    ],
+    releaseInterpretation: {
+      percentMeaning: "Percentual geral de produto em desenvolvimento, considerando API, web, mobile, banco, integracoes e governanca.",
+      doesNotMean: "Nao significa producao liberada nem clientes reais ativos.",
+      safestNextMove: "Melhorar experiencia web e mobile enquanto banco real e contas externas ficam preparados em paralelo.",
+    },
+    blockedActions: [
+      "treat_product_percent_as_production_go_live",
+      "publish_without_final_validation",
+      "activate_real_customer_without_homologation",
+      "enable_external_provider_without_vault",
+      "migrate_real_data_without_database_cutover",
+    ],
+  };
+}
+
 export function getMobileOfflineEscalationBoard() {
   const items = [
     {

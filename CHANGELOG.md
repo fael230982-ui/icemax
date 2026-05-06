@@ -1254,6 +1254,14 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Console web ganhou consulta de snapshot de release de provedores.
 - Teste automatizado diferencia prontidao controlada de go-live real.
 
+## 0.8.170 - Auditoria Geral De Produto
+
+- Criado endpoint de auditoria geral de produto.
+- Auditoria consolida percentual geral, dominios, bloqueios criticos e prioridades de execucao.
+- Diferenciado 100% de prontidao controlada de provedores do percentual geral do produto.
+- Console web ganhou consulta de auditoria geral do produto.
+- Teste automatizado cobre bloqueios de producao, dominio mobile em atencao e acoes bloqueadas.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.

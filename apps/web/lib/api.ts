@@ -339,6 +339,7 @@ export const icemaxApi = {
     apiRequest<unknown>(`/platform/mobile-offline-escalations/${recordId}/timeline`, { token }),
   preReleaseGate: (token?: string) => apiRequest<unknown>("/platform/pre-release-gate", { token }),
   productionReadiness: (token?: string) => apiRequest<unknown>("/platform/production-readiness", { token }),
+  productAuditSnapshot: (token?: string) => apiRequest<unknown>("/platform/product-audit-snapshot", { token }),
   endOfDaySnapshot: (token?: string) => apiRequest<unknown>("/platform/end-of-day-snapshot", { token }),
   apiContracts: (token?: string) => apiRequest<ApiListResponse<unknown> & { version: string }>("/api-contract/routes", { token }),
   homologationScenarios: (token?: string) => apiRequest<ApiListResponse<unknown>>("/homologation/scenarios", { token }),
