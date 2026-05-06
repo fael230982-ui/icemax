@@ -422,6 +422,18 @@ h2 {
   font-size: 13px;
 }
 
+.compactQueueActions {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.compactQueueActions button {
+  min-height: 34px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
 .tableWrap {
   overflow-x: auto;
 }
@@ -2398,7 +2410,8 @@ dd {
   .billingSummary,
   .billingControls,
   .billingRows article,
-  .compactQueueGrid {
+  .compactQueueGrid,
+  .compactQueueActions {
     grid-template-columns: 1fr;
   }
 }

@@ -1533,6 +1533,17 @@ export function OperationsConsole() {
                       <span>{item.actionLabel}</span>
                       <span className={getEscalationPriorityClass(item.priority)}>{item.priority}</span>
                     </div>
+                    <div className="compactQueueActions">
+                      <button type="button" className="secondary" onClick={() => prepareMobileOfflineAssistedRetry(item.id)}>
+                        Preparar
+                      </button>
+                      <button type="button" className="secondary" onClick={() => runMobileOfflineAssistedRetryDryRun(item.id)}>
+                        Simular
+                      </button>
+                      <button type="button" className="secondary" onClick={() => loadMobileOfflineEscalationTimeline(item.id)}>
+                        Timeline
+                      </button>
+                    </div>
                   </article>
                 ))}
               </div>

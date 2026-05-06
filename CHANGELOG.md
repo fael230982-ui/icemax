@@ -1374,6 +1374,13 @@ Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de
 - Fila compacta respeita os filtros e a ordenacao ja escolhidos pelo gestor.
 - Documentacao operacional criada para uso diario da fila compacta.
 
+## 0.8.186 - Acoes Rapidas Na Fila Compacta Offline
+
+- Cards compactos da fila offline ganharam acoes diretas de preparar, simular e abrir timeline.
+- Acoes reutilizam os mesmos fluxos seguros ja existentes na tabela completa.
+- Layout dos botoes foi ajustado para leitura rapida no desktop e no mobile.
+- Documentacao operacional criada para acoes rapidas da fila compacta.
+
 ## 0.8.8 - Calendario De Contratos Recorrentes
 
 - Adicionado endpoint de calendario de manutencoes contratadas.
