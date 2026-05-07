@@ -1,320 +1,284 @@
+"use client";
+
+import { useState } from "react";
 import {
-  checklists,
   contracts,
   equipmentList,
-  executionFlow,
   floorPlan,
   integrations,
-  manuals,
-  notifications,
+  metrics,
   orders,
-  qrLabels,
   quality,
   quotes,
-  serviceFlow,
   stockAlerts,
   technicians,
-  customers,
 } from "../app/data";
-import { Panel } from "./Panel";
-import { CloseoutArchivePanel } from "./CloseoutArchivePanel";
-import { CollectionAutomationPanel } from "./CollectionAutomationPanel";
-import { CompletionEmailQueuePanel } from "./CompletionEmailQueuePanel";
-import { ContractCapacityBoardPanel } from "./ContractCapacityBoardPanel";
-import { ContractOpportunityPipelinePanel } from "./ContractOpportunityPipelinePanel";
-import { FieldFinalizationBoard } from "./FieldFinalizationBoard";
-import { PostServiceCommandPanel } from "./PostServiceCommandPanel";
-import { RecurringBillingBoardPanel } from "./RecurringBillingBoardPanel";
-import { ReceivablesCollectionPanel } from "./ReceivablesCollectionPanel";
 import { OperationsConsole } from "./forms/OperationsConsole";
-import { QuickCreatePanel } from "./forms/QuickCreatePanel";
+
+const actionButtons = [
+  {
+    label: "Despachar tecnico",
+    result: "Rafael Martins mantido na emergencia #1048. Joao Pereira recebeu rota otimizada para #1049.",
+  },
+  {
+    label: "Enviar relatorio",
+    result: "Relatorio final mockado enviado para o e-mail da empresa, com copia opcional para o cliente.",
+  },
+  {
+    label: "Gerar QR",
+    result: "Etiqueta QR criada para ICM-AC-0004 e vinculada ao historico do equipamento.",
+  },
+  {
+    label: "Criar contrato",
+    result: "Proposta de contrato trimestral preparada para Clinica Vida, com agenda preventiva sugerida.",
+  },
+];
+
+const tabCards = {
+  Operacao: [
+    { title: "OS critica", value: orders[0].id, detail: `${orders[0].customer} - ${orders[0].issue}` },
+    { title: "Equipe em campo", value: "3", detail: "2 internos e 1 terceirizado com acesso limitado" },
+    { title: "SLA em risco", value: "1", detail: "Emergencia sem refrigeracao em atendimento" },
+  ],
+  Agenda: [
+    { title: "Proxima chegada", value: orders[2].eta, detail: `${orders[2].technician} para ${orders[2].customer}` },
+    { title: "Preventivas", value: "6", detail: "Visitas proximas por contratos recorrentes" },
+    { title: "Mapa ativo", value: floorPlan.equipmentCount.toString(), detail: `${floorPlan.name} - ${floorPlan.customer}` },
+  ],
+  Financeiro: [
+    { title: "Orcamentos", value: quotes.length.toString(), detail: "Aprovacao e aceite digital no portal" },
+    { title: "Contratos", value: contracts.length.toString(), detail: "Recorrencias de 3, 4 e 6 meses" },
+    { title: "Estoque critico", value: stockAlerts.filter((item) => item.status === "Critico").length.toString(), detail: "Reposicao sugerida antes do despacho" },
+  ],
+  Configuracao: [
+    { title: "Whitelabel", value: "Ativo", detail: "ICEMAX como tenant piloto sem codigo fixo" },
+    { title: "Integracoes", value: integrations.length.toString(), detail: "Maps, OpenAI, WhatsApp e e-mail preparados" },
+    { title: "Qualidade", value: quality[3].value, detail: "Satisfacao usada no painel gerencial" },
+  ],
+};
+
+const tabs = Object.keys(tabCards) as Array<keyof typeof tabCards>;
 
 export function DashboardSections() {
+  const [activeTab, setActiveTab] = useState<keyof typeof tabCards>("Operacao");
+  const [lastAction, setLastAction] = useState("Nenhuma acao executada nesta sessao.");
+  const [activity, setActivity] = useState([
+    "Fila priorizada recalculada com urgencias primeiro.",
+    "Contrato da Clinica Vida pronto para proxima visita.",
+    "Estoque de R410A marcado como critico.",
+  ]);
+
+  function runMockAction(result: string) {
+    setLastAction(result);
+    setActivity((items) => [result, ...items].slice(0, 5));
+  }
+
   return (
-    <section className="content">
-      <Panel eyebrow="Operacao" title="Acoes rapidas" wide>
-        <QuickCreatePanel />
-      </Panel>
+    <section className="commandCenter" id="dashboard">
+      <div className="commandHero">
+        <div>
+          <p className="eyebrow">Visao do dia</p>
+          <h2>Operacao pronta para decidir, despachar e fechar OS sem ruído.</h2>
+          <p>
+            Primeira tela compacta para diretoria, atendimento e coordenacao tecnica. Os modulos continuam existindo,
+            mas o cockpit mostra apenas o que precisa de decisao agora.
+          </p>
+        </div>
+        <div className="heroStats">
+          {metrics.map((metric) => (
+            <article className={`heroMetric ${metric.tone}`} key={metric.label}>
+              <span>{metric.label}</span>
+              <strong>{metric.value}</strong>
+              <small>{metric.detail}</small>
+            </article>
+          ))}
+        </div>
+      </div>
 
-      <Panel eyebrow="Operacao" title="Console conectado" wide>
-        <OperationsConsole />
-      </Panel>
-
-      <Panel eyebrow="Fechamento" title="Board de finalizacao da OS" action={<span className="pill danger">Assinatura e e-mail</span>} wide>
-        <FieldFinalizationBoard />
-      </Panel>
-
-      <Panel eyebrow="Fechamento" title="Fila de e-mails finais" action={<span className="pill">Auditoria</span>} wide>
-        <CompletionEmailQueuePanel />
-      </Panel>
-
-      <Panel eyebrow="Historico" title="Arquivo de fechamento da OS" action={<span className="pill">Comprovantes</span>} wide>
-        <CloseoutArchivePanel />
-      </Panel>
-
-      <Panel eyebrow="Pos-atendimento" title="Garantia, pesquisa e contrato" action={<span className="pill">Receita recorrente</span>} wide>
-        <PostServiceCommandPanel />
-      </Panel>
-
-      <Panel eyebrow="Comercial" title="Esteira de contratos recorrentes" action={<span className="pill">Pipeline</span>} wide>
-        <ContractOpportunityPipelinePanel />
-      </Panel>
-
-      <Panel eyebrow="Contratos" title="Capacidade da agenda recorrente" action={<span className="pill">Preventivas</span>} wide>
-        <ContractCapacityBoardPanel />
-      </Panel>
-
-      <Panel eyebrow="Financeiro" title="Faturamento recorrente" action={<span className="pill">MRR</span>} wide>
-        <RecurringBillingBoardPanel />
-      </Panel>
-
-      <Panel eyebrow="Financeiro" title="Contas a receber" action={<span className="pill danger">Inadimplencia</span>} wide>
-        <ReceivablesCollectionPanel />
-      </Panel>
-
-      <Panel eyebrow="Financeiro" title="Regua de cobranca" action={<span className="pill">Pre-fila</span>} wide>
-        <CollectionAutomationPanel />
-      </Panel>
-
-      <Panel id="ordens" eyebrow="Fila priorizada" title="Ordens em andamento" action={<span className="pill danger">Urgencias primeiro</span>} wide>
-        <div className="ordersTable">
-          <div className="tableHead">
-            <span>OS</span>
-            <span>Cliente</span>
-            <span>Equipamento</span>
-            <span>Status</span>
-            <span>ETA</span>
+      <div className="commandGrid">
+        <article className="commandPanel priorityPanel" id="ordens">
+          <div className="panelHeader">
+            <div>
+              <p className="eyebrow">Fila priorizada</p>
+              <h2>Ordens que exigem atencao</h2>
+            </div>
+            <span className="pill danger">Urgencias primeiro</span>
           </div>
-          {orders.map((order) => (
-            <div className="tableRow" key={order.id}>
-              <strong>{order.id}</strong>
-              <span>
-                {order.customer}
-                <small>{order.issue}</small>
-              </span>
-              <span>{order.equipment}</span>
-              <span>
-                {order.status}
-                <small>{order.technician}</small>
-              </span>
-              <b>{order.eta}</b>
+
+          <div className="priorityList">
+            {orders.map((order) => (
+              <button className="priorityRow" key={order.id} onClick={() => runMockAction(`${order.id} selecionada: ${order.customer} - ${order.status}.`)}>
+                <span>
+                  <strong>{order.id}</strong>
+                  <small>{order.priority}</small>
+                </span>
+                <span>
+                  <b>{order.customer}</b>
+                  <small>{order.equipment}</small>
+                </span>
+                <span>
+                  <b>{order.status}</b>
+                  <small>{order.technician}</small>
+                </span>
+                <em>{order.eta}</em>
+              </button>
+            ))}
+          </div>
+        </article>
+
+        <aside className="commandPanel actionDock">
+          <div className="panelHeader">
+            <div>
+              <p className="eyebrow">Comando rapido</p>
+              <h2>Acoes mockadas funcionais</h2>
             </div>
-          ))}
-        </div>
-      </Panel>
+          </div>
+          <div className="actionButtons">
+            {actionButtons.map((action) => (
+              <button key={action.label} onClick={() => runMockAction(action.result)}>
+                {action.label}
+              </button>
+            ))}
+          </div>
+          <div className="actionResult">
+            <span>Ultima acao</span>
+            <p>{lastAction}</p>
+          </div>
+        </aside>
+      </div>
 
-      <Panel eyebrow="Execucao de campo" title="Fluxo da OS" action={<span className="pill">App tecnico</span>} wide>
-        <div className="contractGrid">
-          {executionFlow.map((step) => (
-            <div className="contract" key={step.label}>
-              <strong>{step.label}</strong>
-              <span>{step.status}</span>
+      <div className="insightGrid">
+        <article className="commandPanel" id="agenda">
+          <div className="panelHeader">
+            <div>
+              <p className="eyebrow">Mapa e agenda</p>
+              <h2>Equipe em movimento</h2>
             </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="clientes" eyebrow="CRM tecnico" title="Clientes">
-        <div className="stack">
-          {customers.map((customer) => (
-            <div className="simpleItem" key={customer.name}>
-              <strong>{customer.name}</strong>
-              <span>{customer.email}</span>
-              <small>{customer.contracts} contratos / {customer.equipment} equipamentos</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="equipamentos" eyebrow="Ativos" title="Equipamentos">
-        <div className="stack">
-          {equipmentList.map((item) => (
-            <div className="simpleItem" key={item.serial}>
-              <strong>{item.serial}</strong>
-              <span>{item.model}</span>
-              <small>{item.customer} - {item.location}</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="agenda" eyebrow="Roteirizacao" title="Agenda inteligente" action={<span className="pill">Mapa</span>}>
-        <div className="map">
-          <span className="pin p1" />
-          <span className="pin p2" />
-          <span className="pin p3" />
-          <span className="route" />
-        </div>
-        <p className="muted">No MVP, agenda manual com tempo de deslocamento. Depois, sugestao automatica por localizacao, urgencia e especialidade.</p>
-      </Panel>
-
-      <Panel id="contratos" eyebrow="Receita recorrente" title="Contratos de manutencao" action={<span className="pill">3, 4 ou 6 meses</span>} wide>
-        <div className="contractGrid">
-          {contracts.map((contract) => (
-            <div className="contract" key={contract.customer}>
-              <strong>{contract.customer}</strong>
-              <span>{contract.plan}</span>
-              <small>{contract.recurrence}</small>
-              <b>{contract.nextVisit}</b>
-              <em>{contract.status}</em>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="pmoc" eyebrow="Qualidade" title="PMOC, KM e satisfacao" action={<span className="pill">PCM</span>}>
-        <div className="miniGrid">
-          {quality.map((item) => (
-            <div className="miniMetric" key={item.label}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="orcamentos" eyebrow="Aprovacao" title="Orcamentos" action={<span className="pill">Link cliente</span>}>
-        <div className="stack">
-          {quotes.map((quote) => (
-            <div className="quote" key={quote.number}>
-              <strong>{quote.number}</strong>
-              <span>{quote.customer}</span>
-              <b>{quote.total}</b>
-              <small>{quote.status}</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="checklists" eyebrow="Qualidade" title="Checklists tecnicos">
-        <div className="stack">
-          {checklists.map((checklist) => (
-            <div className="simpleItem" key={checklist.name}>
-              <strong>{checklist.name}</strong>
-              <span>{checklist.items} itens</span>
-              <small>{checklist.requiredPhotos ? "Fotos obrigatorias" : "Fotos opcionais"}</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="mapas" eyebrow="Plantas" title="Mapa de equipamentos" action={<span className="pill">{floorPlan.equipmentCount} aparelhos</span>}>
-        <div className="floorPlan">
-          {floorPlan.points.map((point) => (
-            <span className="equipmentPoint" style={{ left: point.left, top: point.top }} title={`${point.label} - ${point.code}`} key={point.code}>
-              {point.code.slice(-2)}
-            </span>
-          ))}
-        </div>
-        <p className="muted">{floorPlan.customer} - {floorPlan.name}</p>
-      </Panel>
-
-      <Panel id="qr" eyebrow="Etiquetas" title="QR Code por equipamento" action={<span className="pill">Impressao</span>}>
-        <div className="stack">
-          {qrLabels.map((label) => (
-            <div className="qrLabel" key={label.code}>
-              <div className="qrBox">{label.code.slice(-2)}</div>
-              <div>
-                <strong>{label.code}</strong>
-                <span>{label.customer}</span>
-                <small>{label.location}</small>
+          </div>
+          <div className="routePreview">
+            <span className="routeLine" />
+            {technicians.map((tech, index) => (
+              <button
+                className={`techMarker marker${index + 1}`}
+                key={tech.name}
+                onClick={() => runMockAction(`${tech.name}: ${tech.status}. ${tech.location}.`)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+          <div className="compactList">
+            {technicians.map((tech) => (
+              <div key={tech.name}>
+                <strong>{tech.name}</strong>
+                <span>{tech.kind} - {tech.status}</span>
               </div>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="campo" eyebrow="Equipe" title="Campo e terceirizados">
-        <div className="stack">
-          {technicians.map((tech) => (
-            <div className="tech" key={tech.name}>
-              <strong>{tech.name}</strong>
-              <span>{tech.kind} - {tech.status}</span>
-              <small>{tech.location}</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="estoque" eyebrow="Mini ERP" title="Estoque critico">
-        <div className="stack">
-          {stockAlerts.map((part) => (
-            <div className="stock" key={part.item}>
-              <strong>{part.item}</strong>
-              <span>{part.location}</span>
-              <b>{part.balance}</b>
-              <small>{part.status}</small>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="manuais" eyebrow="Biblioteca" title="Manuais no app">
-        <div className="stack">
-          {manuals.map((manual) => (
-            <div className="simpleItem" key={manual.title}>
-              <strong>{manual.title}</strong>
-              <span>{manual.detail}</span>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel id="ia" eyebrow="Assistente IA" title="Revisao tecnica e sugestao de causa" action={<span className="pill">Assistivo</span>} wide>
-        <div className="aiGrid">
-          <div>
-            <span className="label">Texto do tecnico</span>
-            <p className="note">limpei filtro e tava com pouco gas, precisa olhar vazamento</p>
+            ))}
           </div>
+        </article>
+
+        <article className="commandPanel" id="contratos">
+          <div className="panelHeader">
+            <div>
+              <p className="eyebrow">Receita recorrente</p>
+              <h2>Contratos ativos</h2>
+            </div>
+          </div>
+          <div className="compactList">
+            {contracts.map((contract) => (
+              <button className="contractRow" key={contract.customer} onClick={() => runMockAction(`Contrato ${contract.customer}: ${contract.status} em ${contract.nextVisit}.`)}>
+                <strong>{contract.customer}</strong>
+                <span>{contract.recurrence}</span>
+                <small>{contract.nextVisit}</small>
+              </button>
+            ))}
+          </div>
+        </article>
+
+        <article className="commandPanel" id="estoque">
+          <div className="panelHeader">
+            <div>
+              <p className="eyebrow">Mini ERP</p>
+              <h2>Pecas que travam OS</h2>
+            </div>
+          </div>
+          <div className="compactList">
+            {stockAlerts.map((part) => (
+              <button className="stockRow" key={part.item} onClick={() => runMockAction(`${part.item}: ${part.balance} em ${part.location}.`)}>
+                <strong>{part.item}</strong>
+                <span>{part.location}</span>
+                <small>{part.status}</small>
+              </button>
+            ))}
+          </div>
+        </article>
+      </div>
+
+      <article className="commandPanel moduleSurface" id="campo">
+        <div className="panelHeader">
           <div>
-            <span className="label">Versao profissional</span>
-            <p className="note improved">Foi realizada a limpeza dos filtros e identificada baixa carga de fluido refrigerante. Recomenda-se teste de estanqueidade para verificar possivel vazamento.</p>
+            <p className="eyebrow">Modulos executivos</p>
+            <h2>Resumo por area</h2>
+          </div>
+          <div className="segmentTabs" role="tablist" aria-label="Modulos do cockpit">
+            {tabs.map((tab) => (
+              <button className={tab === activeTab ? "active" : ""} key={tab} onClick={() => setActiveTab(tab)} type="button">
+                {tab}
+              </button>
+            ))}
           </div>
         </div>
-      </Panel>
-
-      <Panel id="whitelabel" eyebrow="Multiempresa" title="Whitelabel">
-        <dl className="settings">
-          <dt>Empresa piloto</dt>
-          <dd>ICEMAX Ar Condicionado</dd>
-          <dt>E-mail</dt>
-          <dd>adm.rcsolutions@gmail.com</dd>
-          <dt>Regra</dt>
-          <dd>ICEMAX e tenant, nao codigo fixo.</dd>
-        </dl>
-      </Panel>
-
-      <Panel id="notificacoes" eyebrow="Comunicacao" title="Notificacoes">
-        <div className="stack">
-          {notifications.map((notification) => (
-            <div className="simpleItem" key={`${notification.channel}-${notification.subject}`}>
-              <strong>{notification.subject}</strong>
-              <span>{notification.channel}</span>
-              <small>{notification.status}</small>
+        <div className="moduleGrid">
+          {tabCards[activeTab].map((card) => (
+            <div className="moduleCard" key={card.title}>
+              <span>{card.title}</span>
+              <strong>{card.value}</strong>
+              <p>{card.detail}</p>
             </div>
           ))}
         </div>
-      </Panel>
-
-      <Panel id="integracoes" eyebrow="Setup" title="Integracoes externas">
-        <div className="stack">
-          {integrations.map((integration) => (
-            <div className="simpleItem" key={integration.name}>
-              <strong>{integration.name}</strong>
-              <span>{integration.purpose}</span>
-              <small>{integration.status}</small>
-            </div>
+        <div className="activityFeed">
+          <strong>Atividade recente</strong>
+          {activity.map((item) => (
+            <span key={item}>{item}</span>
           ))}
         </div>
-      </Panel>
+      </article>
 
-      <Panel eyebrow="Fluxo padrao" title="Ciclo da OS" wide>
-        <div className="flow">
-          {serviceFlow.map((step, index) => (
-            <span key={step} className={index < 3 ? "done" : ""}>{step}</span>
+      <article className="commandPanel assetSurface">
+        <div className="panelHeader">
+          <div>
+            <p className="eyebrow">Ativos e QR</p>
+            <h2>Mapa interativo enxuto</h2>
+          </div>
+          <span className="pill">{floorPlan.equipmentCount} aparelhos</span>
+        </div>
+        <div className="floorPlan premiumPlan">
+          {floorPlan.points.map((point) => (
+            <button
+              className="equipmentPoint premiumPoint"
+              style={{ left: point.left, top: point.top }}
+              key={point.code}
+              onClick={() => runMockAction(`${point.code}: ${point.label} selecionado para historico, manual e QR.`)}
+            >
+              {point.code.slice(-2)}
+            </button>
           ))}
         </div>
-      </Panel>
+        <div className="equipmentStrip">
+          {equipmentList.map((item) => (
+            <span key={item.serial}>{item.serial} - {item.location}</span>
+          ))}
+        </div>
+      </article>
+
+      <details className="advancedConsole" id="console">
+        <summary>
+          <span>Console tecnico avancado</span>
+          <strong>API, testes de fluxo e rotinas completas</strong>
+        </summary>
+        <OperationsConsole />
+      </details>
     </section>
   );
 }

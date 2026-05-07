@@ -2,6 +2,14 @@
 
 Todas as alteracoes relevantes deste projeto devem ser registradas aqui antes de releases, homologacoes ou publicacoes importantes.
 
+## 0.8.201 - Redesign Premium Do Cockpit Web
+
+- Painel web passou a usar o logo real da ICEMAX na navegacao lateral.
+- Dashboard extenso foi substituido por cockpit operacional compacto e executivo.
+- Acoes mockadas ganharam feedback visual imediato sem depender da API.
+- Console tecnico completo foi preservado em area avancada recolhida.
+- Estilo responsivo foi refinado para primeira experiencia mais premium.
+
 ## 0.8.9 - Despacho Inteligente
 
 - Adicionado endpoint de recomendacao de tecnico por OS.
